@@ -9,6 +9,7 @@ import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
+import axios from "axios";
 export default defineComponent({
     props: ["employees"],
     data() {
@@ -18,12 +19,13 @@ export default defineComponent({
             tbody: [
                 "Employee Name",
                 "Employee Code",
-                "Date Of Joining",
+                "Number",
                 "Status",
                 "Created At",
                 "Action",
             ],
             isLoading: false,
+            employees: this.employees,
         };
     },
     components: {
@@ -48,9 +50,14 @@ export default defineComponent({
                 })
                 .finally(() => (this.isLoading = false));
         },
-        confirmDelete(id) {
+        confirmDelete(id, user) {
+            this.isLoading = true;
+
+            // const employeeName = this('[ employees-filter="employees_name"]').innerText;
+
+
             Swal.fire({
-                title: "Are you sure?",
+                title: "Are you sure you want to delete " + user.first_name + " " + user.last_name + "?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -59,30 +66,53 @@ export default defineComponent({
                 confirmButtonText: "Yes, delete it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(
-                        "Deleted!",
-                        "Your item has been deleted.",
-                        "success"
-                    );
+                    axios
+                        .delete("/employees/" + id + "/delete")
+                        .then((response) => {
+                            console.log(response)
+                            toastr.success(response.data.message);
+                            $(parent).remove().draw();
+                        })
+
+                        .catch((error) => {
+                            if (error.response.status == 400) {
+                                toastr.error(error.response.data.message);
+                            }
+                        });
+                } else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        text: user.first_name + " " + user.last_name + " was not deleted.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary",
+                        }
+                    });
                 }
-            });
+
+            }).this.$router.reload();
         },
         search() {
             Inertia.get(
-                "/client",
+                "/employees",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true,
                 }
             );
         },
+        getEmployees: async () => {
+            const res = await axios.get("employees")
+            console.log("see", res);
+        }
     },
 });
 </script>
 <template>
     <app-layout>
 
-        <Head title="Clients" />
+        <Head title="Employees" />
         <div class="card card-flush">
             <!--begin::Actions-->
             <div>
@@ -98,18 +128,16 @@ export default defineComponent({
                                 <path
                                     d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
                                     fill="currentColor"></path>
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
-                        <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search Client" />
-                    </div>
-                    <div class="w-100 mw-200px">
-                        <!--begin::Select2-->
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
+                        placeholder="Search Employees" />
+                </div>
+                <!-- <div class="w-100 mw-200px">
                         <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                        <!--end::Select2-->
-                    </div>
+                                                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
+                                                </div> -->
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
@@ -117,21 +145,21 @@ export default defineComponent({
 
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <!--begin::Add project-->
+                        <!--begin::Add employees-->
                         <Link href="/employees/add" class="btn btn-primary">
                         Add Employee
                         </Link>
-                        <!--end::Add project-->
+                        <!--end::Add employees-->
                     </div>
                     <!--end::Card toolbar-->
-            </form>
-        </div>
-        <div class="card-body pt-0">
-            <!--begin::Table-->
-            <div class="table-responsive">
-                <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
-                    <!--begin::Table head-->
-                    <thead>
+                </form>
+            </div>
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+                        <!--begin::Table head-->
+                        <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
@@ -143,25 +171,30 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(client, index) in employees.data" :key="index">
+                            <tr v-for="(employees, index) in this.employees.data" :key="index">
                                 <td>
 
-                                    <Link :href="'/client/' + client.id"
+                                    <Link :href="'/employees/' + employees.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        project-filter="project_name">{{ client.name }}</Link>
+                                        employees-filter="employees_name">{{ employees.user.first_name }} {{
+                                            employees.user.last_name }}</Link>
                                 </td>
-                                <td>{{ client.display_name }}</td>
-                                <td>
-                                    <span :class="`badge bg-${client.status.value == 1
-                                        ? 'success'
-                                        : 'danger'
-                                        }`">{{ client.status.label }}</span>
-                                </td>
-                                <td>{{ client.created_at }}</td>
+                                <td>{{ employees.code }}</td>
+                                <!-- <td>
+                                                                                                                                                                                            <span :class="`badge bg-${employees.status.value == 1
+                                                                                                                                                                                                ? 'success'
+                                                                                                                                                                                                : 'danger'
+                                                                                                                                                                                                }`">{{ employees.status.label }}</span>
+                                                                                                                                                                                        </td> -->
+                                <td>{{ employees.number }}</td>
+                                <td>{{ employees.salary }}</td>
+
+                                <td>{{ employees.created_at }}</td>
+
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${client.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${employees.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -176,21 +209,22 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${client.id}`">
+                                            :aria-labelled:by="`dropdown-${employees.id}`">
                                             <li class="menu-item px-3">
-                                                <Link class="dropdown-item" :href="`/project/${client.id}/edit`">Edit
+                                                <Link class="dropdown-item" :href="`/employees/${employees.id}/edit`">Edit
                                                 </Link>
                                             </li>
-                                            <li class="menu-item px-3">
-                                                <Link class="dropdown-item" :href="`/project/${client.id}/edit`">Add Link
-                                                </Link>
-                                            </li>
+                                            <!-- <li class="menu-item px-3">
+                                                                                                                                <Link class="dropdown-item" :href="`/employees/${employees.id}/edit`">Add
+                                                                                                                                Link
+                                                                                                                                </Link>
+                                                                                                                            </li> -->
                                             <li class="menu-item px-3">
                                                 <hr class="dropdown-divider" />
                                             </li>
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    client.id
+                                                    employees.id, employees.user
                                                 )
                                                 " class="btn btn-sm dropdown-item">
                                                     Delete
@@ -205,14 +239,14 @@ export default defineComponent({
                     </table>
                 </div>
                 <!-- <div class="row" v-if="suppliers.meta">
-                                    <div
-                                        class="col-sm-12 d-flex align-items-center justify-content-center justify-content-md-end"
-                                    >
-                                        <div class="dataTables_paginate paging_simple_numbers">
-                                            <Pagination :links="employyes.meta.links" />
-                                        </div>
-                                    </div>
-                                </div> -->
+                                                                                                                                                                                                                <div
+                                                                                                                                                                                                                    class="col-sm-12 d-flex align-items-center justify-content-center justify-content-md-end"
+                                                                                                                                                                                                                >
+                                                                                                                                                                                                                    <div class="dataTables_paginate paging_simple_numbers">
+                                                                                                                                                                                                                        <Pagination :links="employyes.meta.links" />
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                            </div> -->
                 <!--end::Table-->
             </div>
         </div>

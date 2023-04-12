@@ -9,5 +9,21 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'date_of_joining', 'number', 'qualification', 'emergency_number', 'pan_number', 'father_name', 'formalities', 'salary', 'offer_acceptance', 'probation_period', 'date_of_confirmation', 'notice_period', 'last_working_day', 'full_final', 'department_id'];
+    protected $fillable = ['code', 'date_of_joining', 'number', 'qualification', 'emergency_number', 'pan_number', 'father_name', 'formalities', 'salary', 'offer_acceptance', 'probation_period', 'date_of_confirmation', 'notice_period', 'last_working_day', 'full_final', 'department_id', 'user_id'];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($employee) {
+            // before delete() method call this
+            $employee->user()->delete();
+            // do the rest of the cleanup...
+        });
+    }
 }

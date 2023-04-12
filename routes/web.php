@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -39,7 +38,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/', 'index')->name('employees.index');
             Route::get('/add', 'create')->name('employees.add');
             Route::post('/store', 'store')->name('employees.store');
-            Route::get('{id}/view', 'show')->name('employees.view');
             Route::get('{id}/edit', 'edit')->name('employees.edit');
             Route::post('{id}/update', 'update')->name('employees.update');
             Route::delete('{id}/delete', 'destroy')->name('employees.delete');
