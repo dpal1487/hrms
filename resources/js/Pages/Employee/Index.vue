@@ -1,5 +1,5 @@
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
@@ -12,6 +12,7 @@ import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
     props: ["employees"],
+
     data() {
         return {
             q: "",
@@ -25,7 +26,6 @@ export default defineComponent({
                 "Action",
             ],
             isLoading: false,
-            employees: this.employees,
         };
     },
     components: {
@@ -43,6 +43,7 @@ export default defineComponent({
                 .post("/supplier/status", { id: id, status: e })
                 .then((response) => {
                     if (response.data.success) {
+
                         toast.success(response.data.message);
                         return;
                     }
@@ -50,14 +51,15 @@ export default defineComponent({
                 })
                 .finally(() => (this.isLoading = false));
         },
-        confirmDelete(id, user) {
+        confirmDelete(id, index) {
             this.isLoading = true;
 
-            // const employeeName = this('[ employees-filter="employees_name"]').innerText;
+            // console.log(this.employees.data[index].user.first_name)
 
-
+            const first_name = this.employees.data[index].user.first_name;
+            const last_name = this.employees.data[index].user.last_name;
             Swal.fire({
-                title: "Are you sure you want to delete " + user.first_name + " " + user.last_name + "?",
+                title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -69,9 +71,12 @@ export default defineComponent({
                     axios
                         .delete("/employees/" + id + "/delete")
                         .then((response) => {
-                            console.log(response)
-                            toastr.success(response.data.message);
-                            $(parent).remove().draw();
+                            if (response.data.success) {
+                                this.employees.data.splice(index, 1);
+                                return;
+                            }
+
+
                         })
 
                         .catch((error) => {
@@ -81,7 +86,7 @@ export default defineComponent({
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: user.first_name + " " + user.last_name + " was not deleted.",
+                        text: first_name + " " + last_name + " was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -91,21 +96,19 @@ export default defineComponent({
                     });
                 }
 
-            }).this.$router.reload();
+            });
         },
         search() {
             Inertia.get(
                 "/employees",
                 { q: this.q, status: this.s },
                 {
-                    preserveState: true,
+                    preserveState: true, onSuccess: (data) => {
+                        this.employees = data.props.employees;
+                    },
                 }
             );
         },
-        getEmployees: async () => {
-            const res = await axios.get("employees")
-            console.log("see", res);
-        }
     },
 });
 </script>
@@ -114,9 +117,10 @@ export default defineComponent({
 
         <Head title="Employees" />
         <div class="card card-flush">
+
             <!--begin::Actions-->
             <div>
-                <form class="card-header align-items-center py-5 gap-2 gap-md-5">
+                <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
                     <!--begin::Card title-->
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
@@ -125,19 +129,19 @@ export default defineComponent({
                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
                                     transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
-                                <path
-                                    d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                    fill="currentColor"></path>
+                            <path
+                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                fill="currentColor"></path>
                         </svg>
                     </span>
                     <!--end::Svg Icon-->
                     <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                         placeholder="Search Employees" />
-                </div>
-                <!-- <div class="w-100 mw-200px">
+                    </div>
+                    <div class="w-100 mw-200px">
                         <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
-                                                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                                                </div> -->
+                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
+                    </div>
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
@@ -171,7 +175,7 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(employees, index) in this.employees.data" :key="index">
+                            <tr v-for="(employees, index) in employees.data" :key="index">
                                 <td>
 
                                     <Link :href="'/employees/' + employees.id"
@@ -181,11 +185,11 @@ export default defineComponent({
                                 </td>
                                 <td>{{ employees.code }}</td>
                                 <!-- <td>
-                                                                                                                                                                                            <span :class="`badge bg-${employees.status.value == 1
-                                                                                                                                                                                                ? 'success'
-                                                                                                                                                                                                : 'danger'
-                                                                                                                                                                                                }`">{{ employees.status.label }}</span>
-                                                                                                                                                                                        </td> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span :class="`badge bg-${employees.status.value == 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ? 'success'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        : 'danger'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }`">{{ employees.status.label }}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </td> -->
                                 <td>{{ employees.number }}</td>
                                 <td>{{ employees.salary }}</td>
 
@@ -215,16 +219,16 @@ export default defineComponent({
                                                 </Link>
                                             </li>
                                             <!-- <li class="menu-item px-3">
-                                                                                                                                <Link class="dropdown-item" :href="`/employees/${employees.id}/edit`">Add
-                                                                                                                                Link
-                                                                                                                                </Link>
-                                                                                                                            </li> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <Link class="dropdown-item" :href="`/employees/${employees.id}/edit`">Add
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Link
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </Link>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li> -->
                                             <li class="menu-item px-3">
                                                 <hr class="dropdown-divider" />
                                             </li>
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    employees.id, employees.user
+                                                    employees.id, index
                                                 )
                                                 " class="btn btn-sm dropdown-item">
                                                     Delete
@@ -239,14 +243,14 @@ export default defineComponent({
                     </table>
                 </div>
                 <!-- <div class="row" v-if="suppliers.meta">
-                                                                                                                                                                                                                <div
-                                                                                                                                                                                                                    class="col-sm-12 d-flex align-items-center justify-content-center justify-content-md-end"
-                                                                                                                                                                                                                >
-                                                                                                                                                                                                                    <div class="dataTables_paginate paging_simple_numbers">
-                                                                                                                                                                                                                        <Pagination :links="employyes.meta.links" />
-                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="col-sm-12 d-flex align-items-center justify-content-center justify-content-md-end"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="dataTables_paginate paging_simple_numbers">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <Pagination :links="employyes.meta.links" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                 <!--end::Table-->
             </div>
         </div>

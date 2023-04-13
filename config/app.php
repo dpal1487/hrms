@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -155,7 +154,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -185,6 +183,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -198,7 +197,6 @@ return [
         App\Providers\JetstreamServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Chatify\ChatifyServiceProvider::class,
-
     ],
 
     /*
@@ -212,9 +210,11 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'Chatify' => Chatify\Facades\ChatifyMessenger::class,
-    ])->toArray(),
-
+    'aliases' => Facade::defaultAliases()
+        ->merge([
+            'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+            'Chatify' => Chatify\Facades\ChatifyMessenger::class,
+            'Image' => Intervention\Image\Facades\Image::class,
+        ])
+        ->toArray(),
 ];

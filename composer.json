@@ -11,6 +11,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "haruncpi/laravel-id-generator": "^1.1",
         "inertiajs/inertia-laravel": "^0.6.3",
+        "intervention/image": "^2.7",
         "laravel/cashier": "^14.9",
         "laravel/framework": "^9.19",
         "laravel/jetstream": "^2.13",

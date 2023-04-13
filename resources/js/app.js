@@ -7,6 +7,8 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 
+import Vue3Toastify from 'vue3-toastify';
+
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 import "vue3-toastify/dist/index.css";
@@ -22,7 +24,7 @@ createInertiaApp({
             autoSetContainer: true,
             appendToBody: true,
             })
-            .use(plugin)
+            .use(plugin).use(Vue3Toastify, {autoClose: 3000,})
             .mixin({ methods: { route } })
             .mount(el);
     },

@@ -2,33 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use Illuminate\Http\Request;
-use App\Http\Resources\EmployeeResources;
-use Inertia\Inertia;
-use App\Models\Employee;
-use App\Models\User;
-use Auth;
+use App\Http\Resources\QuestionResources;
 
-class EmployeeController extends Controller
+use Inertia\Inertia;
+
+class QuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $employees = new Employee();
-        if (!empty($request->q)) {
-            $employees = $employees
-                ->whereHas('user', function ($q) use ($request) {
-                    $q->where('first_name', 'like', "%$request->q%")->orWhere('last_name', 'like', "%$request->q%");
-                })
-                ->orWhere('code', 'like', "%$request->q%")
-                ->orWhere('number', 'like', "%$request->q%");
-        }
-        return Inertia::render('Employee/Index', [
-            'employees' => EmployeeResources::collection($employees->paginate(10)),
+        $question = Question::get();
+        // $question = new Question();
+
+        // if (!empty($request->q)) {
+        //     $question = $questions
+        //         ->whereHas('industry', function ($q) use ($request) {
+        //             $q->where('name', 'like', "%$request->q%");
+        //         })
+        //         ->orWhere('question_key', 'like', "%$request->q%")
+        //         ->orWhere('text', 'like', "%$request->q%")
+        //         ->orWhere('language', 'like', "%$request->q%")
+        //         ->orWhere('type', 'like', "%$request->q%");
+        // }
+
+        // return QuestionResources::collection($question);
+        return Inertia::render('Question/Index', [
+            'questions' => QuestionResources::collection($question),
         ]);
     }
 
@@ -39,7 +44,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Employee/Form');
+        return Inertia::render('Question/Form');
     }
 
     /**
@@ -72,7 +77,7 @@ class EmployeeController extends Controller
         ]);
 
         if (
-            $employee = Employee::create([
+            $question = question::create([
                 'code' => 'ABC123',
                 'date_of_joining' => $request->date_of_joining,
                 'number' => $request->number,
@@ -92,35 +97,48 @@ class EmployeeController extends Controller
                 'user_id' => $user->id,
             ])
         ) {
-            // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
+            // return response()->json(['success' => true, 'message' => 'question created successfully']);
 
-            return redirect('/employees');
+            return redirect('/question');
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Question $question)
     {
         //
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Question  $question
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Question $question)
     {
-        $employee = Employee::find($id);
+        $question = question::find($id);
 
-        // $employee = new EmployeeResources($employee);
+        // $question = new questionResources($question);
 
-        return Inertia::render('Employee/Form', [
-            'employee' => new EmployeeResources($employee),
+        return Inertia::render('question/Form', [
+            'question' => new questionResources($question),
         ]);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Question  $question
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Question $question)
     {
         $request->validate([
             'first_name' => 'required',
@@ -139,19 +157,19 @@ class EmployeeController extends Controller
             'department_id' => 'required',
         ]);
 
-        $employee = Employee::find($id);
+        $question = question::find($id);
 
-        $employee = new EmployeeResources($employee);
+        $question = new questionResources($question);
 
-        $user = User::where(['id' => $employee->user->id])->get();
+        $user = User::where(['id' => $question->user->id])->get();
 
-        $user = User::where(['id' => $employee->user->id])->update([
+        $user = User::where(['id' => $question->user->id])->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
         ]);
 
         if (
-            $employee = Employee::where(['id' => $employee->id])->update([
+            $question = question::where(['id' => $question->id])->update([
                 'code' => 'ABC123',
                 'date_of_joining' => $request->date_of_joining,
                 'number' => $request->number,
@@ -165,26 +183,26 @@ class EmployeeController extends Controller
                 'probation_period' => $request->probation_period,
                 'date_of_confirmation' => $request->date_of_confirmation,
                 'department_id' => $request->department_id,
-                'user_id' => $employee->user->id,
+                'user_id' => $question->user->id,
             ])
         ) {
-            // return response()->json(['success'=>true,'message'=>'Employee Updated successfully']);
+            // return response()->json(['success'=>true,'message'=>'question Updated successfully']);
 
-            return redirect('/employees');
+            return redirect('/question');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Question $question)
     {
-        $employee = Employee::find($id);
-        if ($employee->delete()) {
-            return response()->json(['success' => true, 'message' => 'Employee has been deleted successfully.']);
+        $question = Question::find($id);
+        if ($question->delete()) {
+            return response()->json(['success' => true, 'message' => 'Question has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
