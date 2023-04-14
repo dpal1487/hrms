@@ -51,7 +51,7 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            console.log(this.industries.data[index])
+            // console.log(this.industries.data[index])
 
             const name = this.industries.data[index].name;
             // const last_name = this.industries;
@@ -122,21 +122,21 @@ export default defineComponent({
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                    <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
-                            <path
-                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                fill="currentColor"></path>
-                        </svg>
+                        <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                                    transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                                <path
+                                    d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                    fill="currentColor"></path>
+                            </svg>
                         </span>
                         <!--end::Svg Icon-->
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search Industry" />
                     </div>
                     <div class="w-100 mw-200px">
-                        <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
+                        <Multiselect :options="$page.props.industries.status" label="status" valueProp="value"
                             class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
                     </div>
                     <button type="submit" class="btn btn-primary">
@@ -173,11 +173,7 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(industries, index) in industries.data" :key="index">
-                                <!-- <td>
-                                                                                                                                                        <Link :href="'/industries/' + industries.id"
-                                                                                                                                                            class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                                                                                                                                            industries-filter="industries_name">{{ industries.name }} </Link>
-                                                                                                                                                    </td> -->
+
                                 <td>{{ industries.name }}</td>
                                 <td>{{ industries.created_at }}</td>
                                 <td>
@@ -209,10 +205,10 @@ export default defineComponent({
                                                 </Link>
                                             </li>
                                             <!-- <li class="menu-item px-3">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                <Link class="dropdown-item" :href="`/industries/${industries.id}/edit`">Add
-                                                                                                                                                                                                                                                                                                                                                                                                                                                Link
-                                                                                                                                                                                                                                                                                                                                                                                                                                                </Link>
-                                                                                                                                                                                                                                                                                                                                                                                                                                            </li> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <Link class="dropdown-item" :href="`/industries/${industries.id}/edit`">Add
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Link
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </Link>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </li> -->
                                             <li class="menu-item px-3">
                                                 <hr class="dropdown-divider" />
                                             </li>
@@ -232,16 +228,9 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <!-- <div class="row" v-if="suppliers.meta">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    class="col-sm-12 d-flex align-items-center justify-content-center justify-content-md-end"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                >
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="dataTables_paginate paging_simple_numbers">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <Pagination :links="employyes.meta.links" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
-                <!--end::Table-->
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="industries.meta">
+                    <Pagination :links="industries.meta.links" />
+                </div>
             </div>
         </div>
     </app-layout>

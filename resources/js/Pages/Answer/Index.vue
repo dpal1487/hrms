@@ -7,22 +7,19 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
-import 'vue3-toastify/dist/index.css';
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
-    props: ["employees"],
+    props: ["answers"],
 
     data() {
         return {
             q: "",
             s: "",
             tbody: [
-                "Employee Name",
-                "Employee Code",
-                "Number",
-                "Status",
-                "Created At",
+                "Question",
+                "Answer",
+                "Order By",
                 "Action",
             ],
             isLoading: false,
@@ -37,29 +34,16 @@ export default defineComponent({
         Loading,
     },
     methods: {
-        updateStatus(id, e) {
-            this.isLoading = true;
-            axios
-                .post("/supplier/status", { id: id, status: e })
-                .then((response) => {
-                    if (response.data.success) {
 
-                        toast.success(response.data.message);
-                        return;
-                    }
-                    toast.error(response.data.message);
-                })
-                .finally(() => (this.isLoading = false));
-        },
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            // console.log(this.employees.data[index].user.first_name)
+            // console.log(this.answers.data[index].question.question_key)
 
-            const first_name = this.employees.data[index].user.first_name;
-            const last_name = this.employees.data[index].user.last_name;
+            const name = this.answers.data[index].question?.question_key;
+
             Swal.fire({
-                title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
+                title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -69,14 +53,12 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/employees/" + id + "/delete")
+                        .delete("/answer/" + id + "/delete")
                         .then((response) => {
                             if (response.data.success) {
-                                this.employees.data.splice(index, 1);
+                                this.answers.data.splice(index, 1);
                                 return;
                             }
-
-
                         })
 
                         .catch((error) => {
@@ -86,7 +68,7 @@ export default defineComponent({
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: first_name + " " + last_name + " was not deleted.",
+                        text: name + " was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -100,30 +82,22 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/employees",
+                "/answer",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
-                        this.employees = data.props.employees;
+                        this.answers = data.props.answers;
                     },
                 }
             );
         },
     },
-    setup() {
-        const notify = () => {
-            toast("A basic toast message", {
-                // toast options here
-            });
-        }
-        return { notify };
-    }
 });
 </script>
 <template>
     <app-layout>
 
-        <Head title="Employees" />
+        <Head title="Answers" />
         <div class="card card-flush">
 
             <!--begin::Actions-->
@@ -144,12 +118,9 @@ export default defineComponent({
                         </span>
                         <!--end::Svg Icon-->
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search Employees" />
+                            placeholder="Search Answers" />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                    </div>
+
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
@@ -157,11 +128,11 @@ export default defineComponent({
 
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <!--begin::Add employees-->
-                        <Link href="/employees/add" class="btn btn-primary">
-                        Add Employee
+                        <!--begin::Add Answers-->
+                        <Link href="/answer/add" class="btn btn-primary">
+                        Add Answer
                         </Link>
-                        <!--end::Add employees-->
+                        <!--end::Add Answers-->
                     </div>
                     <!--end::Card toolbar-->
                 </form>
@@ -183,30 +154,22 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(employees, index) in employees.data" :key="index">
+                            <tr v-for="(answers, index) in answers.data" :key="index">
                                 <td>
 
-                                    <Link :href="'/employees/' + employees.id"
+                                    <Link :href="'/answers/' + answers.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        employees-filter="employees_name">{{ employees.user.first_name }} {{
-                                            employees.user.last_name }}</Link>
+                                        answers-filter="answers_name">{{ answers.data }} {{
+                                            answers.question?.question_key }}</Link>
                                 </td>
-                                <td>{{ employees.code }}</td>
-                                <!-- <td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <span :class="`badge bg-${employees.status.value == 1
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ? 'success'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            : 'danger'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }`">{{ employees.status.label }}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </td> -->
-                                <td>{{ employees.number }}</td>
-                                <td>{{ employees.salary }}</td>
-
-                                <td>{{ employees.created_at }}</td>
+                                <td>{{ answers.answer }}</td>
+                                <td v-if="(answers.order_by == 1)">Ascending</td>
+                                <td v-else="( answers.order_by == 0 )">Descending</td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${employees.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${answers.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -221,23 +184,18 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${employees.id}`">
+                                            :aria-labelled:by="`dropdown-${answers.id}`">
                                             <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employees/${employees.id}/edit`">Edit
-                                                </Link>
-                                            </li>
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employees/${employees.id}/view`">View
+                                                <Link class="dropdown-item" :href="`/answer/${answers.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
+                                                <hr class="dropdown-divider" />
+                                            </li>
+                                            <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    employees.id, index
+                                                    answers.id, index
                                                 )
                                                 " class="btn btn-sm dropdown-item">
                                                     Delete
@@ -251,8 +209,8 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="employees.meta">
-                    <Pagination :links="employees.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="answers.meta">
+                    <Pagination :links="answers.meta.links" />
                 </div>
             </div>
         </div>

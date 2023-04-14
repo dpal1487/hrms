@@ -46,10 +46,16 @@ export default defineComponent({
             form: this.$inertia.form({
                 id: this.industry?.data?.id || '',
                 name: this.industry?.data?.name || '',
-                image: this.industry?.data?.image || '',
+                image: this.industry?.data?.image?.name || '',
                 status: this.industry?.data?.status || '',
             }),
             url: null,
+            value: null,
+            status: [
+                { id: '1', name: 'Active' },
+                { id: '0', name: 'Inactive' },
+
+            ]
 
         };
     },
@@ -89,8 +95,9 @@ export default defineComponent({
         },
         onFileChange(e) {
             const file = e.target.files[0];
-            console.log("see file", file)
+            // console.log("see file", file.name)
             this.$data.form.image = file;
+            this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
         }
 
@@ -124,58 +131,47 @@ export default defineComponent({
                                 <!-- <jet-input type="text" v-model="v$.form.id.$model" /> -->
 
                                 <div class="fv-row col-6">
-                                    <jet-label for="image" value="Picture" />
-                                    <!-- <label for="description">Picture</label> -->
-                                    <input type="file" name="image" placeholder="First image"
-                                        class="form-control-file form-control form-control-lg form-control-solid" id="image"
-                                        @change="onFileChange" />
+                                    <label for="image" class="d-flex align-items-center">
+                                        <input type="file" name="image" placeholder="First image" id="image"
+                                            @change="onFileChange" class="d-none" />
+                                        <div class=" border border-1 border-dark rounded-2 p-4 bg-secondary me-4">
+                                            Industry Image
+                                        </div>
+                                        <div v-if="industry?.data?.image?.name">{{ industry?.data?.image?.name }}</div>
+                                        <div v-else>{{ selectedFilename }}</div>
+                                    </label>
                                     <div v-for="(error, index) of v$.form.image.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
-
+                                    <!-- {{ industry.data.image.name }} -->
                                     <div id="preview" class="m-3">
                                         <img v-if="url" :src="url" :width="200" />
+                                        <img v-else-if="industry?.data?.image?.medium_path"
+                                            :src="industry?.data?.image?.medium_path" :width="200" />
                                     </div>
                                 </div>
-                                <div class="fv-row col-6">
+                                <div class="col-6">
+                                    <div class="fv-row mb-6">
 
-                                    <jet-label for="name" value="Name" />
-                                    <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="
-                                        v$.form.name.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Industry name" />
-                                    <div v-for="(error, index) of v$.form.name.$errors" :key="index">
-                                        <input-error :message="error.$message" />
+                                        <jet-label for="name" value="Name" />
+                                        <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="
+                                            v$.form.name.$errors.length > 0
+                                                ? 'is-invalid'
+                                                : ''
+                                        " placeholder="Industry name" />
+                                        <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                            <input-error :message="error.$message" />
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="fv-row">
+                                        <jet-label for="status" value="Status" />
 
-                                <!-- <div class="fv-row col-6">
+                                        <Multiselect :options="status" label="name" valueProp="id"
+                                            :custom-label="nameWithLang"
+                                            class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                            v-model="v$.form.status.$model" track-by="name" />
 
-                                                                                                                                                                                                                <jet-label for="name" value="Profile Avatar" />
-                                                                                                                                                                                                                <jet-input id="image" type="file" v-model="v$.form.image.$model" :class="
-                                                                                                                                                                                                                    v$.form.image.$errors.length > 0
-                                                                                                                                                                                                                        ? 'is-invalid'
-                                                                                                                                                                                                                        : ''
-                                                                                                                                                                                                                " placeholder="First image" />
-                                                                                                                                                                                                                <div v-for="(error, index) of v$.form.image.$errors" :key="index">
-                                                                                                                                                                                                                    <input-error :message="error.$message" />
-                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                            </div> -->
-
-
-                                <div class="fv-row col-6">
-                                    <jet-label for="status" value="Status" />
-                                    <select v-model="v$.form.status.$model"
-                                        class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        track-by="name">
-                                        <option value="1">Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                    <!-- <Multiselect :options="options" label="name" valueProp="value"
-                                                                                                                                                                                                                                                                            :custom-label="nameWithLang" class="form-control form-control-lg form-control-solid"
-                                                                                                                                                                                                                                                                            placeholder="Select One" v-model="value" track-by="name" /> -->
-
+                                    </div>
                                 </div>
 
 
@@ -185,20 +181,23 @@ export default defineComponent({
                     <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
-                            <div class="d-flex justify-content-end">
-                                <Link href="/industries" class="btn btn-secondary me-3">
+                            <div class="d-flex justify-content-end text-align-center gap-2">
+
+                                <Link href="/industries" class="btn btn-secondary    ">
                                 Cancel
                                 </Link>
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="indicator-label">
-                                        <p v-if="route().current() == 'industries.edit'">Update</p>
-                                        <p v-if="route().current() == 'industries.add'">Save</p>
-                                    </span>
-                                    <span class="indicator-progress">
-                                        Please wait... <span
-                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
-                                </button>
+
+                                <div>
+                                    <button type="submit" class="btn btn-primary align-items-center justify-content-center"
+                                        :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                        <span v-if="route().current() == 'industries.edit'">Update</span>
+                                        <span v-if="route().current() == 'industries.add'">Save</span>
+                                        <span class="indicator-progress">
+                                            Please wait... <span
+                                                class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                </div>
                                 <!--end::Button-->
                             </div>
                         </div>

@@ -106,7 +106,13 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        $employee = Employee::find($id);
+
+        return Inertia::render('Employee/View', [
+            'employee' => new EmployeeResources($employee),
+        ]);
+
+        return $employee;
     }
 
     public function edit($id)

@@ -23,7 +23,6 @@ export default defineComponent({
                 "Text",
                 "Language",
                 "Type",
-                "Created At",
                 "Action",
             ],
             isLoading: false,
@@ -38,29 +37,16 @@ export default defineComponent({
         Loading,
     },
     methods: {
-        updateStatus(id, e) {
-            this.isLoading = true;
-            axios
-                .post("/supplier/status", { id: id, status: e })
-                .then((response) => {
-                    if (response.data.success) {
 
-                        toast.success(response.data.message);
-                        return;
-                    }
-                    toast.error(response.data.message);
-                })
-                .finally(() => (this.isLoading = false));
-        },
         confirmDelete(id, index) {
             this.isLoading = true;
 
             // console.log(this.questions.data[index].user.first_name)
 
-            const first_name = this.questions.data[index].user.first_name;
-            const last_name = this.questions.data[index].user.last_name;
+            const name = this.questions.data[index].industry?.name;
+
             Swal.fire({
-                title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
+                title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -70,14 +56,12 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/questions/" + id + "/delete")
+                        .delete("/question/" + id + "/delete")
                         .then((response) => {
                             if (response.data.success) {
                                 this.questions.data.splice(index, 1);
                                 return;
                             }
-
-
                         })
 
                         .catch((error) => {
@@ -87,7 +71,7 @@ export default defineComponent({
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: first_name + " " + last_name + " was not deleted.",
+                        text: name + " was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -121,22 +105,22 @@ export default defineComponent({
 
             <!--begin::Actions-->
             <div>
-                <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
-                    <!--begin::Card title-->
-                    <!--begin::Search-->
-                    <div class="d-flex align-items-center position-relative">
+            <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
+                <!--begin::Card title-->
+                <!--begin::Search-->
+                <div class="d-flex align-items-center position-relative">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                         <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
-                            <path
-                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                fill="currentColor"></path>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                    <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
+                                    transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                                <path
+                                    d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                    fill="currentColor"></path>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search questions" />
                     </div>
                     <div class="w-100 mw-200px">
@@ -151,8 +135,8 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add questions-->
-                        <Link href="/questions/add" class="btn btn-primary">
-                        Add Employee
+                        <Link href="/question/add" class="btn btn-primary">
+                        Add Question
                         </Link>
                         <!--end::Add questions-->
                     </div>
@@ -182,15 +166,15 @@ export default defineComponent({
                                     <Link :href="'/questions/' + questions.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
                                         questions-filter="questions_name">{{ questions.data }} {{
-                                            questions }}</Link>
+                                            questions.industry?.name }}</Link>
                                 </td>
                                 <td>{{ questions.question_key }}</td>
                                 <!-- <td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span :class="`badge bg-${questions.status.value == 1
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ? 'success'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        : 'danger'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }`">{{ questions.status.label }}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </td> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span :class="`badge bg-${questions.status.value == 1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ? 'success'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    : 'danger'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }`">{{ questions.status.label }}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </td> -->
                                 <td>{{ questions.text }}</td>
                                 <td>{{ questions.language }}</td>
 
@@ -216,14 +200,14 @@ export default defineComponent({
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                             :aria-labelled:by="`dropdown-${questions.id}`">
                                             <li class="menu-item px-3">
-                                                <Link class="dropdown-item" :href="`/questions/${questions.id}/edit`">Edit
+                                                <Link class="dropdown-item" :href="`/question/${questions.id}/edit`">Edit
                                                 </Link>
                                             </li>
                                             <!-- <li class="menu-item px-3">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <Link class="dropdown-item" :href="`/questions/${questions.id}/edit`">Add
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Link
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </Link>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <Link class="dropdown-item" :href="`/questions/${questions.id}/edit`">Add
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Link
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </Link>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </li> -->
                                             <li class="menu-item px-3">
                                                 <hr class="dropdown-divider" />
                                             </li>
@@ -243,16 +227,9 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <!-- <div class="row" v-if="suppliers.meta">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="col-sm-12 d-flex align-items-center justify-content-center justify-content-md-end"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="dataTables_paginate paging_simple_numbers">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <Pagination :links="employyes.meta.links" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
-                <!--end::Table-->
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="questions.meta">
+                    <Pagination :links="questions.meta.links" />
+                </div>
             </div>
         </div>
     </app-layout>

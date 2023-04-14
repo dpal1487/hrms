@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\Industry;
 use Illuminate\Http\Request;
 use App\Http\Resources\QuestionResources;
 
@@ -10,30 +11,25 @@ use Inertia\Inertia;
 
 class QuestionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $question = Question::get();
-        // $question = new Question();
+        // $questions = Question::get();
+        $questions = new Question();
 
-        // if (!empty($request->q)) {
-        //     $question = $questions
-        //         ->whereHas('industry', function ($q) use ($request) {
-        //             $q->where('name', 'like', "%$request->q%");
-        //         })
-        //         ->orWhere('question_key', 'like', "%$request->q%")
-        //         ->orWhere('text', 'like', "%$request->q%")
-        //         ->orWhere('language', 'like', "%$request->q%")
-        //         ->orWhere('type', 'like', "%$request->q%");
-        // }
+        if (!empty($request->q)) {
+            $questions = $questions
+                ->whereHas('industry', function ($q) use ($request) {
+                    $q->where('name', 'like', "%$request->q%");
+                })
+                ->orWhere('question_key', 'like', "%$request->q%")
+                ->orWhere('text', 'like', "%$request->q%")
+                ->orWhere('language', 'like', "%$request->q%")
+                ->orWhere('type', 'like', "%$request->q%");
+        }
 
         // return QuestionResources::collection($question);
         return Inertia::render('Question/Index', [
-            'questions' => QuestionResources::collection($question),
+            'questions' => QuestionResources::collection($questions->paginate(10)),
         ]);
     }
 
@@ -44,7 +40,9 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Question/Form');
+        $industries = Industry::get();
+        // return $industries;
+        return Inertia::render('Question/Form', ['industries' => $industries]);
     }
 
     /**
@@ -55,46 +53,22 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'date_of_joining' => 'required',
-            'number' => 'required|numeric',
-            'qualification' => 'required',
-            'emergency_number' => 'required|integer',
-            'pan_number' => 'required|regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}/',
-            'father_name' => 'required',
-            'formalities' => 'required|integer',
-            'salary' => 'required',
-            'offer_acceptance' => 'required|integer',
-            'probation_period' => 'required',
-            'date_of_confirmation' => 'required',
-            'department_id' => 'required',
-        ]);
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+            'question_key' => 'required',
+            'text' => 'required',
+            'type' => 'required',
+            'industry' => 'required',
+            'language' => 'required',
         ]);
 
         if (
             $question = question::create([
-                'code' => 'ABC123',
-                'date_of_joining' => $request->date_of_joining,
-                'number' => $request->number,
-                'qualification' => $request->qualification,
-                'emergency_number' => $request->emergency_number,
-                'pan_number' => $request->pan_number,
-                'father_name' => $request->father_name,
-                'formalities' => $request->formalities,
-                'salary' => $request->salary,
-                'offer_acceptance' => $request->offer_acceptance,
-                'probation_period' => $request->probation_period,
-                'date_of_confirmation' => $request->date_of_confirmation,
-                'notice_period' => $request->notice_period,
-                'last_working_day' => $request->last_working_day,
-                'full_final' => $request->full_final,
-                'department_id' => $request->department_id,
-                'user_id' => $user->id,
+                'question_key' => $request->question_key,
+                'text' => $request->text,
+                'type' => $request->type,
+                'industry_id' => $request->industry,
+                'language' => $request->language,
             ])
         ) {
             // return response()->json(['success' => true, 'message' => 'question created successfully']);
@@ -120,14 +94,17 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function edit(Question $question)
+    public function edit(Question $question, $id)
     {
+        $industries = Industry::get();
+
         $question = question::find($id);
 
         // $question = new questionResources($question);
 
-        return Inertia::render('question/Form', [
+        return Inertia::render('Question/Form', [
             'question' => new questionResources($question),
+            'industries' => $industries,
         ]);
     }
 
@@ -138,55 +115,28 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Question $question)
+    public function update(Request $request, Question $question, $id)
     {
         $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'date_of_joining' => 'required',
-            'number' => 'required|numeric',
-            'qualification' => 'required',
-            'emergency_number' => 'required|integer',
-            'pan_number' => 'required|regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}/',
-            'father_name' => 'required',
-            'formalities' => 'required|integer',
-            'salary' => 'required',
-            'offer_acceptance' => 'required|integer',
-            'probation_period' => 'required',
-            'date_of_confirmation' => 'required',
-            'department_id' => 'required',
+            'question_key' => 'required',
+            'text' => 'required',
+            'type' => 'required',
+            'industry' => 'required',
+            'language' => 'required',
         ]);
 
         $question = question::find($id);
 
-        $question = new questionResources($question);
-
-        $user = User::where(['id' => $question->user->id])->get();
-
-        $user = User::where(['id' => $question->user->id])->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-        ]);
-
         if (
             $question = question::where(['id' => $question->id])->update([
-                'code' => 'ABC123',
-                'date_of_joining' => $request->date_of_joining,
-                'number' => $request->number,
-                'qualification' => $request->qualification,
-                'emergency_number' => $request->emergency_number,
-                'pan_number' => $request->pan_number,
-                'father_name' => $request->father_name,
-                'formalities' => $request->formalities,
-                'salary' => $request->salary,
-                'offer_acceptance' => $request->offer_acceptance,
-                'probation_period' => $request->probation_period,
-                'date_of_confirmation' => $request->date_of_confirmation,
-                'department_id' => $request->department_id,
-                'user_id' => $question->user->id,
+                'question_key' => $request->question_key,
+                'text' => $request->text,
+                'type' => $request->type,
+                'industry_id' => $request->industry,
+                'language' => $request->language,
             ])
         ) {
-            // return response()->json(['success'=>true,'message'=>'question Updated successfully']);
+            // return response()->json(['success' => true, 'message' => 'question created successfully']);
 
             return redirect('/question');
         }
@@ -198,8 +148,10 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Question $question)
+    public function destroy($id)
     {
+        // dd($id);
+
         $question = Question::find($id);
         if ($question->delete()) {
             return response()->json(['success' => true, 'message' => 'Question has been deleted successfully.']);
