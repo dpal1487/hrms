@@ -24,8 +24,12 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'social_id', 'social_type', 'email_verified_at'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'social_id', 'social_type', 'email_verified_at', 'image_id', 'avatar'];
 
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'id', 'image_id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

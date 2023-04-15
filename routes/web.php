@@ -44,7 +44,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/', 'index')->name('employees.index');
             Route::get('/add', 'create')->name('employees.add');
             Route::post('/store', 'store')->name('employees.store');
-            Route::get('{id}/view', 'show')->name('employees.view');
+            Route::get('{id}/overview', 'overview')->name('employees.overview');
+            Route::get('{id}/settings', 'setting')->name('employees.settings');
+            Route::get('{id}/security', 'security')->name('employees.security');
+            Route::get('{id}/address', 'address')->name('employees.address');
             Route::get('{id}/edit', 'edit')->name('employees.edit');
             Route::post('{id}/update', 'update')->name('employees.update');
             Route::delete('{id}/delete', 'destroy')->name('employees.delete');

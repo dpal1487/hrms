@@ -10,6 +10,7 @@ import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, email, url, numeric, integer } from "@vuelidate/validators";
+import ImageInput from '@/components/ImageInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Dropdown from "../../Jetstream/Dropdown.vue";
@@ -26,6 +27,9 @@ export default defineComponent({
     validations() {
         return {
             form: {
+                image: {
+                    required,
+                },
                 first_name: {
                     required,
                 },
@@ -78,6 +82,7 @@ export default defineComponent({
             isEdit: false,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
+                image: this.employee?.data?.employee?.avatar || '',
                 first_name: this.employee?.data?.user?.first_name || '',
                 last_name: this.employee?.data?.user?.last_name || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
@@ -115,7 +120,8 @@ export default defineComponent({
         InputError,
         JetValidationErrors,
         VueDatePicker,
-        Dropdown
+        Dropdown,
+        ImageInput
     },
     methods: {
         nameWithLang({ name, language }) {
@@ -131,6 +137,14 @@ export default defineComponent({
                     .post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id));
             }
         },
+        onFileChange(e) {
+            const file = e.target.files[0];
+            // console.log("see file", file.name)
+            this.$data.form.image = file;
+            this.selectedFilename = file?.name;
+            this.url = URL.createObjectURL(file);
+        }
+
 
     },
     created() {
@@ -144,6 +158,7 @@ export default defineComponent({
     <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
     <AppLayout>
+
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <JetValidationErrors />
@@ -153,12 +168,19 @@ export default defineComponent({
                         <div class="card-header">
                             <div class="card-title">
                                 <h2>General</h2>
+                                <!-- {{ this.employee?.data?.image?.medium_path }} -->
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="row g-5 col-md-12">
 
                                 <!-- <jet-input type="text" v-model="v$.form.id.$model" /> -->
+
+                                <div class="fv-row col-6">
+                                    <ImageInput :image="this.employee?.data?.image?.medium_path" :onchange="onFileChange"
+                                        :remove="removeSelectedAvatar" :selectedImage="url"
+                                        :errors="v$.form.image.$errors" />
+                                </div>
                                 <div class="fv-row col-6">
 
                                     <jet-label for="first_name" value="First Name" />

@@ -9,6 +9,7 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
+import ImageInput from '@/Components/ImageInput.vue';
 import { required, email, url, numeric, integer } from "@vuelidate/validators";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -35,13 +36,11 @@ export default defineComponent({
                 status: {
                     required,
                 }
-
             },
         };
     },
     data() {
         return {
-
             isEdit: false,
             form: this.$inertia.form({
                 id: this.industry?.data?.id || '',
@@ -54,7 +53,6 @@ export default defineComponent({
             status: [
                 { id: '1', name: 'Active' },
                 { id: '0', name: 'Inactive' },
-
             ]
 
         };
@@ -69,7 +67,8 @@ export default defineComponent({
         JetLabel,
         InputError,
         JetValidationErrors,
-        VueDatePicker
+        VueDatePicker,
+        ImageInput
     },
     methods: {
         submit() {
@@ -80,25 +79,27 @@ export default defineComponent({
 
 
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => {
-                        console.log("see submitted data", data);
-                        const formdata = new FormData();
-                        formdata.append("id", data.id);
-                        formdata.append("name", data.name);
-                        formdata.append("image", data.image);
-                        formdata.append("status", data.status);
-                        return formdata;
-                    })
+                this.form.transform((data) => {
+                    console.log("see submitted data", data);
+                    const formdata = new FormData();
+                    formdata.append("id", data.id);
+                    formdata.append("name", data.name);
+                    formdata.append("image", data.image);
+                    formdata.append("status", data.status);
+                    return formdata;
+                })
                     .post(route().current() == 'industries.add' ? this.route("industries.store") : this.route('industries.update', this.form.id), config);
             }
         },
         onFileChange(e) {
             const file = e.target.files[0];
-            // console.log("see file", file.name)
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
+        },
+        removeSelectedAvatar() {
+            console.log("I am working...")
+            this.url = null;
         }
 
     },
@@ -125,32 +126,66 @@ export default defineComponent({
                                 <h2>General</h2>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="row g-5 col-md-12">
+                    </div>
+                    <div class="">
+                        <div class="row g-5">
+                            <div class="col-4">
+                                <div class="card p-6">
+                                    <div class="fv-row">
+                                        <div class="d-flex align-items-center justify-content-center d-none">
+                                            <div class="text-center">
+                                                <div class="image-input image-input-outline mx-auto"
+                                                    data-kt-image-input="true"
+                                                    style="background-image: url('/assets/media/svg/avatars/blank.svg')">
+                                                    <!--begin::Preview existing avatar-->
+                                                    <!-- {{ this.industry?.data?.image?.medium_path }} -->
+                                                    <img class="image-input-wrapper w-125px h-125px"
+                                                        v-if="this.industry?.data?.image?.medium_path && !url"
+                                                        :src="this.industry?.data?.image?.medium_path" />
+                                                    <img class="image-input-wrapper w-125px h-125px"
+                                                        v-else-if="!this.industry && !url"
+                                                        src="/assets/media/svg/avatars/blank.svg" />
+                                                    <img class="image-input-wrapper w-125px h-125px" v-else :src="url" />
 
-                                <!-- <jet-input type="text" v-model="v$.form.id.$model" /> -->
 
-                                <div class="fv-row col-6">
-                                    <label for="image" class="d-flex align-items-center">
-                                        <input type="file" name="image" placeholder="First image" id="image"
-                                            @change="onFileChange" class="d-none" />
-                                        <div class=" border border-1 border-dark rounded-2 p-4 bg-secondary me-4">
-                                            Industry Image
+                                                    <!--end::Preview existing avatar-->
+                                                    <!--begin::Label-->
+                                                    <label
+                                                        class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                                        data-kt-image-input-action="change" data-bs-toggle="tooltip"
+                                                        title="Change avatar">
+                                                        <i class="bi bi-pencil-fill fs-7"></i>
+                                                        <!--begin::Inputs-->
+                                                        <input type="file" name="avatar" accept=".png, .jpg, .jpeg"
+                                                            @change="onFileChange" />
+                                                        <input type="hidden" name="avatar_remove" />
+                                                        <!--end::Inputs-->
+                                                    </label>
+                                                    <div v-for="(error, index) of v$.form.image.$errors" :key="index">
+                                                        <input-error :message="error.$message" />
+                                                    </div>
+                                                    <!--end::Label-->
+                                                    <!--begin::Cancel-->
+                                                    <span v-if="url"
+                                                        class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                                        data-kt-image-input-action="remove" data-bs-toggle="tooltip"
+                                                        title="Cancel avatar" @click="removeSelectedAvatar">
+                                                        <i class="bi bi-x fs-2"></i>
+                                                    </span>
+                                                    <!--end::Cancel-->
+                                                </div>
+                                                <div class="form-text mt-5">Allowed file types: png, jpg, jpeg.</div>
+                                            </div>
                                         </div>
-                                        <div v-if="industry?.data?.image?.name">{{ industry?.data?.image?.name }}</div>
-                                        <div v-else>{{ selectedFilename }}</div>
-                                    </label>
-                                    <div v-for="(error, index) of v$.form.image.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                    <!-- {{ industry.data.image.name }} -->
-                                    <div id="preview" class="m-3">
-                                        <img v-if="url" :src="url" :width="200" />
-                                        <img v-else-if="industry?.data?.image?.medium_path"
-                                            :src="industry?.data?.image?.medium_path" :width="200" />
+                                        <ImageInput :image="this.industry?.data?.image?.medium_path"
+                                            :onchange="onFileChange" :remove="removeSelectedAvatar" :selectedImage="url"
+                                            :errors="v$.form.image.$errors" />
                                     </div>
                                 </div>
-                                <div class="col-6">
+                            </div>
+
+                            <div class="col-8">
+                                <div class="card p-6">
                                     <div class="fv-row mb-6">
 
                                         <jet-label for="name" value="Name" />
@@ -169,13 +204,19 @@ export default defineComponent({
                                         <Multiselect :options="status" label="name" valueProp="id"
                                             :custom-label="nameWithLang"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                            v-model="v$.form.status.$model" track-by="name" />
-
+                                            v-model="v$.form.status.$model" track-by="name" :class="
+                                                v$.form.status.$errors.length > 0
+                                                    ? 'is-invalid'
+                                                    : ''
+                                            " />
+                                        <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                            <input-error :message="error.$message" />
+                                        </div>
                                     </div>
                                 </div>
-
-
                             </div>
+
+
                         </div>
                     </div>
                     <!--end::Variations-->
