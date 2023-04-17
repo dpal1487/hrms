@@ -10,6 +10,7 @@ use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\AddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,15 +45,24 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/', 'index')->name('employees.index');
             Route::get('/add', 'create')->name('employees.add');
             Route::post('/store', 'store')->name('employees.store');
+            Route::get('{id}', 'show')->name('employees.view');
             Route::get('{id}/overview', 'overview')->name('employees.overview');
+            Route::get('{id}/overview/edit', 'overviewEdit')->name('employees.overview.edit');
             Route::get('{id}/settings', 'setting')->name('employees.settings');
             Route::get('{id}/security', 'security')->name('employees.security');
             Route::get('{id}/address', 'address')->name('employees.address');
+            Route::get('{id}/address/edit', 'addressEdit')->name('employees.address.edit');
+            Route::get('{id}/attendance', 'attendance')->name('employees.attendance');
             Route::get('{id}/edit', 'edit')->name('employees.edit');
             Route::post('{id}/update', 'update')->name('employees.update');
             Route::delete('{id}/delete', 'destroy')->name('employees.delete');
         });
     });
+
+    Route::group(['prefix' => 'employees'], function () {
+        Route::post('{id}/address/update', [AddressController::class, 'update'])->name('employees.address.update');
+    });
+
     Route::controller(IndustryController::class)->group(function () {
         Route::group(['prefix' => 'industries'], function () {
             Route::get('/', 'index')->name('industries.index');

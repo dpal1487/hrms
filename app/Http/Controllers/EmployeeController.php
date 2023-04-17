@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\EmployeeResources;
+use App\Http\Resources\AddressResource;
+
 use Inertia\Inertia;
 use App\Models\Employee;
 use App\Models\User;
@@ -12,11 +14,6 @@ use Image;
 use App\Models\Image as DBImage;
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $employees = new Employee();
@@ -33,22 +30,11 @@ class EmployeeController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return Inertia::render('Employee/Form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -135,12 +121,14 @@ class EmployeeController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function show($id)
+    {
+        $employee = Employee::find($id);
+
+        return Inertia::render('Employee/Overview', [
+            'employee' => new EmployeeResources($employee),
+        ]);
+    }
     public function overview($id)
     {
         $employee = Employee::find($id);
@@ -148,8 +136,15 @@ class EmployeeController extends Controller
         return Inertia::render('Employee/Overview', [
             'employee' => new EmployeeResources($employee),
         ]);
+    }
 
-        return $employee;
+    function overviewEdit($id)
+    {
+        $employee = Employee::find($id);
+
+        return Inertia::render('Employee/Edit', [
+            'employee' => new EmployeeResources($employee),
+        ]);
     }
 
     public function setting($id)
@@ -159,8 +154,6 @@ class EmployeeController extends Controller
         return Inertia::render('Employee/Setting', [
             'employee' => new EmployeeResources($employee),
         ]);
-
-        return $employee;
     }
     public function security($id)
     {
@@ -169,8 +162,6 @@ class EmployeeController extends Controller
         return Inertia::render('Employee/Security', [
             'employee' => new EmployeeResources($employee),
         ]);
-
-        return $employee;
     }
     public function address($id)
     {
@@ -179,8 +170,24 @@ class EmployeeController extends Controller
         return Inertia::render('Employee/Address', [
             'employee' => new EmployeeResources($employee),
         ]);
+    }
 
-        return $employee;
+    public function addressEdit($id)
+    {
+        $employee = Employee::find($id);
+        // return new EmployeeResources($employee);
+
+        return Inertia::render('Employee/UserAddress', [
+            'employee' => new EmployeeResources($employee),
+        ]);
+    }
+    public function attendance($id)
+    {
+        $employee = Employee::find($id);
+
+        return Inertia::render('Employee/Attendance', [
+            'employee' => new EmployeeResources($employee),
+        ]);
     }
 
     public function edit($id)
@@ -221,10 +228,58 @@ class EmployeeController extends Controller
 
         $user = User::where(['id' => $employee->user->id])->get();
 
-        $user = User::where(['id' => $employee->user->id])->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-        ]);
+        $image = $request->file('image');
+
+        if ($image) {
+            $extension = $request->image->extension();
+            $file_path = 'assets/images/users/';
+            $name = time() . '_' . $request->image->getClientOriginalName();
+
+            $result = Image::make($image)->save($file_path . 'original/' . $name);
+            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
+            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
+
+            $smallThumbnailFolder = 'assets/images/users/thumbnail/small/';
+            $mediumThumbnailFolder = 'assets/images/users/thumbnail/medium/';
+
+            // $result = $result->save($file_path.'original/'.$name);
+
+            $result->resize(200, 200);
+            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
+
+            $result->resize(100, 100);
+            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
+
+            $Imagefile = DBImage::create([
+                'name' => $name,
+                'original_path' => url($file_path),
+                'small_path' => url($file_path . $name),
+                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
+                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
+            ]);
+            // dd($Imagefile);
+        }
+
+        if ($image) {
+            $user = User::where(['id' => $employee->user->id])->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'image_id' => $Imagefile->id,
+                'avatar' => $image,
+            ]);
+        } else {
+            $user = User::where(['id' => $employee->user->id])->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+            ]);
+        }
+
+        // $user = User::where(['id' => $employee->user->id])->update([
+        //     'first_name' => $request->first_name,
+        //     'last_name' => $request->last_name,
+        //     'image_id' => $Imagefile->id,
+        //     'avatar' => $image,
+        // ]);
 
         if (
             $employee = Employee::where(['id' => $employee->id])->update([
@@ -250,12 +305,6 @@ class EmployeeController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $employee = Employee::find($id);

@@ -40,8 +40,8 @@ export default defineComponent({
             axios
                 .post("/supplier/status", { id: id, status: e })
                 .then((response) => {
+                    toast.success(response.data.message);
                     if (response.data.success) {
-                        toast.success(response.data.message);
                         return;
                     }
                     toast.error(response.data.message);
@@ -201,22 +201,18 @@ export default defineComponent({
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                             :aria-labelled:by="`dropdown-${industries.id}`">
                                             <li class="menu-item px-3">
-                                                <Link class="dropdown-item" :href="`/industries/${industries.id}/edit`">Edit
+                                                <Link
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
+                                                    :href="`/industries/${industries.id}/edit`">Edit
                                                 </Link>
                                             </li>
-                                            <!-- <li class="menu-item px-3">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <Link class="dropdown-item" :href="`/industries/${industries.id}/edit`">Add
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Link
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </Link>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </li> -->
-                                            <li class="menu-item px-3">
-                                                <hr class="dropdown-divider" />
-                                            </li>
+
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
                                                     industries.id, index
                                                 )
-                                                " class="btn btn-sm dropdown-item">
+                                                "
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>
                                             </li>

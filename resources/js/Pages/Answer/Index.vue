@@ -55,6 +55,7 @@ export default defineComponent({
                     axios
                         .delete("/answer/" + id + "/delete")
                         .then((response) => {
+                            toast.success(response.data.message)
                             if (response.data.success) {
                                 this.answers.data.splice(index, 1);
                                 return;

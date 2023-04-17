@@ -132,51 +132,6 @@ export default defineComponent({
                             <div class="col-4">
                                 <div class="card p-6">
                                     <div class="fv-row">
-                                        <div class="d-flex align-items-center justify-content-center d-none">
-                                            <div class="text-center">
-                                                <div class="image-input image-input-outline mx-auto"
-                                                    data-kt-image-input="true"
-                                                    style="background-image: url('/assets/media/svg/avatars/blank.svg')">
-                                                    <!--begin::Preview existing avatar-->
-                                                    <!-- {{ this.industry?.data?.image?.medium_path }} -->
-                                                    <img class="image-input-wrapper w-125px h-125px"
-                                                        v-if="this.industry?.data?.image?.medium_path && !url"
-                                                        :src="this.industry?.data?.image?.medium_path" />
-                                                    <img class="image-input-wrapper w-125px h-125px"
-                                                        v-else-if="!this.industry && !url"
-                                                        src="/assets/media/svg/avatars/blank.svg" />
-                                                    <img class="image-input-wrapper w-125px h-125px" v-else :src="url" />
-
-
-                                                    <!--end::Preview existing avatar-->
-                                                    <!--begin::Label-->
-                                                    <label
-                                                        class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                        data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                                        title="Change avatar">
-                                                        <i class="bi bi-pencil-fill fs-7"></i>
-                                                        <!--begin::Inputs-->
-                                                        <input type="file" name="avatar" accept=".png, .jpg, .jpeg"
-                                                            @change="onFileChange" />
-                                                        <input type="hidden" name="avatar_remove" />
-                                                        <!--end::Inputs-->
-                                                    </label>
-                                                    <div v-for="(error, index) of v$.form.image.$errors" :key="index">
-                                                        <input-error :message="error.$message" />
-                                                    </div>
-                                                    <!--end::Label-->
-                                                    <!--begin::Cancel-->
-                                                    <span v-if="url"
-                                                        class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                        data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                                        title="Cancel avatar" @click="removeSelectedAvatar">
-                                                        <i class="bi bi-x fs-2"></i>
-                                                    </span>
-                                                    <!--end::Cancel-->
-                                                </div>
-                                                <div class="form-text mt-5">Allowed file types: png, jpg, jpeg.</div>
-                                            </div>
-                                        </div>
                                         <ImageInput :image="this.industry?.data?.image?.medium_path"
                                             :onchange="onFileChange" :remove="removeSelectedAvatar" :selectedImage="url"
                                             :errors="v$.form.image.$errors" />
@@ -200,7 +155,7 @@ export default defineComponent({
                                     </div>
                                     <div class="fv-row">
                                         <jet-label for="status" value="Status" />
-
+                                        <!-- {{ this.industry?.data?.status }} -->
                                         <Multiselect :options="status" label="name" valueProp="id"
                                             :custom-label="nameWithLang"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"

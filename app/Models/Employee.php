@@ -21,6 +21,11 @@ class Employee extends Model
         return $this->hasOne(Image::class, 'id', 'image_id');
     }
 
+    public function address()
+    {
+        return $this->hasOne(EmployeeAddress::class, 'employee_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();

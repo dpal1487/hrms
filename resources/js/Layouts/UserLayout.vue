@@ -14,69 +14,6 @@ export default defineComponent({
     data() {
         return {
             q: "",
-            navigations: [
-                {
-                    link: "/employees",
-                    title: "Employees",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/industries",
-                    title: "Industries",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/question",
-                    title: "Question",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/answer",
-                    title: "Answer",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/clients",
-                    title: "Clients",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/events",
-                    title: "Events",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/holidays",
-                    title: "Holidays",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/meetings",
-                    title: "Meetings",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/plans",
-                    title: "Plans",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/projects",
-                    title: "Projects",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/promotions",
-                    title: "Promotions",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/roles",
-                    title: "Roles",
-                    icon: "bi bi-pie-chart-fill",
-                },
-
-            ],
         };
     },
     methods: {
@@ -87,18 +24,20 @@ export default defineComponent({
 </script>
 
 <template>
-    <div id="kt_app_content" class="app-content flex-column-fluid">
+    <div class="app-content flex-column-fluid ">
         <!--begin::Content container-->
-        <div id="kt_app_content_container" class="app-container container-xxl">
+        <div class="app-container container-xxl">
             <!--begin::Navbar-->
-            <div class="card mb-5 mb-xl-10">
+            <div class="card mb-5 mb-xl-5">
                 <div class="card-body pt-9 pb-0">
                     <!--begin::Details-->
                     <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                         <!--begin: Pic-->
                         <div class="me-7 mb-4">
                             <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                                <img :src="this.employee?.data?.image?.medium_path" alt="image" />
+                                <img v-if="this.employee?.data?.image?.medium_path"
+                                    :src="this.employee?.data?.image?.medium_path" alt="image" />
+                                <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image">
                                 <div
                                     class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px">
                                 </div>
@@ -116,7 +55,7 @@ export default defineComponent({
                                         <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
                                             (this.employee?.data?.user?.first_name) }}
                                             {{ (this.employee?.data?.user?.last_name) }}</a>
-                                        <a href="#">
+                                        <a href="">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
                                             <span class="svg-icon svg-icon-1 svg-icon-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
@@ -131,9 +70,6 @@ export default defineComponent({
                                             </span>
                                             <!--end::Svg Icon-->
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3"
-                                            data-bs-toggle="modal" data-bs-target="#kt_modal_upgrade_plan">Upgrade to
-                                            Pro</a>
                                     </div>
                                     <!--end::Name-->
                                     <!--begin::Info-->
@@ -169,7 +105,7 @@ export default defineComponent({
                                                 </svg>
                                             </span>
                                             <!--end::Svg Icon-->SF, Bay Area</a>
-                                        <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
+                                        <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                             <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                             <span class="svg-icon svg-icon-4 me-1">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -213,8 +149,7 @@ export default defineComponent({
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                                <div class="fs-2 fw-bold" data-kt-countup="true"
-                                                    data-kt-countup-value="4500" data-kt-countup-prefix="$">0</div>
+                                                <div class="fs-2 fw-bold">0</div>
                                             </div>
                                             <!--end::Number-->
                                             <!--begin::Label-->
@@ -239,7 +174,7 @@ export default defineComponent({
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                                <div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="75">
+                                                <div class="fs-2 fw-bold">
                                                     0</div>
                                             </div>
                                             <!--end::Number-->
@@ -265,8 +200,7 @@ export default defineComponent({
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                                <div class="fs-2 fw-bold" data-kt-countup="true" data-kt-countup-value="60"
-                                                    data-kt-countup-prefix="%">0</div>
+                                                <div class="fs-2 fw-bold">0</div>
                                             </div>
                                             <!--end::Number-->
                                             <!--begin::Label-->
@@ -276,8 +210,8 @@ export default defineComponent({
                                         <!--end::Stat-->
                                     </div>
                                     <!--end::Stats-->
-                                </div>
-                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Wrapper-->
                                 <!--begin::Progress-->
                                 <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                                     <div class="d-flex justify-content-between w-100 mt-auto mb-2">
@@ -297,41 +231,84 @@ export default defineComponent({
                     </div>
                     <!--end::Details-->
                     <!--begin::Navs-->
+
                     <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
                         <!--begin::Nav item-->
+                        <!-- <a :href="route('applications.index')" :class="activeClass" class="list-group-item">Applications</a>
+                                                                                                                                                                                                                                                        <a :href="route('applications.repository')" :class="" class="list-group-item">Token Repository</a>
+                                                                                                                                                                                                                                                        <a :href="route('applications.notifications')" :class="" class="list-group-item">Notifications</a> -->
                         <li class="nav-item mt-2">
-                            <Link class="nav-link text-active-primary ms-0 me-10 py-5" href="overview">Overview
+                            <!-- {{ (route().current("employees.overview")) }} -->
+                            <Link v-if="(route().current('employees.overview'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
+                                :href="'/employees/' + this.employee.data.id + '/overview'">Overview
+                            </Link>
+                            <Link v-else="(route().current('employees.overview')) "
+                                class="nav-link text-active-primary ms-0 me-10 py-5"
+                                :href="'/employees/' + this.employee.data.id + '/overview'">Overview
                             </Link>
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <Link class="nav-link text-active-primary ms-0 me-10 py-5" href="settings">Settings</Link>
+                            <Link v-if="(route().current('employees.settings'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
+                                :href="'/employees/' + this.employee.data.id + '/settings'">Settings
+                            </Link>
+                            <Link v-else="(route().current('employees.settings'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5"
+                                :href="'/employees/' + this.employee.data.id + '/settings'">Settings
+                            </Link>
+
+                    </li>
+                        <!--end::Nav item-->
+                        <!--begin::Nav item-->
+                        <li class="nav-item mt-2">
+                            <Link v-if="(route().current('employees.security'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
+                                :href="'/employees/' + this.employee.data.id + '/security'">Security
+                            </Link>
+                            <Link v-else="(route().current('employees.security'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5"
+                                :href="'/employees/' + this.employee.data.id + '/security'">Security
+                            </Link>
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <Link class="nav-link text-active-primary ms-0 me-10 py-5" href="security">Security</Link>
+                            <Link v-if="(route().current('employees.address'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
+                                :href="'/employees/' + this.employee.data.id + '/address'">Address
+                            </Link>
+                            <Link v-else="(route().current('employees.address'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5"
+                                :href="'/employees/' + this.employee.data.id + '/address'">Address
+                            </Link>
+                            <!-- <Link class="nav-link text-active-primary ms-0 me-10 py-5"
+                                                :href="'/employees/' + this.employee.data.id + '/address'">Address</Link> -->
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <Link class="nav-link text-active-primary ms-0 me-10 py-5" href="address">Address</Link>
-                        </li>
-                        <!--end::Nav item-->
-                        <!--begin::Nav item-->
-                        <li class="nav-item mt-2">
-                            <Link class="nav-link text-active-primary ms-0 me-10 py-5" href="">Statements</Link>
+
+                            <Link v-if="(route().current('employees.attendance'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
+                                :href="'/employees/' + this.employee.data.id + '/attendance'">attendance
+                            </Link>
+                            <Link v-else="(route().current('employees.attendance'))"
+                                class="nav-link text-active-primary ms-0 me-10 py-5"
+                                :href="'/employees/' + this.employee.data.id + '/attendance'">attendance
+                            </Link>
                         </li>
                         <!--end::Nav item-->
                     </ul>
                     <!--begin::Navs-->
                 </div>
             </div>
+            <slot></slot>
             <!--end::Navbar-->
 
         </div>
         <!--end::Content container-->
-        <slot></slot>
     </div>
 </template>

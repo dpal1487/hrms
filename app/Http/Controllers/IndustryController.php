@@ -146,17 +146,55 @@ class IndustryController extends Controller
 
         $industry = new IndustryResource($industry);
 
-        if (
+        $image = $request->file('image');
+
+        if ($image) {
+            $extension = $request->image->extension();
+            $file_path = 'assets/images/industry/';
+            $name = time() . '_' . $request->image->getClientOriginalName();
+
+            $result = Image::make($image)->save($file_path . 'original/' . $name);
+            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
+            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
+
+            $smallThumbnailFolder = 'assets/images/industry/thumbnail/small/';
+            $mediumThumbnailFolder = 'assets/images/industry/thumbnail/medium/';
+
+            // $result = $result->save($file_path.'original/'.$name);
+
+            $result->resize(200, 200);
+            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
+
+            $result->resize(100, 100);
+            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
+
+            $Imagefile = DBImage::create([
+                'name' => $name,
+                'original_path' => url($file_path),
+                'small_path' => url($file_path . $name),
+                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
+                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
+            ]);
+
+            // dd($Imagefile);
+        }
+
+        if ($image) {
             $industry = Industry::where(['id' => $industry->id])->update([
                 'name' => $request->name,
-                // 'image' => $request->image,
+                'image_id' => $Imagefile->id,
                 'status' => $request->status,
-            ])
-        ) {
-            // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
-
-            return redirect('/industries');
+            ]);
+        } else {
+            $industry = Industry::where(['id' => $industry->id])->update([
+                'name' => $request->name,
+                'status' => $request->status,
+            ]);
         }
+
+        // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
+
+        return redirect('/industries');
     }
 
     /**

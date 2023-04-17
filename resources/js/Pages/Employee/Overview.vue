@@ -24,77 +24,12 @@ export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
     },
-    validations() {
-        return {
-            form: {
-                first_name: {
-                    required,
-                },
-                last_name: {
-                    required,
-                },
-                date_of_joining: {
-                    required,
-                },
-                number: {
-                    required,
-                },
-                qualification: {
-                    required,
-                },
-                emergency_number: {
-                    required, integer,
-                },
-                pan_number: {
-                    required,
 
-                },
-                father_name: {
-                    required,
-                },
-                formalities: {
-                    required, integer,
-                },
-                salary: {
-                    required,
-                },
-                offer_acceptance: {
-                    required, integer,
-                },
-                probation_period: {
-                    required,
-                },
-                date_of_confirmation: {
-                    required,
-                },
-                department_id: {
-                    required,
-                }
-            },
-        };
-    },
     data() {
         return {
 
             isEdit: false,
-            form: this.$inertia.form({
-                id: this.employee?.data?.id || '',
-                first_name: this.employee?.data?.user?.first_name || '',
-                last_name: this.employee?.data?.user?.last_name || '',
-                date_of_joining: this.employee?.data?.date_of_joining || '',
-                number: this.employee?.data?.number || '',
-                qualification: this.employee?.data?.qualification || '',
-                emergency_number: this.employee?.data?.emergency_number || '',
-                pan_number: this.employee?.data?.pan_number || '',
-                father_name: this.employee?.data?.father_name || '',
-                formalities: this.employee?.data?.formalities || '',
-                salary: this.employee?.data?.salary || '',
-                offer_acceptance: this.employee?.data?.offer_acceptance || '',
-                probation_period: this.employee?.data?.probation_period || '',
-                date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
-                department_id: this.employee?.data?.department_id || '',
 
-            }),
             value: null,
             options: [
                 { name: 'Vue.js', language: 'JavaScript' },
@@ -147,14 +82,20 @@ export default defineComponent({
     <AppLayout>
         <UserLayout :employee="employee">
             <!--begin::details View-->
-            <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+            <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
                 <div class="card-header cursor-pointer">
                     <!--begin::Card title-->
                     <div class="card-title m-0">
                         <h3 class="fw-bold m-0">Profile Details</h3>
+                        <!-- {{ employee }} -->
                     </div>
                     <!--end::Card title-->
+                    <Link class="btn btn-primary align-self-center"
+                        :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
+                    Profile
+                    </Link>
+                    <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
                 </div>
                 <!--begin::Card header-->
                 <!--begin::Card body-->
@@ -175,7 +116,7 @@ export default defineComponent({
                     <!--begin::Input group-->
                     <div class="row mb-7">
                         <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Company</label>
+                        <label class="col-lg-4 fw-semibold text-muted">Code</label>
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8 fv-row">
@@ -194,7 +135,7 @@ export default defineComponent({
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8 d-flex align-items-center">
-                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.user?.contact }} </span>
+                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.number }} </span>
                             <span class="badge badge-success">Verified</span>
                         </div>
                         <!--end::Col-->
@@ -203,12 +144,12 @@ export default defineComponent({
                     <!--begin::Input group-->
                     <div class="row mb-7">
                         <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Company Site</label>
+                        <label class="col-lg-4 fw-semibold text-muted">Emergency Number</label>
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8">
                             <a href="#" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{{
-                                this.employee?.data?.user?.compony_url }} </a>
+                                this.employee?.data?.emergency_number }} </a>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -222,7 +163,7 @@ export default defineComponent({
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8">
-                            <span class="fw-bold fs-6 text-gray-800">{{ this.employee?.data?.user?.country }} </span>
+                            <span class="fw-bold fs-6 text-gray-800">{{ this.employee?.data?.address?.country_id }} </span>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -230,27 +171,89 @@ export default defineComponent({
                     <!--begin::Input group-->
                     <div class="row mb-7">
                         <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Communication</label>
+                        <label class="col-lg-4 fw-semibold text-muted">Date Of Joining</label>
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8">
-                            <span class="fw-bold fs-6 text-gray-800">Email, Phone</span>
+                            <span class="fw-bold fs-6 text-gray-800">{{ this.employee?.data?.date_of_joining }}</span>
                         </div>
                         <!--end::Col-->
                     </div>
                     <!--end::Input group-->
                     <!--begin::Input group-->
-                    <div class="row mb-10">
+                    <div class="row mb-7">
                         <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Allow Changes</label>
+                        <label class="col-lg-4 fw-semibold text-muted">Pan Number</label>
                         <!--begin::Label-->
                         <!--begin::Label-->
                         <div class="col-lg-8">
-                            <span class="fw-semibold fs-6 text-gray-800">Yes</span>
+                            <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.pan_number }}</span>
                         </div>
                         <!--begin::Label-->
                     </div>
                     <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Salary</label>
+                        <!--begin::Label-->
+                        <!--begin::Label-->
+                        <div class="col-lg-8">
+                            <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.salary }}</span>
+                        </div>
+                        <!--begin::Label-->
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Offer Acceptance</label>
+                        <!--begin::Label-->
+                        <!--begin::Label-->
+                        <div class="col-lg-8">
+                            <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.offer_acceptance }}</span>
+                        </div>
+                        <!--begin::Label-->
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Probation Period</label>
+                        <!--begin::Label-->
+                        <!--begin::Label-->
+                        <div class="col-lg-8">
+                            <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.probation_period }}</span>
+                        </div>
+                        <!--begin::Label-->
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Date Of Conformation</label>
+                        <!--begin::Label-->
+                        <!--begin::Label-->
+                        <div class="col-lg-8">
+                            <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.date_of_confirmation
+                            }}</span>
+                        </div>
+                        <!--begin::Label-->
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Department</label>
+                        <!--begin::Label-->
+                        <!--begin::Label-->
+                        <div class="col-lg-8">
+                            <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.department_id }}</span>
+                        </div>
+                        <!--begin::Label-->
+                    </div>
+                    <!--end::Input group-->
+
                 </div>
                 <!--end::Card body-->
             </div>

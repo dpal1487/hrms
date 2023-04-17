@@ -58,7 +58,7 @@ export default {
             <!--end::sidebar mobile toggle-->
             <!--begin::Mobile logo-->
             <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                <Link href="/index.html" class="d-lg-none">
+                <Link href="/" class="d-lg-none">
                 </Link>
             </div>
             <!--end::Mobile logo-->

@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from "vue"
 import AppLayout from "@/Layouts/AppLayout.vue"
-import { Head, Link } from '@inertiajs/inertia-vue3';   
+import { Head, Link } from '@inertiajs/inertia-vue3';
 export default defineComponent({
     components: {
         Link
@@ -22,7 +22,7 @@ export default defineComponent({
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                     <!--begin::Item-->
                     <li class="breadcrumb-item text-muted">
-                        <Link href="/" class="text-muted text-hover-primary">Home</Link>
+                        <!-- <Link href="/" class="text-muted text-hover-primary">Home</Link> -->
                     </li>
                     <!--end::Item-->
                     <!--begin::Item-->

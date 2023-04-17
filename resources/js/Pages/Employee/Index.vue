@@ -21,6 +21,7 @@ export default defineComponent({
                 "Employee Name",
                 "Employee Code",
                 "Number",
+                "Salary",
                 "Status",
                 "Created At",
                 "Action",
@@ -42,9 +43,8 @@ export default defineComponent({
             axios
                 .post("/supplier/status", { id: id, status: e })
                 .then((response) => {
+                    toast.success(response.data.message)
                     if (response.data.success) {
-
-                        toast.success(response.data.message);
                         return;
                     }
                     toast.error(response.data.message);
@@ -71,12 +71,11 @@ export default defineComponent({
                     axios
                         .delete("/employees/" + id + "/delete")
                         .then((response) => {
+                            toast.success(response.data.message);
                             if (response.data.success) {
                                 this.employees.data.splice(index, 1);
                                 return;
                             }
-
-
                         })
 
                         .catch((error) => {
@@ -192,15 +191,12 @@ export default defineComponent({
                                             employees.user.last_name }}</Link>
                                 </td>
                                 <td>{{ employees.code }}</td>
-                                <!-- <td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span :class="`badge bg-${employees.status.value == 1
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ? 'success'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    : 'danger'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }`">{{ employees.status.label }}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </td> -->
                                 <td>{{ employees.number }}</td>
                                 <td>{{ employees.salary }}</td>
-
+                                <td>
+                                    <p v-if="employees.user.active_status == 1">Active</p>
+                                    <p v-if="employees.user.active_status == 0">Inactive</p>
+                                </td>
                                 <td>{{ employees.created_at }}</td>
 
                                 <td>
@@ -231,7 +227,7 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employees/${employees.id}/overview`">View
+                                                    :href="`/employees/${employees.id}`">View
                                                 </Link>
                                             </li>
 

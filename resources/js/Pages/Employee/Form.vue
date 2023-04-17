@@ -14,6 +14,7 @@ import ImageInput from '@/components/ImageInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Dropdown from "../../Jetstream/Dropdown.vue";
+import { toast } from 'vue3-toastify';
 
 
 // Vue.use(Datetime);
@@ -77,12 +78,13 @@ export default defineComponent({
         };
     },
     data() {
+        // console.log("see this", this.employee?.data?.user?.image?.medium_path)
         return {
 
             isEdit: false,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
-                image: this.employee?.data?.employee?.avatar || '',
+                image: this.employee?.data?.user?.image?.medium_path || '',
                 first_name: this.employee?.data?.user?.first_name || '',
                 last_name: this.employee?.data?.user?.last_name || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
@@ -99,6 +101,7 @@ export default defineComponent({
                 department_id: this.employee?.data?.department_id || '',
 
             }),
+            url: null,
             value: null,
             options: [
                 { name: 'Vue.js', language: 'JavaScript' },
@@ -121,13 +124,16 @@ export default defineComponent({
         JetValidationErrors,
         VueDatePicker,
         Dropdown,
-        ImageInput
+        ImageInput,
     },
     methods: {
         nameWithLang({ name, language }) {
             return `${name} — [${language}]`
         },
         submit() {
+            const config = {
+                headers: { 'content-type': 'multipart/form-data' }
+            }
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.form
@@ -140,9 +146,13 @@ export default defineComponent({
         onFileChange(e) {
             const file = e.target.files[0];
             // console.log("see file", file.name)
+
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
+        },
+        removeSelectedAvatar() {
+            this.url = null;
         }
 
 
@@ -182,7 +192,6 @@ export default defineComponent({
                                         :errors="v$.form.image.$errors" />
                                 </div>
                                 <div class="fv-row col-6">
-
                                     <jet-label for="first_name" value="First Name" />
                                     <jet-input id="first_name" type="text" v-model="v$.form.first_name.$model" :class="
                                         v$.form.first_name.$errors.length > 0
@@ -192,8 +201,7 @@ export default defineComponent({
                                     <div v-for="(error, index) of v$.form.first_name.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
-                                </div>
-                                <div class="fv-row col-6">
+
                                     <jet-label for="last_name" value="Last Name" />
                                     <jet-input id="last_name" type="text" v-model="v$.form.last_name.$model" :class="
                                         v$.form.last_name.$errors.length > 0
@@ -204,8 +212,6 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-
-                                <!--  -->
 
                                 <div class="fv-row col-6">
                                     <jet-label for="date_of_joining" value="Date Of Joining" />

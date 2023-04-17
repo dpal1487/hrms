@@ -10,9 +10,7 @@ export default defineComponent({
     },
     methods: {
         handleRemoveClick() {
-            alert("slkdfj")
             this.$emit("remove");
-            alert("sldkfj");
         }
     }
 })
@@ -27,7 +25,7 @@ export default defineComponent({
                 <!--begin::Preview existing avatar-->
                 <!-- {{ this.industry?.data?.image?.medium_path }} -->
                 <img class="image-input-wrapper w-125px h-125px" v-if="image && !selectedImage" :src="image" />
-                <img class="image-input-wrapper w-125px h-125px" v-else-if="!this.industry && !selectedImage"
+                <img class="image-input-wrapper w-125px h-125px" v-else-if="!selectedImage"
                     src="/assets/media/svg/avatars/blank.svg" />
                 <img class="image-input-wrapper w-125px h-125px" v-else :src="selectedImage" />
 
@@ -47,14 +45,6 @@ export default defineComponent({
                     <input-error :message="error.$message" />
                 </div>
                 <!--end::Label-->
-                <!--begin::Cancel-->
-                <button type="button" v-if="selectedImage"
-                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                    data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Cancel avatar"
-                    @click="handleRemoveClick">
-                    <i class="bi bi-x fs-2"></i>
-                </button>
-                <!--end::Cancel-->
             </div>
             <div class="form-text mt-5">Allowed file types: png, jpg, jpeg.</div>
         </div>
