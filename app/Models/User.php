@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'social_id', 'social_type', 'email_verified_at', 'image_id', 'avatar'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'social_id', 'social_type', 'email_verified_at', 'image_id', 'avatar', 'password'];
 
     public function image()
     {
@@ -39,7 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
-    protected $hidden = ['password', 'remember_token', 'two_factor_recovery_codes', 'two_factor_secret'];
+    protected $hidden = ['remember_token', 'two_factor_recovery_codes', 'two_factor_secret'];
 
     /**
      * The attributes that should be cast.

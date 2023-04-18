@@ -2,7 +2,6 @@
 <script>
 import { defineComponent } from "vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
     props: ["employee", "status"],
@@ -14,12 +13,36 @@ export default defineComponent({
     data() {
         return {
             q: "",
+            navmenus: [
+                {
+                    link: "/overview",
+                    title: "Overview",
+                },
+                {
+                    link: "/settings",
+                    title: "Settings",
+                },
+                {
+                    link: "/security",
+                    title: "Security",
+                },
+                {
+                    link: "/address",
+                    title: "Address",
+                },
+                {
+                    link: "/attendance",
+                    title: "Attendance",
+                }
+            ],
         };
     },
     methods: {
 
     },
-    created() { },
+    created() {
+
+    },
 });
 </script>
 
@@ -210,8 +233,8 @@ export default defineComponent({
                                         <!--end::Stat-->
                                     </div>
                                     <!--end::Stats-->
-                            </div>
-                            <!--end::Wrapper-->
+                                </div>
+                                <!--end::Wrapper-->
                                 <!--begin::Progress-->
                                 <div class="d-flex align-items-center w-200px w-sm-300px flex-column mt-3">
                                     <div class="d-flex justify-content-between w-100 mt-auto mb-2">
@@ -234,70 +257,42 @@ export default defineComponent({
 
                     <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
                         <!--begin::Nav item-->
-                        <!-- <a :href="route('applications.index')" :class="activeClass" class="list-group-item">Applications</a>
-                                                                                                                                                                                                                                                        <a :href="route('applications.repository')" :class="" class="list-group-item">Token Repository</a>
-                                                                                                                                                                                                                                                        <a :href="route('applications.notifications')" :class="" class="list-group-item">Notifications</a> -->
                         <li class="nav-item mt-2">
-                            <!-- {{ (route().current("employees.overview")) }} -->
-                            <Link v-if="(route().current('employees.overview'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
-                                :href="'/employees/' + this.employee.data.id + '/overview'">Overview
-                            </Link>
-                            <Link v-else="(route().current('employees.overview')) "
-                                class="nav-link text-active-primary ms-0 me-10 py-5"
+                            <Link
+                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.overview') && 'active'}`"
                                 :href="'/employees/' + this.employee.data.id + '/overview'">Overview
                             </Link>
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <Link v-if="(route().current('employees.settings'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
+                            <Link
+                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.settings') && 'active'}`"
                                 :href="'/employees/' + this.employee.data.id + '/settings'">Settings
                             </Link>
-                            <Link v-else="(route().current('employees.settings'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5"
-                                :href="'/employees/' + this.employee.data.id + '/settings'">Settings
-                            </Link>
-
-                    </li>
+                        </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <Link v-if="(route().current('employees.security'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
-                                :href="'/employees/' + this.employee.data.id + '/security'">Security
-                            </Link>
-                            <Link v-else="(route().current('employees.security'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5"
+                            <Link
+                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.security') && 'active'}`"
                                 :href="'/employees/' + this.employee.data.id + '/security'">Security
                             </Link>
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <Link v-if="(route().current('employees.address'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
+                            <Link
+                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.address') && 'active'}`"
                                 :href="'/employees/' + this.employee.data.id + '/address'">Address
                             </Link>
-                            <Link v-else="(route().current('employees.address'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5"
-                                :href="'/employees/' + this.employee.data.id + '/address'">Address
-                            </Link>
-                            <!-- <Link class="nav-link text-active-primary ms-0 me-10 py-5"
-                                                :href="'/employees/' + this.employee.data.id + '/address'">Address</Link> -->
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-
-                            <Link v-if="(route().current('employees.attendance'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5 active"
-                                :href="'/employees/' + this.employee.data.id + '/attendance'">attendance
-                            </Link>
-                            <Link v-else="(route().current('employees.attendance'))"
-                                class="nav-link text-active-primary ms-0 me-10 py-5"
-                                :href="'/employees/' + this.employee.data.id + '/attendance'">attendance
+                            <Link
+                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.attendance') && 'active'}`"
+                                :href="'/employees/' + this.employee.data.id + '/attendance'">Attendance
                             </Link>
                         </li>
                         <!--end::Nav item-->

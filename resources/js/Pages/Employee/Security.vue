@@ -3,20 +3,13 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Multiselect from "@vueform/multiselect";
-import PrimaryButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+
 import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-import Dropdown from "../../Jetstream/Dropdown.vue";
+
 import UserEmail from "@/Components/User/UserEmail.vue";
 import TwoFactor from "@/Components/User/TwoFactor.vue";
-
+import UserPassword from "../../Components/User/UserPassword.vue";
+import DeactivateAccount from "../../Components/User/DeactivateAccount.vue";
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
 
@@ -37,6 +30,8 @@ export default defineComponent({
         Head,
         UserEmail,
         TwoFactor,
+        UserPassword,
+        DeactivateAccount
     },
     methods: {
         onAvatarChange(e) {
@@ -64,82 +59,25 @@ export default defineComponent({
             <!--begin::Sign-in Method-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
-                <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
-                    data-bs-target="#kt_account_signin_method">
+                <div class="card-header border-0 cursor-pointer" role="button">
                     <div class="card-title m-0">
                         <h3 class="fw-bold m-0">Sign-in Method</h3>
                     </div>
                 </div>
+
                 <!--end::Card header-->
                 <!--begin::Content-->
                 <div class="collapse show">
                     <!--begin::Card body-->
                     <div class="card-body border-top p-9">
                         <!--begin::Email Address-->
-                        <UserEmail email='asldkf@gmail.com' />
+                        <UserEmail :email='this.employee?.data?.user' />
                         <!--end::Email Address-->
                         <!--begin::Separator-->
                         <div class="separator separator-dashed my-6"></div>
                         <!--end::Separator-->
                         <!--begin::Password-->
-                        <div class="d-flex flex-wrap align-items-center mb-10">
-                            <!--begin::Label-->
-                            <div id="kt_signin_password">
-                                <div class="fs-6 fw-bold mb-1">Password</div>
-                                <div class="fw-semibold text-gray-600">************</div>
-                            </div>
-                            <!--end::Label-->
-                            <!--begin::Edit-->
-                            <div id="kt_signin_password_edit" class="flex-row-fluid d-none">
-                                <!--begin::Form-->
-                                <form id="kt_signin_change_password" class="form" novalidate="novalidate">
-                                    <div class="row mb-1">
-                                        <div class="col-lg-4">
-                                            <div class="fv-row mb-0">
-                                                <label for="currentpassword" class="form-label fs-6 fw-bold mb-3">Current
-                                                    Password</label>
-                                                <input type="password"
-                                                    class="form-control form-control-lg form-control-solid"
-                                                    name="currentpassword" id="currentpassword" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="fv-row mb-0">
-                                                <label for="newpassword" class="form-label fs-6 fw-bold mb-3">New
-                                                    Password</label>
-                                                <input type="password"
-                                                    class="form-control form-control-lg form-control-solid"
-                                                    name="newpassword" id="newpassword" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="fv-row mb-0">
-                                                <label for="confirmpassword" class="form-label fs-6 fw-bold mb-3">Confirm
-                                                    New Password</label>
-                                                <input type="password"
-                                                    class="form-control form-control-lg form-control-solid"
-                                                    name="confirmpassword" id="confirmpassword" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-text mb-5">Password must be at least 8 character and contain symbols
-                                    </div>
-                                    <div class="d-flex">
-                                        <button id="kt_password_submit" type="button"
-                                            class="btn btn-primary me-2 px-6">Update Password</button>
-                                        <button id="kt_password_cancel" type="button"
-                                            class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
-                                    </div>
-                                </form>
-                                <!--end::Form-->
-                            </div>
-                            <!--end::Edit-->
-                            <!--begin::Action-->
-                            <div id="kt_signin_password_button" class="ms-auto">
-                                <button class="btn btn-light btn-active-light-primary">Reset Password</button>
-                            </div>
-                            <!--end::Action-->
-                        </div>
+                        <UserPassword :password="this.employee?.data?.user" />
                         <!--end::Password-->
                         <!--begin::Notice-->
                         <TwoFactor />
@@ -150,78 +88,8 @@ export default defineComponent({
                 <!--end::Content-->
             </div>
             <!--end::Sign-in Method-->
-
             <!--begin::Deactivate Account-->
-            <div class="card">
-                <!--begin::Card header-->
-                <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
-                    data-bs-target="#kt_account_deactivate" aria-expanded="true" aria-controls="kt_account_deactivate">
-                    <div class="card-title m-0">
-                        <h3 class="fw-bold m-0">Deactivate Account</h3>
-                    </div>
-                </div>
-                <!--end::Card header-->
-                <!--begin::Content-->
-                <div id="kt_account_settings_deactivate" class="collapse show">
-                    <!--begin::Form-->
-                    <form id="kt_account_deactivate_form" class="form">
-                        <!--begin::Card body-->
-                        <div class="card-body border-top p-9">
-                            <!--begin::Notice-->
-                            <div
-                                class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-9 p-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
-                                <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10"
-                                            fill="currentColor" />
-                                        <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
-                                            fill="currentColor" />
-                                        <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Wrapper-->
-                                <div class="d-flex flex-stack flex-grow-1">
-                                    <!--begin::Content-->
-                                    <div class="fw-semibold">
-                                        <h4 class="text-gray-900 fw-bold">You Are Deactivating Your Account</h4>
-                                        <div class="fs-6 text-gray-700">For extra security, this requires you to confirm
-                                            your email or phone number when you reset yousignr password.
-                                            <br />
-                                            <a class="fw-bold" href="#">Learn more</a>
-                                        </div>
-                                    </div>
-                                    <!--end::Content-->
-                                </div>
-                                <!--end::Wrapper-->
-                            </div>
-                            <!--end::Notice-->
-                            <!--begin::Form input row-->
-                            <div class="form-check form-check-solid fv-row">
-                                <input name="deactivate" class="form-check-input" type="checkbox" value=""
-                                    id="deactivate" />
-                                <label class="form-check-label fw-semibold ps-2 fs-6" for="deactivate">I confirm my account
-                                    deactivation</label>
-                            </div>
-                            <!--end::Form input row-->
-                        </div>
-                        <!--end::Card body-->
-                        <!--begin::Card footer-->
-                        <div class="card-footer d-flex justify-content-end py-6 px-9">
-                            <button id="kt_account_deactivate_account_submit" type="submit"
-                                class="btn btn-danger fw-semibold">Deactivate Account</button>
-                        </div>
-                        <!--end::Card footer-->
-                    </form>
-                    <!--end::Form-->
-                </div>
-                <!--end::Content-->
-            </div>
+            <DeactivateAccount />
             <!--end::Deactivate Account-->
         </UserLayout>
     </AppLayout>

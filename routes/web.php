@@ -55,6 +55,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/attendance', 'attendance')->name('employees.attendance');
             Route::get('{id}/edit', 'edit')->name('employees.edit');
             Route::post('{id}/update', 'update')->name('employees.update');
+            Route::post('{id}/email/update', 'emailUpdate')->name('employees.email.update');
+            Route::post('{id}/change-password', 'changePassword')->name('employees.change-password');
             Route::delete('{id}/delete', 'destroy')->name('employees.delete');
         });
     });

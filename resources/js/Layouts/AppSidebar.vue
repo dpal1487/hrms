@@ -58,22 +58,7 @@ export default defineComponent({
                     link: "/plans",
                     title: "Plans",
                     icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/projects",
-                    title: "Projects",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/promotions",
-                    title: "Promotions",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/roles",
-                    title: "Roles",
-                    icon: "bi bi-pie-chart-fill",
-                },
+                }
 
             ],
         };
@@ -192,7 +177,7 @@ export default defineComponent({
         </div>
         <!--end::sidebar menu-->
         <!--begin::Footer-->
-        <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
+        <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6">
             <form method="post" @submit.prevent="logout">
                 <button type="submit"
                     class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100">

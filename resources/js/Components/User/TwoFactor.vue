@@ -19,17 +19,13 @@ export default defineComponent({
         hideAuthenticationModal() {
             this.isModalOpen = false;
         }
-
     }
-
 })
 
 </script>
 
 <template>
     <AuthenticationModal :show="isModalOpen" @hidemodal="hideAuthenticationModal" />
-
-
     <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6">
         <!--begin::Icon-->
         <!--begin::Svg Icon | path: icons/duotune/general/gen048.svg-->

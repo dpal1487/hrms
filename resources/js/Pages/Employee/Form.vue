@@ -37,6 +37,9 @@ export default defineComponent({
                 last_name: {
                     required,
                 },
+                email: {
+                    required,
+                },
                 date_of_joining: {
                     required,
                 },
@@ -87,6 +90,7 @@ export default defineComponent({
                 image: this.employee?.data?.user?.image?.medium_path || '',
                 first_name: this.employee?.data?.user?.first_name || '',
                 last_name: this.employee?.data?.user?.last_name || '',
+                email: this.employee?.data?.user?.email || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
                 number: this.employee?.data?.number || '',
                 qualification: this.employee?.data?.qualification || '',
@@ -140,7 +144,8 @@ export default defineComponent({
                     .transform((data) => ({
                         ...data,
                     }))
-                    .post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id));
+                    .post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id))
+                    .then((response) => toast.success.message);
             }
         },
         onFileChange(e) {
@@ -172,6 +177,8 @@ export default defineComponent({
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <JetValidationErrors />
+
+
                 <!-- {{ form }} -->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
@@ -213,6 +220,18 @@ export default defineComponent({
                                     </div>
                                 </div>
 
+
+                                <div class="fv-row col-6">
+                                    <jet-label for="email" value="Email" />
+                                    <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="
+                                        v$.form.email.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                    " placeholder="Email" />
+                                    <div v-for="(error, index) of v$.form.email.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="date_of_joining" value="Date Of Joining" />
                                     <VueDatePicker v-model="v$.form.date_of_joining.$model" :enable-time-picker="false"
@@ -238,17 +257,6 @@ export default defineComponent({
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
-                                    <jet-label for="qualification" value="Qualification" />
-                                    <jet-input id="qualification" type="text" v-model="v$.form.qualification.$model" :class="
-                                        v$.form.qualification.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Qualification" />
-                                    <div v-for="(error, index) of v$.form.qualification.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                </div>
-                                <div class="fv-row col-6">
                                     <jet-label for="emergency_number" value="Emergency Number" />
                                     <jet-input id="emergency_number" type="text" v-model="v$.form.emergency_number.$model"
                                         :class="
@@ -260,6 +268,18 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
+                                <div class="fv-row col-6">
+                                    <jet-label for="qualification" value="Qualification" />
+                                    <jet-input id="qualification" type="text" v-model="v$.form.qualification.$model" :class="
+                                        v$.form.qualification.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                    " placeholder="Qualification" />
+                                    <div v-for="(error, index) of v$.form.qualification.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
+
                                 <div class="fv-row col-6">
                                     <jet-label for="pan_number" value="Pan Number" />
                                     <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="

@@ -68,6 +68,7 @@ export default defineComponent({
                     axios
                         .delete("/industries/" + id + "/delete")
                         .then((response) => {
+                            toast.success(response.data.message);
                             if (response.data.success) {
                                 this.industries.data.splice(index, 1);
                                 return;
@@ -175,7 +176,11 @@ export default defineComponent({
                             <tr v-for="(industries, index) in industries.data" :key="index">
 
                                 <td>{{ industries.name }}</td>
-                                <td>{{ industries.created_at }}</td>
+                                <td>
+                                    <div class="symbol symbol-100px me-5">
+                                        <img alt="Logo" :src="industries.image?.medium_path">
+                                    </div>
+                                </td>
                                 <td>
                                     <p v-if="(industries.status == 1)">Active </p>
                                     <p v-if="(industries.status == 0)">Inactive </p>

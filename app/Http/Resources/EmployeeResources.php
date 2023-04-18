@@ -35,7 +35,7 @@ class EmployeeResources extends JsonResource
             'created_at' => $this->created_at,
             'user' => $this->user,
             'image' => $this->user->image,
-            'address' => $this->address->address,
+            'address' => $this->address?->address,
         ];
     }
 }

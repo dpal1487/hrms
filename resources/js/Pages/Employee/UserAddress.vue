@@ -51,18 +51,18 @@ export default defineComponent({
         };
     },
     data() {
-        // console.log("see this", this.employee?.data?.id)
+        console.log("see this", this.employee?.data?.address?.id)
         return {
 
             isEdit: false,
             form: this.$inertia.form({
-                id: this.employee?.data?.id || '',
-                address_line_1: this.employee?.address_line_1 || '',
-                address_line_2: this.employee?.data?.user?.address_line_2 || '',
-                city: this.employee?.data?.user?.city || '',
-                state: this.employee?.data?.state || '',
-                country: this.employee?.data?.country || '',
-                pincode: this.employee?.data?.pincode || '',
+                id: this.employee?.data?.address?.id || '',
+                address_line_1: this.employee?.data?.address?.address_line_1 || '',
+                address_line_2: this.employee?.data?.address?.address_line_2 || '',
+                city: this.employee?.data?.address?.city || '',
+                state: this.employee?.data?.address?.state || '',
+                country: this.employee?.data?.address?.country || '',
+                pincode: this.employee?.data?.address?.pincode || '',
             }),
             url: null,
             value: null,
@@ -97,7 +97,7 @@ export default defineComponent({
                     .transform((data) => ({
                         ...data,
                     }))
-                    .post(route('employees.address.update', this.form.id));
+                    .post(route('employees.address.update', this.form.id)).then((response) => toast.success.message).window.reload;
             }
         },
 
@@ -520,7 +520,11 @@ export default defineComponent({
                         <!--end::Card body-->
                         <!--begin::Actions-->
                         <div class="card-footer d-flex justify-content-end py-6 px-9">
-                            <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button>
+                            <Link :href="`/employees/${employee?.data?.id}/address`"
+                                class="btn btn-light btn-active-light-primary me-2">
+                            Discard
+                            </Link>
+                            <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->
                             <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                 :data-kt-indicator="form.processing ? 'on' : 'off'">
                                 <span class="indicator-label">

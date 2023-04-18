@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Models\Employee;
 use App\Models\User;
 use Auth;
+use Hash;
 use Image;
 use App\Models\Image as DBImage;
 class EmployeeController extends Controller
@@ -40,6 +41,7 @@ class EmployeeController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
+            'email' => 'required',
             'date_of_joining' => 'required',
             'number' => 'required|numeric',
             'qualification' => 'required',
@@ -90,6 +92,7 @@ class EmployeeController extends Controller
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
+            'email' => $request->email,
             'image_id' => $Imagefile->id,
             'avatar' => $image,
         ]);
@@ -121,6 +124,144 @@ class EmployeeController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $employee = Employee::find($id);
+
+        // $employee = new EmployeeResources($employee);
+
+        return Inertia::render('Employee/Form', [
+            'employee' => new EmployeeResources($employee),
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $image = $request->file('image');
+
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'date_of_joining' => 'required',
+            'number' => 'required|numeric',
+            'qualification' => 'required',
+            'emergency_number' => 'required|integer',
+            'pan_number' => 'required|regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}/',
+            'father_name' => 'required',
+            'formalities' => 'required|integer',
+            'salary' => 'required',
+            'offer_acceptance' => 'required|integer',
+            'probation_period' => 'required',
+            'date_of_confirmation' => 'required',
+            'department_id' => 'required',
+        ]);
+
+        $employee = Employee::find($id);
+
+        $employee = new EmployeeResources($employee);
+
+        $user = User::where(['id' => $employee->user->id])->get();
+
+        $image = $request->file('image');
+
+        if ($image) {
+            $extension = $request->image->extension();
+            $file_path = 'assets/images/users/';
+            $name = time() . '_' . $request->image->getClientOriginalName();
+
+            $result = Image::make($image)->save($file_path . 'original/' . $name);
+            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
+            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
+
+            $smallThumbnailFolder = 'assets/images/users/thumbnail/small/';
+            $mediumThumbnailFolder = 'assets/images/users/thumbnail/medium/';
+
+            // $result = $result->save($file_path.'original/'.$name);
+
+            $result->resize(200, 200);
+            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
+
+            $result->resize(100, 100);
+            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
+
+            $Imagefile = DBImage::create([
+                'name' => $name,
+                'original_path' => url($file_path),
+                'small_path' => url($file_path . $name),
+                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
+                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
+            ]);
+            // dd($Imagefile);
+        }
+
+        if ($image) {
+            $user = User::where(['id' => $employee->user->id])->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'image_id' => $Imagefile->id,
+                'avatar' => $image,
+            ]);
+        } else {
+            $user = User::where(['id' => $employee->user->id])->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+            ]);
+        }
+
+        if (
+            $employee = Employee::where(['id' => $employee->id])->update([
+                'code' => 'ABC123',
+                'date_of_joining' => $request->date_of_joining,
+                'number' => $request->number,
+                'qualification' => $request->qualification,
+                'emergency_number' => $request->emergency_number,
+                'pan_number' => $request->pan_number,
+                'father_name' => $request->father_name,
+                'formalities' => $request->formalities,
+                'salary' => $request->salary,
+                'offer_acceptance' => $request->offer_acceptance,
+                'probation_period' => $request->probation_period,
+                'date_of_confirmation' => $request->date_of_confirmation,
+                'department_id' => $request->department_id,
+                'user_id' => $employee->user->id,
+            ])
+        ) {
+            // return response()->json(['success'=>true,'message'=>'Employee Updated successfully']);
+
+            return redirect('/employees');
+        }
+    }
+
+    public function emailUpdate(Request $request, $id)
+    {
+        if (Hash::check($request->confirm_password, Auth::user()->password)) {
+            $userEmail = User::where('id', $id)->update([
+                'email' => $request->email,
+            ]);
+            return back()->with('status', 'Password changed successfully!');
+        } else {
+            return back()->with('error', "Don't Have Autherity To change Password!");
+        }
+    }
+
+    public function changePassword(Request $request, $id)
+    {
+        $user = User::where('id', $id)->first();
+
+        // dd(strcmp($request->old_password, $user->password));
+
+        if (strcmp($request->old_password, $user->password == 1)) {
+            User::where('id', $id)->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+            return back()->with('status', 'Password changed successfully!');
+        } else {
+            return back()->with('error', "Old Password Doesn't match!");
+        }
+    }
     public function show($id)
     {
         $employee = Employee::find($id);
@@ -188,121 +329,6 @@ class EmployeeController extends Controller
         return Inertia::render('Employee/Attendance', [
             'employee' => new EmployeeResources($employee),
         ]);
-    }
-
-    public function edit($id)
-    {
-        $employee = Employee::find($id);
-
-        // $employee = new EmployeeResources($employee);
-
-        return Inertia::render('Employee/Form', [
-            'employee' => new EmployeeResources($employee),
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $image = $request->file('image');
-
-        $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'date_of_joining' => 'required',
-            'number' => 'required|numeric',
-            'qualification' => 'required',
-            'emergency_number' => 'required|integer',
-            'pan_number' => 'required|regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}/',
-            'father_name' => 'required',
-            'formalities' => 'required|integer',
-            'salary' => 'required',
-            'offer_acceptance' => 'required|integer',
-            'probation_period' => 'required',
-            'date_of_confirmation' => 'required',
-            'department_id' => 'required',
-        ]);
-
-        $employee = Employee::find($id);
-
-        $employee = new EmployeeResources($employee);
-
-        $user = User::where(['id' => $employee->user->id])->get();
-
-        $image = $request->file('image');
-
-        if ($image) {
-            $extension = $request->image->extension();
-            $file_path = 'assets/images/users/';
-            $name = time() . '_' . $request->image->getClientOriginalName();
-
-            $result = Image::make($image)->save($file_path . 'original/' . $name);
-            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
-            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
-
-            $smallThumbnailFolder = 'assets/images/users/thumbnail/small/';
-            $mediumThumbnailFolder = 'assets/images/users/thumbnail/medium/';
-
-            // $result = $result->save($file_path.'original/'.$name);
-
-            $result->resize(200, 200);
-            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
-
-            $result->resize(100, 100);
-            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
-
-            $Imagefile = DBImage::create([
-                'name' => $name,
-                'original_path' => url($file_path),
-                'small_path' => url($file_path . $name),
-                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
-                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
-            ]);
-            // dd($Imagefile);
-        }
-
-        if ($image) {
-            $user = User::where(['id' => $employee->user->id])->update([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'image_id' => $Imagefile->id,
-                'avatar' => $image,
-            ]);
-        } else {
-            $user = User::where(['id' => $employee->user->id])->update([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-            ]);
-        }
-
-        // $user = User::where(['id' => $employee->user->id])->update([
-        //     'first_name' => $request->first_name,
-        //     'last_name' => $request->last_name,
-        //     'image_id' => $Imagefile->id,
-        //     'avatar' => $image,
-        // ]);
-
-        if (
-            $employee = Employee::where(['id' => $employee->id])->update([
-                'code' => 'ABC123',
-                'date_of_joining' => $request->date_of_joining,
-                'number' => $request->number,
-                'qualification' => $request->qualification,
-                'emergency_number' => $request->emergency_number,
-                'pan_number' => $request->pan_number,
-                'father_name' => $request->father_name,
-                'formalities' => $request->formalities,
-                'salary' => $request->salary,
-                'offer_acceptance' => $request->offer_acceptance,
-                'probation_period' => $request->probation_period,
-                'date_of_confirmation' => $request->date_of_confirmation,
-                'department_id' => $request->department_id,
-                'user_id' => $employee->user->id,
-            ])
-        ) {
-            // return response()->json(['success'=>true,'message'=>'Employee Updated successfully']);
-
-            return redirect('/employees');
-        }
     }
 
     public function destroy($id)
