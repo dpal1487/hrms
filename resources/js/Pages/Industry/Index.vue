@@ -12,7 +12,6 @@ import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
     props: ["industries"],
-
     data() {
         return {
             q: "",
@@ -50,11 +49,7 @@ export default defineComponent({
         },
         confirmDelete(id, index) {
             this.isLoading = true;
-
-            // console.log(this.industries.data[index])
-
             const name = this.industries.data[index].name;
-            // const last_name = this.industries;
             Swal.fire({
                 title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",

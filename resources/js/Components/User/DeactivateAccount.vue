@@ -1,3 +1,21 @@
+<script>
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+    props: [],
+    data() {
+        isDelete = false
+    },
+    components: {
+
+    },
+    methods: {
+        deactiveActive() {
+            this.isDelete = true
+        }
+    },
+})
+</script>
 <template>
     <div class="card">
         <!--begin::Card header-->
@@ -56,7 +74,7 @@
                 <!--end::Card body-->
                 <!--begin::Card footer-->
                 <div class="card-footer d-flex justify-content-end py-6 px-9">
-                    <button id="kt_account_deactivate_account_submit" type="submit"
+                    <button id="kt_account_deactivate_account_submit" @click="deactiveActive" type="button"
                         class="btn btn-danger fw-semibold">Deactivate Account</button>
                 </div>
                 <!--end::Card footer-->
