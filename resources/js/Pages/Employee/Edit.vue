@@ -10,12 +10,14 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
+import { required, url, integer } from "@vuelidate/validators";
 import ImageInput from '@/components/ImageInput.vue';
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Dropdown from "../../Jetstream/Dropdown.vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
 
 
 // Vue.use(Datetime);
@@ -102,11 +104,10 @@ export default defineComponent({
             }),
             value: null,
             options: [
-                { name: 'Vue.js', language: 'JavaScript' },
-                { name: 'Rails', language: 'Ruby' },
-                { name: 'Sinatra', language: 'Ruby' },
-                { name: 'Laravel', language: 'PHP', $isDisabled: true },
-                { name: 'Phoenix', language: 'Elixir' }
+                { name: 'Vue.js', department: 'Vue.js' },
+                { name: 'Rails', department: 'Rails' },
+                { name: 'Ruby', department: 'Ruby' },
+                { name: 'Laravel', department: 'Laravel' }
             ]
         };
     },
@@ -133,11 +134,10 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route('employees.update', this.form.id));
+                axios.post(route('employees.update', this.form.id), this.form)
+                    .then((response) => {
+                        toast(response.data.message)
+                    }).finally(url = '/employees/' + this.employee?.data?.id + '/overview');
             }
         },
 
@@ -162,9 +162,9 @@ export default defineComponent({
                     </div>
                     <!--end::Card title-->
                     <!-- <Link class="btn btn-primary align-self-center"
-                                                                                        :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
-                                                                                    Profile
-                                                                                    </Link> -->
+                                                                                                                                                                                :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
+                                                                                                                                                                            Profile
+                                                                                                                                                                            </Link> -->
                     <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
                 </div>
                 <!--begin::Card header-->
@@ -327,12 +327,14 @@ export default defineComponent({
                                         </div>
                                         <div class="fv-row col-6">
                                             <jet-label for="date_of_confirmation" value="Date Of Confirmation" />
-                                            <jet-input id="date_of_confirmation" type="text"
-                                                v-model="v$.form.date_of_confirmation.$model" :class="
+                                            <VueDatePicker v-model="v$.form.date_of_confirmation.$model"
+                                                :enable-time-picker="false" auto-apply
+                                                input-class-name="form-control form-control-lg form-control-solid fw-normal"
+                                                :class="
                                                     v$.form.date_of_confirmation.$errors.length > 0
                                                         ? 'is-invalid'
                                                         : ''
-                                                " placeholder="Date Of Confirmation" />
+                                                " placeholder="Date Of Confirmation"></VueDatePicker>
                                             <div v-for="(error, index) of v$.form.date_of_confirmation.$errors"
                                                 :key="index">
                                                 <input-error :message="error.$message" />
@@ -354,10 +356,11 @@ export default defineComponent({
                                         </div>
                                         <div class="fv-row col-6">
                                             <jet-label for="department_id" value="Department" />
-                                            <Multiselect :options="options" label="name" valueProp="name"
+                                            <Multiselect :options="options" label="name" valueProp="department"
                                                 :custom-label="nameWithLang"
                                                 class="form-control form-control-lg form-control-solid"
-                                                placeholder="Select One" v-model="value" track-by="name" />
+                                                placeholder="Select One" v-model="form.department_id" track-by="name" />
+
                                         </div>
                                     </div>
                                 </div>

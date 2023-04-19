@@ -88,8 +88,9 @@ export default defineComponent({
                 <!--end::Content-->
             </div>
             <!--end::Sign-in Method-->
+            <!-- {{ this.employee }} -->
             <!--begin::Deactivate Account-->
-            <DeactivateAccount />
+            <DeactivateAccount :employee="this.employee" />
             <!--end::Deactivate Account-->
         </UserLayout>
     </AppLayout>

@@ -81,7 +81,7 @@ class AddressController extends Controller
             'pincode' => 'required',
         ]);
 
-        $address = Address::create([
+        $address = Address::updateOrCreate([
             'address_line_1' => $request->address_line_1,
             'address_line_2' => $request->address_line_2,
             'city' => $request->city,
@@ -90,16 +90,13 @@ class AddressController extends Controller
             'pincode' => $request->pincode,
         ]);
 
-        $employeeAddress = EmployeeAddress::create([
-            'employee_id' => $id,
-            'address_id' => $address->id,
-        ]);
+        $employeeAddress = EmployeeAddress::updateOrCreate(['employee_id' => $id], ['address_id' => $address->id]);
 
-        return response()->json(['success' => true, 'message' => 'Employee created successfully']);
-        // return redirect()
-        //     ->back('')
-        //     ->with('message', 'Address Updated Successfully');
-        // return redirect('/employees');
+        if ($employeeAddress) {
+            return response()->json(['success' => true, 'message' => 'Employee Address Added successfully']);
+        } else {
+            return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
+        }
     }
 
     /**

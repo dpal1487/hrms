@@ -11,6 +11,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DecisionMakerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('{id}/email/update', 'emailUpdate')->name('employees.email.update');
             Route::post('{id}/change-password', 'changePassword')->name('employees.change-password');
             Route::delete('{id}/delete', 'destroy')->name('employees.delete');
+            Route::post('{id}/deactivate', 'deactivate')->name('employees.deactivate');
         });
     });
 
@@ -93,6 +95,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/edit', 'edit')->name('answer.edit');
             Route::post('{id}/update', 'update')->name('answer.update');
             Route::delete('{id}/delete', 'destroy')->name('answer.delete');
+        });
+    });
+
+    Route::controller(DecisionMakerController::class)->group(function () {
+        Route::group(['prefix' => 'decision-makers'], function () {
+            Route::get('/', 'index')->name('decision-makers.index');
+            Route::get('/add', 'create')->name('decision-makers.add');
+            Route::post('/store', 'store')->name('decision-makers.store');
+            Route::get('{id}/edit', 'edit')->name('decision-makers.edit');
+            Route::post('{id}/update', 'update')->name('decision-makers.update');
+            Route::delete('{id}/delete', 'destroy')->name('decision-makers.delete');
         });
     });
     Route::controller(EmployeeController::class)->group(function () {

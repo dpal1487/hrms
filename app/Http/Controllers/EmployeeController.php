@@ -8,6 +8,7 @@ use App\Http\Resources\AddressResource;
 
 use Inertia\Inertia;
 use App\Models\Employee;
+use App\Models\Country;
 use App\Models\User;
 use Auth;
 use Hash;
@@ -58,6 +59,8 @@ class EmployeeController extends Controller
 
         $image = $request->file('image');
 
+        // dd($image);
+
         if ($image) {
             $extension = $request->image->extension();
             $file_path = 'assets/images/users/';
@@ -99,7 +102,7 @@ class EmployeeController extends Controller
 
         if (
             $employee = Employee::create([
-                'code' => 'ABC123',
+                'code' => 'ARS' . date('Y') . $user->id,
                 'date_of_joining' => $request->date_of_joining,
                 'number' => $request->number,
                 'qualification' => $request->qualification,
@@ -118,9 +121,9 @@ class EmployeeController extends Controller
                 'user_id' => $user->id,
             ])
         ) {
-            // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
+            return response()->json(['success' => true, 'message' => 'Employee created successfully']);
 
-            return redirect('/employees');
+            // return redirect('/employees')->with(['message' => 'Employee created successfully']);
         }
     }
 
@@ -137,12 +140,13 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request);
         $image = $request->file('image');
 
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
+            // 'email' => 'required',
             'date_of_joining' => 'required',
             'number' => 'required|numeric',
             'qualification' => 'required',
@@ -229,21 +233,22 @@ class EmployeeController extends Controller
                 'user_id' => $employee->user->id,
             ])
         ) {
-            // return response()->json(['success'=>true,'message'=>'Employee Updated successfully']);
+            return response()->json(['success' => true, 'message' => 'Employee Updated successfully']);
 
-            return redirect('/employees');
+            // return redirect('/employees');
         }
     }
 
     public function emailUpdate(Request $request, $id)
     {
+        // dd($request);
         if (Hash::check($request->confirm_password, Auth::user()->password)) {
             $userEmail = User::where('id', $id)->update([
                 'email' => $request->email,
             ]);
-            return back()->with('status', 'Password changed successfully!');
+            return response()->json(['success' => true, 'message' => 'Successfully Change Email!']);
         } else {
-            return back()->with('error', "Don't Have Autherity To change Password!");
+            return response()->json(['success' => false, 'message' => "Don't Have Autherity To change Email! Please insert correct password"]);
         }
     }
 
@@ -251,15 +256,13 @@ class EmployeeController extends Controller
     {
         $user = User::where('id', $id)->first();
 
-        // dd(strcmp($request->old_password, $user->password));
-
         if (strcmp($request->old_password, $user->password == 1)) {
             User::where('id', $id)->update([
                 'password' => Hash::make($request->new_password),
             ]);
-            return back()->with('status', 'Password changed successfully!');
+            return response()->json(['success' => true, 'message' => 'Password changed successfully!']);
         } else {
-            return back()->with('error', "Old Password Doesn't match!");
+            return response()->json(['success' => false, 'message' => "Old Password Doesn't match!"]);
         }
     }
     public function show($id)
@@ -307,6 +310,7 @@ class EmployeeController extends Controller
     public function address($id)
     {
         $employee = Employee::find($id);
+        // return new EmployeeResources($employee);
 
         return Inertia::render('Employee/Address', [
             'employee' => new EmployeeResources($employee),
@@ -316,10 +320,13 @@ class EmployeeController extends Controller
     public function addressEdit($id)
     {
         $employee = Employee::find($id);
-        // return new EmployeeResources($employee);
+        $countries = Country::get();
+
+        // dd($countries);
 
         return Inertia::render('Employee/UserAddress', [
             'employee' => new EmployeeResources($employee),
+            'countries' => $countries,
         ]);
     }
     public function attendance($id)
@@ -338,5 +345,19 @@ class EmployeeController extends Controller
             return response()->json(['success' => true, 'message' => 'Employee has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+
+    public function deactivate($id)
+    {
+        $employee = Employee::join('users', 'users.id', 'employees.user_id')
+            ->select('users.id as userId', 'users.active_status', 'employees.id as empId')
+            ->where('employees.id', $id)
+            ->update([
+                'active_status' => 0,
+            ]);
+        if ($employee) {
+            return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
+        }
+        return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
     }
 }

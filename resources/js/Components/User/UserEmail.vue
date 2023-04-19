@@ -1,13 +1,13 @@
 <script>
 import useVuelidate from '@vuelidate/core';
 import { defineComponent } from 'vue';
-import { required, email } from "@vuelidate/validators";
+import { required, email, sameAs } from "@vuelidate/validators";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-
-
+import { toast } from 'vue3-toastify';
+import axios from 'axios';
 
 export default defineComponent({
     props: ["email", "selectedImage", "errors"],
@@ -23,6 +23,7 @@ export default defineComponent({
                 },
                 confirm_password: {
                     required,
+                    sameAs: sameAs(this.email?.password)
                 }
             }
         }
@@ -49,33 +50,33 @@ export default defineComponent({
         hideEditEmail() {
             this.isEdit = false;
         },
-
         submit() {
-            // this.v$.$touch();
             if (!this.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route('employees.email.update', this.form.id));
+                axios.post(route('employees.email.update', this.form.id), this.form).then((response) => {
+                    if (response.data.success) {
+                        toast(response.data.message)
+                        return;
+                    } else {
+                        toast(response.data.message)
+                    }
+                }).finally(() => {
+                    this.isEdit = false;
+                    this.form.reset()
+                });
             }
         },
     }
 })
 </script>
 
-
 <template>
     <div v-if="isEdit" class="flex-row-fluid">
         <!--begin::Form-->
         <JetValidationErrors />
-
         <form @submit.prevent="submit()" class="">
-
             <div class="row mb-6">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="fv-row mb-0">
-
                         <label for="emailaddress" class="form-label fs-6 fw-bold mb-3">Enter New
                             Email Address </label>
                         <input type="email" class="form-control form-control-lg form-control-solid"
@@ -84,7 +85,6 @@ export default defineComponent({
                 </div>
                 <div class="col-lg-6">
                     <div class="fv-row mb-0">
-
                         <label for="confirmemailpassword" class="form-label fs-6 fw-bold mb-3">Confirm Password</label>
                         <input type="password" class="form-control form-control-lg form-control-solid"
                             v-model="form.confirm_password" />

@@ -12,7 +12,7 @@ import Vue3Toastify from 'vue3-toastify';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 import "vue3-toastify/dist/index.css";
-import VueClipboard from 'vue3-clipboard'
+import VueClipboard from 'vue3-clipboard';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

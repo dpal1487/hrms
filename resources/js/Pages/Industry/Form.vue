@@ -77,7 +77,6 @@ export default defineComponent({
             }
             this.v$.$touch();
 
-
             if (!this.v$.form.$invalid) {
                 this.form.transform((data) => {
                     console.log("see submitted data", data);

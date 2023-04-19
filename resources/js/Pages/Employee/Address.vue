@@ -122,7 +122,7 @@ export default defineComponent({
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8 d-flex align-items-center">
-                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.address?.country
+                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.address?.country?.name
                             }}</span>
                         </div>
                         <!--end::Col-->

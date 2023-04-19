@@ -3,27 +3,24 @@ import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
+
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
-import 'vue3-toastify/dist/index.css';
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
-    props: ["employees"],
+    props: ["decisionmakers"],
 
     data() {
         return {
             q: "",
             s: "",
             tbody: [
-                "Employee Name",
-                "Employee Code",
-                "Number",
-                "Salary",
-                "Status",
-                "Created At",
+                "Indusctry Name",
+                "Title",
+                "Order By",
                 "Action",
             ],
             isLoading: false,
@@ -38,28 +35,16 @@ export default defineComponent({
         Loading,
     },
     methods: {
-        updateStatus(id, e) {
-            this.isLoading = true;
-            axios
-                .post("/supplier/status", { id: id, status: e })
-                .then((response) => {
-                    toast.success(response.data.message)
-                    if (response.data.success) {
-                        return;
-                    }
-                    toast.error(response.data.message);
-                })
-                .finally(() => (this.isLoading = false));
-        },
+
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            // console.log(this.employees.data[index].user.first_name)
+            // console.log(this.decisionmakers.data[index].user.first_name)
 
-            const first_name = this.employees.data[index].user.first_name;
-            const last_name = this.employees.data[index].user.last_name;
+            const name = this.decisionmakers.data[index].industry?.name;
+
             Swal.fire({
-                title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
+                title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -69,11 +54,11 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/employees/" + id + "/delete")
+                        .delete("/decision-makers/" + id + "/delete")
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
-                                this.employees.data.splice(index, 1);
+                                this.decisionmakers.data.splice(index, 1);
                                 return;
                             }
                         })
@@ -85,7 +70,7 @@ export default defineComponent({
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: first_name + " " + last_name + " was not deleted.",
+                        text: name + " was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -99,30 +84,22 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/employees",
+                "/decision-makers",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
-                        this.employees = data.props.employees;
+                        this.decisionmakers = data.props.decisionmakers;
                     },
                 }
             );
         },
     },
-    setup() {
-        const notify = () => {
-            toast("A basic toast message", {
-                // toast options here
-            });
-        }
-        return { notify };
-    }
 });
 </script>
 <template>
     <app-layout>
 
-        <Head title="Employees" />
+        <Head title="decisionmakers" />
         <div class="card card-flush">
 
             <!--begin::Actions-->
@@ -143,7 +120,7 @@ export default defineComponent({
                         </span>
                         <!--end::Svg Icon-->
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search Employees" />
+                            placeholder="Search decisionmakers" />
                     </div>
                     <div class="w-100 mw-200px">
                         <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
@@ -156,11 +133,11 @@ export default defineComponent({
 
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <!--begin::Add employees-->
-                        <Link href="/employees/add" class="btn btn-primary">
-                        Add Employee
+                        <!--begin::Add decisionmakers-->
+                        <Link href="/decision-makers/add" class="btn btn-primary">
+                        Add Decision Makers
                         </Link>
-                        <!--end::Add employees-->
+                        <!--end::Add questions-->
                     </div>
                     <!--end::Card toolbar-->
                 </form>
@@ -182,27 +159,22 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(employees, index) in employees.data" :key="index">
+                            <tr v-for="(decisionmakers, index) in decisionmakers.data" :key="index">
                                 <td>
 
-                                    <Link :href="'/employees/' + employees.id"
+                                    <Link :href="'/decision-makers/' + decisionmakers.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        employees-filter="employees_name">{{ employees.user?.first_name }} {{
-                                            employees.user?.last_name }}</Link>
+                                        decisionmakers-filter="decisionmakers_name">{{ decisionmakers.data }} {{
+                                            decisionmakers.industry?.name }}</Link>
                                 </td>
-                                <td>{{ employees.code }}</td>
-                                <td>{{ employees.number }}</td>
-                                <td>{{ employees.salary }}</td>
-                                <td>
-                                    <p v-if="employees.user?.active_status == 1">Active</p>
-                                    <p v-if="employees.user?.active_status == 0">Inactive</p>
-                                </td>
-                                <td>{{ employees.created_at }}</td>
+                                <td>{{ decisionmakers?.title }}</td>
+                                <td v-if="(decisionmakers?.order_by == 1)">Ascending</td>
+                                <td v-if="(decisionmakers?.order_by == 0)">Descending</td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${employees.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${decisionmakers.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -217,25 +189,20 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${employees.id}`">
+                                            :aria-labelled:by="`dropdown-${decisionmakers.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employees/${employees.id}/edit`">Edit
+                                                    :href="`/decision-makers/${decisionmakers.id}/edit`">
+                                                Edit
                                                 </Link>
                                             </li>
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employees/${employees.id}`">View
-                                                </Link>
-                                            </li>
-
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    employees.id, index
+                                                    decisionmakers.id, index
                                                 )
-                                                " class="btn btn-sm dropdown-item">
+                                                "
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>
                                             </li>
@@ -247,8 +214,9 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="employees.meta">
-                    <Pagination :links="employees.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end"
+                    v-if="decisionmakers.meta">
+                    <Pagination :links="decisionmakers.meta.links" />
                 </div>
             </div>
         </div>

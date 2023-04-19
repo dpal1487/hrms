@@ -19,4 +19,8 @@ class Address extends Model
     {
         return $this->hasOne(Employee::class, 'id', 'id');
     }
+    public function country()
+    {
+        return $this->hasOne(Country::class, 'id', 'country_id');
+    }
 }

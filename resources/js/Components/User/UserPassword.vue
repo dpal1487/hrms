@@ -4,8 +4,10 @@ import useVuelidate from '@vuelidate/core';
 import { required, } from '@vuelidate/validators';
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
-import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+import { toast } from 'vue3-toastify';
+
+import axios from 'axios';
 
 export default defineComponent({
 
@@ -49,11 +51,22 @@ export default defineComponent({
         },
         submit() {
             if (!this.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route('employees.change-password', this.form.id));
+                axios.post(route('employees.change-password', this.form.id), this.form).then((response) => {
+                    if (response.data.success) {
+                        toast(response.data.message)
+                        return;
+                    } else {
+                        toast(response.data.message)
+
+                    }
+                }).finally(() => {
+                    // toast(response.data.message)
+
+                    this.isEdit = false;
+                    this.form.reset()
+                });
+
+
             }
         },
     }
@@ -94,9 +107,14 @@ export default defineComponent({
             <div class="form-text mb-5">Password must be at least 8 character and contain symbols
             </div>
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary me-2 px-6">Update Password</button>
+                <button type="submit" class="btn btn-primary me-2 px-6"
+                    :data-kt-indicator="form.processing ? 'on' : 'off'">Update Password</button>
                 <button id="kt_password_cancel" type="button" @click="hideChangePassword"
                     class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
+
+                <span class="indicator-progress">
+                    Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                </span>
             </div>
         </form>
         <!--end::Form-->
