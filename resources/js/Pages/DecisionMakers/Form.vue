@@ -10,14 +10,10 @@ import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import Dropdown from "../../Jetstream/Dropdown.vue";
-import axios from "axios";
 import { toast } from "vue3-toastify";
 
-
-
 export default defineComponent({
-    props: ["decisionmakers", 'decisionmaker', 'industries'],
+    props: ['decisionmaker', 'industries'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -61,24 +57,15 @@ export default defineComponent({
         JetLabel,
         InputError,
         JetValidationErrors,
-        Dropdown
     },
     methods: {
-        nameWithLang({ value, name }) {
-            return `${value} — [${name}]`
-        },
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.submitting = true;
-
-                axios.post(route().current() == 'decision-makers.add' ? this.route("decision-makers.store") : this.route('decision-makers.update', this.form.id), this.form)
-                    .then((response) => {
-                        toast(response.data.message)
-                    }).finally(() => {
-                        this.submitting = false;
-                        this.$router.push('/decision-makers');
-                    });
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    })).post(route().current() == 'decision-makers.add' ? this.route("decision-makers.store") : this.route('decision-makers.update', this.form.id));
             }
         },
 
@@ -161,7 +148,7 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
+                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'decision-makers.edit'">Update</span>
                                         <span v-if="route().current() == 'decision-makers.add'">Save</span>

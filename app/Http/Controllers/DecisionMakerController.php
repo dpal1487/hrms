@@ -12,48 +12,29 @@ class DecisionMakerController extends Controller
 {
     public function index(Request $request)
     {
-        $decisionmakers = DecisionMaker::get();
+        $decisionmakers = new DecisionMaker();
 
-        // return DecisionMakerResources::collection($decisionmakers);?
+        if (!empty($request->q)) {
+            $decisionmakers = $decisionmakers
+                ->whereHas('industry', function ($q) use ($request) {
+                    $q->where('name', 'like', "%$request->q%");
+                })
+                ->orWhere('title', 'like', "%$request->q%");
+        }
 
-        // return $DecisionMakers;
-        // $decisionmakers = new DecisionMaker();
-
-        // if (!empty($request->q)) {
-        //     $decisionmakers = $decisionmakers
-        //         ->whereHas('industry', function ($q) use ($request) {
-        //             $q->where('name', 'like', "%$request->q%");
-        //         })
-        //         ->orWhere('title', 'like', "%$request->q%");
-        // }
-
-        // return DecisionMakerResources::collection($decisionmakers);
         return Inertia::render('DecisionMakers/Index', [
-            'decisionmakers' => DecisionMakerResources::collection($decisionmakers),
+            'decisionmakers' => DecisionMakerResources::collection($decisionmakers->paginate(10)),
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $industries = Industry::get();
-        // return $industries;
         return Inertia::render('DecisionMakers/Form', ['industries' => $industries]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        // dd($request);
         $request->validate([
             'title' => 'required',
             'order_by' => 'required',
@@ -67,10 +48,10 @@ class DecisionMakerController extends Controller
                 'order_by' => $request->order_by,
             ])
         ) {
-            return response()->json(['success' => true, 'message' => 'DecisionMaker created successfully']);
-
-            // return redirect('/decisionmaker');
+            // return response()->json(['success' => true, 'message' => 'DecisionMaker created successfully']);
+            return redirect('/decision-makers')->with('message', 'DecisionMaker created successfully');
         }
+        return redirect('/decision-makers')->with('message', 'DecisionMaker not created');
     }
 
     public function edit($id)
@@ -104,10 +85,11 @@ class DecisionMakerController extends Controller
                 'order_by' => $request->order_by,
             ])
         ) {
-            return response()->json(['success' => true, 'message' => 'DecisionMaker Updated successfully']);
+            // return response()->json(['success' => true, 'message' => 'DecisionMaker Updated successfully']);
 
-            // return redirect('/decision-makers');
+            return redirect('/decision-makers')->with('message', 'DecisionMaker Updated successfully');
         }
+        return redirect('/decision-makers')->with('message', 'DecisionMaker not Updated');
     }
 
     /**

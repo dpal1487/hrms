@@ -1,48 +1,15 @@
 
 <script>
 import { defineComponent } from "vue";
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/inertia-vue3";
 
 export default defineComponent({
     props: ["employee", "status"],
 
     components: {
         Link,
-        Head,
     },
-    data() {
-        return {
-            q: "",
-            navmenus: [
-                {
-                    link: "/overview",
-                    title: "Overview",
-                },
-                {
-                    link: "/settings",
-                    title: "Settings",
-                },
-                {
-                    link: "/security",
-                    title: "Security",
-                },
-                {
-                    link: "/address",
-                    title: "Address",
-                },
-                {
-                    link: "/attendance",
-                    title: "Attendance",
-                }
-            ],
-        };
-    },
-    methods: {
 
-    },
-    created() {
-
-    },
 });
 </script>
 
@@ -264,14 +231,7 @@ export default defineComponent({
                             </Link>
                         </li>
                         <!--end::Nav item-->
-                        <!--begin::Nav item-->
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.settings') && 'active'}`"
-                                :href="'/employees/' + this.employee.data.id + '/settings'">Settings
-                            </Link>
-                        </li>
-                        <!--end::Nav item-->
+
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
                             <Link
@@ -285,6 +245,14 @@ export default defineComponent({
                             <Link
                                 :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.address') && 'active'}`"
                                 :href="'/employees/' + this.employee.data.id + '/address'">Address
+                            </Link>
+                        </li>
+                        <!--end::Nav item-->
+                        <!--begin::Nav item-->
+                        <li class="nav-item mt-2">
+                            <Link
+                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.settings') && 'active'}`"
+                                :href="'/employees/' + this.employee.data.id + '/settings'">Settings
                             </Link>
                         </li>
                         <!--end::Nav item-->

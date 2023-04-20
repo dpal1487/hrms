@@ -3,21 +3,7 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Multiselect from "@vueform/multiselect";
-import PrimaryButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-import Dropdown from "../../Jetstream/Dropdown.vue";
-
-
-// Vue.use(Datetime);
-// import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
     props: ["employees", 'employee'],

@@ -6,10 +6,10 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 
 import useVuelidate from "@vuelidate/core";
 
-import UserEmail from "@/Components/User/UserEmail.vue";
-import TwoFactor from "@/Components/User/TwoFactor.vue";
-import UserPassword from "../../Components/User/UserPassword.vue";
-import DeactivateAccount from "../../Components/User/DeactivateAccount.vue";
+import UserEmail from "@/Components/User/security/UserEmail.vue";
+import TwoFactor from "@/Components/User/security/TwoFactor.vue";
+import UserPassword from "../../Components/User/security/UserPassword.vue";
+import DeactivateAccount from "../../Components/User/security/DeactivateAccount.vue";
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
 

@@ -156,7 +156,6 @@ export default defineComponent({
                                         <jet-label for="status" value="Status" />
                                         <!-- {{ this.industry?.data?.status }} -->
                                         <Multiselect :options="status" label="name" valueProp="id"
-                                            :custom-label="nameWithLang"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                             v-model="v$.form.status.$model" track-by="name" :class="
                                                 v$.form.status.$errors.length > 0
@@ -184,7 +183,7 @@ export default defineComponent({
 
                                 <div>
                                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                        :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                        :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
                                         <span v-if="route().current() == 'industries.edit'">Update</span>
                                         <span v-if="route().current() == 'industries.add'">Save</span>
                                         <span class="indicator-progress">

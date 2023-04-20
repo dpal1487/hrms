@@ -24,7 +24,7 @@ import { toast } from "vue3-toastify";
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ["employees", 'employee'],
+    props: ['employee'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -38,6 +38,9 @@ export default defineComponent({
                     required,
                 },
                 last_name: {
+                    required,
+                },
+                email: {
                     required,
                 },
                 date_of_joining: {
@@ -89,6 +92,7 @@ export default defineComponent({
                 image: this.employee?.data?.user?.image?.medium_path || '',
                 first_name: this.employee?.data?.user?.first_name || '',
                 last_name: this.employee?.data?.user?.last_name || '',
+                email: this.employee?.data?.user?.email || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
                 number: this.employee?.data?.number || '',
                 qualification: this.employee?.data?.qualification || '',
@@ -128,18 +132,28 @@ export default defineComponent({
 
     },
     methods: {
-        nameWithLang({ name, language }) {
-            return `${name} — [${language}]`
-        },
+
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                axios.post(route('employees.update', this.form.id), this.form)
-                    .then((response) => {
-                        toast(response.data.message)
-                    }).finally(url = '/employees/' + this.employee?.data?.id + '/overview');
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(route('employees.update', this.form.id));
             }
         },
+        onFileChange(e) {
+            const file = e.target.files[0];
+            // console.log("see file", file.name)
+
+            this.$data.form.image = file;
+            this.selectedFilename = file?.name;
+            this.url = URL.createObjectURL(file);
+        },
+        removeSelectedAvatar() {
+            this.url = null;
+        }
 
     },
     created() {
@@ -162,9 +176,9 @@ export default defineComponent({
                     </div>
                     <!--end::Card title-->
                     <!-- <Link class="btn btn-primary align-self-center"
-                                                                                                                                                                                :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
-                                                                                                                                                                            Profile
-                                                                                                                                                                            </Link> -->
+                                                                                                                                                                                                        :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
+                                                                                                                                                                                                    Profile
+                                                                                                                                                                                                    </Link> -->
                     <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
                 </div>
                 <!--begin::Card header-->

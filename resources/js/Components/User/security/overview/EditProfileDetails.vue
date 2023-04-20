@@ -1,6 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import UserLayout from "@/Layouts/UserLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import PrimaryButton from "@/Jetstream/Button.vue";
@@ -9,18 +10,21 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
+import { required, url, integer } from "@vuelidate/validators";
 import ImageInput from '@/components/ImageInput.vue';
+
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import Dropdown from "../../Jetstream/Dropdown.vue";
-import { toast } from 'vue3-toastify';
+// import Dropdown from "../../Jetstream/Dropdown.vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
+
 
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ['employee'],
+    props: ["employees", 'employee'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -34,9 +38,6 @@ export default defineComponent({
                     required,
                 },
                 last_name: {
-                    required,
-                },
-                email: {
                     required,
                 },
                 date_of_joining: {
@@ -80,17 +81,14 @@ export default defineComponent({
         };
     },
     data() {
-        // console.log("see this", this.employee?.data?.user?.image?.medium_path)
         return {
 
-            message: '',
             isEdit: false,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
                 image: this.employee?.data?.user?.image?.medium_path || '',
                 first_name: this.employee?.data?.user?.first_name || '',
                 last_name: this.employee?.data?.user?.last_name || '',
-                email: this.employee?.data?.user?.email || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
                 number: this.employee?.data?.number || '',
                 qualification: this.employee?.data?.qualification || '',
@@ -103,10 +101,7 @@ export default defineComponent({
                 probation_period: this.employee?.data?.probation_period || '',
                 date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
                 department_id: this.employee?.data?.department_id || '',
-                department: '',
-                requsetingFrom: "employees/edit",
             }),
-            url: null,
             value: null,
             options: [
                 { name: 'Vue.js', department: 'Vue.js' },
@@ -118,6 +113,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
+        UserLayout,
         Link,
         Head,
         Multiselect,
@@ -127,63 +123,54 @@ export default defineComponent({
         InputError,
         JetValidationErrors,
         VueDatePicker,
-        Dropdown,
+        // Dropdown,
         ImageInput,
+
     },
     methods: {
+        nameWithLang({ name, language }) {
+            return `${name} — [${language}]`
+        },
         submit() {
-            const config = {
-                headers: { 'content-type': 'multipart/form-data' }
-            }
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.form
                     .transform((data) => ({
                         ...data,
-                    }))
-                    .post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id));
-
-
+                    })).post(route('employees.update', this.form.id));
             }
         },
-        onFileChange(e) {
-            const file = e.target.files[0];
-            // console.log("see file", file.name)
-
-            this.$data.form.image = file;
-            this.selectedFilename = file?.name;
-            this.url = URL.createObjectURL(file);
-        },
-        removeSelectedAvatar() {
-            this.url = null;
-        }
-
 
     },
     created() {
-        if (route().current() == 'employees.edit') {
-            this.isEdit = true;
-        }
+
     }
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
-
-    <AppLayout>
-
+    <div class="card mb-5 mb-xl-10">
+        <!--begin::Card header-->
+        <div class="card-header cursor-pointer">
+            <!--begin::Card title-->
+            <div class="card-title m-0">
+                <h3 class="fw-bold m-0">Profile Edit</h3>
+                <!-- {{ employee }} -->
+            </div>
+            <!--end::Card title-->
+            <!-- <Link class="btn btn-primary align-self-center"
+                                                                                                                                                                                                                                                :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
+                                                                                                                                                                                                                                            Profile
+                                                                                                                                                                                                                                            </Link> -->
+            <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
+        </div>
+        <!--begin::Card header-->
+        <!--begin::Card body-->
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <JetValidationErrors />
-
                 <!-- {{ form }} -->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <h2>General</h2>
-                            </div>
-                        </div>
                         <div class="card-body">
                             <div class="row g-5 col-md-12">
                                 <div class="fv-row col-6">
@@ -213,18 +200,6 @@ export default defineComponent({
                                     </div>
                                 </div>
 
-
-                                <div class="fv-row col-6">
-                                    <jet-label for="email" value="Email" />
-                                    <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="
-                                        v$.form.email.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Email" />
-                                    <div v-for="(error, index) of v$.form.email.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="date_of_joining" value="Date Of Joining" />
                                     <VueDatePicker v-model="v$.form.date_of_joining.$model" :enable-time-picker="false"
@@ -250,6 +225,17 @@ export default defineComponent({
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
+                                    <jet-label for="qualification" value="Qualification" />
+                                    <jet-input id="qualification" type="text" v-model="v$.form.qualification.$model" :class="
+                                        v$.form.qualification.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                    " placeholder="Qualification" />
+                                    <div v-for="(error, index) of v$.form.qualification.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
+                                <div class="fv-row col-6">
                                     <jet-label for="emergency_number" value="Emergency Number" />
                                     <jet-input id="emergency_number" type="text" v-model="v$.form.emergency_number.$model"
                                         :class="
@@ -261,18 +247,6 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <div class="fv-row col-6">
-                                    <jet-label for="qualification" value="Qualification" />
-                                    <jet-input id="qualification" type="text" v-model="v$.form.qualification.$model" :class="
-                                        v$.form.qualification.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Qualification" />
-                                    <div v-for="(error, index) of v$.form.qualification.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                </div>
-
                                 <div class="fv-row col-6">
                                     <jet-label for="pan_number" value="Pan Number" />
                                     <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="
@@ -350,8 +324,20 @@ export default defineComponent({
                                                 ? 'is-invalid'
                                                 : ''
                                         " placeholder="Date Of Confirmation"></VueDatePicker>
-
                                     <div v-for="(error, index) of v$.form.date_of_confirmation.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
+
+                                <div class="fv-row col-6">
+
+                                    <jet-label for="department_id" value="Department" />
+                                    <jet-input id="department_id" type="text" v-model="v$.form.department_id.$model" :class="
+                                        v$.form.department_id.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                    " placeholder="Department" />
+                                    <div v-for="(error, index) of v$.form.department_id.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
@@ -362,22 +348,22 @@ export default defineComponent({
                                         placeholder="Select One" v-model="form.department_id" track-by="name" />
 
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <!--end::Variations-->
-                    <div class="row text-align-center">
+                    <div class="row text-align-center p-3">
                         <div class="col-12">
+
                             <div class="d-flex justify-content-end gap-2">
-                                <Link href="/employees" class="btn btn-secondary align-items-center justify-content-center">
-                                Cancel
-                                </Link>
+                                <button @click="$emit('edit', false)"
+                                    class="btn btn-secondary align-items-center justify-content-center">
+                                    Cancel
+                                </button>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                    :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'employees.edit'">Update</span>
-                                        <span v-if="route().current() == 'employees.add'">Save</span>
+                                        <span>Save</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span
@@ -392,5 +378,6 @@ export default defineComponent({
                 </form>
             </div>
         </div>
-    </AppLayout>
+        <!--end::Card body-->
+    </div>
 </template>

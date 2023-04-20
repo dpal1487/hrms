@@ -93,9 +93,12 @@ class AddressController extends Controller
         $employeeAddress = EmployeeAddress::updateOrCreate(['employee_id' => $id], ['address_id' => $address->id]);
 
         if ($employeeAddress) {
-            return response()->json(['success' => true, 'message' => 'Employee Address Added successfully']);
+            return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee address added successfully');
+            // return response()->json(['success' => true, 'message' => 'Employee Address Added successfully']);
         } else {
-            return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
+            return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee address not added');
+
+            // return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
         }
     }
 

@@ -75,10 +75,11 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                axios.post(route('employees.address.update', this.form.id), this.form)
-                    .then((response) => {
-                        toast(response.data.message)
-                    });
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(route('employees.address.update', this.form.id));
             }
         },
     },
@@ -109,8 +110,7 @@ export default defineComponent({
                     <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                         <!--begin::Card body-->
                         <div class="card-body border-top p-9">
-                            {{ this.employee?.data?.id }}
-
+                            <!-- {{ this.employee?.data?.id }} -->
                             <!--begin::Input group-->
                             <div class="row mb-6">
                                 <!--begin::Label-->
@@ -252,9 +252,9 @@ export default defineComponent({
                             </Link>
                             <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->
                             <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
                                 <span class="indicator-label">
-                                    <span>Save</span>
+                                    <span>Address Add</span>
                                 </span>
                                 <span class="indicator-progress">
                                     Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>

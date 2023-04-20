@@ -11,16 +11,23 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, integer } from "@vuelidate/validators";
 import Dropdown from "../../Jetstream/Dropdown.vue";
-
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ["questions", 'question', 'industries'],
+    props: ["questions", 'question', 'industries', 'message'],
     setup() {
         return { v$: useVuelidate() };
+        const notify = () => {
+            toast.info("Wow so easy !", {
+                autoClose: 1000,
+            });
+        }
+        return { notify };
     },
     validations() {
         return {
@@ -107,6 +114,13 @@ export default defineComponent({
 
     <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
+            <div v-if="$page.props.flash.message"
+                class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                role="alert">
+                <span class="font-medium">
+                    {{ $page.props.flash.message }}
+                </span>
+            </div>
             <div class="col-12">
                 <JetValidationErrors />
                 <!-- {{ question?.data?.question_key }} -->

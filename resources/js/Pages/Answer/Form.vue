@@ -9,16 +9,10 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, integer } from "@vuelidate/validators";
-import Dropdown from "../../Jetstream/Dropdown.vue";
-
-
-
-// Vue.use(Datetime);
-// import { Datetime } from 'vue-datetime';
+import { required } from "@vuelidate/validators";
 
 export default defineComponent({
-    props: ["questions", 'answer',],
+    props: ["questions", 'answer', 'message'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -68,9 +62,7 @@ export default defineComponent({
         JetValidationErrors,
     },
     methods: {
-        nameWithLang({ name, type }) {
-            return `${name} — [${type}]`
-        },
+
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
@@ -95,6 +87,8 @@ export default defineComponent({
 
     <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
+            {{ this.message }}
+
             <div class="col-12">
                 <JetValidationErrors />
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
@@ -109,7 +103,6 @@ export default defineComponent({
 
                                 <div class="fv-row col-6">
                                     <jet-label for="question" value="Question" />
-                                    {{ question }}
                                     <Multiselect :options="questions" label="question_key" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                         v-model="v$.form.question.$model" track-by="question_key" :searchable="true" :class="
@@ -121,10 +114,7 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-
-                                <!-- <jet-input type="text" v-model="v$.form.id.$model" /> -->
                                 <div class="fv-row col-6">
-
                                     <jet-label for="answer" value="Answer" />
                                     <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="
                                         v$.form.answer.$errors.length > 0
@@ -137,7 +127,6 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="order_by" value="Order By" />
-
                                     <Multiselect :options="order_by" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                         v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="
@@ -161,7 +150,7 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                    :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'answer.edit'">Update</span>
                                         <span v-if="route().current() == 'answer.add'">Save</span>

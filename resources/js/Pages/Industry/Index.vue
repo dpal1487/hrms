@@ -1,9 +1,8 @@
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
-
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
@@ -11,7 +10,7 @@ import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
-    props: ["industries"],
+    props: ["industries", 'message'],
     data() {
         return {
             q: "",
@@ -22,7 +21,6 @@ export default defineComponent({
                 "Status",
                 "Action",
             ],
-            isLoading: false,
         };
     },
     components: {
@@ -34,19 +32,7 @@ export default defineComponent({
         Loading,
     },
     methods: {
-        updateStatus(id, e) {
-            this.isLoading = true;
-            axios
-                .post("/supplier/status", { id: id, status: e })
-                .then((response) => {
-                    toast.success(response.data.message);
-                    if (response.data.success) {
-                        return;
-                    }
-                    toast.error(response.data.message);
-                })
-                .finally(() => (this.isLoading = false));
-        },
+
         confirmDelete(id, index) {
             this.isLoading = true;
             const name = this.industries.data[index].name;
@@ -111,8 +97,12 @@ export default defineComponent({
         <Head title="Industry" />
         <div class="card card-flush">
 
+
+
+
             <!--begin::Actions-->
             <div>
+
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
                     <!--begin::Card title-->
                     <!--begin::Search-->
@@ -132,7 +122,8 @@ export default defineComponent({
                             placeholder="Search Industry" />
                     </div>
                     <div class="w-100 mw-200px">
-                        <Multiselect :options="$page.props.industries.status" label="status" valueProp="value"
+                        <!-- {{ $page.props.ziggy.status }} -->
+                        <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
                             class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
                     </div>
                     <button type="submit" class="btn btn-primary">
@@ -172,7 +163,7 @@ export default defineComponent({
 
                                 <td>{{ industries.name }}</td>
                                 <td>
-                                    <div class="symbol symbol-100px me-5">
+                                    <div class="symbol symbol-50px me-5">
                                         <img alt="Logo" :src="industries.image?.medium_path">
                                     </div>
                                 </td>

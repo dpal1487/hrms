@@ -1,7 +1,7 @@
 <script>
 
 import { defineComponent } from 'vue';
-import Modal from '../Modal.vue';
+import Modal from '../../Modal.vue';
 import MessageVerification from './authSteps/MessageVerification.vue';
 import AuthenticatorApps from './authSteps/AuthenticatorApps.vue';
 

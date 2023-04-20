@@ -17,16 +17,16 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
     protected $company = [];
-    protected $notificationCount =[];
+    protected $notificationCount = [];
     protected $status = [
         [
-            'label'=>'Active',
-            'value'=>1
+            'label' => 'Active',
+            'value' => 1,
         ],
         [
-            'label'=>'Inactive',
-            'value'=>0
-        ]
+            'label' => 'Inactive',
+            'value' => 0,
+        ],
     ];
 
     /**
@@ -50,8 +50,9 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'ziggy' => function () use ($request) {
-                return array_merge((new Ziggy)->toArray(), [
+                return array_merge((new Ziggy())->toArray(), [
                     'location' => $request->url(),
+                    'status' => $this->status,
                 ]);
             },
         ]);

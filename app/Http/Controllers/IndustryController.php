@@ -22,7 +22,9 @@ class IndustryController extends Controller
         // dd($request->q);
         $industries = new Industry();
         if (!empty($request->q)) {
-            $industries = $industries->where('name', 'like', "%$request->q%")->orWhere('status', 'like', "%$request->q%");
+            if (!empty($request->s)) {
+                $industries = $industries->where('name', 'like', "%$request->q%");
+            }
         }
         return Inertia::render('Industry/Index', [
             'industries' => IndustryResource::collection($industries->paginate(10)),
@@ -94,8 +96,10 @@ class IndustryController extends Controller
             ])
         ) {
             // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
-
-            return redirect('/industries');
+            return redirect()
+                ->route('industries.index')
+                ->with('message', 'Industries created Successfully');
+            // return redirect('/industries');
         }
     }
 
@@ -194,7 +198,9 @@ class IndustryController extends Controller
 
         // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
 
-        return redirect('/industries');
+        return redirect()
+            ->route('industries.index')
+            ->with('message', 'Industries updated Successfully');
     }
 
     /**

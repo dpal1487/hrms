@@ -14,6 +14,7 @@ use Auth;
 use Hash;
 use Image;
 use App\Models\Image as DBImage;
+
 class EmployeeController extends Controller
 {
     public function index(Request $request)
@@ -28,7 +29,7 @@ class EmployeeController extends Controller
                 ->orWhere('number', 'like', "%$request->q%");
         }
         return Inertia::render('Employee/Index', [
-            'employees' => EmployeeResources::collection($employees->paginate(10)),
+            'employees' => EmployeeResources::collection($employees->paginate(4)),
         ]);
     }
 
@@ -121,10 +122,11 @@ class EmployeeController extends Controller
                 'user_id' => $user->id,
             ])
         ) {
-            return response()->json(['success' => true, 'message' => 'Employee created successfully']);
+            // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
 
-            // return redirect('/employees')->with(['message' => 'Employee created successfully']);
+            return redirect('/employees')->with(['message', 'Employee created successfully']);
         }
+        return redirect('/employees')->with(['message', 'Employee not created']);
     }
 
     public function edit($id)
@@ -140,7 +142,8 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request);
+        // return route('employees.add');
+        // dd($request->requsetingFrom);
         $image = $request->file('image');
 
         $request->validate([
@@ -233,10 +236,12 @@ class EmployeeController extends Controller
                 'user_id' => $employee->user->id,
             ])
         ) {
-            return response()->json(['success' => true, 'message' => 'Employee Updated successfully']);
-
-            // return redirect('/employees');
+            if ($request->requsetingFrom == 'employees/edit') {
+                return redirect(url('employees'))->with('message', 'Employee Updated successfully');
+            }
+            return redirect(url('employees/' . $id . '/overview'))->with('message', 'Employee Updated successfully');
         }
+        return redirect()->with('message', 'Employee not updated');
     }
 
     public function emailUpdate(Request $request, $id)

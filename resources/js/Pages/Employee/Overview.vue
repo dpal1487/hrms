@@ -3,78 +3,23 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Multiselect from "@vueform/multiselect";
 import PrimaryButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-import Dropdown from "../../Jetstream/Dropdown.vue";
+
 
 
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ["employees", 'employee'],
-    setup() {
-        return { v$: useVuelidate() };
-    },
+    props: ['employee'],
 
-    data() {
-        return {
-
-            isEdit: false,
-
-            value: null,
-            options: [
-                { name: 'Vue.js', language: 'JavaScript' },
-                { name: 'Rails', language: 'Ruby' },
-                { name: 'Sinatra', language: 'Ruby' },
-                { name: 'Laravel', language: 'PHP', $isDisabled: true },
-                { name: 'Phoenix', language: 'Elixir' }
-            ]
-        };
-    },
     components: {
         AppLayout,
         UserLayout,
-        Link,
-        Head,
-        Multiselect,
         PrimaryButton,
-        JetInput,
-        JetLabel,
-        InputError,
-        JetValidationErrors,
-        VueDatePicker,
-        Dropdown
+        Link
     },
-    methods: {
-        nameWithLang({ name, language }) {
-            return `${name} — [${language}]`
-        },
-        submit() {
-            this.v$.$touch();
-            if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id));
-            }
-        },
 
-    },
-    created() {
-        if (route().current() == 'employees.edit') {
-            this.isEdit = true;
-        }
-    }
 });
 </script>
 <template>
@@ -157,7 +102,7 @@ export default defineComponent({
                     <!--begin::Input group-->
                     <div class="row mb-7">
                         <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Country
+                        <label class="col-lg-4 fw-semibold text-muted">Count
                             <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                 title="Country of origination"></i></label>
                         <!--end::Label-->

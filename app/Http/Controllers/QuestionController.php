@@ -13,21 +13,19 @@ class QuestionController extends Controller
 {
     public function index(Request $request)
     {
-        // $questions = Question::get();
         $questions = new Question();
 
         if (!empty($request->q)) {
             $questions = $questions
-                ->whereHas('industry', function ($q) use ($request) {
-                    $q->where('name', 'like', "%$request->q%");
+                ->whereHas('industry', function ($query) use ($request) {
+                    $query->where('name', 'like', "%$request->q%");
                 })
                 ->orWhere('question_key', 'like', "%$request->q%")
                 ->orWhere('text', 'like', "%$request->q%")
-                ->orWhere('language', 'like', "%$request->q%")
-                ->orWhere('type', 'like', "%$request->q%");
+                ->orWhere('language', 'like', "%$request->q%");
         }
 
-        // return QuestionResources::collection($question);
+        // return QuestionResources::collection($questions->paginate(10));
         return Inertia::render('Question/Index', [
             'questions' => QuestionResources::collection($questions->paginate(10)),
         ]);
@@ -73,8 +71,9 @@ class QuestionController extends Controller
         ) {
             // return response()->json(['success' => true, 'message' => 'question created successfully']);
 
-            return redirect('/question');
+            return redirect('/question')->with('message', 'Question created successfully');
         }
+        return redirect('/question')->with('message', 'Question not created');
     }
 
     /**
@@ -138,8 +137,9 @@ class QuestionController extends Controller
         ) {
             // return response()->json(['success' => true, 'message' => 'question created successfully']);
 
-            return redirect('/question');
+            return redirect('/question')->with('message', 'Question updated successfully');
         }
+        return redirect('/question')->with('message', 'Question not updated.');
     }
 
     /**
