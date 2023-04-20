@@ -20,12 +20,16 @@ class HandleInertiaRequests extends Middleware
     protected $notificationCount = [];
     protected $status = [
         [
+            'name' => 'All',
+            'value' => "",
+        ],
+        [
             'name' => 'Active',
-            'value' => 1,
+            'value' => "1",
         ],
         [
             'name' => 'Inactive',
-            'value' => 0,
+            'value' => "0",
         ],
     ];
 

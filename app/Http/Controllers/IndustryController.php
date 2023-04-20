@@ -19,13 +19,15 @@ class IndustryController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->q);
         $industries = new Industry();
-        if (!empty($request->q)) {
-            if (!empty($request->s)) {
-                $industries = $industries->where('name', 'like', "%$request->q%");
-            }
-        }
+    if (!empty($request->q)) {
+        $industries = $industries->where('name', 'like', '%'.$request->q.'%');
+    }
+
+    if (!empty($request->status))  {
+        $industries = $industries->where('status','=', $request->status);
+    }
+
         return Inertia::render('Industry/Index', [
             'industries' => IndustryResource::collection($industries->paginate(10)),
         ]);

@@ -102,7 +102,7 @@ export default defineComponent({
                     <!--begin::Input group-->
                     <div class="row mb-7">
                         <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Count
+                        <label class="col-lg-4 fw-semibold text-muted">Country
                             <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                 title="Country of origination"></i></label>
                         <!--end::Label-->

@@ -14,7 +14,7 @@ export default defineComponent({
     data() {
         return {
             q: "",
-            s: "",
+            status: "",
             tbody: [
                 "Industry Name",
                 "Industry Image",
@@ -80,7 +80,7 @@ export default defineComponent({
         search() {
             Inertia.get(
                 "/industries",
-                { q: this.q, status: this.s },
+                { q: this.q, status: this.status },
                 {
                     preserveState: true, onSuccess: (data) => {
                         this.industry = data.props.industry;
@@ -96,13 +96,7 @@ export default defineComponent({
 
         <Head title="Industry" />
         <div class="card card-flush">
-
-
-
-
-            <!--begin::Actions-->
             <div>
-
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
                     <!--begin::Card title-->
                     <!--begin::Search-->
@@ -124,7 +118,7 @@ export default defineComponent({
                     <div class="w-100 mw-200px">
                         <!-- {{ $page.props.ziggy.status }} -->
                         <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
+                            class="form-control form-control-solid" placeholder="Select Status" v-model="status" />
                     </div>
                     <button type="submit" class="btn btn-primary">
                         Search
