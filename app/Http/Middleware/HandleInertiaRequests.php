@@ -21,15 +21,15 @@ class HandleInertiaRequests extends Middleware
     protected $status = [
         [
             'name' => 'All',
-            'value' => "",
+            'value' => '',
         ],
         [
             'name' => 'Active',
-            'value' => "1",
+            'value' => '1',
         ],
         [
             'name' => 'Inactive',
-            'value' => "0",
+            'value' => '0',
         ],
     ];
 
@@ -55,7 +55,6 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
-                    'location' => $request->url(),
                     'status' => $this->status,
                 ]);
             },

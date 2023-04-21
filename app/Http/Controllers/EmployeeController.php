@@ -28,13 +28,13 @@ class EmployeeController extends Controller
                 ->orWhere('code', 'like', "%$request->q%")
                 ->orWhere('number', 'like', "%$request->q%");
         }
-        if (!empty($request->status))  {
+        if (!empty($request->status) || $request->status != '') {
             $employees = $employees->whereHas('user', function ($q) use ($request) {
-                $q->where('active_status','=', $request->status);
+                $q->where('active_status', '=', $request->status);
             });
         }
         return Inertia::render('Employee/Index', [
-            'employees' => EmployeeResources::collection($employees->paginate(4)),
+            'employees' => EmployeeResources::collection($employees->paginate(10)->append($request->all())),
         ]);
     }
 

@@ -1,9 +1,61 @@
+<script>
+import { Head, Link } from "@inertiajs/inertia-vue3";
+import AppHeader from "./AppHeader.vue";
+import AppSidebar from "./AppSidebar.vue";
+
+export default {
+    props: {
+        title: String,
+        breadcrumb: Object,
+    },
+
+    components: {
+        Head,
+        Link,
+        AppHeader,
+        AppSidebar,
+    },
+
+    data() {
+        return {
+            showingNavigationDropdown: false,
+            hideSidebarOn: []
+        };
+    },
+
+    methods: {
+        switchToTeam(team) {
+            this.$inertia.put(
+                route("current-team.update"),
+                {
+                    team_id: team.id,
+                },
+                {
+                    preserveState: false,
+                }
+            );
+        },
+
+        logout() {
+            this.$inertia.post(route("logout"));
+        },
+    },
+
+    computed: {
+        path() {
+            return window.location.pathname;
+        },
+    },
+};
+</script>
+
+
 <template>
     <div>
 
         <Head :title="title" />
         <AppHeader />
-        <AppSidebar />
+        <AppSidebar v-if="true" />
         <!-- Page Content -->
         <main class="app-wrapper flex-column flex-row-fluid">
             <div class="app-main flex-column flex-row-fluid">
@@ -47,52 +99,4 @@
     </div>
 </template>
 
-<script>
-import { Head, Link } from "@inertiajs/inertia-vue3";
-import AppHeader from "./AppHeader.vue";
-import AppSidebar from "./AppSidebar.vue";
 
-export default {
-    props: {
-        title: String,
-        breadcrumb: Object,
-    },
-
-    components: {
-        Head,
-        Link,
-        AppHeader,
-        AppSidebar,
-    },
-
-    data() {
-        return {
-            showingNavigationDropdown: false,
-        };
-    },
-
-    methods: {
-        switchToTeam(team) {
-            this.$inertia.put(
-                route("current-team.update"),
-                {
-                    team_id: team.id,
-                },
-                {
-                    preserveState: false,
-                }
-            );
-        },
-
-        logout() {
-            this.$inertia.post(route("logout"));
-        },
-    },
-
-    computed: {
-        path() {
-            return window.location.pathname;
-        },
-    },
-};
-</script>

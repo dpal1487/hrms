@@ -40,13 +40,13 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/clients",
-                    title: "Clients",
+                    link: "/images",
+                    title: "Images",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/events",
-                    title: "Events",
+                    link: "/company",
+                    title: "Company",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {

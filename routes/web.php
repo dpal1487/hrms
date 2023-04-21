@@ -12,6 +12,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DecisionMakerController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,14 +109,20 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/delete', 'destroy')->name('decision-makers.delete');
         });
     });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'clients'], function () {
-            Route::get('/', 'index')->name('clients.index');
-            Route::get('/add', 'create')->name('clients.add');
-            Route::post('/store', 'store')->name('clients.store');
-            Route::get('{id}/edit', 'edit')->name('clients.edit');
-            Route::post('{id}/update', 'update')->name('clients.update');
-            Route::delete('{id}/delete', 'destroy')->name('clients.delete');
+
+    // Route::controller(ImageController::class)->group(function () {
+    //   Route::group(['prefix' =>'admin']->group(function () {
+
+    //   });
+    // });
+    Route::controller(CompanyController::class)->group(function () {
+        Route::group(['prefix' => 'company'], function () {
+            Route::get('/', 'index')->name('company.index');
+            Route::get('/add', 'create')->name('company.add');
+            Route::post('/store', 'store')->name('company.store');
+            Route::get('{id}/edit', 'edit')->name('company.edit');
+            Route::post('{id}/update', 'update')->name('company.update');
+            Route::delete('{id}/delete', 'destroy')->name('company.delete');
         });
     });
     Route::controller(EmployeeController::class)->group(function () {

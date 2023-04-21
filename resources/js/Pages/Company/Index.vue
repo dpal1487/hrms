@@ -11,19 +11,20 @@ import 'vue3-toastify/dist/index.css';
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
-    props: ["employees"],
+    props: ["companies"],
     data() {
         return {
             q: "",
             s: "",
             message: '',
             tbody: [
-                "Employee Name",
-                "Employee Code",
-                "Number",
-                "Salary",
-                "Status",
-                "Created At",
+                "Company Name",
+                "Company Registration No",
+                "Shortered Description",
+                "Corporation type",
+                "Website",
+                "Contact Email",
+                "Contact Number",
                 "Action",
             ],
             isLoading: false,
@@ -48,8 +49,8 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            const first_name = this.employees.data[index].user.first_name;
-            const last_name = this.employees.data[index].user.last_name;
+            const first_name = this.companies.data[index].user.first_name;
+            const last_name = this.companies.data[index].user.last_name;
             Swal.fire({
                 title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
                 text: "You won't be able to revert this!",
@@ -91,7 +92,7 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/employees",
+                "/companies",
                 { q: this.q, status: this.s },
             );
         },
@@ -105,7 +106,7 @@ export default defineComponent({
 <template>
     <app-layout>
 
-        <Head title="Employees" />
+        <Head title="Company" />
         <div class="card card-flush">
             <div v-if="message">{{ message }}</div>
             <!--begin::Actions-->
@@ -126,7 +127,7 @@ export default defineComponent({
                         </span>
                         <!--end::Svg Icon-->
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search Industry" />
+                            placeholder="Search ..." />
                     </div>
                     <div class="w-100 mw-200px">
                         <!-- {{ $page.props.ziggy.status }} -->
@@ -141,8 +142,8 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add industries-->
-                        <Link href="/employees/add" class="btn btn-primary">
-                        Add Employee
+                        <Link href="/company/add" class="btn btn-primary">
+                        Add Company
                         </Link>
                         <!--end::Add industries-->
                     </div>
@@ -167,28 +168,27 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(employees, index) in employees.data" :key="index">
+                            <tr v-for="(companies, index) in companies.data" :key="index">
 
                                 <td>
 
-                                    <Link :href="'/employees/' + employees.id"
-                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        employees-filter="employees_name">{{ employees.user?.first_name }} {{
-                                            employees.user?.last_name }}</Link>
+                                    <Link :href="'/employees/' + companies.id"
+                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
+                                            companies?.company_name }} </Link>
                                 </td>
-                                <td>{{ employees.code }}</td>
-                                <td>{{ employees.number }}</td>
-                                <td>{{ employees.salary }}</td>
+                                <td>{{ companies?.tax_number }}</td>
+                                <td>{{ companies?.description }}</td>
+                                <td>{{ companies?.company_type }}</td>
                                 <td>
-                                    <p v-if="employees.user?.active_status == 1">Active</p>
-                                    <p v-if="employees.user?.active_status == 0">Inactive</p>
+                                    {{ companies?.website }}
                                 </td>
-                                <td>{{ employees.created_at }}</td>
+                                <td>{{ companies?.contact_email }}</td>
+                                <td>{{ companies?.contact_number }}</td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${employees.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${companies.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -203,25 +203,25 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${employees.id}`">
+                                            :aria-labelled:by="`dropdown-${companies.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employees/${employees.id}/edit`">Edit
+                                                    :href="`/company/${companies.id}/edit`">Edit
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employees/${employees.id}`">View
+                                                    :href="`/company/${companies.id}`">View
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    employees.id, index
-                                                )
-                                                " class="btn btn-sm dropdown-item">
+                                                        companies.id, index
+                                                    )
+                                                    " class="btn btn-sm dropdown-item">
                                                     Delete
                                                 </button>
                                             </li>
@@ -234,8 +234,8 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="employees.meta">
-                    <Pagination :links="employees.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="companies.meta">
+                    <Pagination :links="companies.meta.links" />
                 </div>
             </div>
         </div>

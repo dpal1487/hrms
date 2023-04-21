@@ -193,21 +193,19 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="first_name" value="First Name" />
-                                    <jet-input id="first_name" type="text" v-model="v$.form.first_name.$model" :class="
-                                        v$.form.first_name.$errors.length > 0
+                                    <jet-input id="first_name" type="text" v-model="v$.form.first_name.$model" :class="v$.form.first_name.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="First name" />
+                                        " placeholder="First name" />
                                     <div v-for="(error, index) of v$.form.first_name.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
 
                                     <jet-label for="last_name" value="Last Name" />
-                                    <jet-input id="last_name" type="text" v-model="v$.form.last_name.$model" :class="
-                                        v$.form.last_name.$errors.length > 0
+                                    <jet-input id="last_name" type="text" v-model="v$.form.last_name.$model" :class="v$.form.last_name.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Last Name" />
+                                        " placeholder="Last Name" />
                                     <div v-for="(error, index) of v$.form.last_name.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -216,11 +214,10 @@ export default defineComponent({
 
                                 <div class="fv-row col-6">
                                     <jet-label for="email" value="Email" />
-                                    <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="
-                                        v$.form.email.$errors.length > 0
+                                    <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="v$.form.email.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Email" />
+                                        " placeholder="Email" />
                                     <div v-for="(error, index) of v$.form.email.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -229,22 +226,20 @@ export default defineComponent({
                                     <jet-label for="date_of_joining" value="Date Of Joining" />
                                     <VueDatePicker v-model="v$.form.date_of_joining.$model" :enable-time-picker="false"
                                         auto-apply
-                                        input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="
-                                            v$.form.date_of_joining.$errors.length > 0
+                                        input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.date_of_joining.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Date Of Joining"></VueDatePicker>
+                                            " placeholder="Date Of Joining"></VueDatePicker>
                                     <div v-for="(error, index) of v$.form.date_of_joining.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="number" value="Number" />
-                                    <jet-input id="number" type="text" v-model="v$.form.number.$model" :class="
-                                        v$.form.number.$errors.length > 0
+                                    <jet-input id="number" type="text" v-model="v$.form.number.$model" :class="v$.form.number.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Enter Employee Number" />
+                                        " placeholder="Enter Employee Number" />
                                     <div v-for="(error, index) of v$.form.number.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -252,22 +247,20 @@ export default defineComponent({
                                 <div class="fv-row col-6">
                                     <jet-label for="emergency_number" value="Emergency Number" />
                                     <jet-input id="emergency_number" type="text" v-model="v$.form.emergency_number.$model"
-                                        :class="
-                                            v$.form.emergency_number.$errors.length > 0
+                                        :class="v$.form.emergency_number.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Emergency Number" />
+                                            " placeholder="Emergency Number" />
                                     <div v-for="(error, index) of v$.form.emergency_number.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="qualification" value="Qualification" />
-                                    <jet-input id="qualification" type="text" v-model="v$.form.qualification.$model" :class="
-                                        v$.form.qualification.$errors.length > 0
+                                    <jet-input id="qualification" type="text" v-model="v$.form.qualification.$model" :class="v$.form.qualification.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Qualification" />
+                                        " placeholder="Qualification" />
                                     <div v-for="(error, index) of v$.form.qualification.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -275,44 +268,40 @@ export default defineComponent({
 
                                 <div class="fv-row col-6">
                                     <jet-label for="pan_number" value="Pan Number" />
-                                    <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="
-                                        v$.form.pan_number.$errors.length > 0
+                                    <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="v$.form.pan_number.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Pan Number" />
+                                        " placeholder="Pan Number" />
                                     <div v-for="(error, index) of v$.form.pan_number.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="father_name" value="Father Name" />
-                                    <jet-input id="father_name" type="text" v-model="v$.form.father_name.$model" :class="
-                                        v$.form.father_name.$errors.length > 0
+                                    <jet-input id="father_name" type="text" v-model="v$.form.father_name.$model" :class="v$.form.father_name.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Father Name" />
+                                        " placeholder="Father Name" />
                                     <div v-for="(error, index) of v$.form.father_name.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="formalities" value="Formalities" />
-                                    <jet-input id="formalities" type="text" v-model="v$.form.formalities.$model" :class="
-                                        v$.form.formalities.$errors.length > 0
+                                    <jet-input id="formalities" type="text" v-model="v$.form.formalities.$model" :class="v$.form.formalities.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Formalities" />
+                                        " placeholder="Formalities" />
                                     <div v-for="(error, index) of v$.form.formalities.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="salary" value="Salary" />
-                                    <jet-input id="salary" type="text" v-model="v$.form.salary.$model" :class="
-                                        v$.form.salary.$errors.length > 0
+                                    <jet-input id="salary" type="text" v-model="v$.form.salary.$model" :class="v$.form.salary.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Salary" />
+                                        " placeholder="Salary" />
                                     <div v-for="(error, index) of v$.form.salary.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -320,11 +309,10 @@ export default defineComponent({
                                 <div class="fv-row col-6">
                                     <jet-label for="offer_acceptance" value="Offer Acceptance" />
                                     <jet-input id="offer_acceptance" type="text" v-model="v$.form.offer_acceptance.$model"
-                                        :class="
-                                            v$.form.offer_acceptance.$errors.length > 0
+                                        :class="v$.form.offer_acceptance.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Offer Acceptance" />
+                                            " placeholder="Offer Acceptance" />
                                     <div v-for="(error, index) of v$.form.offer_acceptance.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -332,11 +320,10 @@ export default defineComponent({
                                 <div class="fv-row col-6">
                                     <jet-label for="probation_period" value="Probation Period" />
                                     <jet-input id="probation_period" type="text" v-model="v$.form.probation_period.$model"
-                                        :class="
-                                            v$.form.probation_period.$errors.length > 0
+                                        :class="v$.form.probation_period.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Probation Period" />
+                                            " placeholder="Probation Period" />
                                     <div v-for="(error, index) of v$.form.probation_period.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -345,11 +332,10 @@ export default defineComponent({
                                     <jet-label for="date_of_confirmation" value="Date Of Confirmation" />
                                     <VueDatePicker v-model="v$.form.date_of_confirmation.$model" :enable-time-picker="false"
                                         auto-apply
-                                        input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="
-                                            v$.form.date_of_confirmation.$errors.length > 0
+                                        input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.date_of_confirmation.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Date Of Confirmation"></VueDatePicker>
+                                            " placeholder="Date Of Confirmation"></VueDatePicker>
 
                                     <div v-for="(error, index) of v$.form.date_of_confirmation.$errors" :key="index">
                                         <input-error :message="error.$message" />

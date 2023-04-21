@@ -80,7 +80,7 @@ export default defineComponent({
         search() {
             Inertia.get(
                 "/industries",
-                { q: this.q, status: this.status },
+                { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
                         this.industry = data.props.industry;
@@ -118,7 +118,7 @@ export default defineComponent({
                     <div class="w-100 mw-200px">
                         <!-- {{ $page.props.ziggy.status }} -->
                         <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="status" />
+                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
                     </div>
                     <button type="submit" class="btn btn-primary">
                         Search
