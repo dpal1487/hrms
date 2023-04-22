@@ -32,10 +32,10 @@ export default defineComponent({
                 <div class="row">
                     <!--begin::Col-->
                     <div class="col-lg-6">
-                        <!-- {{ form.account_type }} -->
+                        <!-- {{ form.company_type }} -->
                         <!--begin::Option-->
-                        <input type="radio" class="btn-check" v-model="form.account_type" value="personal"
-                            :checked="(form.account_type === 'personal') && 'checked'" />
+                        <input type="radio" class="btn-check" v-model="form.company_type" value="personal"
+                            :checked="(form.company_type === 'personal') && 'checked'" />
                         <label
                             class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center mb-10">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com005.svg-->
@@ -66,12 +66,12 @@ export default defineComponent({
                     <!--begin::Col-->
                     <div class="col-lg-6">
                         <!--begin::Option-->
-                        <input type="radio" class="btn-check" v-model="form.account_type" value="corporate"
-                            :checked="(form.account_type === 'corporate') && 'checked'"
-                            id="kt_create_account_form_account_type_corporate" />
+                        <input type="radio" class="btn-check" v-model="form.company_type" value="corporate"
+                            :checked="(form.company_type === 'corporate') && 'checked'"
+                            id="kt_create_account_form_company_type_corporate" />
                         <label
                             class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center"
-                            for="kt_create_account_form_account_type_corporate">
+                            for="kt_create_account_form_company_type_corporate">
                             <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
                             <span class="svg-icon svg-icon-3x me-5">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

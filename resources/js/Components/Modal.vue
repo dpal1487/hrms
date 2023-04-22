@@ -89,7 +89,7 @@ const maxWidthClass = computed(() => {
                 </div>
                 <!--begin::Modal header-->
                 <!--begin::Modal body-->
-                <div class="modal-body scroll-y pt-10 pb-15 px-lg-17">
+                <div class="modal-body scroll-y">
                     <slot v-if="show" />
                 </div>
             </div>

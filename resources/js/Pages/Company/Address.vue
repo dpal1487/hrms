@@ -1,21 +1,22 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import UserLayout from "@/Layouts/UserLayout.vue";
+import CompanyLayout from "@/Layouts/CompanyLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
+import AddressComponent from "../../Components/Company/Address/AddressComponent.vue";
 
 export default defineComponent({
-    props: ["employees", 'employee'],
+    props: ['company', 'countries'],
     setup() {
         return { v$: useVuelidate() };
     },
-
     components: {
         AppLayout,
-        UserLayout,
+        CompanyLayout,
         Link,
         Head,
+        AddressComponent
     },
     methods: {
 
@@ -27,111 +28,56 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="Address" />
-
     <AppLayout>
-        <UserLayout :employee="employee">
+        <CompanyLayout :company="company">
             <!--begin::details View-->
+            <!--begin::Billing Address-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
-                <div class="card-header cursor-pointer">
-                    <!--begin::Card title-->
-                    <div class="card-title m-0">
-                        <h3 class="fw-bold m-0">User Address</h3>
+                <div class="card-header">
+                    <!--begin::Title-->
+                    <div class="card-title">
+                        <h3>Billing Address</h3>
                     </div>
-                    <!--end::Card title-->
-                    <Link class="btn btn-primary align-self-center" :href="`/employees/${employee?.data?.id}/address/edit`">
-                    Edit
-                    Address
-                    </Link>
+                    <!--end::Title-->
                 </div>
-                <!--begin::Card header-->
+                <!--end::Card header-->
                 <!--begin::Card body-->
-                <div class="card-body p-9">
-                    <!--begin::Row-->
-                    <div class="row mb-7">
-                        <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Address</label>
-                        <!--end::Label-->
+                <div class="card-body">
+                    <!--begin::Addresses-->
+                    <div class="row gx-9 gy-6">
+                        <!-- {{ company }} -->
                         <!--begin::Col-->
-
-                        <div class="col-lg-8">
-                            <span class="fw-bold fs-6 text-gray-800">{{ this.employee?.data?.address?.address_line_1
-                            }}</span>
-                        </div>
+                        <AddressComponent :countries="countries" :company="company" />
                         <!--end::Col-->
-                    </div>
-                    <!--end::Row-->
-                    <!--begin::Input group-->
-                    <div class="row mb-7">
-                        <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Address</label>
-                        <!--end::Label-->
-                        <!--begin::Col-->
-                        <div class="col-lg-8 fv-row">
-                            <span class="fw-bold fs-6 text-gray-800">{{ this.employee?.data?.address?.address_line_2
-                            }}</span>
+                        <div class="col-xl-6">
+                            <!--begin::Notice-->
+                            <div
+                                class="notice d-flex bg-light-primary rounded border-primary border border-dashed flex-stack h-xl-100 mb-10 p-6">
+                                <!--begin::Wrapper-->
+                                <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
+                                    <!--begin::Content-->
+                                    <div class="mb-3 mb-md-0 fw-semibold">
+                                        <h4 class="text-gray-900 fw-bold">This is a very important note!</h4>
+                                        <div class="fs-6 text-gray-700 pe-7">Writing headlines for blog posts is much
+                                            science and probably cool audience</div>
+                                    </div>
+                                    <!--end::Content-->
+                                    <!--begin::Action-->
+                                    <a href="#" class="btn btn-primary px-6 align-self-center text-nowrap"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_address">New Address</a>
+                                    <!--end::Action-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Notice-->
                         </div>
-                        <!--end::Col-->
                     </div>
-                    <!--end::Input group-->
-                    <!--begin::Input group-->
-                    <div class="row mb-7">
-                        <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">City</label>
-                        <!--end::Label-->
-                        <!--begin::Col-->
-                        <div class="col-lg-8 d-flex align-items-center">
-                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.address?.city
-                            }}</span>
-                        </div>
-                        <!--end::Col-->
-                    </div>
-                    <!--end::Input group-->
-                    <!--begin::Input group-->
-                    <div class="row mb-7">
-                        <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">State</label>
-                        <!--end::Label-->
-                        <!--begin::Col-->
-                        <div class="col-lg-8 d-flex align-items-center">
-                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.address?.state
-                            }}</span>
-                        </div>
-                        <!--end::Col-->
-                    </div>
-                    <!--end::Input group-->
-                    <!--begin::Input group-->
-                    <div class="row mb-7">
-                        <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Country
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Col-->
-                        <div class="col-lg-8 d-flex align-items-center">
-                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.address?.country?.name
-                            }}</span>
-                        </div>
-                        <!--end::Col-->
-                    </div>
-                    <!--end::Input group-->
-                    <!--begin::Input group-->
-                    <div class="row mb-7">
-                        <!--begin::Label-->
-                        <label class="col-lg-4 fw-semibold text-muted">Country
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Col-->
-                        <div class="col-lg-8 d-flex align-items-center">
-                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.employee?.data?.address?.pincode
-                            }}</span>
-                        </div>
-                        <!--end::Col-->
-                    </div>
-                    <!--end::Input group-->
+                    <!--end::Addresses-->
                 </div>
                 <!--end::Card body-->
             </div>
-            <!--end::details View-->
-        </UserLayout>
+            <!--end::Billing Address-->
+        </CompanyLayout>
     </AppLayout>
 </template>

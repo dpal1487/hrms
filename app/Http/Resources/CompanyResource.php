@@ -21,11 +21,15 @@ class CompanyResource extends JsonResource
             'company_size_id' =>$this->company_size_id,
             'corporation_type_id' =>$this->corporation_type_id,
             'contact_email' =>$this->contact_email,
+            'contact_number' =>$this->contact_number,
             'tax_number' =>$this->tax_number,
             'company_name' =>$this->company_name,
             'description' =>$this->description,
             'website' =>$this->website,
+            'account_plan'=>$this->account_plan,
             'user'=>$this->user,
+            'size'=>$this->size,
+            'corporationtype' => $this->corporationtype,
         ];
     }
 }

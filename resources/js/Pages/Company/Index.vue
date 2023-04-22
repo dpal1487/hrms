@@ -172,7 +172,7 @@ export default defineComponent({
 
                                 <td>
 
-                                    <Link :href="'/employees/' + companies.id"
+                                    <Link :href="'/company/' + companies.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
                                             companies?.company_name }} </Link>
                                 </td>

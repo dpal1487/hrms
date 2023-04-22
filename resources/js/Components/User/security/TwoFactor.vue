@@ -53,8 +53,7 @@ export default defineComponent({
             <!--end::Content-->
             <!--begin::Action-->
             <button type="button" @click="showAuthenticationModal"
-                class="btn btn-primary px-6 align-self-center text-nowrap" data-bs-toggle="modal"
-                :data-bs-target="kt_modal_two_factor_authentication">Enable</button>
+                class="btn btn-primary px-6 align-self-center text-nowrap" >Enable</button>
             <!--end::Action-->
         </div>
         <!--end::Wrapper-->

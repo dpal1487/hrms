@@ -11,8 +11,11 @@ export default defineComponent({
         }
     },
     methods: {
+        handleFinalClick() {
 
-    }
+        }
+
+    },
 })
 </script>
 
@@ -101,11 +104,11 @@ export default defineComponent({
             <!--begin::Input group-->
             <div class="mb-10 fv-row">
                 <!--begin::Label-->
-                <label class="form-label mb-3">Team Account Name</label>
+                <label class="form-label mb-3">Company Registration No</label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <input type="text" class="form-control form-control-lg form-control-solid" v-model="form.account_name"
-                    placeholder="" required />
+                <input type="text" class="form-control form-control-lg form-control-solid" v-model="form.tax_number"
+                    placeholder="" />
                 <!--end::Input-->
             </div>
             <!--end::Input group-->
@@ -155,7 +158,7 @@ export default defineComponent({
 
                         <span class="form-check form-check-custom form-check-solid">
                             <input class="form-check-input" type="radio" v-model="form.account_plan"
-                                :checked="(form.account_plan === '1') && 'checked'" value="1" />
+                                :checked="(form.account_plan === 'Company Account') && 'checked'"  value="Company Account"/>
                         </span>
                         <!--end:Input-->
                     </label>
@@ -197,7 +200,7 @@ export default defineComponent({
                         <!--begin:Input-->
                         <span class="form-check form-check-custom form-check-solid">
                             <input class="form-check-input" type="radio" v-model="form.account_plan"
-                                :checked="(form.account_plan === '2') && 'checked'" value="2" />
+                                :checked="(form.account_plan === 'Developer Account') && 'checked'" value="Developer Account"/>
                         </span>
                         <!--end:Input-->
                     </label>
@@ -241,15 +244,16 @@ export default defineComponent({
                         <!--begin:Input-->
                         <span class="form-check form-check-custom form-check-solid">
                             <input class="form-check-input" type="radio" v-model="form.account_plan"
-                                :checked="(form.account_plan === '3') && 'checked'" value="3" />
+                                :checked="(form.account_plan === 'Testing Account') && 'checked'" value="Testing Account"/>
                         </span>
                         <!--end:Input-->
                     </label>
                     <!--end::Option-->
                 </div>
                 <!--end::Options-->
+            </div>
+            <!--end::Input group-->
         </div>
-        <!--end::Input group-->
+        <!--end::Wrapper-->
     </div>
-    <!--end::Wrapper-->
-</div></template>
+</template>

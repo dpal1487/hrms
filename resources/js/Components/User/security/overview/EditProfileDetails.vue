@@ -157,11 +157,6 @@ export default defineComponent({
                 <!-- {{ employee }} -->
             </div>
             <!--end::Card title-->
-            <!-- <Link class="btn btn-primary align-self-center"
-                                                                                                                                                                                                                                                :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
-                                                                                                                                                                                                                                            Profile
-                                                                                                                                                                                                                                            </Link> -->
-            <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
         </div>
         <!--begin::Card header-->
         <!--begin::Card body-->

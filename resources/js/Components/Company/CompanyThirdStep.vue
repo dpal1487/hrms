@@ -41,6 +41,28 @@ export default defineComponent({
                 <!--end::Input-->
             </div>
             <!--end::Input group-->
+             <!--begin::Input group-->
+                <div class="fv-row mb-10">
+                    <!--begin::Label-->
+                    <label class="form-label required">Company Website</label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <input v-model="form.company_website" class="form-control form-control-lg form-control-solid"
+                         />
+                    <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                    <div class="fv-row mb-10">
+                        <!--begin::Label-->
+                        <label class="form-label required">Company Domain</label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input v-model="form.company_domain" class="form-control form-control-lg form-control-solid"
+                             />
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
             <!--begin::Input group-->
             <div class="fv-row mb-10">
                 <!--begin::Label-->
@@ -49,7 +71,7 @@ export default defineComponent({
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <input v-model="form.business_descriptor" class="form-control form-control-lg form-control-solid"
+                <input v-model="form.sorted_description" class="form-control form-control-lg form-control-solid"
                      />
                 <!--end::Input-->
                 <!--begin::Hint-->
@@ -64,7 +86,7 @@ export default defineComponent({
                 <label class="form-label required">Corporation Type</label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <select v-model="form.business_type" class="form-select form-select-lg form-select-solid" data-control="select2"
+                <select v-model="form.corporate_type" class="form-select form-select-lg form-select-solid" data-control="select2"
                     data-placeholder="Select..." data-allow-clear="true" data-hide-search="true">
                     <option></option>
                     <option value="1">S Corporation</option>
@@ -83,7 +105,7 @@ export default defineComponent({
                 <label class="form-label">Business Description</label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <textarea v-model="form.business_description" class="form-control form-control-lg form-control-solid"
+                <textarea v-model="form.description" class="form-control form-control-lg form-control-solid"
                     rows="3"></textarea>
                 <!--end::Input-->
             </div>

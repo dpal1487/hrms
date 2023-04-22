@@ -14,6 +14,8 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\CompanyController;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -120,79 +122,26 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/', 'index')->name('company.index');
             Route::get('/add', 'create')->name('company.add');
             Route::post('/store', 'store')->name('company.store');
+            Route::get('{id}', 'show')->name('company.view');
+            Route::get('{id}/overview', 'show')->name('company.overview');
+
+            Route::get('{id}/account', 'accountShow')->name('company.account');
+            Route::get('{id}/emails', 'emialsShow')->name('company.emails');
+            Route::get('{id}/invoices', 'invoicesShow')->name('company.invoices');
+            Route::get('{id}/projects', 'projectsShow')->name('company.projects');
+            Route::get('{id}/suppliers', 'suppliersShow')->name('company.suppliers');
             Route::get('{id}/edit', 'edit')->name('company.edit');
             Route::post('{id}/update', 'update')->name('company.update');
             Route::delete('{id}/delete', 'destroy')->name('company.delete');
         });
     });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'events'], function () {
-            Route::get('/', 'index')->name('events.index');
-            Route::get('/add', 'create')->name('events.add');
-            Route::post('/store', 'store')->name('events.store');
-            Route::get('{id}/edit', 'edit')->name('events.edit');
-            Route::post('{id}/update', 'update')->name('events.update');
-            Route::delete('{id}/delete', 'destroy')->name('events.delete');
-        });
-    });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'holidays'], function () {
-            Route::get('/', 'index')->name('holidays.index');
-            Route::get('/add', 'create')->name('holidays.add');
-            Route::post('/store', 'store')->name('holidays.store');
-            Route::get('{id}/edit', 'edit')->name('holidays.edit');
-            Route::post('{id}/update', 'update')->name('holidays.update');
-            Route::delete('{id}/delete', 'destroy')->name('holidays.delete');
-        });
-    });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'meetings'], function () {
-            Route::get('/', 'index')->name('meetings.index');
-            Route::get('/add', 'create')->name('meetings.add');
-            Route::post('/store', 'store')->name('meetings.store');
-            Route::get('{id}/edit', 'edit')->name('meetings.edit');
-            Route::post('{id}/update', 'update')->name('meetings.update');
-            Route::delete('{id}/delete', 'destroy')->name('meetings.delete');
-        });
-    });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'plans'], function () {
-            Route::get('/', 'index')->name('plans.index');
-            Route::get('/add', 'create')->name('plans.add');
-            Route::post('/store', 'store')->name('plans.store');
-            Route::get('{id}/edit', 'edit')->name('plans.edit');
-            Route::post('{id}/update', 'update')->name('plans.update');
-            Route::delete('{id}/delete', 'destroy')->name('plans.delete');
-        });
-    });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'projects'], function () {
-            Route::get('/', 'index')->name('projects.index');
-            Route::get('/add', 'create')->name('projects.add');
-            Route::post('/store', 'store')->name('projects.store');
-            Route::get('{id}/edit', 'edit')->name('projects.edit');
-            Route::post('{id}/update', 'update')->name('projects.update');
-            Route::delete('{id}/delete', 'destroy')->name('projects.delete');
-        });
-    });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'promotions'], function () {
-            Route::get('/', 'index')->name('promotions.index');
-            Route::get('/add', 'create')->name('promotions.add');
-            Route::post('/store', 'store')->name('promotions.store');
-            Route::get('{id}/edit', 'edit')->name('promotions.edit');
-            Route::post('{id}/update', 'update')->name('promotions.update');
-            Route::delete('{id}/delete', 'destroy')->name('promotions.delete');
-        });
-    });
-    Route::controller(EmployeeController::class)->group(function () {
-        Route::group(['prefix' => 'roles'], function () {
-            Route::get('/', 'index')->name('roles.index');
-            Route::get('/add', 'create')->name('roles.add');
-            Route::post('/store', 'store')->name('roles.store');
-            Route::get('{id}/edit', 'edit')->name('roles.edit');
-            Route::post('{id}/update', 'update')->name('roles.update');
-            Route::delete('{id}/delete', 'destroy')->name('roles.delete');
+
+      Route::controller(AddressController::class)->group(function () {
+        Route::group(['prefix' => 'company'], function () {
+            Route::get('{id}/address', 'addressShow')->name('company.address');
+            Route::post('/store', 'store')->name('company.address.store');
+            Route::post('/edit', 'store')->name('company.address.edit');
+            Route::delete('{id}/delete', 'destroy')->name('company-address.delete');
         });
     });
 });

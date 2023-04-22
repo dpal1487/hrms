@@ -6,7 +6,8 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Resources\CompanyResource;
-use App\Models\Employee;
+use App\Models\CompanySize;
+use App\Models\Country;
 use App\Models\User;
 use Auth;
 use Hash;
@@ -59,17 +60,39 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        dd($request);
-        $request->validate([
-            'account_type' => 'required',
+        // dd($req);
+        // $request->validate([
+        //     'account_type' => 'required',
+        // ]);
+
+        $companySize = CompanySize::create([
+            'size' => $req->account_team_size,
         ]);
 
         if (
             $company = Company::create([
                 'user_id' => Auth::user()->id,
-                'company_type' => $request->account_type,
+                'company_type' => $req->company_type,
+                'company_size_id' => $companySize->id,
+                'tax_number' => $req->tax_number,
+                'account_name' => $req->account_name,
+                'account_plan' => $req->account_plan,
+                'company_name' => $req->company_name,
+                'subdomain' => $req->company_domain,
+                'website' => $req->company_website,
+                'sorted_description' => $req->sorted_description,
+                'description' => $req->description,
+                'corporation_type_id' => $req->corporate_type,
+                'contact_email' => $req->company_email,
+                'contact_number' => $req->company_number,
+                'card_name' => $req->card_name,
+                'card_number' => $req->card_number,
+                'card_expiry_month' => $req->card_expiry_month,
+                'card_expiry_year' => $req->card_expiry_year,
+                'card_cvv' => $req->card_cvv,
+                'card_save' => $req->card_save,
             ])
         ) {
             return redirect('company')->with('message', 'Company Created Successfully');
@@ -82,9 +105,60 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show($id)
     {
-        //
+        $company = Company::find($id);
+        // return new CompanyResource($company);
+        return Inertia::render('Company/Overview', [
+            'company' => new CompanyResource($company),
+        ]);
+    }
+
+   
+     public function accountShow($id)
+    {
+        // dd($id);
+        $company = Company::find($id);
+        // return new CompanyResource($company);
+        return Inertia::render('Company/Address', [
+            'company' => new CompanyResource($company),
+        ]);
+    }
+    public function emialsShow($id)
+    {
+        // dd($id);
+        $company = Company::find($id);
+        // return new CompanyResource($company);
+        return Inertia::render('Company/Address', [
+            'company' => new CompanyResource($company),
+        ]);
+    }
+     public function invoicesShow ($id)
+    {
+        // dd($id);
+        $company = Company::find($id);
+        // return new CompanyResource($company);
+        return Inertia::render('Company/Invoices', [
+            'company' => new CompanyResource($company),
+        ]);
+    }
+     public function projectsShow ($id)
+    {
+        // dd($id);
+        $company = Company::find($id);
+        // return new CompanyResource($company);
+        return Inertia::render('Company/Invoices', [
+            'company' => new CompanyResource($company),
+        ]);
+    }
+     public function suppliersShow ($id)
+    {
+        // dd($id);
+        $company = Company::find($id);
+        // return new CompanyResource($company);
+        return Inertia::render('Company/Invoices', [
+            'company' => new CompanyResource($company),
+        ]);
     }
 
     /**
