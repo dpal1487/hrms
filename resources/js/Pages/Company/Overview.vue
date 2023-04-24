@@ -33,11 +33,11 @@ export default defineComponent({
                     <!--begin::Card title-->
                     <div class="card-title m-0">
                         <h3 class="fw-bold m-0">Company Details</h3>
-
+                        <!-- {{ company.data }} -->
                     </div>
                     <!--end::Card title-->
                     <Link class="btn btn-primary align-self-center"
-                        :href="`/company/${employee?.data?.id}/overview/edit`">Edit
+                        :href="`/company/${company?.data?.id}/overview/edit`">Edit
                     Profile
                     </Link>
                     <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
@@ -50,9 +50,10 @@ export default defineComponent({
                             <!--begin::Label-->
                             <label class="col-lg-4 fw-semibold text-muted">User Name</label>
                             <!--end::Label-->
+                            <!-- {{ company?.data?.user }} -->
                             <!--begin::Col-->
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user.first_name +" "+ company?.data?.user.first_name }}</span>
+                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user?.first_name +" "+ company?.data?.user.last_name }}</span>
                             </div>
                             <!--end::Col-->
                         </div>

@@ -26,21 +26,21 @@ export default defineComponent({
                 company_type: 'personal',
                 account_team_size: '2-10',
                 tax_number: '',
-                company_domain:'',
-                company_website:'',
-                account_plan: 'Developer Account' ,
-                company_number:'+911111111111',
-                company_email:'corp@support.com',
-                sorted_description:'KEENTHEMES',
-                corporate_type:'',
-                description:'',
-                company_name:'Keenthemes Inc.',
-                card_name:'Max Doe',
-                card_number:'4111 1111 1111 1111',
-                card_expiry_month:'',
-                card_expiry_year:'',
-                card_cvv:'',
-                card_save:'1',
+                company_domain: '',
+                company_website: '',
+                account_plan: 'Developer Account',
+                company_number: '+911111111111',
+                company_email: 'corp@support.com',
+                sorted_description: 'KEENTHEMES',
+                corporate_type: '',
+                description: '',
+                company_name: 'Keenthemes Inc.',
+                card_name: 'Max Doe',
+                card_number: '4111 1111 1111 1111',
+                card_expiry_month: '',
+                card_expiry_year: '',
+                card_cvv: '',
+                card_save: '1',
 
             })
         };
@@ -59,12 +59,15 @@ export default defineComponent({
     methods: {
         submit() {
             console.log("see this value", this.form);
+            // this.v$.$touch();
+            // if (!this.v$.form.$invalid) {
             this.form
+
                 .transform((data) => ({
                     ...data,
                 }))
-                .post(this.route('company.store'), this.form.id)
-            //    }
+                .post(this.route('company.store'), this.form)
+            // }
         },
         onPrev() {
             if (this.currStep > 0) this.currStep--;
@@ -75,7 +78,7 @@ export default defineComponent({
             } else {
                 if (this.currStep < 5 && this.currStep >= 0) this.currStep++;
             }
-        }
+        },
     },
     created() {
 

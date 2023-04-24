@@ -14,8 +14,6 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\CompanyController;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -136,12 +134,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
-      Route::controller(AddressController::class)->group(function () {
+    Route::controller(AddressController::class)->group(function () {
         Route::group(['prefix' => 'company'], function () {
             Route::get('{id}/address', 'addressShow')->name('company.address');
-            Route::post('/store', 'store')->name('company.address.store');
-            Route::post('/edit', 'store')->name('company.address.edit');
-            Route::delete('{id}/delete', 'destroy')->name('company-address.delete');
+            Route::post('/address/store', 'store')->name('company.address.store');
+            Route::delete('{id}/address/delete', 'destroy')->name('company.address.delete');
         });
     });
 });

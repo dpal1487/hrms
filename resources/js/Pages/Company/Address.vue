@@ -5,23 +5,39 @@ import CompanyLayout from "@/Layouts/CompanyLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 import AddressComponent from "../../Components/Company/Address/AddressComponent.vue";
+import AddAddress from "../../Components/Company/Address/Model/AddAddress.vue";
 
 export default defineComponent({
     props: ['company', 'countries'],
     setup() {
-        return { v$: useVuelidate() };
+        return {
+            v$: useVuelidate(),
+            // isEdit: false
+        };
+    },
+    data() {
+        return {
+            isEdit: false,
+        }
     },
     components: {
         AppLayout,
         CompanyLayout,
         Link,
         Head,
-        AddressComponent
+        AddressComponent,
+        AddAddress,
+
     },
     methods: {
+        toggleModal(value) {
+            this.isEdit = value;
+        }
 
     },
     created() {
+
+
 
     }
 });
@@ -43,13 +59,14 @@ export default defineComponent({
                 </div>
                 <!--end::Card header-->
                 <!--begin::Card body-->
+                <AddAddress :show="isEdit" @hidemodal="toggleModal" :countries="countries" :company="company" />
                 <div class="card-body">
                     <!--begin::Addresses-->
                     <div class="row gx-9 gy-6">
-                        <!-- {{ company }} -->
                         <!--begin::Col-->
                         <AddressComponent :countries="countries" :company="company" />
                         <!--end::Col-->
+
                         <div class="col-xl-6">
                             <!--begin::Notice-->
                             <div
@@ -64,8 +81,8 @@ export default defineComponent({
                                     </div>
                                     <!--end::Content-->
                                     <!--begin::Action-->
-                                    <a href="#" class="btn btn-primary px-6 align-self-center text-nowrap"
-                                        data-bs-toggle="modal" data-bs-target="#kt_modal_new_address">New Address</a>
+                                    <button class="btn btn-primary px-6 align-self-center text-nowrap"
+                                        @click=toggleModal(true)>New Address</button>
                                     <!--end::Action-->
                                 </div>
                                 <!--end::Wrapper-->

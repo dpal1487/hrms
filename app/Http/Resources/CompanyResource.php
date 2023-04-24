@@ -30,6 +30,9 @@ class CompanyResource extends JsonResource
             'user'=>$this->user,
             'size'=>$this->size,
             'corporationtype' => $this->corporationtype,
+            'company_addresss' =>AddressResource::collection($this->company_addresss),
+            // 'address' =>$this->company_addresss->address,
+            // 'country' =>$this->company_address?->address->country,
         ];
     }
 }

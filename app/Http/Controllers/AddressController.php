@@ -16,6 +16,7 @@ class AddressController extends Controller
 {
     public function store(Request $request)
     {
+        // dd($request->id);
         $request->validate([
             'address_line_1' => 'required',
             'address_line_2' => 'required',
@@ -25,19 +26,36 @@ class AddressController extends Controller
             'pincode' => 'required',
         ]);
 
-        $address = Address::updateOrCreate([
-            'address_line_1' => $request->address_line_1,
-            'address_line_2' => $request->address_line_2,
-            'city' => $request->city,
-            'state' => $request->state,
-            'country_id' => $request->country,
-            'pincode' => $request->pincode,
-        ]);
-
-        $employeeAddress = CompanyAddress::updateOrCreate(['company_id' => $request->id], ['address_id' => $address->id]);
-
-        if ($employeeAddress) {
-            return response()->json(['success' => true, 'message' => 'Company Address Added successfully']);
+        if (!empty($request->id)) {
+            $address = Address::where('id', $request->id)->update([
+                'address_line_1' => $request->address_line_1,
+                'address_line_2' => $request->address_line_2,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country_id' => $request->country,
+                'pincode' => $request->pincode,
+            ]);
+        } else {
+            $address = Address::create([
+                'address_line_1' => $request->address_line_1,
+                'address_line_2' => $request->address_line_2,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country_id' => $request->country,
+                'pincode' => $request->pincode,
+            ]);
+            $employeeAddress = CompanyAddress::create([
+                'company_id' => $request->company_id,
+                'address_id' => $address->id,
+            ]);
+            if ($employeeAddress) {
+                return response()->json(['success' => true, 'message' => 'Company Address Added successfully']);
+            } else {
+                return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
+            }
+        }
+        if ($address) {
+            return response()->json(['success' => true, 'message' => 'Company Address Updates successfully']);
         } else {
             return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
         }
@@ -48,22 +66,42 @@ class AddressController extends Controller
         // dd($id);
         $countries = Country::get();
         $company = Company::find($id);
-        // return new AddressResource($company);
+        // return new CompanyResource($company);
         return Inertia::render('Company/Address', [
             'company' => new CompanyResource($company),
             'countries' => $countries,
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Address  $address
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Address $address)
+
+    public function updateAddress(Request $request, $id)
     {
-        //
+        dd('sd');
+        $request->validate([
+            'address_line_1' => 'required',
+            'address_line_2' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            // 'country' => 'required',
+            'pincode' => 'required',
+        ]);
+
+        $address = Address::create([
+            'address_line_1' => $request->address_line_1,
+            'address_line_2' => $request->address_line_2,
+            'city' => $request->city,
+            'state' => $request->state,
+            'country_id' => $request->country,
+            'pincode' => $request->pincode,
+        ]);
+
+        $employeeAddress = CompanyAddress::where(['company_id' => $request->id])->update(['company_id' => $request->id], ['address_id' => $address->id]);
+
+        if ($employeeAddress) {
+            return response()->json(['success' => true, 'message' => 'Company Updated Added successfully']);
+        } else {
+            return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
+        }
     }
 
     /**
@@ -75,7 +113,7 @@ class AddressController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($id);
+        dd($id);
         $request->validate([
             'address_line_1' => 'required',
             'address_line_2' => 'required',
@@ -85,7 +123,7 @@ class AddressController extends Controller
             'pincode' => 'required',
         ]);
 
-        $address = Address::updateOrCreate([
+        $address = Address::where('id', $request->id)->update([
             'address_line_1' => $request->address_line_1,
             'address_line_2' => $request->address_line_2,
             'city' => $request->city,
@@ -94,15 +132,12 @@ class AddressController extends Controller
             'pincode' => $request->pincode,
         ]);
 
-        $employeeAddress = EmployeeAddress::updateOrCreate(['employee_id' => $id], ['address_id' => $address->id]);
+        // $employeeAddress = EmployeeAddress::updateOrCreate(['employee_id' => $id], ['address_id' => $address->id]);
 
-        if ($employeeAddress) {
-            return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee address added successfully');
-            // return response()->json(['success' => true, 'message' => 'Employee Address Added successfully']);
+        if ($address) {
+            return response()->json(['success' => true, 'message' => 'Company Address Updated  successfully']);
         } else {
-            return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee address not added');
-
-            // return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
+            return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
         }
     }
 
@@ -112,8 +147,13 @@ class AddressController extends Controller
      * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Address $address)
+    public function destroy($id)
     {
-        //
+        $address = CompanyAddress::find($id);
+
+        if ($address->delete()) {
+            return response()->json(['success' => true, 'message' => 'Address has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 }

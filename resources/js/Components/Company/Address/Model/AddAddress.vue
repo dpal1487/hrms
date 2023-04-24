@@ -8,7 +8,7 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 import Modal from '../../../Modal.vue';
 import { toast } from 'vue3-toastify';
 import axios from 'axios';
@@ -45,20 +45,19 @@ export default defineComponent({
         };
     },
     data() {
-        // console.log("see this", this.employee?.data?.user?.image?.medium_path)
         return {
 
             message: '',
             isEdit: false,
             requesting: false,
             form: this.$inertia.form({
-                id: this.company?.data?.id,
-                address_line_1: this.employee?.data?.user?.image?.medium_path || '',
-                address_line_2: this.employee?.data?.user?.first_name || '',
-                city: this.employee?.data?.user?.last_name || '',
-                state: this.employee?.data?.user?.email || '',
-                country: this.employee?.data?.date_of_joining || '',
-                pincode: this.employee?.data?.number || '',
+                company_id: this.company?.data?.id,
+                address_line_1: '',
+                address_line_2: '',
+                city: '',
+                state: '',
+                country: '',
+                pincode: '',
             }),
         };
     },
@@ -85,6 +84,10 @@ export default defineComponent({
                         if (response.data.success) {
                             toast(response.data.message)
                             this.requesting = false;
+                            this.$emit('hidemodal', false)
+                            return;
+                        } else {
+                            toast(response.data.message)
                         }
                     });
             }
@@ -92,18 +95,17 @@ export default defineComponent({
 
     },
     created() {
-        if (route().current() == 'employees.edit') {
-            this.isEdit = true;
-        }
+
     }
 
 })
 </script>
 
 <template>
-    <Head title="Address" />
+    <Head title="Add Address" />
     <Modal :show="show" title="Add New Address" @onhide="$emit('hidemodal', false)">
         <JetValidationErrors />
+
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
 
             <!--begin::Modal body-->

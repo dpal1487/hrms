@@ -108,13 +108,13 @@ class CompanyController extends Controller
     public function show($id)
     {
         $company = Company::find($id);
-        // return new CompanyResource($company);
+        // return new AddressResource($company);
         return Inertia::render('Company/Overview', [
             'company' => new CompanyResource($company),
         ]);
     }
 
-   
+
      public function accountShow($id)
     {
         // dd($id);

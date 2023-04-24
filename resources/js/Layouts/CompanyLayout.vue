@@ -42,9 +42,7 @@ export default defineComponent({
                                 <div class="d-flex flex-column">
                                     <!--begin::Name-->
                                     <div class="d-flex align-items-center mb-2">
-                                        <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
-                                            (this.company?.data?.user?.first_name) }}
-                                            {{ (this.company?.data?.user?.last_name) }}</a>
+                                        <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{ company?.data?.company_name }}</a>
                                         <a href="">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
                                             <span class="svg-icon svg-icon-1 svg-icon-primary">
@@ -79,7 +77,7 @@ export default defineComponent({
                                                     <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->Developer</a>
+                                            <!--end::Svg Icon-->{{ company?.data?.company_name }}</a>
                                         <a href="#"
                                             class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
@@ -94,7 +92,7 @@ export default defineComponent({
                                                         fill="currentColor" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->SF, Bay Area</a>
+                                            <!--end::Svg Icon-->{{ company?.data?.company_address?.city + " "+ company?.data?.company_address?.state +" , " + company?.data?.company_address?.country?.name}}</a>
                                         <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                             <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                             <span class="svg-icon svg-icon-4 me-1">
@@ -108,7 +106,7 @@ export default defineComponent({
                                                         fill="currentColor" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->{{ (this.company?.data?.user.email) }}</a>
+                                            <!--end::Svg Icon-->{{ company.data.contact_email }}</a>
                                     </div>
                                     <!--end::Info-->
                                 </div>
@@ -139,7 +137,7 @@ export default defineComponent({
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                                <div class="fs-2 fw-bold">0</div>
+                                                <div class="fs-2 fw-bold">1000</div>
                                             </div>
                                             <!--end::Number-->
                                             <!--begin::Label-->
@@ -165,7 +163,7 @@ export default defineComponent({
                                                 </span>
                                                 <!--end::Svg Icon-->
                                                 <div class="fs-2 fw-bold">
-                                                    0</div>
+                                                    20</div>
                                             </div>
                                             <!--end::Number-->
                                             <!--begin::Label-->
@@ -190,7 +188,7 @@ export default defineComponent({
                                                     </svg>
                                                 </span>
                                                 <!--end::Svg Icon-->
-                                                <div class="fs-2 fw-bold">0</div>
+                                                <div class="fs-2 fw-bold">100%</div>
                                             </div>
                                             <!--end::Number-->
                                             <!--begin::Label-->
