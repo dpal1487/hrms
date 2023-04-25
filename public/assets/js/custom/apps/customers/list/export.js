@@ -38,12 +38,11 @@ var KTCustomersExport = function () {
 
 		// Action buttons
 		submitButton.addEventListener('click', function (e) {
-			e.preventDefault();      
+			e.preventDefault();
 
 			// Validate form before submit
 			if (validator) {
 				validator.validate().then(function (status) {
-					console.log('validated!');
 
 					if (status == 'Valid') {
 						submitButton.setAttribute('data-kt-indicator', 'on');
@@ -53,7 +52,7 @@ var KTCustomersExport = function () {
 
 						setTimeout(function() {
 							submitButton.removeAttribute('data-kt-indicator');
-							
+
 							Swal.fire({
 								text: "Customer list has been successfully exported!",
 								icon: "success",
@@ -67,12 +66,12 @@ var KTCustomersExport = function () {
 									modal.hide();
 
                                     // Enable submit button after loading
-                                    submitButton.disabled = false;        
+                                    submitButton.disabled = false;
 								}
 							});
 
 							//form.submit(); // Submit form
-						}, 2000);   						
+						}, 2000);
 					} else {
 						Swal.fire({
 							text: "Sorry, looks like there are some errors detected, please try again.",
@@ -104,8 +103,8 @@ var KTCustomersExport = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal		
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
@@ -136,8 +135,8 @@ var KTCustomersExport = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal			
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
@@ -155,7 +154,7 @@ var KTCustomersExport = function () {
 
     var initForm = function () {
         const datepicker = form.querySelector("[name=date]");
-        
+
         // Handle datepicker range -- For more info on flatpickr plugin, please visit: https://flatpickr.js.org/
         $(datepicker).flatpickr({
             altInput: true,

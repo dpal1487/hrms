@@ -6,9 +6,13 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\InvoiceResource;
+
+
 use App\Models\CompanySize;
 use App\Models\Country;
 use App\Models\User;
+use App\Models\Invoice;
 use Auth;
 use Hash;
 use Image;
@@ -114,14 +118,25 @@ class CompanyController extends Controller
         ]);
     }
 
-
-     public function accountShow($id)
+    public function accountShow($id)
     {
         // dd($id);
         $company = Company::find($id);
         // return new CompanyResource($company);
         return Inertia::render('Company/Address', [
             'company' => new CompanyResource($company),
+        ]);
+    }
+     public function invoicesShow($id)
+    {
+        // dd($id);
+        $company = Company::find($id);
+        $invoices = Invoice::get();
+        // return InvoiceResource::collection($invoices);
+        // return new CompanyResource($company);
+        return Inertia::render('Company/Invoices', [
+            'company' => new CompanyResource($company),
+            'invoices' => InvoiceResource::collection($invoices),
         ]);
     }
     public function emialsShow($id)
@@ -133,7 +148,8 @@ class CompanyController extends Controller
             'company' => new CompanyResource($company),
         ]);
     }
-     public function invoicesShow ($id)
+
+    public function projectsShow($id)
     {
         // dd($id);
         $company = Company::find($id);
@@ -142,16 +158,7 @@ class CompanyController extends Controller
             'company' => new CompanyResource($company),
         ]);
     }
-     public function projectsShow ($id)
-    {
-        // dd($id);
-        $company = Company::find($id);
-        // return new CompanyResource($company);
-        return Inertia::render('Company/Invoices', [
-            'company' => new CompanyResource($company),
-        ]);
-    }
-     public function suppliersShow ($id)
+    public function suppliersShow($id)
     {
         // dd($id);
         $company = Company::find($id);

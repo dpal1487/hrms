@@ -15,7 +15,6 @@ export default defineComponent({
     },
     methods: {
         handleOptionChange(event) {
-            // console.log("see radio value", event.target.value);
             this.value = event.target.value;
         },
         toggleView(view) {

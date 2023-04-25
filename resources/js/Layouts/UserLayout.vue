@@ -4,7 +4,7 @@ import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 
 export default defineComponent({
-    props: ["employee", "status"],
+    props: ["employee"],
 
     components: {
         Link,

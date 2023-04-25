@@ -26,7 +26,6 @@ export default defineComponent({
         }
     },
     data() {
-        console.log("password", this.password?.password)
         return {
             isEdit: false,
             form: this.$inertia.form({

@@ -16,9 +16,12 @@ import axios from 'axios';
 
 export default defineComponent({
 
-    props: ['company', 'show', 'countries', 'addressId'],
+    props: ['show', 'countries', 'address'],
     setup() {
-        return { v$: useVuelidate() };
+        return {
+            v$: useVuelidate(),
+
+        };
     },
     validations() {
         return {
@@ -45,20 +48,19 @@ export default defineComponent({
         };
     },
     data() {
-
         return {
             message: '',
             isEdit: false,
             requesting: false,
-            form: this.$inertia.form({
-                id: this.addressId,
-                address_line_1: this.company.data.company_addresss[0]['address_line_1'] || '',
-                address_line_2: this.company.data.company_addresss[0]['address_line_2'] || '',
-                city: this.company.data.company_addresss[0]['city'] || '',
-                state: this.company.data.company_addresss[0]['state'] || '',
-                country: this.company.data.company_addresss[0]['country']['id'] || '',
-                pincode: this.company.data.company_addresss[0]['pincode'] || '',
 
+            form: this.$inertia.form({
+                id: this.address.id || '',
+                address_line_1: this.address.address_line_1,
+                address_line_2: this.address.address_line_2,
+                city: this.address.city,
+                state: this.address.state,
+                country: this.address.country.id,
+                pincode: this.address.pincode,
             }),
         };
     },
@@ -80,12 +82,13 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.requesting = true;
-                axios.post(this.route("company.address.store"), { ...this.form, id: this.addressId })
+                axios.post(this.route("company.address.store"), { ...this.form, id: this.form.id })
                     .then((response) => {
                         if (response.data.success) {
                             toast(response.data.message)
                             this.requesting = false;
-                            this.$emit('hidemodal', false)
+                            this.$emit('hidemodal', false);
+                            location.reload();
                             return;
                         } else {
                             toast(response.data.message)
@@ -99,15 +102,14 @@ export default defineComponent({
 </script>
 
 <template>
-    <Head title="Edit Address" />
+
+    <Modal :show="show" title="Company Address" @onhide="$emit('hidemodal', false)">
     <Modal :show="show" title="Edit Address" @onhide="$emit('hidemodal', false)">
-        <!-- {{ company.data[index].company_addresss }} -->
         <JetValidationErrors />
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+            <!-- {{ form }} -->
             <!--begin::Modal body-->
-            {{ addressId }}
-
-            <input type="text" v-model="addressId">
+            <!-- <input type="text" v-model="addressId"> -->
             <div class="me-n7 pe-7 mh-lg-400px" style="overflow-y: auto;">
                 <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
                     <jet-label for="address1" value="Address Line 1" />

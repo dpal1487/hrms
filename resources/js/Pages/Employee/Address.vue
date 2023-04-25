@@ -26,7 +26,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="Address" />
+    <Head title="Employee Address" />
 
     <AppLayout>
         <UserLayout :employee="employee">

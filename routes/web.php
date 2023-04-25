@@ -13,6 +13,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +140,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/address', 'addressShow')->name('company.address');
             Route::post('/address/store', 'store')->name('company.address.store');
             Route::delete('{id}/address/delete', 'destroy')->name('company.address.delete');
+        });
+    });
+    Route::controller(InvoiceController::class)->group(function () {
+        Route::group(['prefix' => 'invoices'], function () {
+            Route::get('/', 'index')->name('invoices.index');
+            Route::get('/add', 'create')->name('invoices.add');
+            Route::post('/store', 'store')->name('invoices.store');
+            Route::get('{id}/edit', 'edit')->name('invoices.edit');
+            Route::post('{id}/update', 'update')->name('invoices.update');
+            Route::delete('{id}/delete', 'destroy')->name('invoices.delete');
         });
     });
 });

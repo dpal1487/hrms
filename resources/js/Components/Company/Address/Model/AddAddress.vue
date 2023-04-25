@@ -102,7 +102,6 @@ export default defineComponent({
 </script>
 
 <template>
-    <Head title="Add Address" />
     <Modal :show="show" title="Add New Address" @onhide="$emit('hidemodal', false)">
         <JetValidationErrors />
 

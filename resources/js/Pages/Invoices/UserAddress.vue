@@ -88,7 +88,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head title="User Address" />
+    <Head :title="Address" />
     <AppLayout>
         <UserLayout :employee="employee">
             <!--begin::details View-->

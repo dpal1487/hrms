@@ -162,7 +162,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head title="Employee Edit" />
+    <Head :title="Overview" />
     <AppLayout>
         <UserLayout :employee="employee">
             <!--begin::details View-->

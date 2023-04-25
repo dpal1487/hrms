@@ -3,11 +3,15 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+
 import useVuelidate from "@vuelidate/core";
+
 import UserEmail from "@/Components/User/security/UserEmail.vue";
 import TwoFactor from "@/Components/User/security/TwoFactor.vue";
 import UserPassword from "../../Components/User/security/UserPassword.vue";
 import DeactivateAccount from "../../Components/User/security/DeactivateAccount.vue";
+// Vue.use(Datetime);
+// import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
     props: ["employees", 'employee'],
@@ -34,6 +38,12 @@ export default defineComponent({
             console.log("see file", e.target.files[0], this);
             this.avatar = URL.createObjectURL(e.target.files[0]);
         },
+        // removeSelectedAvatar() {
+        //     this.avatar = null;
+        // },
+        // removeExistingAvatar() {
+        //     alert("Are you sure ?...")
+        // }
     },
     created() {
 
@@ -41,10 +51,11 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head title="Employee Security" />
+    <Head :title="Address" />
 
     <AppLayout>
         <UserLayout :employee="employee">
+
             <!--begin::Sign-in Method-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
@@ -53,6 +64,7 @@ export default defineComponent({
                         <h3 class="fw-bold m-0">Sign-in Method</h3>
                     </div>
                 </div>
+
                 <!--end::Card header-->
                 <!--begin::Content-->
                 <div class="collapse show">

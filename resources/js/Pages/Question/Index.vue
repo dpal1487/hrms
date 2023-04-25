@@ -100,7 +100,7 @@ export default defineComponent({
 <template>
     <app-layout>
 
-        <Head title="questions" />
+        <Head title="Question" />
         <div class="card card-flush">
 
             <!--begin::Actions-->

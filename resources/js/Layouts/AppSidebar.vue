@@ -39,14 +39,20 @@ export default defineComponent({
                     title: "Decision Makers",
                     icon: "bi bi-pie-chart-fill",
                 },
-                {
-                    link: "/images",
-                    title: "Images",
-                    icon: "bi bi-pie-chart-fill",
-                },
+
                 {
                     link: "/company",
                     title: "Company",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/invoices",
+                    title: "Invoices",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/images",
+                    title: "Images",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {

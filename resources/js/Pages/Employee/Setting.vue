@@ -48,7 +48,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="Address" />
+    <Head title="Employee Setting" />
 
     <AppLayout>
         <UserLayout :employee="employee">
