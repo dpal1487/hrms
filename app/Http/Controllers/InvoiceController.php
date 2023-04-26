@@ -40,7 +40,7 @@ class InvoiceController extends Controller
         // var_dump($clients);
         return Inertia::render('Invoices/Form', [
             'companies' => $companies,
-            'clients' => ClientResource::collection($clients),
+            'clients' => $clients,
         ]);
     }
 

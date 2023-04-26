@@ -19,8 +19,8 @@ class ClientResource extends JsonResource
             'name' => $this->name,
             'sort_name' => $this->sort_name,
             'status' => $this->status,
-            'client' => $this->client_address,
-            'client_address' => $this->client_address,
+            'client_address' => $this->client_address?->address,
+            'country' => $this->client_address?->address?->country,
         ];
     }
 }

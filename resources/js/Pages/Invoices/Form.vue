@@ -149,14 +149,15 @@ export default defineComponent({
             if (this.items.length > 1) this.items = this.items.filter(i => i.id !== id);
             return;
         },
-        getClientDetails(e) {
+        async getClientDetails(e) {
             let client = e.target.value;
-            console.log("see the selected client", client);
-            axios
+            // console.log("see the selected client", client);
+           await axios
                 .get(client + '/client-address/')
                 .then((response) => {
                     if (response.data.success) {
-                        this.clientAddress = response?.data?.data?.address || {}
+                        this.clientAddress = response?.data?.data?.client_address || {}
+                        console.log("this is ",this.clientAddress)
                         return;
                     }
                 })
@@ -321,7 +322,7 @@ export default defineComponent({
                                             <!--end::Col-->
                                             <!--begin::Col-->
                                             <div class="col-lg-6">
-                                                <div class="mb-10">
+                                                <div class="mb-1">
                                                     <!--begin::Label-->
                                                     <label class="form-label fw-bold fs-6 text-gray-700">Client</label>
                                                     <!--end::Label-->
@@ -330,43 +331,34 @@ export default defineComponent({
                                                         class="form-control form-control-lg form-control-solid mb-2"
                                                         placeholder="Select One">
                                                         <option value="">-- Select One --</option>
-                                                        <option v-for="client in clients.data" :value="client.id">{{
-                                                           ( client.id)
+                                                        <option v-for="client in clients" :value="client.c_id">{{
+                                                           ( client.name)
                                                         }}</option>
                                                     </select>
 
-
+                                                    <!-- <Multiselect :options="clients" label="name" valueProp="c_id"
+                                                    class="form-control form-control-lg form-control-solid" :searchable="true"
+                                                    v-model="form.client" track-by="name" placeholder="Select One" @change="getClientDetails($event)"/> -->
                                                     <!--end::Select-->
-
                                                 </div>
-                                                <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Bill To</label>
+                                                <label class="form-label fs-6 fw-bold text-gray-700">Bill To</label>
                                                 <!--begin::Input group-->
                                                 <div class="mb-5">
-                                                    <input type="text" :value="clientAddress.address_line_1"
-                                                        class="form-control form-control-solid" placeholder="Name" />
+                                                    <input type="text" class="form-control fs-6 form-control-transparent"
+                                                         :value="clientAddress?.address_line_1 +'  ' + clientAddress?.address_line_2 " readonly />
+
+                                                         <input type="text" class="form-control fs-6 form-control-transparent"
+                                                         :value="clientAddress?.city " readonly />
+                                                         <input type="text" class="form-control fs-7 form-control-transparent"
+                                                         :value="clientAddress?.state" readonly />
+                                                         <input type="text" class="form-control fs-7 form-control-transparent"
+                                                         :value="clientAddress?.pincode" readonly />
+                                                         <input type="text" class="form-control fs-7 form-control-transparent"
+                                                         :value="clientAddress?.country?.name" readonly />
+
                                                 </div>
                                                 <!--end::Input group-->
-                                                <!--begin::Input group-->
-                                                <div class="mb-5">
-                                                    <input type="text" :value="clientAddress.address_line_2"
-                                                        class="form-control form-control-solid" placeholder="Email" />
-                                                </div>
-                                                <div class="mb-5">
-                                                    <input type="text" :value="clientAddress.city"
-                                                        class="form-control form-control-solid" placeholder="Email" />
-                                                </div>
-                                                <div class="mb-5">
-                                                    <input type="text" :value="clientAddress.state"
-                                                        class="form-control form-control-solid" placeholder="Email" />
-                                                </div>
-                                                <div class="mb-5">
-                                                    <input type="text" :value="clientAddress.pincode"
-                                                        class="form-control form-control-solid" placeholder="Email" />
-                                                </div>
-                                                <div class="mb-5">
-                                                    <input type="text" :value="clientAddress.country?.name"
-                                                        class="form-control form-control-solid" placeholder="Email" />
-                                                </div>
+
                                                 <!--end::Input group-->
                                             </div>
                                             <!--end::Col-->

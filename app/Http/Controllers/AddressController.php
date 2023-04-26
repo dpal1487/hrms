@@ -11,6 +11,9 @@ use App\Models\CompanyAddress;
 use Illuminate\Http\Request;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\ClientResource;
+
+
 use Inertia\Inertia;
 
 class AddressController extends Controller
@@ -72,16 +75,19 @@ class AddressController extends Controller
             'countries' => $countries,
         ]);
     }
-    public function clientAddress(Request $request, $id)
+    public function clientAddress(Request $request , $id)
     {
-        $client = Client::where('id', $id)->first();
+        // dd($id);
+        $client = Client::where('c_id', $id)->first();
 
-        return $client;
+        // return $client;
+        // return new ClientResource($client);
+
         if ($request->ajax()) {
             if ($client) {
                 return response()->json([
                     'success' => true,
-                    'data' => AddressResource::collection($client->address),
+                    'data' =>new ClientResource($client),
                 ]);
             }
             return response()->json([
