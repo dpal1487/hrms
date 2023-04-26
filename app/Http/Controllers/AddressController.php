@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\Client;
 use App\Models\EmployeeAddress;
 use App\Models\CompanyAddress;
 use Illuminate\Http\Request;
@@ -70,6 +71,26 @@ class AddressController extends Controller
             'company' => new CompanyResource($company),
             'countries' => $countries,
         ]);
+    }
+    public function clientAddress(Request $request, $id)
+    {
+        $client = Client::where('id', $id)->first();
+
+        return $client;
+        if ($request->ajax()) {
+            if ($client) {
+                return response()->json([
+                    'success' => true,
+                    'data' => AddressResource::collection($client->address),
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Something Went Wrong',
+            ]);
+        } else {
+            return $this->errorAjax();
+        }
     }
 
     public function destroy($id)

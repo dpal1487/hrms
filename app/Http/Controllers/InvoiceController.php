@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\CompanyInvoice;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\ClientResource;
 use Inertia\Inertia;
 
 use Illuminate\Http\Request;
@@ -36,20 +37,14 @@ class InvoiceController extends Controller
     {
         $companies = Company::get();
         $clients = Client::get();
-        // dd($company);
+        // var_dump($clients);
         return Inertia::render('Invoices/Form', [
             'companies' => $companies,
-            'clients' => $clients,
+            'clients' => ClientResource::collection($clients),
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+ public function store(Request $request)
     {
         // dd($request);
         $request->validate([
@@ -148,7 +143,7 @@ class InvoiceController extends Controller
             'status' => 'required',
         ]);
 
-        $invoice = Invoice::where('id' , $id)->update([
+        $invoice = Invoice::where('id', $id)->update([
             'client_id' => $request->client,
             'company_id' => $request->company,
             'gst_status' => $request->gst_status,
@@ -179,9 +174,9 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoices  $invoices
      * @return \Illuminate\Http\Response
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
-         $invoice = Invoice::find($id);
+        $invoice = Invoice::find($id);
         if ($invoice->delete()) {
             return response()->json(['success' => true, 'message' => 'Invoice has been deleted successfully.']);
         }

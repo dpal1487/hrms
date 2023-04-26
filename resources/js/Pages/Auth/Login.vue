@@ -69,12 +69,7 @@
             <!--end::Input group--->
 
             <!--begin::Wrapper-->
-            <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="link-primary">
-                Forgot your password?
-                </Link>
-                <!--end::Link-->
-            </div>
+           
             <!--end::Wrapper-->
             <!--begin::Submit button-->
             <div class="d-grid mb-10">

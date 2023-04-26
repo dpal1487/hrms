@@ -20,4 +20,8 @@ class Controller extends BaseController
     public function companyId()
     {
     }
+    public function errorAjax()
+    {
+        return response()->json(['success' => false, 'message' => 'Unauthrize Access.']);
+    }
 }

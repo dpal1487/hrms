@@ -12,6 +12,7 @@ import CompanyFifthStep from "../../Components/Company/CompanyFifthStep.vue";
 
 export default defineComponent({
     props: [''],
+    emits:['onNext'],
     setup() {
     },
     validations() {
