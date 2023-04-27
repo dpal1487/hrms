@@ -107,6 +107,7 @@ export default defineComponent({
                 department_id: this.employee?.data?.department_id || '',
             }),
             value: null,
+            url:null,
             options: [
                 { name: 'Vue.js', department: 'Vue.js' },
                 { name: 'Rails', department: 'Rails' },
@@ -371,7 +372,7 @@ export default defineComponent({
                                         <div class="fv-row col-6">
                                             <jet-label for="department_id" value="Department" />
                                             <Multiselect :options="options" label="name" valueProp="department"
-                                                :custom-label="nameWithLang"
+                                                
                                                 class="form-control form-control-lg form-control-solid"
                                                 placeholder="Select One" v-model="form.department_id" track-by="name" />
 

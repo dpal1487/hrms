@@ -25,8 +25,7 @@ export default defineComponent({
     validations() {
         return {
             form: {
-
-                company: {
+                client: {
                     required,
                 },
                 gst_status: {
@@ -44,13 +43,13 @@ export default defineComponent({
                 invoice_due_date: {
                     required,
                 },
-                total_amount_usd: {
-                    required,
-                },
-                total_amount_inr: {
-                    required, integer
+                // total_amount_usd: {
+                //     required,
+                // },
+                // total_amount_inr: {
+                //     required, integer
 
-                },
+                // },
                 notes: {
                     required,
                 },
@@ -73,18 +72,22 @@ export default defineComponent({
             clientAddress: {},
             form: this.$inertia.form({
                 id: this.invoice?.data?.id || '',
-                client: this.invoice?.data?.client?.name || '',
-                company: this.invoice?.data?.company?.id || {},
-                gst_status: this.invoice?.data?.gst_status || '',
-                invoice_number: this.invoice?.data?.invoice_number || '',
-                invoice_date: this.invoice?.data?.invoice_date || '',
-                conversion_rate: this.invoice?.data?.conversion_rate || '',
-                invoice_due_date: this.invoice?.data?.invoice_due_date || '',
-                total_amount_usd: this.invoice?.data?.total_amount_usd || '',
-                total_amount_inr: this.invoice?.data?.total_amount_inr || '',
-                notes: this.invoice?.data?.notes || '',
-                status: this.invoice?.data?.status || '',
+                client: '',
+                company: '',
+                gst_status: '',
+                invoice_number: '20202023',
+                invoice_date: '',
+                conversion_rate: '',
+                invoice_due_date: '',
+                total_amount_usd: '',
+                total_amount_inr: '',
+                notes: '',
+                status: '',
                 currnecy: '',
+                name: [],
+                cpi: [],
+                quantity: [],
+                price: [],
             }),
             url: null,
             value: null,
@@ -149,15 +152,14 @@ export default defineComponent({
             if (this.items.length > 1) this.items = this.items.filter(i => i.id !== id);
             return;
         },
-        async getClientDetails(e) {
-            let client = e.target.value;
-            // console.log("see the selected client", client);
-           await axios
-                .get(client + '/client-address/')
+        async getClientDetails(c_id) {
+
+            await axios
+                .get(c_id + '/client-address/')
                 .then((response) => {
-                    if (response.data.success) {
+                    if (response.data.success = true) {
                         this.clientAddress = response?.data?.data?.client_address || {}
-                        console.log("this is ",this.clientAddress)
+                        // console.log("this is ", this.clientAddress)
                         return;
                     }
                 })
@@ -168,16 +170,6 @@ export default defineComponent({
             this.isEdit = true;
         }
 
-        // const el = document.querySelector(".sidepane");
-
-        // const observer = new IntersectionObserver(
-        //     ([e]) => e.target.classList.toggle("is-pinned", e.intersectionRatio < 1),
-        //     { threshold: [1] }
-        // );
-
-        // console.log(el);
-
-        // // observer.observe(el);
     }
 });
 
@@ -191,6 +183,8 @@ export default defineComponent({
         <div class="app-content flex-column-fluid">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
+                <JetValidationErrors />
+
                 <!--begin::Layout-->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-lg-row">
                     <!--begin::Content-->
@@ -215,15 +209,12 @@ export default defineComponent({
                                                 <VueDatePicker v-model="v$.form.invoice_date.$model"
                                                     :enable-time-picker="false" auto-apply
                                                     input-class-name="form-control form-control-transparent fw-bold pe-5"
-                                                    :class="v$.form.invoice_due_date.$errors.length > 0
+                                                    :class="v$.form.invoice_date.$errors.length > 0
                                                             ? 'is-invalid'
                                                             : ''
                                                         " placeholder="Select date">
                                                 </VueDatePicker>
-                                                <div v-for="(error, index) of v$.form.invoice_due_date.$errors"
-                                                    :key="index">
-                                                    <input-error :message="error.$message" />
-                                                </div>
+
                                                 <!--end::Datepicker-->
                                                 <!--begin::Icon-->
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -237,6 +228,10 @@ export default defineComponent({
                                                 </span>
                                                 <!--end::Svg Icon-->
                                                 <!--end::Icon-->
+
+                                            </div>
+                                            <div v-for="(error, index) of v$.form.invoice_date.$errors" :key="index">
+                                                <input-error :message="error.$message" />
                                             </div>
                                             <!--end::Input-->
                                         </div>
@@ -245,9 +240,17 @@ export default defineComponent({
                                         <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4"
                                             data-bs-toggle="tooltip" data-bs-trigger="hover" title="Enter invoice number">
                                             <span class="fs-2x fw-bold text-gray-800">Invoice #</span>
+
+
                                             <input type="text"
                                                 class="form-control form-control-flush fw-bold text-muted fs-3 w-125px"
-                                                value="2021001" placehoder="..." />
+                                                v-model="v$.form.invoice_number.$model" :class="v$.form.invoice_number.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                    " placeholder="..." />
+                                            <div v-for="(error, index) of v$.form.invoice_number.$errors" :key="index">
+                                                <input-error :message="error.$message" />
+                                            </div>
                                         </div>
                                         <!--end::Input group-->
                                         <!--begin::Input group-->
@@ -263,7 +266,7 @@ export default defineComponent({
                                                 <VueDatePicker v-model="v$.form.invoice_due_date.$model"
                                                     :enable-time-picker="false" auto-apply
                                                     input-class-name="form-control form-control-transparent fw-bold pe-5"
-                                                    :class="v$.form.invoice_date.$errors.length > 0
+                                                    :class="v$.form.invoice_due_date.$errors.length > 0
                                                             ? 'is-invalid'
                                                             : ''
                                                         " placeholder="Select Date"></VueDatePicker>
@@ -282,6 +285,9 @@ export default defineComponent({
                                                 <!--end::Icon-->
                                             </div>
                                             <!--end::Input-->
+                                            <div v-for="(error, index) of v$.form.invoice_due_date.$errors" :key="index">
+                                                <input-error :message="error.$message" />
+                                            </div>
                                         </div>
                                         <!--end::Input group-->
                                     </div>
@@ -292,73 +298,57 @@ export default defineComponent({
                                     <!--begin::Wrapper-->
                                     <div class="mb-0">
                                         <!--begin::Row-->
-                                        <div class="row gx-10 mb-5">
+                                        <div class="d-flex flex-wrap gap-6 justify-content-between">
                                             <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <label class="form-label fs-6 fw-bold text-gray-700">Bill From</label>
+                                            <div class="min-w-350px">
+                                                <label class="form-label fs-5 fw-bold text-gray-700">Bill From</label>
                                                 <!--begin::Input group-->
-                                                <div class="mb-0">
-                                                    <input type="text" class="form-control fs-5 form-control-transparent"
-                                                        value="A.R Solution" readonly />
-                                                </div>
-                                                <!--end::Input group-->
-                                                <!--begin::Input group-->
-                                                <div class="mb-0">
-                                                    <input type="text" class="form-control fs-7 form-control-transparent"
-                                                        value="RZ - 121 Prajapati Colony Uttam Nagar" readonly />
-                                                </div>
-                                                <!--end::Input group-->
-                                                <!--begin::Input group-->
-                                                <div class="mb-0">
-                                                    <input type="text" class="form-control fs-7 form-control-transparent"
-                                                        value="Delhi,India 110059" readonly />
-                                                    <input type="text" class="form-control fs-7 form-control-transparent"
-                                                        value="GSTIN : 07CAYPR9267G1ZN" readonly />
-                                                    <input type="text" class="form-control fs-7 form-control-transparent"
-                                                        value="+91-7503876258" readonly />
+                                                <div class="d-flex mt-6 flex-column gap-2 text-gray-600">
+                                                    <span>RZ - 121 Prajapati Colony Uttam Nagar</span>
+                                                    <span>A R Solution</span>
+                                                    <span>Delhi,India 110059</span>
+                                                    <span>GSTIN : 07CAYPR9267G1ZN</span>
+                                                    <span>+91-7503876258</span>
                                                 </div>
                                                 <!--end::Input group-->
                                             </div>
                                             <!--end::Col-->
                                             <!--begin::Col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-1">
+                                            <div class="min-w-350px">
+                                                <div class="form-label fs-5 fw-bold text-gray-700">Bill To</div>
+                                                <div class="mb-1 mt-6">
                                                     <!--begin::Label-->
-                                                    <label class="form-label fw-bold fs-6 text-gray-700">Client</label>
+                                                    <label class="form-label fw-bold fs-6 text-gray-600">Client</label>
                                                     <!--end::Label-->
                                                     <!--begin::Select-->
-                                                    <select @change="getClientDetails"
-                                                        class="form-control form-control-lg form-control-solid mb-2"
-                                                        placeholder="Select One">
-                                                        <option value="">-- Select One --</option>
-                                                        <option v-for="client in clients" :value="client.c_id">{{
-                                                           ( client.name)
-                                                        }}</option>
-                                                    </select>
-
-                                                    <!-- <Multiselect :options="clients" label="name" valueProp="c_id"
-                                                    class="form-control form-control-lg form-control-solid" :searchable="true"
-                                                    v-model="form.client" track-by="name" placeholder="Select One" @change="getClientDetails($event)"/> -->
+                                                    <Multiselect :options="clients" label="name" valueProp="c_id"
+                                                        class="form-control form-control-lg form-control-solid"
+                                                        :searchable="true" v-model="v$.form.client.$model" :class="v$.form.client.$errors.length > 0
+                                                                ? 'is-invalid'
+                                                                : ''
+                                                            " track-by="name" placeholder="Select One"
+                                                        @change="getClientDetails" />
                                                     <!--end::Select-->
                                                 </div>
-                                                <label class="form-label fs-6 fw-bold text-gray-700">Bill To</label>
+                                                <div v-for="(error, index) of v$.form.client.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                                 <!--begin::Input group-->
                                                 <div class="mb-5">
                                                     <input type="text" class="form-control fs-6 form-control-transparent"
-                                                         :value="clientAddress?.address_line_1 +'  ' + clientAddress?.address_line_2 " readonly />
-
-                                                         <input type="text" class="form-control fs-6 form-control-transparent"
-                                                         :value="clientAddress?.city " readonly />
-                                                         <input type="text" class="form-control fs-7 form-control-transparent"
-                                                         :value="clientAddress?.state" readonly />
-                                                         <input type="text" class="form-control fs-7 form-control-transparent"
-                                                         :value="clientAddress?.pincode" readonly />
-                                                         <input type="text" class="form-control fs-7 form-control-transparent"
-                                                         :value="clientAddress?.country?.name" readonly />
-
+                                                        :value="clientAddress?.address_line_1" readonly />
+                                                    <input type="text" class="form-control fs-6 form-control-transparent"
+                                                        :value="clientAddress?.address_line_2" readonly />
+                                                    <input type="text" class="form-control fs-6 form-control-transparent"
+                                                        :value="clientAddress?.city" readonly />
+                                                    <input type="text" class="form-control fs-7 form-control-transparent"
+                                                        :value="clientAddress?.state" readonly />
+                                                    <input type="text" class="form-control fs-7 form-control-transparent"
+                                                        :value="clientAddress?.pincode" readonly />
+                                                    <input type="text" class="form-control fs-7 form-control-transparent"
+                                                        :value="clientAddress?.country?.name" readonly />
                                                 </div>
                                                 <!--end::Input group-->
-
                                                 <!--end::Input group-->
                                             </div>
                                             <!--end::Col-->
@@ -371,23 +361,26 @@ export default defineComponent({
                                                 data-kt-element="items">
                                                 <!--begin::Table head-->
                                                 <thead>
-                                                    <tr class="border-bottom fs-7 fw-bold text-gray-700 text-uppercase">
+                                                    <tr
+                                                        class="border-bottom fs-7 fw-bold text-gray-700 text-uppercase text-center">
                                                         <th class="min-w-150px w-150px">Item</th>
                                                         <th class="min-w-150px w-100px">CPI</th>
-                                                        <th class="min-w-150px w-150px">Quantity</th>
-                                                        <th class="min-w-150px w-150px text-end">Total</th>
+                                                        <th class="min-w-20px w-50px">Quantity</th>
+                                                        <th class="min-w-100px w-150px">Price</th>
+                                                        <th class="min-w-100px w-150px text-end">Total</th>
                                                         <th class="min-w-75px w-75px text-end">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody>
-                                                    <ItemFormList :items="items" @removeSingle="removeItemForm" />
+                                                    <ItemFormList :items="items" :form="form"
+                                                        @removeSingle="removeItemForm" />
                                                 </tbody>
                                                 <!--end::Table body-->
                                                 <!--begin::Table foot-->
                                                 <tfoot>
-                                                    <AppendItem @addItemForm="appendItemForm" />
+                                                    <AppendItem :form="form" @addItemForm="appendItemForm" />
                                                     <tr class="align-top fw-bold text-gray-700">
                                                         <th></th>
                                                         <th colspan="2" class="fs-4 ps-0">Total</th>
@@ -404,7 +397,14 @@ export default defineComponent({
                                         <div class="mb-0">
                                             <label class="form-label fs-6 fw-bold text-gray-700">Notes</label>
                                             <textarea name="notes" class="form-control form-control-solid" rows="3"
-                                                placeholder="Thanks for your business"></textarea>
+                                                placeholder="Thanks for your business" v-model="v$.form.notes.$model"
+                                                :class="v$.form.notes.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                    "></textarea>
+                                        </div>
+                                        <div v-for="(error, index) of v$.form.notes.$errors" :key="index">
+                                            <input-error :message="error.$message" />
                                         </div>
                                         <!--end::Notes-->
                                     </div>
@@ -432,24 +432,49 @@ export default defineComponent({
                                     <!--begin::Select-->
                                     <Multiselect :options="currnecy" label="name" valueProp="value"
                                         class="form-control form-control-lg form-control-solid mb-2" :searchable="true"
-                                        v-model="form.currnecy" :class="v$.form.currnecy.$errors.length > 0
-                                                    ? 'is-invalid'
-                                                    : ''
-                                                " placeholder="Select One" track-by="name" />
+                                        v-model="v$.form.currnecy.$model" :class="v$.form.currnecy.$errors.length > 0
+                                                ? 'is-invalid'
+                                                : ''
+                                            " placeholder="Select One" track-by="name" />
                                     <div v-for="(error, index) of v$.form.currnecy.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                     <!--end::Select-->
-                                    <jet-input id="conversion_rate" type="text" v-model="v$.form.conversion_rate.$model"
-                                        :class="v$.form.conversion_rate.$errors.length > 0
-                                                    ? 'is-invalid'
-                                                    : ''
-                                                " placeholder="Conversion Rate" />
+                                    <jet-input type="text" v-model="v$.form.conversion_rate.$model" :class="v$.form.conversion_rate.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                        " placeholder="Conversion Rate" />
                                     <div v-for="(error, index) of v$.form.conversion_rate.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <!--end::Input group-->
+                                <div class="mb-5">
+                                    <label class="form-label fw-bold fs-6 text-gray-700">GST Status</label>
+
+                                    <Multiselect :options="gst_status" label="name" valueProp="id"
+                                        class="form-control form-control-lg form-control-solid" :searchable="true"
+                                        v-model="v$.form.gst_status.$model" :class="v$.form.gst_status.$errors.length > 0
+                                                ? 'is-invalid'
+                                                : ''
+                                            " placeholder="Select One" track-by="name" />
+                                    <div v-for="(error, index) of v$.form.gst_status.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label class="form-label fw-bold fs-6 text-gray-700">Status</label>
+
+                                    <Multiselect :options="status" label="name" valueProp="id"
+                                        class="form-control form-control-lg form-control-solid" :class="v$.form.status.$errors.length > 0
+                                                ? 'is-invalid'
+                                                : ''
+                                            " placeholder="Select One" v-model="v$.form.status.$model"
+                                        track-by="name" />
+                                    <div v-for="(error, index) of v$.form.status.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
                                 <!--begin::Separator-->
                                 <div class="separator separator-dashed mb-8"></div>
                                 <!--end::Separator-->

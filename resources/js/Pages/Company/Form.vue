@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, Head } from "@inertiajs/inertia-vue3";
 import { required } from "@vuelidate/validators";
 import ComponyAside from "../../Components/Company/CompanyAside.vue"
 import CompanyStepFirst from "../../Components/Company/CompanyStepFirst.vue";
@@ -12,7 +12,7 @@ import CompanyFifthStep from "../../Components/Company/CompanyFifthStep.vue";
 
 export default defineComponent({
     props: [''],
-    emits:['onNext'],
+    emits: ['onNext'],
     setup() {
     },
     validations() {
@@ -23,6 +23,8 @@ export default defineComponent({
     data() {
         return {
             currStep: 0,
+            isEdit: false,
+            onNext:0,
             form: this.$inertia.form({
                 company_type: 'personal',
                 account_team_size: '2-10',
@@ -55,6 +57,7 @@ export default defineComponent({
         CompanyFourthStep,
         CompanyFifthStep,
         Link,
+        Head
 
     },
     methods: {

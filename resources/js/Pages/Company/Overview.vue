@@ -11,13 +11,14 @@ import PrimaryButton from "@/Jetstream/Button.vue";
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ['company'],
+    props: ['company','Overview'],
 
     components: {
         AppLayout,
         CompanyLayout,
         PrimaryButton,
-        Link
+        Link,
+        Head
     },
 
 });

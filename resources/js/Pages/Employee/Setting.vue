@@ -206,7 +206,7 @@ export default defineComponent({
                                 <!--end::Content-->
                                 <!--begin::Action-->
                                 <a href="#" class="btn btn-primary px-6 align-self-center text-nowrap"
-                                    data-bs-toggle="modal" :data-bs-target="kt_modal_two_factor_authentication">Enable</a>
+                                    data-bs-toggle="modal">Enable</a>
                                 <!--end::Action-->
                             </div>
                             <!--end::Wrapper-->

@@ -9,7 +9,9 @@ class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company_id', 'name', 'sort_name', 'status'];
+    protected $table = 'clients';
+
+    protected $fillable = ['id', 'company_id', 'name', 'sort_name', 'status'];
 
     public function company()
     {
@@ -18,6 +20,6 @@ class Client extends Model
 
     public function client_address()
     {
-        return $this->hasOne(ClientAddress::class, 'client_id', 'c_id');
+        return $this->hasOne(ClientAddress::class, 'client_id', 'id');
     }
 }

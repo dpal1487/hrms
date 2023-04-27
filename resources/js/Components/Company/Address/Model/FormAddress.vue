@@ -104,7 +104,7 @@ export default defineComponent({
 <template>
 
     <Modal :show="show" title="Company Address" @onhide="$emit('hidemodal', false)">
-    <Modal :show="show" title="Edit Address" @onhide="$emit('hidemodal', false)">
+    <!-- <Modal :show="show" title="Edit Address" @onhide="$emit('hidemodal', false)"> -->
         <JetValidationErrors />
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
             <!-- {{ form }} -->

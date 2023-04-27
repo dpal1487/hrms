@@ -1,18 +1,19 @@
 <script>
-import useVuelidate from '@vuelidate/core';
 import { defineComponent } from 'vue';
-import { required, email, sameAs } from "@vuelidate/validators";
+
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+import useVuelidate from '@vuelidate/core';
+import { required, email, sameAs } from "@vuelidate/validators";
 import { toast } from 'vue3-toastify';
 import axios from 'axios';
 
 export default defineComponent({
-    props: ["email", "selectedImage", "errors"],
+    props: ["email"],
     setup() {
-        return { $v: useVuelidate() };
+        return { v$: useVuelidate() };
     },
     validations() {
         return {
@@ -51,6 +52,7 @@ export default defineComponent({
             this.isEdit = false;
         },
         submit() {
+            this.v$.$touch();
             if (!this.form.$invalid) {
                 axios.post(route('employees.email.update', this.form.id), this.form).then((response) => {
                     if (response.data.success) {
@@ -77,17 +79,27 @@ export default defineComponent({
             <div class="row mb-6">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="fv-row mb-0">
-                        <label for="emailaddress" class="form-label fs-6 fw-bold mb-3">Enter New
+                        <!-- <label for="emailaddress" class="form-label fs-6 fw-bold mb-3">Enter New
                             Email Address </label>
                         <input type="email" class="form-control form-control-lg form-control-solid"
-                            placeholder="Email Address" v-model="form.email" />
+                            placeholder="Email Address" v-model="v$.form.email.$modal" /> -->
+
+                        <jet-label for="email" value="Enter New
+                            Email Address" />
+                        <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="v$.form.email.$errors.length > 0
+                                ? 'is-invalid'
+                                : ''
+                            " placeholder="Email Id" />
+
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="fv-row mb-0">
-                        <label for="confirmemailpassword" class="form-label fs-6 fw-bold mb-3">Confirm Password</label>
-                        <input type="password" class="form-control form-control-lg form-control-solid"
-                            v-model="form.confirm_password" />
+                        <jet-label for="password" value="Confirm Password" />
+                        <jet-input id="password" type="password" v-model="v$.form.confirm_password.$model" :class="v$.form.confirm_password.$errors.length > 0
+                                ? 'is-invalid'
+                                : ''
+                            " placeholder="Confirm Password" />
                     </div>
                 </div>
             </div>

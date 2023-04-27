@@ -79,7 +79,7 @@ export default defineComponent({
 
             if (!this.v$.form.$invalid) {
                 this.form.transform((data) => {
-                    console.log("see submitted data", data);
+                    
                     const formdata = new FormData();
                     formdata.append("id", data.id);
                     formdata.append("name", data.name);
@@ -183,7 +183,7 @@ export default defineComponent({
 
                                 <div>
                                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                        :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
+                                        :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                         <span v-if="route().current() == 'industries.edit'">Update</span>
                                         <span v-if="route().current() == 'industries.add'">Save</span>
                                         <span class="indicator-progress">

@@ -16,6 +16,7 @@ export default defineComponent({
     data() {
         return {
             q: "",
+            s:"",
             tbody: [
                 "Indusctry Name",
                 "Title",

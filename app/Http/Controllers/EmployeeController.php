@@ -252,13 +252,19 @@ class EmployeeController extends Controller
     public function emailUpdate(Request $request, $id)
     {
         // dd($request);
-        if (Hash::check($request->confirm_password, Auth::user()->password)) {
-            $userEmail = User::where('id', $id)->update([
-                'email' => $request->email,
-            ]);
-            return response()->json(['success' => true, 'message' => 'Successfully Change Email!']);
-        } else {
+        if ($request->ajax()) {
+            if ($request->confirm_password == null) {
+                 return response()->json(['success' => false, 'message' => "Please Insert password"]);
+            }
+            if (Hash::check($request->confirm_password, Auth::user()->password)) {
+                $userEmail = User::where('id', $id)->update([
+                    'email' => $request->email,
+                ]);
+                return response()->json(['success' => true, 'message' => 'Successfully Change Email!']);
+            }
             return response()->json(['success' => false, 'message' => "Don't Have Autherity To change Email! Please insert correct password"]);
+        } else {
+            return $this->errorAjax();
         }
     }
 

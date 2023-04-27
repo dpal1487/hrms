@@ -3,7 +3,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    props: ["id", "count", "index"],
+    props: ["id", "count", "index", 'form'],
     emits: ["removeSingle"],
 
 })
@@ -15,22 +15,27 @@ export default defineComponent({
 <template>
     <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
         <td>
-            <input type="text" class="form-control form-control-solid mb-2" :name="`name[${index}]`"
-                placeholder="Item name" />
+            
+            <input type="text" class="form-control form-control-solid mb-2" v-model="form.name[index]"
+                :name="`name[${index}]`" placeholder="Item name" />
         </td>
-        <td> <input type="text" class="form-control form-control-solid" :name="`description[${index}]`"
+        <td> <input type="text" class="form-control form-control-solid" v-model="form.cpi[index]" :name="`cpi[${index}]`"
                 placeholder="Description" />
         </td>
         <td class="ps-0">
-            <input class="form-control form-control-solid" type="number" min="1" :name="`qunatity[${index}]`"
-                placeholder="1" value="1" data-kt-element="quantity" />
+            
+            <input class="form-control form-control-solid" type="number" v-model="form.quantity[index]"
+                :name="`qunatity[${index}]`" placeholder="1" />
         </td>
         <td>
-            <input type="text" class="form-control form-control-solid text-end" :name="`price[${index}]`" placeholder="0.00"
-                value="0.00" data-kt-element="price" />
+            <input type="text" class="form-control form-control-solid text-end" v-model="form.price[index]"
+                :name="`price[${index}]`" placeholder="0.00" />
         </td>
-        <td class="pt-8 text-end text-nowrap">$
-            <span data-kt-element="total">0.00</span>
+        <td class="pt-8 text-end text-nowrap">
+            {{ totalPrice = ( form.quantity[index] * form.price[index] )}} 
+             <input type="text" class="form-control form-control-transparent text-end p-0" v-model="totalPrice" 
+                    :name="`price[${index}]`" placeholder="0.00" />
+            <!-- <span data-kt-element="total" > {{ totalPrice }}</span> -->
         </td>
         <td class="pt-5 text-end">
             <button :disabled="count <= 1" type="button" class="btn btn-sm btn-icon btn-active-color-primary"

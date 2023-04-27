@@ -13,7 +13,6 @@ use App\Http\Resources\AddressResource;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\ClientResource;
 
-
 use Inertia\Inertia;
 
 class AddressController extends Controller
@@ -65,6 +64,53 @@ class AddressController extends Controller
         }
     }
 
+    public function empaddress(Request $request, $id)
+    {
+        // dd($request->address_id);
+        $request->validate([
+            'address_line_1' => 'required',
+            'address_line_2' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            // 'country' => 'required',
+            'pincode' => 'required',
+        ]);
+        if ($request->address_id) {
+             $address = Address::where('id', $request->id)->update([
+            'address_line_1' => $request->address_line_1,
+            'address_line_2' => $request->address_line_2,
+            'city' => $request->city,
+            'state' => $request->state,
+            'country_id' => $request->country,
+            'pincode' => $request->pincode,
+        ]);
+        }
+        else {
+            $address = Address::create([
+                'address_line_1' => $request->address_line_1,
+                'address_line_2' => $request->address_line_2,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country_id' => $request->country,
+                'pincode' => $request->pincode,
+            ]);
+            $employeeAddress = EmployeeAddress::create([
+                'employee_id' => $id,
+                'address_id' => $address->id,
+            ]);
+            if ($employeeAddress) {
+                 return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address Updated successfully');
+            } else {
+                 return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on update');
+            }
+        }
+
+        if ($address) {
+             return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address created successfully');
+        } else {
+             return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on create');
+        }
+    }
     public function addressShow($id)
     {
         $countries = Country::get();
@@ -75,19 +121,14 @@ class AddressController extends Controller
             'countries' => $countries,
         ]);
     }
-    public function clientAddress(Request $request , $id)
+    public function clientAddress(Request $request, $id)
     {
-        // dd($id);
-        $client = Client::where('c_id', $id)->first();
-
-        // return $client;
-        // return new ClientResource($client);
-
+        $client = Client::where('id', $id)->first();
         if ($request->ajax()) {
             if ($client) {
                 return response()->json([
                     'success' => true,
-                    'data' =>new ClientResource($client),
+                    'data' => new ClientResource($client),
                 ]);
             }
             return response()->json([

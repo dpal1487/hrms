@@ -34,7 +34,7 @@ export default defineComponent({
     },
     data() {
         return {
-            submitting: false,
+            isEdit: false,
             form: this.$inertia.form({
                 id: this.decisionmaker?.data?.id || '',
                 title: this.decisionmaker?.data?.title || '',

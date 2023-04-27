@@ -66,7 +66,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::group(['prefix' => 'employees'], function () {
-        Route::post('{id}/address/update', [AddressController::class, 'update'])->name('employees.address.update');
+        Route::post('{id}/address/update', [AddressController::class, 'empaddress'])->name('employees.address.update');
     });
 
     Route::controller(IndustryController::class)->group(function () {

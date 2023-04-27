@@ -10,10 +10,8 @@ import UserPassword from "../../Components/User/security/UserPassword.vue";
 import DeactivateAccount from "../../Components/User/security/DeactivateAccount.vue";
 
 export default defineComponent({
-    props: ["employees", 'employee'],
-    setup() {
-        return { v$: useVuelidate() };
-    },
+    props: ['employee'],
+    
     data() {
         return {
             avatar: null,

@@ -35,6 +35,16 @@ export default defineComponent({
                 { value: 0, label: "Inactive" }
             ],
             filteredStatus: [],
+            client_status: [
+                { name: 'New', id: '0' },
+                { name: 'Paid', id: '1' },
+                { name: 'Cancelled', id: '2' },
+            ],
+            gst_status: [
+                { name: 'New', id: '0' },
+                { name: 'Paid', id: '1' },
+                { name: 'Cancelled', id: '2' },
+            ],
         };
     },
     components: {
@@ -175,6 +185,7 @@ export default defineComponent({
                                 <td>{{ invoice?.invoice_due_date }}</td>
                                 <td>{{ invoice?.client_id }}</td>
                                 <td>
+                                   
                                     <span v-if="(invoice?.status == 0)">New</span>
                                     <span v-if="(invoice?.status == 1)">Paid</span>
                                     <span v-if="(invoice?.status == 2)">Cancelled</span>
@@ -185,10 +196,9 @@ export default defineComponent({
                                     <span v-if="(invoice?.status == 2)">Cancelled</span>
                                 </td>
                                 <td>
-                                    <div class="dropdown">
+                                    <div class="dropdown" style="width: 100px;">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${invoice.id}`" data-bs-toggle="dropdown"
-                                            aria-expanded="false">Actions
+                                            data-bs-toggle="dropdown" aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

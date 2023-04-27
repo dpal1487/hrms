@@ -114,11 +114,11 @@ export default defineComponent({
 
     <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
-            <div v-if="$page.props.flash.message"
+            <div v-if="$page?.props?.flash?.message"
                 class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
                 role="alert">
                 <span class="font-medium">
-                    {{ $page.props.flash.message }}
+                    {{ $page?.props?.flash?.message }}
                 </span>
             </div>
             <div class="col-12">
@@ -138,11 +138,10 @@ export default defineComponent({
                                     <jet-label for="industry" value="Industry" />
                                     <Multiselect :options="industries" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        v-model="v$.form.industry.$model" track-by="name" :searchable="true" :class="
-                                            v$.form.industry.$errors.length > 0
+                                        v-model="v$.form.industry.$model" track-by="name" :searchable="true" :class="v$.form.industry.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " />
+                                            " />
                                     <div v-for="(error, index) of v$.form.industry.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -153,11 +152,10 @@ export default defineComponent({
                                 <div class="fv-row col-6">
 
                                     <jet-label for="question_key" value="Question Key" />
-                                    <jet-input id="question_key" type="text" v-model="v$.form.question_key.$model" :class="
-                                        v$.form.question_key.$errors.length > 0
+                                    <jet-input id="question_key" type="text" v-model="v$.form.question_key.$model" :class="v$.form.question_key.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Question Key" />
+                                        " placeholder="Question Key" />
                                     <div v-for="(error, index) of v$.form.question_key.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -166,11 +164,10 @@ export default defineComponent({
 
                                 <div class="fv-row col-6">
                                     <jet-label for="language" value="Language" />
-                                    <jet-input id="language" type="text" v-model="v$.form.language.$model" :class="
-                                        v$.form.language.$errors.length > 0
+                                    <jet-input id="language" type="text" v-model="v$.form.language.$model" :class="v$.form.language.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Language" />
+                                        " placeholder="Language" />
                                     <div v-for="(error, index) of v$.form.language.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -181,11 +178,10 @@ export default defineComponent({
                                     <jet-label for="type" value="Type" />
                                     <Multiselect :options="options" label="name" valueProp="name" id="type"
                                         :custom-label="nameWithLang" class="form-control form-control-lg form-control-solid"
-                                        placeholder="Select One" v-model="v$.form.type.$model" track-by="name" :class="
-                                            v$.form.type.$errors.length > 0
+                                        placeholder="Select One" v-model="v$.form.type.$model" track-by="name" :class="v$.form.type.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " />
+                                            " />
                                     <div v-for="(error, index) of v$.form.type.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -193,11 +189,10 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-12">
                                     <jet-label for="text" value="Text" />
-                                    <textarea v-model="v$.form.text.$model" class="form-control form-control-solid" :class="
-                                        v$.form.text.$errors.length > 0
+                                    <textarea v-model="v$.form.text.$model" class="form-control form-control-solid" :class="v$.form.text.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Text"></textarea>
+                                        " placeholder="Text"></textarea>
 
                                     <div v-for="(error, index) of v$.form.text.$errors" :key="index">
                                         <input-error :message="error.$message" />

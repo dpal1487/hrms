@@ -150,7 +150,7 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
+                                    :data-kt-indicator="(form.processing ) ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'answer.edit'">Update</span>
                                         <span v-if="route().current() == 'answer.add'">Save</span>

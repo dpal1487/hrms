@@ -4,6 +4,7 @@ import AuthenticationModal from './AuthenticationModal.vue';
 
 export default defineComponent({
     props: [],
+    emits:['Onhide'],
     data() {
         return {
             isModalOpen: false,

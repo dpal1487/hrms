@@ -44,11 +44,10 @@ export default defineComponent({
         };
     },
     data() {
-        console.log("see this", this.employee?.data?.address?.id)
         return {
-
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
+                address_id: this.employee?.data?.address?.id || '',
                 address_line_1: this.employee?.data?.address?.address_line_1 || '',
                 address_line_2: this.employee?.data?.address?.address_line_2 || '',
                 city: this.employee?.data?.address?.city || '',
@@ -116,15 +115,15 @@ export default defineComponent({
                                 <!--begin::Label-->
                                 <label class="col-lg-4 col-form-label required fw-semibold fs-6">Address Line 1</label>
                                 <!--end::Label-->
+                                <input type="hidden" v-model="form.address_id">
                                 <!--begin::Col-->
                                 <div class="col-lg-8">
                                     <!--begin::Row-->
                                     <jet-input id="address_line_1" type="text" v-model="v$.form.address_line_1.$model"
-                                        :class="
-                                            v$.form.address_line_1.$errors.length > 0
+                                        :class="v$.form.address_line_1.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Address Line 1" />
+                                            " placeholder="Address Line 1" />
                                     <div v-for="(error, index) of v$.form.address_line_1.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -141,11 +140,10 @@ export default defineComponent({
                                 <!--begin::Col-->
                                 <div class="col-lg-8">
                                     <jet-input id="address_line_2" type="text" v-model="v$.form.address_line_2.$model"
-                                        :class="
-                                            v$.form.address_line_2.$errors.length > 0
+                                        :class="v$.form.address_line_2.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Address Line 2" />
+                                            " placeholder="Address Line 2" />
                                     <div v-for="(error, index) of v$.form.address_line_2.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -165,11 +163,10 @@ export default defineComponent({
                                 <!--end::Label-->
                                 <!--begin::Col-->
                                 <div class="col-lg-8">
-                                    <jet-input id="city" type="text" v-model="v$.form.city.$model" :class="
-                                        v$.form.city.$errors.length > 0
+                                    <jet-input id="city" type="text" v-model="v$.form.city.$model" :class="v$.form.city.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="City" />
+                                        " placeholder="City" />
                                     <div v-for="(error, index) of v$.form.city.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -184,11 +181,10 @@ export default defineComponent({
                                 <!--end::Label-->
                                 <!--begin::Col-->
                                 <div class="col-lg-8">
-                                    <jet-input id="state" type="text" v-model="v$.form.state.$model" :class="
-                                        v$.form.state.$errors.length > 0
+                                    <jet-input id="state" type="text" v-model="v$.form.state.$model" :class="v$.form.state.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="State" />
+                                        " placeholder="State" />
                                     <div v-for="(error, index) of v$.form.state.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -211,11 +207,10 @@ export default defineComponent({
                                 <div class="col-lg-8 fv-row">
                                     <Multiselect :options="countries" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        v-model="v$.form.country.$model" track-by="name" :searchable="true" :class="
-                                            v$.form.country.$errors.length > 0
+                                        v-model="v$.form.country.$model" track-by="name" :searchable="true" :class="v$.form.country.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " />
+                                            " />
                                     <div v-for="(error, index) of v$.form.country.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -230,11 +225,10 @@ export default defineComponent({
                                 <!--end::Label-->
                                 <!--begin::Col-->
                                 <div class="col-lg-8">
-                                    <jet-input id="pincode" type="text" v-model="v$.form.pincode.$model" :class="
-                                        v$.form.pincode.$errors.length > 0
+                                    <jet-input id="pincode" type="text" v-model="v$.form.pincode.$model" :class="v$.form.pincode.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Pincode" />
+                                        " placeholder="Pincode" />
                                     <div v-for="(error, index) of v$.form.pincode.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -252,7 +246,7 @@ export default defineComponent({
                             </Link>
                             <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->
                             <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                :data-kt-indicator="(form.processing || submitting) ? 'on' : 'off'">
+                                :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                 <span class="indicator-label">
                                     <span>Address Add</span>
                                 </span>
