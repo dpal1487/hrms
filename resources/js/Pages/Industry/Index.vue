@@ -60,7 +60,7 @@ export default defineComponent({
 
                         .catch((error) => {
                             if (error.response.status == 400) {
-                                toastr.error(error.response.data.message);
+                                toast.error(error.response.data.message);
                             }
                         });
                 } else if (result.dismiss === 'cancel') {
@@ -96,6 +96,14 @@ export default defineComponent({
 
         <Head title="Industry" />
         <div class="card card-flush">
+            <div v-if="$page.props.ziggy.flash.message" class="alert">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                     <span class="font-medium">
+                        {{ $page.props.ziggy.flash.message }}
+                    </span>                 
+                </div>
+                
+            </div>
             <div>
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
                     <!--begin::Card title-->
@@ -194,9 +202,9 @@ export default defineComponent({
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    industries.id, index
-                                                )
-                                                "
+                                                        industries.id, index
+                                                    )
+                                                    "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>

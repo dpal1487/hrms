@@ -10,8 +10,8 @@ class CompanyInvoice extends UID
     use HasFactory;
     protected $fillable = ['company_id', 'invoice_id'];
 
-    // public function company()
-    // {
-    //     return $this->hasOne(Company::class, 'id', 'company_id');
-    // }
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'id', 'company_id');
+    }
 }

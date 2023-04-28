@@ -19,12 +19,20 @@ class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        // dd($id);
         $company = Company::get();
-        $invoices = Invoice::get();
-      
+        // $invoices = Invoice::get();
+        // return InvoiceResource::collection($invoices);
+        $invoices = new Invoice();
+        if (!empty($request->q)) {
+            $invoices = $invoices->where('invoice_number', 'like', '%' . $request->q . '%');
+        }
+
+        if (!empty($request->status) || $request->status != '') {
+            $invoices = $invoices->where('status', '=', $request->status);
+        }
+
         return Inertia::render('Invoices/Index', [
-            'invoices' => InvoiceResource::collection($invoices),
+            'invoices' => InvoiceResource::collection($invoices->paginate(10)->appends($request->all())),
         ]);
     }
     public function create()
@@ -39,8 +47,8 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
+      
         $request->validate([
-            // 'company' => 'required',
             'gst_status' => 'required',
             'gst_status' => 'required',
             'invoice_number' => 'required',
@@ -67,7 +75,7 @@ class InvoiceController extends Controller
             'status' => $request->status,
         ]);
 
-        foreach ($request->name as  $value) {
+        foreach ($request->name as $value) {
             $invoiceItem = InvoiceItem::create([
                 'invoice_id' => $invoice->id,
                 'project_name' => $value,
@@ -92,7 +100,6 @@ class InvoiceController extends Controller
         //
     }
 
-    
     public function edit($id)
     {
         $invoice = Invoice::find($id);
@@ -113,22 +120,22 @@ class InvoiceController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'company' => 'required',
             'gst_status' => 'required',
             'gst_status' => 'required',
             'invoice_number' => 'required',
             'invoice_date' => 'required',
             'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'invoice_due_date' => 'required',
-            'total_amount_usd' => 'required',
-            'total_amount_inr' => 'required|integer',
+            // 'total_amount_usd' => 'required',
+            // 'total_amount_inr' => 'required|integer',
             'notes' => 'required',
             'status' => 'required',
         ]);
 
         $invoice = Invoice::where('id', $id)->update([
+
             'client_id' => $request->client,
-            'company_id' => $request->company,
+            'company_id' => Auth::user()->id,
             'gst_status' => $request->gst_status,
             'invoice_number' => $request->invoice_number,
             'invoice_date' => $request->invoice_date,
@@ -138,6 +145,7 @@ class InvoiceController extends Controller
             'total_amount_inr' => $request->total_amount_inr,
             'notes' => $request->notes,
             'status' => $request->status,
+
         ]);
 
         if ($invoice) {

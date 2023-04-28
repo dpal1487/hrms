@@ -121,6 +121,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/', 'index')->name('company.index');
             Route::get('/add', 'create')->name('company.add');
             Route::post('/store', 'store')->name('company.store');
+             Route::get('{id}/edit', 'edit')->name('company.edit');
+            Route::post('{id}/update', 'update')->name('company.update');
             Route::get('{id}', 'show')->name('company.view');
             Route::get('{id}/overview', 'show')->name('company.overview');
 
@@ -129,8 +131,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/invoices', 'invoicesShow')->name('company.invoices');
             Route::get('{id}/projects', 'projectsShow')->name('company.projects');
             Route::get('{id}/suppliers', 'suppliersShow')->name('company.suppliers');
-            Route::get('{id}/edit', 'edit')->name('company.edit');
-            Route::post('{id}/update', 'update')->name('company.update');
+           
             Route::delete('{id}/delete', 'destroy')->name('company.delete');
         });
     });

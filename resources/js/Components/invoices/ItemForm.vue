@@ -3,7 +3,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    props: ["id", "count", "index", 'form'],
+    props: ["id", "count", "index", 'form' , 'item'],
     emits: ["removeSingle"],
 
 })
@@ -13,33 +13,35 @@ export default defineComponent({
 
 
 <template>
+    
+    <!-- {{ form.name[index] }} -->
     <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
         <td>
             
             <input type="text" class="form-control form-control-solid mb-2" v-model="form.name[index]"
-                :name="`name[${index}]`" placeholder="Item name" />
+                :name="`index[${index}]name`" placeholder="Item name" />
         </td>
-        <td> <input type="text" class="form-control form-control-solid" v-model="form.cpi[index]" :name="`cpi[${index}]`"
+        <td> <input type="text" class="form-control form-control-solid" v-model="form.cpi[index]" :name="`index[${index}]cpi`"
                 placeholder="Description" />
         </td>
         <td class="ps-0">
             
             <input class="form-control form-control-solid" type="number" v-model="form.quantity[index]"
-                :name="`qunatity[${index}]`" placeholder="1" />
+                :name="`index[${index}]qunatity`" placeholder="1" />
         </td>
         <td>
             <input type="text" class="form-control form-control-solid text-end" v-model="form.price[index]"
-                :name="`price[${index}]`" placeholder="0.00" />
+                :name="`index[${index}]price`" placeholder="0.00" />
         </td>
         <td class="pt-8 text-end text-nowrap">
             {{ totalPrice = ( form.quantity[index] * form.price[index] )}} 
              <input type="text" class="form-control form-control-transparent text-end p-0" v-model="totalPrice" 
-                    :name="`price[${index}]`" placeholder="0.00" />
+                    :name="`index[${index}]price`" placeholder="0.00" />
             <!-- <span data-kt-element="total" > {{ totalPrice }}</span> -->
         </td>
         <td class="pt-5 text-end">
             <button :disabled="count <= 1" type="button" class="btn btn-sm btn-icon btn-active-color-primary"
-                @click="$emit('removeSingle', this.id)">
+                @click="$emit('removeSingle', {id: this.id, index: index})">
                 <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
                 <span class="svg-icon svg-icon-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

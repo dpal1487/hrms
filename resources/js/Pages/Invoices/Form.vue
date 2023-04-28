@@ -64,26 +64,34 @@ export default defineComponent({
         };
     },
     data() {
-
         return {
             items: [{ id: 0 }],
             message: '',
+            i: null,
             isEdit: false,
             clientAddress: {},
+            items: this.invoice?.data?.item,
+
             form: this.$inertia.form({
                 id: this.invoice?.data?.id || '',
-                client: '',
+                client: this.invoice?.data?.client?.id || '',
                 company: '',
-                gst_status: '',
-                invoice_number: '20202023',
-                invoice_date: '',
-                conversion_rate: '',
-                invoice_due_date: '',
+                gst_status: this.invoice?.data.gst_status || '',
+                invoice_number: this.invoice?.data?.invoice_number || '20202023',
+                invoice_date: this.invoice?.data.invoice_date || '',
+                invoice_due_date: this.invoice?.data?.invoice_due_date || '',
+                conversion_rate: this.invoice?.data?.conversion_rate || '',
                 total_amount_usd: '',
                 total_amount_inr: '',
-                notes: '',
-                status: '',
+                notes: this.invoice?.data?.notes || '',
+                status: this.invoice?.data?.status || '',
                 currnecy: '',
+                items: [{
+                    name: '',
+                    cpi: '',
+                    quantity: 5,
+                    price: '',
+                }],
                 name: [],
                 cpi: [],
                 quantity: [],
@@ -148,8 +156,13 @@ export default defineComponent({
             }
             this.items = [...this.items, ...newItems];
         },
-        removeItemForm(id) {
+        removeItemForm(data) {
+            const { id, index } = data;
             if (this.items.length > 1) this.items = this.items.filter(i => i.id !== id);
+            if (index > -1 && index < this.form.name.length) this.form.name.splice(index, 1);
+            if (index > -1 && index < this.form.cpi.length) this.form.cpi.splice(index, 1);
+            if (index > -1 && index < this.form.quantity.length) this.form.quantity.splice(index, 1);
+            if (index > -1 && index < this.form.price.length) this.form.price.splice(index, 1);
             return;
         },
         async getClientDetails(c_id) {
@@ -184,6 +197,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <JetValidationErrors />
+                <!-- {{ invoice }} -->
 
                 <!--begin::Layout-->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-lg-row">
@@ -321,7 +335,7 @@ export default defineComponent({
                                                     <label class="form-label fw-bold fs-6 text-gray-600">Client</label>
                                                     <!--end::Label-->
                                                     <!--begin::Select-->
-                                                    <Multiselect :options="clients" label="name" valueProp="c_id"
+                                                    <Multiselect :options="clients" label="name" valueProp="id"
                                                         class="form-control form-control-lg form-control-solid"
                                                         :searchable="true" v-model="v$.form.client.$model" :class="v$.form.client.$errors.length > 0
                                                                 ? 'is-invalid'
@@ -374,6 +388,8 @@ export default defineComponent({
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody>
+                                                {{ items }}
+
                                                     <ItemFormList :items="items" :form="form"
                                                         @removeSingle="removeItemForm" />
                                                 </tbody>
@@ -451,7 +467,6 @@ export default defineComponent({
                                 <!--end::Input group-->
                                 <div class="mb-5">
                                     <label class="form-label fw-bold fs-6 text-gray-700">GST Status</label>
-
                                     <Multiselect :options="gst_status" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" :searchable="true"
                                         v-model="v$.form.gst_status.$model" :class="v$.form.gst_status.$errors.length > 0
@@ -462,9 +477,8 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <div class="">
+                                <div class="mb-4">
                                     <label class="form-label fw-bold fs-6 text-gray-700">Status</label>
-
                                     <Multiselect :options="status" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" :class="v$.form.status.$errors.length > 0
                                                 ? 'is-invalid'
@@ -477,9 +491,6 @@ export default defineComponent({
                                 </div>
                                 <!--begin::Separator-->
                                 <div class="separator separator-dashed mb-8"></div>
-                                <!--end::Separator-->
-
-                                <!--begin::Separator-->
                                 <!--end::Separator-->
                                 <!--begin::Actions-->
                                 <div class="mb-0">

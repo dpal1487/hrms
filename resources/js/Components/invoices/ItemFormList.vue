@@ -10,8 +10,8 @@ export default defineComponent({
         ItemForm
     },
     methods: {
-        upLiftId(id) {
-            this.$emit("removeSingle", id);
+        upLiftId(data) {
+            this.$emit("removeSingle", data);
         }
     }
 })

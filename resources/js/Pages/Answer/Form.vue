@@ -10,6 +10,8 @@ import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import axios from "axios";
+import { toast } from "vue3-toastify";
 
 export default defineComponent({
     props: ["questions", 'answer', 'message'],
@@ -66,11 +68,22 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route().current() == 'answer.add' ? this.route("answer.store") : this.route('answer.update', this.form.id));
+                // this.form
+                //     .transform((data) => ({
+                //         ...data,
+                //     }))
+                axios.post(route().current() == 'answer.add' ? this.route("answer.store") : this.route('answer.update', this.form.id), this.form)
+                    .then((response) => {
+                        if (response.data.success) {
+                            toast.success(response.data.message)
+                                                    }
+                        else {
+                            toast.warning(response.data.message)
+                        }
+                    }).finally(() => {
+                        // window.location.href('/answer')
+
+                    });
             }
         },
 
@@ -105,22 +118,20 @@ export default defineComponent({
                                     <jet-label for="question" value="Question" />
                                     <Multiselect :options="questions" label="question_key" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        v-model="v$.form.question.$model" track-by="question_key" :searchable="true" :class="
-                                            v$.form.question.$errors.length > 0
+                                        v-model="v$.form.question.$model" track-by="question_key" :searchable="true" :class="v$.form.question.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " />
+                                            " />
                                     <div v-for="(error, index) of v$.form.question.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="answer" value="Answer" />
-                                    <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="
-                                        v$.form.answer.$errors.length > 0
+                                    <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="v$.form.answer.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Answer" />
+                                        " placeholder="Answer" />
                                     <div v-for="(error, index) of v$.form.answer.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -129,11 +140,10 @@ export default defineComponent({
                                     <jet-label for="order_by" value="Order By" />
                                     <Multiselect :options="order_by" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="
-                                            v$.form.order_by.$errors.length > 0
+                                        v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="v$.form.order_by.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " />
+                                            " />
                                     <div v-for="(error, index) of v$.form.order_by.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -150,7 +160,7 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing ) ? 'on' : 'off'">
+                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'answer.edit'">Update</span>
                                         <span v-if="route().current() == 'answer.add'">Save</span>

@@ -15,7 +15,7 @@ export default defineComponent({
     data() {
         return {
             q: "",
-            s:"",
+            s: "",
             tbody: [
                 "Question",
                 "Answer",
@@ -62,7 +62,7 @@ export default defineComponent({
 
                         .catch((error) => {
                             if (error.response.status == 400) {
-                                toastr.error(error.response.data.message);
+                                toast.error(error.response.data.message);
                             }
                         });
                 } else if (result.dismiss === 'cancel') {
@@ -210,9 +210,9 @@ export default defineComponent({
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    answers.id, index
-                                                )
-                                                "
+                                                        answers.id, index
+                                                    )
+                                                    "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>

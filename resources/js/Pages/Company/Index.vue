@@ -49,10 +49,12 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            const first_name = this.companies.data[index].user.first_name;
-            const last_name = this.companies.data[index].user.last_name;
+            console.log(this.companies?.company_name)
+
+            const company_name = this.companies.data[index].company_name;
+
             Swal.fire({
-                title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
+                title: "Are you sure you want to delete " + company_name + "?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -62,11 +64,11 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/employees/" + id + "/delete")
+                        .delete("/company/" + id + "/delete")
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
-                                this.employees.data.splice(index, 1);
+                                this.companies.data.splice(index, 1);
                                 return;
                             }
                         })
@@ -78,7 +80,7 @@ export default defineComponent({
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: first_name + " " + last_name + " was not deleted.",
+                        text: company_name + " was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",

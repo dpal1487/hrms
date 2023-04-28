@@ -15,6 +15,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Dropdown from "../../Jetstream/Dropdown.vue";
 import { toast } from 'vue3-toastify';
+import axios from "axios";
 
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
@@ -82,7 +83,7 @@ export default defineComponent({
     data() {
         // console.log("see this", this.employee?.data?.user?.image?.medium_path)
         return {
-
+            
             message: '',
             isEdit: false,
             form: this.$inertia.form({
@@ -146,13 +147,29 @@ export default defineComponent({
 
             }
         },
-        onFileChange(e) {
+        async onFileChange(e) {
             const file = e.target.files[0];
             // console.log("see file", file.name)
 
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
+
+            const formdata = new FormData();
+            formdata.append("avatar", file)
+
+            const res = await axios.post("/employee/image-upload", formdata, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            })
+
+            if (res.data.success) {
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message);
+            }
+
         },
         removeSelectedAvatar() {
             this.url = null;
@@ -344,8 +361,8 @@ export default defineComponent({
                                 <div class="fv-row col-6">
                                     <jet-label for="department_id" value="Department" />
                                     <Multiselect :options="options" label="name" valueProp="department"
-                                         class="form-control form-control-lg form-control-solid"
-                                        placeholder="Select One" v-model="form.department_id" track-by="name" />
+                                        class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                        v-model="form.department_id" track-by="name" />
 
                                 </div>
 

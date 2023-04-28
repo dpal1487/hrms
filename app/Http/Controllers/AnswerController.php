@@ -82,8 +82,19 @@ class AnswerController extends Controller
             ])
         ) {
             // return response()->json(['success' => true, 'message' => 'Answer created successfully']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Employee Address Updated successfully',
+                'redirect' => '/address',
+            ]);
 
-            return redirect('/answer');
+            // return redirect('/answer');
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something Went Wrong !',
+                'redirect' => '/address',
+            ]);
         }
     }
 

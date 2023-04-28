@@ -12,17 +12,26 @@ class Invoice extends UID
 
     public function company()
     {
-        return $this->hasOne(Company::class, 'id', 'company_id');
+        return $this->hasOne(CompanyInvoice::class, 'company_id', 'company_id');
+    }
+    public function client()
+    {
+        return $this->hasOne(Client::class, 'id', 'client_id');
+    }
+    public function item()
+    {
+        return $this->hasMany(InvoiceItem::class, 'invoice_id', 'id');
     }
 
-    // public static function boot()
-    // {
-    //     parent::boot();
+    public static function boot()
+    {
+        parent::boot();
 
-    //     static::deleting(function ($industry) {
-    //         // before delete() method call this
-    //         $industry->image()->delete();
-    //         // do the rest of the cleanup...
-    //     });
-    // }
+        static::deleting(function ($invoice) {
+            // before delete() method call this
+            $invoice->company()->delete();
+            $invoice->item()->delete();
+            // do the rest of the cleanup...
+        });
+    }
 }

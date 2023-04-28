@@ -15,19 +15,21 @@ class InvoiceResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' =>$this->id,
-            'client_id' =>$this->client_id,
-            'company_id' =>$this->company_id,
-            'gst_status' =>$this->gst_status,
-            'invoice_number' =>$this->invoice_number,
-            'conversion_rate' =>$this->conversion_rate,
-            'invoice_date' =>$this->invoice_date,
-            'invoice_due_date' =>$this->invoice_due_date,
-            'total_amount_usd' =>$this->total_amount_usd,
-            'total_amount_inr' =>$this->total_amount_inr,
-            'notes' =>$this->notes,
-            'status' =>$this->status,
-            'company'=> $this->company,
+            'id' => $this->id,
+            'client_id' => $this->client_id,
+            'company_id' => $this->company_id,
+            'gst_status' => $this->gst_status,
+            'invoice_number' => $this->invoice_number,
+            'conversion_rate' => $this->conversion_rate,
+            'invoice_date' => $this->invoice_date,
+            'invoice_due_date' => $this->invoice_due_date,
+            'total_amount_usd' => $this->total_amount_usd,
+            'total_amount_inr' => $this->total_amount_inr,
+            'notes' => $this->notes,
+            'status' => $this->status,
+            'company' => $this->company,
+            'client' => $this->client,
+            'item' => $this->item,
         ];
     }
 }

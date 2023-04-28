@@ -115,7 +115,7 @@ export default defineComponent({
 <template>
     <app-layout>
 
-        <Head title="Company" />
+        <Head title="Invoice " />
         <div class="card card-flush">
             <div v-if="message">{{ message }}</div>
             <!--begin::Actions-->
@@ -138,11 +138,7 @@ export default defineComponent({
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search ..." />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <!-- {{ $page.props.ziggy.status }} -->
-                        <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                    </div>
+                    <!--  -->
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
@@ -183,7 +179,7 @@ export default defineComponent({
                                 <td>{{ (invoice?.total_amount_inr * 18) / 100 }}</td>
                                 <td>{{ invoice?.invoice_date }}</td>
                                 <td>{{ invoice?.invoice_due_date }}</td>
-                                <td>{{ invoice?.client_id }}</td>
+                                <td>{{ invoice?.client?.name }}</td>
                                 <td>
                                    
                                     <span v-if="(invoice?.status == 0)">New</span>
@@ -243,9 +239,9 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <!-- <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="invoices.meta">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="invoices.meta">
                     <Pagination :links="invoices.meta.links" />
-                </div> -->
+                </div>
             </div>
         </div>
     </app-layout>

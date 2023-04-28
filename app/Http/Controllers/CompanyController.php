@@ -8,7 +8,6 @@ use Inertia\Inertia;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
 
-
 use App\Models\CompanySize;
 use App\Models\Country;
 use App\Models\User;
@@ -103,12 +102,10 @@ class CompanyController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
-     */
+    public function edit($id)
+    {
+        return $id;
+    }
     public function show($id)
     {
         $company = Company::find($id);
@@ -127,7 +124,7 @@ class CompanyController extends Controller
             'company' => new CompanyResource($company),
         ]);
     }
-     public function invoicesShow($id)
+    public function invoicesShow($id)
     {
         // dd($id);
         $company = Company::find($id);
@@ -167,25 +164,6 @@ class CompanyController extends Controller
             'company' => new CompanyResource($company),
         ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Company $company)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Company $company)
     {
         //
@@ -197,8 +175,23 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy($id)
     {
-        //
+        $company = Company::find($id);
+
+        if ($company->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Company Deleted successfully',
+            ]);
+        } else {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Something went wrong !',
+                ],
+                400,
+            );
+        }
     }
 }

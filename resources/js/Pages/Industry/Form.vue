@@ -79,7 +79,7 @@ export default defineComponent({
 
             if (!this.v$.form.$invalid) {
                 this.form.transform((data) => {
-                    
+
                     const formdata = new FormData();
                     formdata.append("id", data.id);
                     formdata.append("name", data.name);
@@ -143,11 +143,10 @@ export default defineComponent({
                                     <div class="fv-row mb-6">
 
                                         <jet-label for="name" value="Name" />
-                                        <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="
-                                            v$.form.name.$errors.length > 0
+                                        <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
-                                        " placeholder="Industry name" />
+                                            " placeholder="Industry name" />
                                         <div v-for="(error, index) of v$.form.name.$errors" :key="index">
                                             <input-error :message="error.$message" />
                                         </div>
@@ -157,11 +156,10 @@ export default defineComponent({
                                         <!-- {{ this.industry?.data?.status }} -->
                                         <Multiselect :options="status" label="name" valueProp="id"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                            v-model="v$.form.status.$model" track-by="name" :class="
-                                                v$.form.status.$errors.length > 0
+                                            v-model="v$.form.status.$model" track-by="name" :class="v$.form.status.$errors.length > 0
                                                     ? 'is-invalid'
                                                     : ''
-                                            " />
+                                                " />
                                         <div v-for="(error, index) of v$.form.name.$errors" :key="index">
                                             <input-error :message="error.$message" />
                                         </div>
