@@ -19,7 +19,17 @@ class AddressController extends Controller
 {
     public function store(Request $request)
     {
-        // dd($request->id);
+        // $address = CompanyAddress::with('address')->where('company_id' , $request->company_id)->get();
+        
+        //     if ($address->isprimary == 1) {
+        //         echo "primary";
+        //     }
+        //     else {
+        //         echo "sdasd";
+        //     }
+
+        // dd($address);
+        
         $request->validate([
             'address_line_1' => 'required',
             'address_line_2' => 'required',
@@ -54,13 +64,13 @@ class AddressController extends Controller
             if ($employeeAddress) {
                 return response()->json(['success' => true, 'message' => 'Company Address Added successfully']);
             } else {
-                return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
+                return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
             }
         }
         if ($address) {
             return response()->json(['success' => true, 'message' => 'Company Address Updates successfully']);
         } else {
-            return response()->json(['success' => true, 'message' => 'Something Went Wrong !']);
+            return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
         }
     }
 
@@ -76,16 +86,15 @@ class AddressController extends Controller
             'pincode' => 'required',
         ]);
         if ($request->address_id) {
-             $address = Address::where('id', $request->id)->update([
-            'address_line_1' => $request->address_line_1,
-            'address_line_2' => $request->address_line_2,
-            'city' => $request->city,
-            'state' => $request->state,
-            'country_id' => $request->country,
-            'pincode' => $request->pincode,
-        ]);
-        }
-        else {
+            $address = Address::where('id', $request->id)->update([
+                'address_line_1' => $request->address_line_1,
+                'address_line_2' => $request->address_line_2,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country_id' => $request->country,
+                'pincode' => $request->pincode,
+            ]);
+        } else {
             $address = Address::create([
                 'address_line_1' => $request->address_line_1,
                 'address_line_2' => $request->address_line_2,
@@ -99,16 +108,16 @@ class AddressController extends Controller
                 'address_id' => $address->id,
             ]);
             if ($employeeAddress) {
-                 return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address Updated successfully');
+                return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address Updated successfully');
             } else {
-                 return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on update');
+                return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on update');
             }
         }
 
         if ($address) {
-             return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address created successfully');
+            return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address created successfully');
         } else {
-             return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on create');
+            return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on create');
         }
     }
     public function addressShow($id)

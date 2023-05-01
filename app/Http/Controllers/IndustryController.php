@@ -12,11 +12,7 @@ use Illuminate\Http\Request;
 
 class IndustryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index(Request $request)
     {
         $industries = new Industry();
@@ -32,22 +28,11 @@ class IndustryController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return Inertia::render('Industry/Form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -56,71 +41,24 @@ class IndustryController extends Controller
             'status' => 'required',
         ]);
 
-        $image = $request->file('image');
-
-        if ($image) {
-            $extension = $request->image->extension();
-            $file_path = 'assets/images/industry/';
-            $name = time() . '_' . $request->image->getClientOriginalName();
-
-            $result = Image::make($image)->save($file_path . 'original/' . $name);
-            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
-            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
-
-            $smallThumbnailFolder = 'assets/images/industry/thumbnail/small/';
-            $mediumThumbnailFolder = 'assets/images/industry/thumbnail/medium/';
-
-            // $result = $result->save($file_path.'original/'.$name);
-
-            $result->resize(200, 200);
-            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
-
-            $result->resize(100, 100);
-            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
-
-            $Imagefile = DBImage::create([
-                'name' => $name,
-                'original_path' => url($file_path),
-                'small_path' => url($file_path . $name),
-                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
-                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
-            ]);
-
-            // dd($Imagefile);
-        }
-
         if (
             $industry = Industry::create([
                 'name' => $request->name,
-                'image_id' => $Imagefile->id,
+                'image_id' => $request->image_id,
                 'status' => $request->status,
             ])
         ) {
-            // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
             return redirect()
                 ->route('industries.index')
                 ->with('message', 'Industries created Successfully');
-            // return redirect('/industries');
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Industry  $industry
-     * @return \Illuminate\Http\Response
-     */
     public function show(Industry $industry)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Industry  $industry
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Industry $industry, $id)
     {
         $industry = Industry::find($id);
@@ -132,13 +70,7 @@ class IndustryController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Industry  $industry
-     * @return \Illuminate\Http\Response
-     */
+  
     public function update(Request $request, Industry $industry, $id)
     {
         $request->validate([
@@ -146,48 +78,12 @@ class IndustryController extends Controller
             'image' => 'required',
             'status' => 'required',
         ]);
-
         $industry = Industry::find($id);
-
         $industry = new IndustryResource($industry);
-
-        $image = $request->file('image');
-
-        if ($image) {
-            $extension = $request->image->extension();
-            $file_path = 'assets/images/industry/';
-            $name = time() . '_' . $request->image->getClientOriginalName();
-
-            $result = Image::make($image)->save($file_path . 'original/' . $name);
-            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
-            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
-
-            $smallThumbnailFolder = 'assets/images/industry/thumbnail/small/';
-            $mediumThumbnailFolder = 'assets/images/industry/thumbnail/medium/';
-
-            // $result = $result->save($file_path.'original/'.$name);
-
-            $result->resize(200, 200);
-            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
-
-            $result->resize(100, 100);
-            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
-
-            $Imagefile = DBImage::create([
-                'name' => $name,
-                'original_path' => url($file_path),
-                'small_path' => url($file_path . $name),
-                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
-                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
-            ]);
-
-            // dd($Imagefile);
-        }
-
-        if ($image) {
+        if ($request->image_id) {
             $industry = Industry::where(['id' => $industry->id])->update([
                 'name' => $request->name,
-                'image_id' => $Imagefile->id,
+                'image_id' => $request->image_id,
                 'status' => $request->status,
             ]);
         } else {
@@ -196,9 +92,6 @@ class IndustryController extends Controller
                 'status' => $request->status,
             ]);
         }
-
-        // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
-
         return redirect()
             ->route('industries.index')
             ->with('message', 'Industries updated Successfully');

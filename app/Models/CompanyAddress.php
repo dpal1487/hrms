@@ -15,7 +15,7 @@ class CompanyAddress extends Model
         return $this->hasOne(Address::class, 'id', 'address_id');
     }
 
-     public static function boot()
+    public static function boot()
     {
         parent::boot();
 

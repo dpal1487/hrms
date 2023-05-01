@@ -27,4 +27,8 @@ class Company extends UID
     {
         return $this->hasMany(CompanyAddress::class , 'company_id' , 'id');
     }
+    public function company_account()
+    {
+        return $this->hasMany(CompanyAccount::class , 'company_id' , 'id');
+    }
 }

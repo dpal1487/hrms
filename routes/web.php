@@ -14,6 +14,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\AccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +42,13 @@ Route::get('login/{provider}/callback', [SocialLoginController::class, 'handleCa
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    Route::post('/upload', [ImageController::class, 'uploadImage'])->name('upload');
+    // Route::post('/upload', [ImageController::class, 'uploadImage'])->name('upload');
+
+    Route::controller(ImageController::class)->group(function () {
+        Route::get('images', 'show')->name('images');
+        Route::post('/employee/image-upload', 'empImage')->name('employee.image-upload');
+        Route::post('/industries/image-upload', 'indImage')->name('industries.image-upload');
+    });
 
     Route::controller(EmployeeController::class)->group(function () {
         Route::group(['prefix' => 'employees'], function () {
@@ -121,17 +128,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/', 'index')->name('company.index');
             Route::get('/add', 'create')->name('company.add');
             Route::post('/store', 'store')->name('company.store');
-             Route::get('{id}/edit', 'edit')->name('company.edit');
+            Route::get('{id}/edit', 'edit')->name('company.edit');
             Route::post('{id}/update', 'update')->name('company.update');
             Route::get('{id}', 'show')->name('company.view');
             Route::get('{id}/overview', 'show')->name('company.overview');
 
-            Route::get('{id}/account', 'accountShow')->name('company.account');
+            // Route::get('{id}/account', 'accountShow')->name('company.account');
             Route::get('{id}/emails', 'emialsShow')->name('company.emails');
             Route::get('{id}/invoices', 'invoicesShow')->name('company.invoices');
             Route::get('{id}/projects', 'projectsShow')->name('company.projects');
             Route::get('{id}/suppliers', 'suppliersShow')->name('company.suppliers');
-           
+
             Route::delete('{id}/delete', 'destroy')->name('company.delete');
         });
     });
@@ -144,6 +151,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
         Route::get('invoices/{id}/client-address', 'clientAddress')->name('invoices.client-address');
     });
+
+    Route::controller(AccountController::class)->group(function () {
+        Route::group(['prefix' => 'company'], function () {
+            Route::get('{id}/account', 'index')->name('company.account');
+            Route::post('/account/store', 'store')->name('company.account.store');
+            Route::delete('{id}/account/delete', 'destroy')->name('company.account.delete');
+        });
+    });
+
     Route::controller(InvoiceController::class)->group(function () {
         Route::group(['prefix' => 'invoices'], function () {
             Route::get('/', 'index')->name('invoices.index');

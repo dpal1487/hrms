@@ -5,10 +5,13 @@ import CompanyLayout from "@/Layouts/CompanyLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 import AddressComponent from "../../Components/Company/Address/AddressComponent.vue";
-import AddAddress from "../../Components/Company/Address/Model/AddAddress.vue";
+
+import FormAddress from "../../Components/Company/Address/Model/formAddress.vue";
+
 
 export default defineComponent({
-    props: ['company', 'countries'],
+    props: ['company', 'countries', 'onOnhide'],
+    emits: [ 'hidemodal'],
     setup() {
         return {
             v$: useVuelidate(),
@@ -26,8 +29,7 @@ export default defineComponent({
         Link,
         Head,
         AddressComponent,
-        AddAddress,
-
+        FormAddress
     },
     methods: {
         toggleModal(value) {
@@ -59,10 +61,11 @@ export default defineComponent({
                 </div>
                 <!--end::Card header-->
                 <!--begin::Card body-->
-                <AddAddress :show="isEdit" @hidemodal="toggleModal" :countries="countries" :company="company" />
+                <FormAddress :show="isEdit" @hidemodal="toggleModal" :countries="countries" :company="company" />
                 <div class="card-body">
                     <!--begin::Addresses-->
                     <div class="row gx-9 gy-6">
+                        <!-- {{ company.data.company_addresss }} -->
                         <!--begin::Col-->
                         <AddressComponent :countries="countries" :company="company" />
                         <!--end::Col-->

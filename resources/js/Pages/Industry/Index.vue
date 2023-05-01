@@ -164,11 +164,16 @@ export default defineComponent({
                             <tr v-for="(industries, index) in industries.data" :key="index">
 
                                 <td>{{ industries.name }}</td>
-                                <td>
+                                <td v-if="industries.image?.medium_path">
                                     <div class="symbol symbol-50px me-5">
                                         <img alt="Logo" :src="industries.image?.medium_path">
                                     </div>
                                 </td>
+                                <td v-else>
+                                        <div class="symbol symbol-50px me-5">
+                                            <img alt="Logo" src="/assets/images/comingsoon.png">
+                                        </div>
+                                    </td>
                                 <td>
                                     <p v-if="(industries.status == 1)">Active </p>
                                     <p v-if="(industries.status == 0)">Inactive </p>

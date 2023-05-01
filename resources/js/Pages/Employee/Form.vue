@@ -83,12 +83,13 @@ export default defineComponent({
     data() {
         // console.log("see this", this.employee?.data?.user?.image?.medium_path)
         return {
-            
+
             message: '',
             isEdit: false,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
                 image: this.employee?.data?.user?.image?.medium_path || '',
+                image_id: '',
                 first_name: this.employee?.data?.user?.first_name || '',
                 last_name: this.employee?.data?.user?.last_name || '',
                 email: this.employee?.data?.user?.email || '',
@@ -156,19 +157,23 @@ export default defineComponent({
             this.url = URL.createObjectURL(file);
 
             const formdata = new FormData();
-            formdata.append("avatar", file)
+            formdata.append("image", file)
 
-            const res = await axios.post("/employee/image-upload", formdata, {
+            const response = await axios.post("/employee/image-upload", formdata, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 }
+            }).then((response) => {
+                if (response.data.success) {
+                    toast.success(response.data.message);
+                    this.form.image_id = response.data.data.id;
+                } else {
+                    toast.error(response.data.message);
+                }
+
             })
 
-            if (res.data.success) {
-                toast.success(res.data.message);
-            } else {
-                toast.error(res.data.message);
-            }
+
 
         },
         removeSelectedAvatar() {
@@ -204,6 +209,7 @@ export default defineComponent({
                         <div class="card-body">
                             <div class="row g-5 col-md-12">
                                 <div class="fv-row col-6">
+                                    <input type="hidden" v-model="form.image_id" />
                                     <ImageInput :image="this.employee?.data?.image?.medium_path" :onchange="onFileChange"
                                         :remove="removeSelectedAvatar" :selectedImage="url"
                                         :errors="v$.form.image.$errors" />

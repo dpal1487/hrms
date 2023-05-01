@@ -13,6 +13,7 @@ import ImageInput from '@/Components/ImageInput.vue';
 import { required, email, url, numeric, integer } from "@vuelidate/validators";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import { toast } from "vue3-toastify";
 
 
 // Vue.use(Datetime);
@@ -47,6 +48,8 @@ export default defineComponent({
                 name: this.industry?.data?.name || '',
                 image: this.industry?.data?.image?.name || '',
                 status: this.industry?.data?.status || '',
+                image_id: '',
+
             }),
             url: null,
             value: null,
@@ -68,7 +71,8 @@ export default defineComponent({
         InputError,
         JetValidationErrors,
         VueDatePicker,
-        ImageInput
+        ImageInput,
+        toast
     },
     methods: {
         submit() {
@@ -85,16 +89,33 @@ export default defineComponent({
                     formdata.append("name", data.name);
                     formdata.append("image", data.image);
                     formdata.append("status", data.status);
+                    formdata.append("image_id", data.image_id);
                     return formdata;
                 })
                     .post(route().current() == 'industries.add' ? this.route("industries.store") : this.route('industries.update', this.form.id), config);
             }
         },
-        onFileChange(e) {
+       async onFileChange(e) {
             const file = e.target.files[0];
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
+             const formdata = new FormData();
+            formdata.append("image", file)
+
+            const response = await axios.post("/industries/image-upload", formdata, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            }).then((response) => {
+                if (response.data.success) {
+                    toast.success(response.data.message);
+                    this.form.image_id = response.data.data.id;
+                } else {
+                    toast.error(response.data.message);
+                }
+
+            })
         },
         removeSelectedAvatar() {
             console.log("I am working...")
@@ -131,6 +152,8 @@ export default defineComponent({
                             <div class="col-4">
                                 <div class="card p-6">
                                     <div class="fv-row">
+                                    <input type="hidden" v-model="form.image_id" />
+
                                         <ImageInput :image="this.industry?.data?.image?.medium_path"
                                             :onchange="onFileChange" :remove="removeSelectedAvatar" :selectedImage="url"
                                             :errors="v$.form.image.$errors" />

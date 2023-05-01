@@ -7,7 +7,8 @@ import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 import axios from "axios";
 export default defineComponent({
-    props: ['countries', 'company'],
+    props: ['countries', 'company', 'onOnhide'],
+
     data() {
         return {
             isEdit: false,
@@ -72,10 +73,10 @@ export default defineComponent({
 })
 </script>
 <template>
-    <formAddress v-if="isEdit" :show="isEdit" @hidemodal="toggleModal" :countries="countries" :address="address" />
+    <formAddress v-if="isEdit" :show="isEdit" @hidemodal="toggleModal" :countries="countries" :address="address"
+        :company="company" />
     <div class="col-xl-6" v-for="(address, index) in company.data.company_addresss" :key="index">
         <!--begin::Address-->
-        <!-- {{ company.data.company_addresss }} -->
         <div class="card card-dashed h-xl-100 flex-row flex-stack flex-wrap p-6">
             <div class="d-flex flex-column py-2">
                 <!-- {{ company }} -->

@@ -63,46 +63,11 @@ class EmployeeController extends Controller
             'department_id' => 'required',
         ]);
 
-        $image = $request->file('image');
-
-        // dd($image);
-
-        if ($image) {
-            $extension = $request->image->extension();
-            $file_path = 'assets/images/users/';
-            $name = time() . '_' . $request->image->getClientOriginalName();
-
-            $result = Image::make($image)->save($file_path . 'original/' . $name);
-            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
-            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
-
-            $smallThumbnailFolder = 'assets/images/users/thumbnail/small/';
-            $mediumThumbnailFolder = 'assets/images/users/thumbnail/medium/';
-
-            // $result = $result->save($file_path.'original/'.$name);
-
-            $result->resize(200, 200);
-            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
-
-            $result->resize(100, 100);
-            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
-
-            $Imagefile = DBImage::create([
-                'name' => $name,
-                'original_path' => url($file_path),
-                'small_path' => url($file_path . $name),
-                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
-                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
-            ]);
-
-            // dd($Imagefile);
-        }
-
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
-            'image_id' => $Imagefile->id,
+            'image_id' => $request->image_id,
             'avatar' => $image,
         ]);
 
@@ -147,8 +112,6 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        // return route('employees.add');
-        // dd($request->requsetingFrom);
         $image = $request->file('image');
 
         $request->validate([
@@ -175,44 +138,12 @@ class EmployeeController extends Controller
 
         $user = User::where(['id' => $employee->user->id])->get();
 
-        $image = $request->file('image');
-
-        if ($image) {
-            $extension = $request->image->extension();
-            $file_path = 'assets/images/users/';
-            $name = time() . '_' . $request->image->getClientOriginalName();
-
-            $result = Image::make($image)->save($file_path . 'original/' . $name);
-            $smallthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_small_' . '.' . $extension;
-            $mediumthumbnail = date('mdYHis') . '-' . uniqid() . '.' . '_medium_' . '.' . $extension;
-
-            $smallThumbnailFolder = 'assets/images/users/thumbnail/small/';
-            $mediumThumbnailFolder = 'assets/images/users/thumbnail/medium/';
-
-            // $result = $result->save($file_path.'original/'.$name);
-
-            $result->resize(200, 200);
-            $result = $result->save($file_path . '/thumbnail/small/' . $smallthumbnail);
-
-            $result->resize(100, 100);
-            $result = $result->save($file_path . '/thumbnail/medium/' . $mediumthumbnail);
-
-            $Imagefile = DBImage::create([
-                'name' => $name,
-                'original_path' => url($file_path),
-                'small_path' => url($file_path . $name),
-                'medium_path' => url($smallThumbnailFolder . $smallthumbnail),
-                'large_path' => url($mediumThumbnailFolder . $mediumthumbnail),
-            ]);
-            // dd($Imagefile);
-        }
-
-        if ($image) {
+        if ($request->image_id) {
             $user = User::where(['id' => $employee->user->id])->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
-                'image_id' => $Imagefile->id,
+                'image_id' => $request->image_id,
                 'avatar' => $image,
             ]);
         } else {
@@ -225,7 +156,6 @@ class EmployeeController extends Controller
 
         if (
             $employee = Employee::where(['id' => $employee->id])->update([
-                'code' => 'ABC123',
                 'date_of_joining' => $request->date_of_joining,
                 'number' => $request->number,
                 'qualification' => $request->qualification,
@@ -254,7 +184,7 @@ class EmployeeController extends Controller
         // dd($request);
         if ($request->ajax()) {
             if ($request->confirm_password == null) {
-                 return response()->json(['success' => false, 'message' => "Please Insert password"]);
+                return response()->json(['success' => false, 'message' => 'Please Insert password']);
             }
             if (Hash::check($request->confirm_password, Auth::user()->password)) {
                 $userEmail = User::where('id', $id)->update([

@@ -13,10 +13,12 @@ import Modal from '../../../Modal.vue';
 import { toast } from 'vue3-toastify';
 import axios from 'axios';
 
-
 export default defineComponent({
 
-    props: ['show', 'countries', 'address'],
+    props: ['show', 'countries', 'company', 'address', 'onOnhide'],
+    emits: ['hidemodal'],
+
+
     setup() {
         return {
             v$: useVuelidate(),
@@ -54,13 +56,14 @@ export default defineComponent({
             requesting: false,
 
             form: this.$inertia.form({
-                id: this.address.id || '',
-                address_line_1: this.address.address_line_1,
-                address_line_2: this.address.address_line_2,
-                city: this.address.city,
-                state: this.address.state,
-                country: this.address.country.id,
-                pincode: this.address.pincode,
+                id: this.address?.id || '',
+                company_id: this.company?.data?.id || '',
+                address_line_1: this.address?.address_line_1 || '',
+                address_line_2: this.address?.address_line_2 || '',
+                city: this.address?.city || '',
+                state: this.address?.state || '',
+                country: this.address?.country.id || '',
+                pincode: this.address?.pincode || '',
             }),
         };
     },
@@ -102,12 +105,10 @@ export default defineComponent({
 </script>
 
 <template>
-
     <Modal :show="show" title="Company Address" @onhide="$emit('hidemodal', false)">
-    <!-- <Modal :show="show" title="Edit Address" @onhide="$emit('hidemodal', false)"> -->
+        <!-- <Modal :show="show" title="Edit Address" @onhide="$emit('hidemodal', false)"> -->
         <JetValidationErrors />
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-            <!-- {{ form }} -->
             <!--begin::Modal body-->
             <!-- <input type="text" v-model="addressId"> -->
             <div class="me-n7 pe-7 mh-lg-400px" style="overflow-y: auto;">
@@ -180,7 +181,7 @@ export default defineComponent({
             <div class="d-flex flex-end mt-5">
                 <button type="reset" @click="$emit('hidemodal', false)" class="btn btn-light me-3">Discard</button>
                 <button type="submit" class="btn btn-primary" :data-kt-indicator="requesting ? 'on' : 'off'">
-                    <span class="indicator-label">Update</span>
+                    <span class="indicator-label">Save</span>
                     <span class="indicator-progress">Please wait...
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                 </button>
