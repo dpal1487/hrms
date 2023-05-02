@@ -131,11 +131,10 @@ export default defineComponent({
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search ..." />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <!-- {{ $page.props.ziggy.status }} -->
+                    <!-- <div class="w-100 mw-200px">
                         <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
                             class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                    </div>
+                    </div> -->
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>

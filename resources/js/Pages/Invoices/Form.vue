@@ -14,21 +14,21 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import ItemFormList from "../../Components/invoices/ItemFormList.vue";
 import { toast } from 'vue3-toastify';
-import AppendItem from "../../Components/invoices/AppendItem.vue";
 import axios from 'axios';
 
 export default defineComponent({
-    props: ['invoice', 'companies', 'clients'],
+    props: ['invoice', 'companies', 'clients', 'address'],
     setup() {
         return { v$: useVuelidate() };
     },
     validations() {
         return {
             form: {
-                client: {
+                company:
+                {
                     required,
                 },
-                gst_status: {
+                client: {
                     required,
                 },
                 invoice_number: {
@@ -40,24 +40,17 @@ export default defineComponent({
                 invoice_date: {
                     required,
                 },
-                invoice_due_date: {
-                    required,
-                },
-                // total_amount_usd: {
-                //     required,
-                // },
-                // total_amount_inr: {
-                //     required, integer
-
-                // },
                 notes: {
                     required,
                 },
                 status: {
                     required,
                 },
-                currnecy:
+                currency:
                 {
+                    required,
+                },
+                paymentTerm: {
                     required,
                 }
             },
@@ -65,51 +58,43 @@ export default defineComponent({
     },
     data() {
         return {
-            items: [{ id: 0 }],
             message: '',
             i: null,
             isEdit: false,
             clientAddress: {},
-            items: this.invoice?.data?.item,
+            companyAddress: [],
+            items: 1,
+            rowCount: 1,
+            total: 0,
 
-            form: this.$inertia.form({
+            form: {
                 id: this.invoice?.data?.id || '',
                 client: this.invoice?.data?.client?.id || '',
                 company: '',
-                gst_status: this.invoice?.data.gst_status || '',
                 invoice_number: this.invoice?.data?.invoice_number || '20202023',
                 invoice_date: this.invoice?.data.invoice_date || '',
                 invoice_due_date: this.invoice?.data?.invoice_due_date || '',
                 conversion_rate: this.invoice?.data?.conversion_rate || '',
                 total_amount_usd: '',
-                total_amount_inr: '',
+                total_amount: 0,
                 notes: this.invoice?.data?.notes || '',
                 status: this.invoice?.data?.status || '',
-                currnecy: '',
+                taxcharge: 18,
+                currency: '',
+                paymentTerm: 0,
                 items: [{
                     name: '',
+                    description: '',
                     cpi: '',
-                    quantity: 5,
-                    price: '',
+                    quantity: '',
                 }],
-                name: [],
-                cpi: [],
-                quantity: [],
-                price: [],
-            }),
-            url: null,
-            value: null,
+            },
             status: [
                 { name: 'New', id: '0' },
                 { name: 'Paid', id: '1' },
                 { name: 'Cancelled', id: '2' },
             ],
-            gst_status: [
-                { name: 'New', id: '0' },
-                { name: 'Paid', id: '1' },
-                { name: 'Cancelled', id: '2' },
-            ],
-            currnecy: [
+            currency: [
                 { name: 'USD - USA dollar', value: 'USD' },
                 { name: 'GBP - British pound', value: 'GBP' },
                 { name: 'AUD - Australian dollar', value: 'AUD' },
@@ -117,6 +102,16 @@ export default defineComponent({
                 { name: 'SEK - Swedish krona', value: 'SEK' },
                 { name: 'CAD - Canadian dollar', value: 'CAD' },
                 { name: 'CHF - Swiss franc', value: 'CHF' },
+            ],
+            paymentTerm: [
+                { name: 'Due On The Specified Date', value: '0' },
+                { name: 'Net 7', value: '7' },
+                { name: 'Net 10', value: '10' },
+                { name: 'Net 15', value: '15' },
+                { name: 'Net 30', value: '30' },
+                { name: 'Net 45', value: '45' },
+                { name: 'Net 60', value: '60' },
+                { name: 'Net 90', value: '90' },
             ]
         };
     },
@@ -132,47 +127,54 @@ export default defineComponent({
         JetValidationErrors,
         VueDatePicker,
         ItemFormList,
-        AppendItem
+    },
+    inputFormat: {
+        type: String,
+        required: false,
+        default: 'yyyy-MM-dd',
     },
     methods: {
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route().current() == 'invoices.add' ? this.route("invoices.store") : this.route('invoices.update', this.form.id));
+                // this.form
+                //     .transform((data) => ({
+                //         ...data,
+                //     }))
+                axios.post(route().current() == 'invoices.add' ? this.route("invoices.store") : this.route('invoices.update', this.form.id), this.form);
             }
         },
-        appendItemForm(rowCount) {
-            let prevId = this.items[this.items.length - 1].id;
-            let newItems = [];
-
-            if (rowCount > 0) {
-                for (let i = 1; i <= rowCount; i++) {
-                    newItems.push({ id: prevId + i })
-                }
+        addItemForm(rowCount) {
+            for (var i = 0; i < rowCount; i++) {
+                this.form.items.push({
+                    name: '',
+                    cpi: '',
+                    quantity: '',
+                    price: ''
+                });
             }
-            this.items = [...this.items, ...newItems];
         },
-        removeItemForm(data) {
-            const { id, index } = data;
-            if (this.items.length > 1) this.items = this.items.filter(i => i.id !== id);
-            if (index > -1 && index < this.form.name.length) this.form.name.splice(index, 1);
-            if (index > -1 && index < this.form.cpi.length) this.form.cpi.splice(index, 1);
-            if (index > -1 && index < this.form.quantity.length) this.form.quantity.splice(index, 1);
-            if (index > -1 && index < this.form.price.length) this.form.price.splice(index, 1);
-            return;
+        removeItemForm(index) {
+            if (this.form.items.length > 0) {
+                this.form.items.splice(index, 1)
+            }
         },
         async getClientDetails(c_id) {
-
             await axios
                 .get(c_id + '/client-address/')
                 .then((response) => {
                     if (response.data.success = true) {
                         this.clientAddress = response?.data?.data?.client_address || {}
-                        // console.log("this is ", this.clientAddress)
+                        return;
+                    }
+                })
+        },
+        async getCompanyDetails(id) {
+            await axios
+                .get(id + '/company-address/')
+                .then((response) => {
+                    if (response.data.success = true) {
+                        this.companyAddress = response?.data?.data?.company_addresss || {}
                         return;
                     }
                 })
@@ -183,10 +185,26 @@ export default defineComponent({
             this.isEdit = true;
         }
 
+    },
+    watch: {
+        form: {
+            deep: true,
+
+            // We have to move our method to a handler field
+            handler() {
+                let total = 0;
+                for (var i = 0; i < this.form.items.length; i++) {
+                    total += parseInt(this.form.items[i].cpi) * parseInt(this.form.items[i].quantity);
+                }
+                this.form.total = total;
+                this.form.total_amount = total * this.form.conversion_rate;
+                this.form.gstAmount = parseFloat(this.form.total_amount / 100 * this.form.taxcharge).toFixed(2);
+                this.form.afterGST = Number(this.form.total_amount) + Number(this.form.gstAmount);
+                // this.form.beforGST = (parseFloat(total - this.form.gstAmount)).toFixed(2);
+            }
+        }
     }
 });
-
-
 
 </script>
 
@@ -197,8 +215,6 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <JetValidationErrors />
-                <!-- {{ invoice }} -->
-
                 <!--begin::Layout-->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-lg-row">
                     <!--begin::Content-->
@@ -212,37 +228,25 @@ export default defineComponent({
                                     <!--begin::Wrapper-->
                                     <div class="d-flex flex-column align-items-start flex-xxl-row">
                                         <!--begin::Input group-->
-                                        <div class="d-flex align-items-center flex-equal fw-row me-4 order-2"
+                                        <div class="d-flex align-items-center flex-equal fw-row me-4 order-2 gap-4"
                                             data-bs-toggle="tooltip" data-bs-trigger="hover" title="Specify invoice date">
                                             <!--begin::Date-->
-                                            <div class="fs-6 fw-bold text-gray-700 text-nowrap">Date:</div>
+                                            <div class="fs-6 fw-bold text-gray-700 text-nowrap">Issue Date:</div>
                                             <!--end::Date-->
                                             <!--begin::Input-->
-                                            <div class="position-relative d-flex align-items-center w-150px">
+                                            <div class="position-relative d-flex align-items-center w-150px ">
                                                 <!--begin::Datepicker-->
                                                 <VueDatePicker v-model="v$.form.invoice_date.$model"
                                                     :enable-time-picker="false" auto-apply
-                                                    input-class-name="form-control form-control-transparent fw-bold pe-5"
-                                                    :class="v$.form.invoice_date.$errors.length > 0
+                                                    input-class-name="form-control form-control-solid fw-bold pe-5" :class="v$.form.invoice_date.$errors.length > 0
                                                             ? 'is-invalid'
                                                             : ''
                                                         " placeholder="Select date">
                                                 </VueDatePicker>
-
                                                 <!--end::Datepicker-->
                                                 <!--begin::Icon-->
-                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                                                <span class="svg-icon svg-icon-2 position-absolute ms-4 end-0">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
-                                                            fill="currentColor" />
-                                                    </svg>
-                                                </span>
-                                                <!--end::Svg Icon-->
-                                                <!--end::Icon-->
 
+                                                <!--end::Icon-->
                                             </div>
                                             <div v-for="(error, index) of v$.form.invoice_date.$errors" :key="index">
                                                 <input-error :message="error.$message" />
@@ -254,8 +258,6 @@ export default defineComponent({
                                         <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4"
                                             data-bs-toggle="tooltip" data-bs-trigger="hover" title="Enter invoice number">
                                             <span class="fs-2x fw-bold text-gray-800">Invoice #</span>
-
-
                                             <input type="text"
                                                 class="form-control form-control-flush fw-bold text-muted fs-3 w-125px"
                                                 v-model="v$.form.invoice_number.$model" :class="v$.form.invoice_number.$errors.length > 0
@@ -267,40 +269,43 @@ export default defineComponent({
                                             </div>
                                         </div>
                                         <!--end::Input group-->
+
+
                                         <!--begin::Input group-->
-                                        <div class="d-flex align-items-center justify-content-end flex-equal order-3 fw-row"
-                                            data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                        <div class="order-3 fw-row" data-bs-toggle="tooltip" data-bs-trigger="hover"
                                             title="Specify invoice due date">
-                                            <!--begin::Date-->
-                                            <div class="fs-6 fw-bold text-gray-700 text-nowrap">Due Date:</div>
-                                            <!--end::Date-->
-                                            <!--begin::Input-->
-                                            <div class="position-relative d-flex align-items-center w-150px">
-                                                <!--begin::Datepicker-->
-                                                <VueDatePicker v-model="v$.form.invoice_due_date.$model"
-                                                    :enable-time-picker="false" auto-apply
-                                                    input-class-name="form-control form-control-transparent fw-bold pe-5"
-                                                    :class="v$.form.invoice_due_date.$errors.length > 0
+
+                                            <!-- selecte time period -->
+                                            <div class="d-flex align-items-center gap-3 mb-3">
+                                                <div class="fs-6 fw-bold text-gray-700 text-nowrap ">Due Date :</div>
+
+                                                <Multiselect :options="paymentTerm" label="name" valueProp="value"
+                                                    class="form-control form-control-lg form-control-solid h-35px"
+                                                    :searchable="true" v-model="v$.form.paymentTerm.$model" :class="v$.form.paymentTerm.$errors.length > 0
                                                             ? 'is-invalid'
                                                             : ''
-                                                        " placeholder="Select Date"></VueDatePicker>
-                                                <!--end::Datepicker-->
-                                                <!--begin::Icon-->
-                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                                                <span class="svg-icon svg-icon-2 position-absolute end-0 ms-4">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
-                                                            fill="currentColor" />
-                                                    </svg>
-                                                </span>
-                                                <!--end::Svg Icon-->
-                                                <!--end::Icon-->
+                                                        " track-by="name" placeholder="Select One" />
                                             </div>
-                                            <!--end::Input-->
-                                            <div v-for="(error, index) of v$.form.invoice_due_date.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+
+                                            <!-- due date -->
+                                            <div class="d-flex align-items-center justify-content-end flex-equal gap-4">
+                                                <div class="fs-6 fw-bold text-gray-700 text-nowrap">Due Date:</div>
+                                                <div>
+                                                    <!-- {{ this.form.invoice_due_date }} -->
+                                                    {{ (this.form.invoice_date) }}
+
+                                                    <!-- {{ $date = this.form.invoice_date
+                                                    date_add($date, date_interval_create_from_date_string("4 days"));
+                                                        echo date_format($date, "Y-m-d"); }} -->
+                                                    <input type="text" class="form-control form-control-transparent">
+
+                                                    <!-- <VueDatePicker v-model="v$.form.invoice_due_date.$model"
+                                                        :enable-time-picker="false" auto-apply
+                                                        input-class-name="form-control form-control-solid fw-bold pe-5"
+                                                        placeholder="Select Date"></VueDatePicker> -->
+                                                </div>
+                                                <!--end::Input-->
+
                                             </div>
                                         </div>
                                         <!--end::Input group-->
@@ -311,31 +316,45 @@ export default defineComponent({
                                     <!--end::Separator-->
                                     <!--begin::Wrapper-->
                                     <div class="mb-0">
+                                        <!-- {{ companies }} -->
                                         <!--begin::Row-->
                                         <div class="d-flex flex-wrap gap-6 justify-content-between">
                                             <!--begin::Col-->
                                             <div class="min-w-350px">
-                                                <label class="form-label fs-5 fw-bold text-gray-700">Bill From</label>
-                                                <!--begin::Input group-->
-                                                <div class="d-flex mt-6 flex-column gap-2 text-gray-600">
-                                                    <span>RZ - 121 Prajapati Colony Uttam Nagar</span>
-                                                    <span>A R Solution</span>
-                                                    <span>Delhi,India 110059</span>
-                                                    <span>GSTIN : 07CAYPR9267G1ZN</span>
-                                                    <span>+91-7503876258</span>
+                                                <div class="form-label fs-5 fw-bold text-gray-700">Billiing Address</div>
+                                                <div class="mb-1">
+                                                    <!--begin::Select-->
+                                                    <Multiselect :options="companies" label="company_name" valueProp="id"
+                                                        class="form-control form-control-lg form-control-solid"
+                                                        :searchable="true" v-model="v$.form.company.$model" :class="v$.form.company.$errors.length > 0
+                                                                ? 'is-invalid'
+                                                                : ''
+                                                            " track-by="name" placeholder="Select One"
+                                                        @change="getCompanyDetails" />
+                                                    <!--end::Select-->
+                                                </div>
+                                                <div v-for="(error, index) of v$.form.company.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
                                                 </div>
                                                 <!--end::Input group-->
+
+                                                <div class="d-flex mt-6 flex-column gap-2 text-gray-600 fs-5">
+                                                    <span> {{ this.companyAddress[0]?.['address_line_1'] }} </span>
+                                                    <span> {{ this.companyAddress[0]?.['address_line_2'] }}</span>
+                                                    <span> {{ this.companyAddress[0]?.['city'] }}</span>
+                                                    <span> {{ this.companyAddress[0]?.['state'] }}</span>
+                                                    <span> {{ this.companyAddress[0]?.['country']['name'] }}</span>
+                                                    <!-- <span>GSTIN : 07CAYPR9267G1ZN</span>
+                                                    <span>+91-7503876258</span> -->
+                                                </div>
                                             </div>
                                             <!--end::Col-->
                                             <!--begin::Col-->
                                             <div class="min-w-350px">
                                                 <div class="form-label fs-5 fw-bold text-gray-700">Bill To</div>
-                                                <div class="mb-1 mt-6">
-                                                    <!--begin::Label-->
-                                                    <label class="form-label fw-bold fs-6 text-gray-600">Client</label>
-                                                    <!--end::Label-->
+                                                <div class="mb-1">
                                                     <!--begin::Select-->
-                                                    <Multiselect :options="clients" label="name" valueProp="id"
+                                                    <Multiselect :options="clients" label="name" valueProp="c_id"
                                                         class="form-control form-control-lg form-control-solid"
                                                         :searchable="true" v-model="v$.form.client.$model" :class="v$.form.client.$errors.length > 0
                                                                 ? 'is-invalid'
@@ -347,23 +366,14 @@ export default defineComponent({
                                                 <div v-for="(error, index) of v$.form.client.$errors" :key="index">
                                                     <input-error :message="error.$message" />
                                                 </div>
-                                                <!--begin::Input group-->
-                                                <div class="mb-5">
-                                                    <input type="text" class="form-control fs-6 form-control-transparent"
-                                                        :value="clientAddress?.address_line_1" readonly />
-                                                    <input type="text" class="form-control fs-6 form-control-transparent"
-                                                        :value="clientAddress?.address_line_2" readonly />
-                                                    <input type="text" class="form-control fs-6 form-control-transparent"
-                                                        :value="clientAddress?.city" readonly />
-                                                    <input type="text" class="form-control fs-7 form-control-transparent"
-                                                        :value="clientAddress?.state" readonly />
-                                                    <input type="text" class="form-control fs-7 form-control-transparent"
-                                                        :value="clientAddress?.pincode" readonly />
-                                                    <input type="text" class="form-control fs-7 form-control-transparent"
-                                                        :value="clientAddress?.country?.name" readonly />
+                                                <!--end::Input group-->
+                                                <div class="d-flex mt-6 flex-column gap-2 text-gray-600 fs-5">
+                                                    <span> {{ this.clientAddress?.address_line_1 }} </span>
+                                                    <span> {{ this.clientAddress?.address_line_2 }}</span>
+                                                    <span> {{ this.clientAddress?.city }}</span>
+                                                    <span> {{ this.clientAddress?.state }}</span>
+                                                    <span> {{ this.clientAddress?.country?.name }}</span>
                                                 </div>
-                                                <!--end::Input group-->
-                                                <!--end::Input group-->
                                             </div>
                                             <!--end::Col-->
                                         </div>
@@ -377,33 +387,81 @@ export default defineComponent({
                                                 <thead>
                                                     <tr
                                                         class="border-bottom fs-7 fw-bold text-gray-700 text-uppercase text-center">
-                                                        <th class="min-w-150px w-150px">Item</th>
-                                                        <th class="min-w-150px w-100px">CPI</th>
-                                                        <th class="min-w-20px w-50px">Quantity</th>
-                                                        <th class="min-w-100px w-150px">Price</th>
-                                                        <th class="min-w-100px w-150px text-end">Total</th>
-                                                        <th class="min-w-75px w-75px text-end">Action</th>
+                                                        <th>Item</th>
+                                                        <th>Description</th>
+                                                        <th>CPI</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody>
-                                                {{ items }}
-
-                                                    <ItemFormList :items="items" :form="form"
+                                                    {{ invoice.data.items }}
+                                                    <ItemFormList v-for="(items) in invoice.data.items" :form="form"
                                                         @removeSingle="removeItemForm" />
                                                 </tbody>
                                                 <!--end::Table body-->
                                                 <!--begin::Table foot-->
                                                 <tfoot>
-                                                    <AppendItem :form="form" @addItemForm="appendItemForm" />
-                                                    <tr class="align-top fw-bold text-gray-700">
-                                                        <th></th>
-                                                        <th colspan="2" class="fs-4 ps-0">Total</th>
-                                                        <th colspan="2" class="text-end fs-4 text-nowrap">$
-                                                            <span data-kt-element="grand-total">0.00</span>
+                                                    <tr
+                                                        class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
+                                                        <input type="number" class="form-control mt-4" v-model="rowCount"
+                                                            min="1">
+                                                        <th class="text-primary">
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                @click="addItemForm(this.rowCount)">Add
+                                                                more</button>
                                                         </th>
+                                                        <th colspan="4" class="border-bottom border-bottom-dashed ps-0">
+                                                            <div class="d-flex align-items-start justify-content-between">
+                                                                <div class="fs-5 h-40px">Net payable amount <span
+                                                                        class="fs-6" v-if="(this.form.total)">${{
+                                                                            this.form.total }} </span> <span v-else>$00</span> X
+                                                                    <span class="fs-6" v-if="(this.form.conversion_rate)">{{
+                                                                        this.form.conversion_rate }} INR</span> <span
+                                                                        v-else>00 INR</span>
+                                                                </div>
+                                                                <div class="fs-6 text-gray-800">INR {{
+                                                                    this.form.total_amount }}</div>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-start justify-content-between mb-2">
+                                                                <div class="text-grey py-1 fs-6">Invoice value before GST :
+                                                                </div>
+                                                                <div class="d-flex align-items-center gap-2">
+
+                                                                    <div class="fs-6 text-gray-800">INR {{
+                                                                        this.form.total_amount }}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-start justify-content-between mb-1">
+                                                                <div class="text-grey py-1 fs-6">GST value at {{
+                                                                    this.form.taxcharge }}%</div>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <div>
+                                                                        <input type="text" v-model="form.taxcharge"
+                                                                            class="w-50px form-control form-control-solid fs-6 text-gray-700 h-35px form-control-transparent" />
+                                                                    </div>
+                                                                    <div class="fs-6 text-gray-800">%</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="d-flex align-items-start justify-content-between">
+                                                                <div class="text-grey py-1 fs-6"> Invoice value with GST :
+                                                                </div>
+                                                                <div class="d-flex align-items-center gap-2">
+
+                                                                    <div class="fs-6 text-gray-800">INR {{
+                                                                        this.form.afterGST }}</div>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+
                                                     </tr>
+
                                                 </tfoot>
                                                 <!--end::Table foot-->
                                             </table>
@@ -446,13 +504,13 @@ export default defineComponent({
                                     <label class="form-label fw-bold fs-6 text-gray-700">Currency</label>
                                     <!--end::Label-->
                                     <!--begin::Select-->
-                                    <Multiselect :options="currnecy" label="name" valueProp="value"
+                                    <Multiselect :options="currency" label="name" valueProp="value"
                                         class="form-control form-control-lg form-control-solid mb-2" :searchable="true"
-                                        v-model="v$.form.currnecy.$model" :class="v$.form.currnecy.$errors.length > 0
+                                        v-model="v$.form.currency.$model" :class="v$.form.currency.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
                                             " placeholder="Select One" track-by="name" />
-                                    <div v-for="(error, index) of v$.form.currnecy.$errors" :key="index">
+                                    <div v-for="(error, index) of v$.form.currency.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                     <!--end::Select-->
@@ -465,18 +523,6 @@ export default defineComponent({
                                     </div>
                                 </div>
                                 <!--end::Input group-->
-                                <div class="mb-5">
-                                    <label class="form-label fw-bold fs-6 text-gray-700">GST Status</label>
-                                    <Multiselect :options="gst_status" label="name" valueProp="id"
-                                        class="form-control form-control-lg form-control-solid" :searchable="true"
-                                        v-model="v$.form.gst_status.$model" :class="v$.form.gst_status.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                            " placeholder="Select One" track-by="name" />
-                                    <div v-for="(error, index) of v$.form.gst_status.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold fs-6 text-gray-700">Status</label>
                                     <Multiselect :options="status" label="name" valueProp="id"

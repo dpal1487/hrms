@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Company;
 use App\Models\Client;
+use App\Models\CompanyAddress;
 use App\Models\InvoiceItem;
 use App\Models\CompanyInvoice;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\ClientResource;
+use App\Http\Resources\AddressResource;
 use Inertia\Inertia;
 use Auth;
 
@@ -19,9 +21,10 @@ class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        $company = Company::get();
-        // $invoices = Invoice::get();
-        // return InvoiceResource::collection($invoices);
+        // $company = Company::get();
+        $company = Company::where('id', $this->companyId())->get();
+
+        // return $company;
         $invoices = new Invoice();
         if (!empty($request->q)) {
             $invoices = $invoices->where('invoice_number', 'like', '%' . $request->q . '%');
@@ -37,34 +40,33 @@ class InvoiceController extends Controller
     }
     public function create()
     {
-        $companies = Company::get();
-        $clients = Client::select('id as c_id', 'name')->get();
+        $companies = Company::where('id', $this->companyId())->get();
+        $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
+        $clients = Client::where('company_id', $this->companyId())->get();
+
+        // return $clients;
+
         return Inertia::render('Invoices/Form', [
             'companies' => $companies,
             'clients' => $clients,
+            'address' => AddressResource::collection($address),
         ]);
     }
 
     public function store(Request $request)
     {
-      
+        // dd($request);
         $request->validate([
-            'gst_status' => 'required',
-            'gst_status' => 'required',
             'invoice_number' => 'required',
             'invoice_date' => 'required',
             'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'invoice_due_date' => 'required',
-            // 'total_amount_usd' => 'required',
-            // 'total_amount_inr' => 'required|integer',
             'notes' => 'required',
             'status' => 'required',
         ]);
 
         $invoice = Invoice::create([
             'client_id' => $request->client,
-            'company_id' => Auth::user()->id,
-            'gst_status' => $request->gst_status,
+            'company_id' => $request->company,
             'invoice_number' => $request->invoice_number,
             'invoice_date' => $request->invoice_date,
             'conversion_rate' => $request->conversion_rate,
@@ -75,12 +77,12 @@ class InvoiceController extends Controller
             'status' => $request->status,
         ]);
 
-        foreach ($request->name as $value) {
+        foreach ($request->items as $value) {
             $invoiceItem = InvoiceItem::create([
                 'invoice_id' => $invoice->id,
-                'project_name' => $value,
-                'price' => $value,
-                'quantity' => $value,
+                'project_name' => $value['name'],
+                'price' => $value['cpi'],
+                'quantity' => $value['quantity'],
             ]);
         }
 
@@ -102,9 +104,11 @@ class InvoiceController extends Controller
 
     public function edit($id)
     {
-        $invoice = Invoice::find($id);
-        $companies = Company::get();
-        $clients = Client::get();
+        $invoice = Invoice::where('company_id', $this->companyId())->find($id);
+
+        $companies = Company::where('id', $this->companyId())->get();
+        $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
+        $clients = Client::where('company_id', $this->companyId())->get();
 
         // return new InvoiceResource($invoice);
 
@@ -133,7 +137,6 @@ class InvoiceController extends Controller
         ]);
 
         $invoice = Invoice::where('id', $id)->update([
-
             'client_id' => $request->client,
             'company_id' => Auth::user()->id,
             'gst_status' => $request->gst_status,
@@ -145,7 +148,6 @@ class InvoiceController extends Controller
             'total_amount_inr' => $request->total_amount_inr,
             'notes' => $request->notes,
             'status' => $request->status,
-
         ]);
 
         if ($invoice) {

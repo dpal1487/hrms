@@ -16,9 +16,9 @@ class Invoice extends UID
     }
     public function client()
     {
-        return $this->hasOne(Client::class, 'id', 'client_id');
+        return $this->hasOne(Client::class, 'c_id', 'client_id');
     }
-    public function item()
+    public function items()
     {
         return $this->hasMany(InvoiceItem::class, 'invoice_id', 'id');
     }

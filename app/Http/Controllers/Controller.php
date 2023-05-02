@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CompanyUser;
 
 class Controller extends BaseController
 {
@@ -19,6 +20,8 @@ class Controller extends BaseController
     }
     public function companyId()
     {
+        $company = CompanyUser::where(['user_id' => $this->uid()])->first();
+        return $company->company_id;
     }
     public function errorAjax()
     {

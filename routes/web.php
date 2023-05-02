@@ -149,6 +149,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/address/store', 'store')->name('company.address.store');
             Route::delete('{id}/address/delete', 'destroy')->name('company.address.delete');
         });
+        Route::get('invoices/{id}/company-address', 'companyAddress')->name('invoices.company-address');
         Route::get('invoices/{id}/client-address', 'clientAddress')->name('invoices.client-address');
     });
 

@@ -20,7 +20,7 @@ class AddressController extends Controller
     public function store(Request $request)
     {
         // $address = CompanyAddress::with('address')->where('company_id' , $request->company_id)->get();
-        
+
         //     if ($address->isprimary == 1) {
         //         echo "primary";
         //     }
@@ -29,7 +29,7 @@ class AddressController extends Controller
         //     }
 
         // dd($address);
-        
+
         $request->validate([
             'address_line_1' => 'required',
             'address_line_2' => 'required',
@@ -130,9 +130,29 @@ class AddressController extends Controller
             'countries' => $countries,
         ]);
     }
+    public function companyAddress(Request $request, $id)
+    {
+        $company = Company::where('id', $this->companyId())->first();
+        // return new CompanyResource($company);
+        if ($request->ajax()) {
+            if ($company) {
+                return response()->json([
+                    'success' => true,
+                    'data' => new CompanyResource($company),
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Something Went Wrong',
+            ]);
+        } else {
+            return $this->errorAjax();
+        }
+    }
     public function clientAddress(Request $request, $id)
     {
-        $client = Client::where('id', $id)->first();
+        // dd($id);
+        $client = Client::where('c_id', $id)->first();
         if ($request->ajax()) {
             if ($client) {
                 return response()->json([

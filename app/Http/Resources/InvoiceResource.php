@@ -29,7 +29,7 @@ class InvoiceResource extends JsonResource
             'status' => $this->status,
             'company' => $this->company,
             'client' => $this->client,
-            'item' => $this->item,
+            'items' => $this->items,
         ];
     }
 }
