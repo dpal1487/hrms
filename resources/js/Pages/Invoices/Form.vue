@@ -398,7 +398,7 @@ export default defineComponent({
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody>
-                                                    {{ invoice.data.items }}
+                                                    <!-- {{ invoice.data.items }} -->
                                                     <ItemFormList v-for="(items) in invoice.data.items" :form="form"
                                                         @removeSingle="removeItemForm" />
                                                 </tbody>
