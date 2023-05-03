@@ -51,6 +51,11 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
+                    link: "/conversion-rate",
+                    title: "Conversion Rate",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
                     link: "/images",
                     title: "Images",
                     icon: "bi bi-pie-chart-fill",

@@ -22,6 +22,18 @@ class Invoice extends UID
     {
         return $this->hasMany(InvoiceItem::class, 'invoice_id', 'id');
     }
+    public function company_address()
+    {
+        return $this->hasOne(CompanyAddress::class, 'company_id', 'company_id');
+    }
+    public function client_address()
+    {
+        return $this->hasOne(ClientAddress::class, 'client_id', 'client_id');
+    }
+    public function client_addresss()
+    {
+        return $this->hasMany(ClientAddress::class, 'client_id', 'client_id');
+    }
 
     public static function boot()
     {

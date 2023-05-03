@@ -15,6 +15,7 @@ export default defineComponent({
 })
 </script>
 <template>
+    {{ this.items }}
     <tr v-for="(item, index) in form.items.length" :key="index" class="border-bottom border-bottom-dashed"
         data-kt-element="item">
         <td>
@@ -39,7 +40,6 @@ export default defineComponent({
         <td class="pt-5 text-end">
             <button :disabled="index < 1" type="button" class="btn btn-sm btn-icon btn-active-color-primary"
                 @click="$emit('removeSingle', index)">
-                <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
                 <span class="svg-icon svg-icon-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path

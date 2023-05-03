@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Client;
 use App\Models\CompanyAddress;
 use App\Models\InvoiceItem;
+use App\Models\ConversionRate;
 use App\Models\CompanyInvoice;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
@@ -43,12 +44,14 @@ class InvoiceController extends Controller
         $companies = Company::where('id', $this->companyId())->get();
         $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
         $clients = Client::where('company_id', $this->companyId())->get();
+        $conversionrates = ConversionRate::get();
 
         // return $clients;
 
         return Inertia::render('Invoices/Form', [
             'companies' => $companies,
             'clients' => $clients,
+            'conversionrates' => $conversionrates,
             'address' => AddressResource::collection($address),
         ]);
     }
@@ -97,9 +100,9 @@ class InvoiceController extends Controller
         }
     }
 
-    public function show(Invoices $invoices)
+    public function conversionValue($id)
     {
-        //
+        
     }
 
     public function edit($id)
@@ -110,36 +113,27 @@ class InvoiceController extends Controller
         $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
         $clients = Client::where('company_id', $this->companyId())->get();
 
-        // return new InvoiceResource($invoice);
-
         return Inertia::render('Invoices/Form', [
             'invoice' => new InvoiceResource($invoice),
             'companies' => $companies,
             'clients' => $clients,
         ]);
-
-        // return $invoice;
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'gst_status' => 'required',
-            'gst_status' => 'required',
             'invoice_number' => 'required',
             'invoice_date' => 'required',
             'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'invoice_due_date' => 'required',
-            // 'total_amount_usd' => 'required',
-            // 'total_amount_inr' => 'required|integer',
             'notes' => 'required',
             'status' => 'required',
         ]);
 
         $invoice = Invoice::where('id', $id)->update([
             'client_id' => $request->client,
-            'company_id' => Auth::user()->id,
-            'gst_status' => $request->gst_status,
+            'company_id' => $request->company,
             'invoice_number' => $request->invoice_number,
             'invoice_date' => $request->invoice_date,
             'conversion_rate' => $request->conversion_rate,

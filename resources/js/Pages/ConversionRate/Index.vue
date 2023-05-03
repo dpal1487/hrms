@@ -1,5 +1,5 @@
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
@@ -10,17 +10,22 @@ import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
-    props: ["industries", 'message'],
+    props: ["conversionrates", "message"],
+
     data() {
         return {
             q: "",
             s: "",
             tbody: [
-                "Industry Name",
-                "Industry Image",
+                "Currency Name",
+                "Currency Value",
+                "Conversion Rate",
+                "Inr Amount",
+                "Actual Amount",
                 "Status",
                 "Action",
             ],
+            isLoading: false,
         };
     },
     components: {
@@ -35,7 +40,9 @@ export default defineComponent({
 
         confirmDelete(id, index) {
             this.isLoading = true;
-            const name = this.industries.data[index].name;
+
+            const name = this.conversionrates.data[index].currency_name;
+
             Swal.fire({
                 title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",
@@ -47,15 +54,13 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/industries/" + id + "/delete")
+                        .delete("/conversion-rate/" + id + "/delete")
                         .then((response) => {
-                            toast.success(response.data.message);
+                            toast.success(response.data.message)
                             if (response.data.success) {
-                                this.industries.data.splice(index, 1);
+                                this.conversionrates.data.splice(index, 1);
                                 return;
                             }
-
-
                         })
 
                         .catch((error) => {
@@ -65,7 +70,7 @@ export default defineComponent({
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: + name + " was not deleted.",
+                        text: name + " was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -79,11 +84,11 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/industries",
+                "/conversion-rate",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
-                        this.industry = data.props.industry;
+                        this.answers = data.props.answers;
                     },
                 }
             );
@@ -94,19 +99,15 @@ export default defineComponent({
 <template>
     <app-layout>
 
-        <Head title="Industry" />
+        <Head title="Conversion Rate" />
         <div class="card card-flush">
-            <div v-if="$page.props.ziggy.flash.message" class="alert">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="font-medium">
-                        {{ $page.props.ziggy.flash.message }}
-                    </span>
-                </div>
+            <!-- {{ this.message }} -->
 
-            </div>
+            <!--begin::Actions-->
             <div>
+                <!--begin::Card title-->
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
-                    <!--begin::Card title-->
+                    <!--begin::Search-->
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -131,18 +132,21 @@ export default defineComponent({
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
-                    <!--end::Search-->
-
+                    <!--begin::Card title-->
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <!--begin::Add industries-->
-                        <Link href="/industries/add" class="btn btn-primary">
-                        Add Industry
-                        </Link>
-                        <!--end::Add industries-->
+                        <!--begin::Toolbar-->
+                        
+                            <!--begin::Add customer-->
+                            <Link href="/conversion-rate/add" class="btn btn-primary">
+                            Add Conversion Rate
+                            </Link>
+                            <!--end::Add customer-->
+                        <!--end::Toolbar-->
                     </div>
                     <!--end::Card toolbar-->
                 </form>
+
             </div>
             <div class="card-body pt-0">
                 <!--begin::Table-->
@@ -161,28 +165,29 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(industries, index) in industries.data" :key="index">
-
-                                <td>{{ industries.name }}</td>
-                                <td v-if="industries.image?.medium_path">
-                                    <div class="symbol symbol-50px me-5">
-                                        <img alt="Logo" :src="industries.image?.medium_path">
-                                    </div>
-                                </td>
-                                <td v-else>
-                                    <div class="symbol symbol-50px me-5">
-                                        <img alt="Logo" src="/assets/images/comingsoon.png">
-                                    </div>
+                            <tr v-for="(conversionrate, index) in conversionrates.data" :key="index">
+                                <td>
+                                    {{ conversionrate?.currency_name }}
                                 </td>
                                 <td>
-                                    <p v-if="(industries.status == 1)">Active </p>
-                                    <p v-if="(industries.status == 0)">Inactive </p>
+                                    {{ conversionrate?.currency_value }}
                                 </td>
+                                <td>
+                                    {{ conversionrate?.conversion_rate }}
+                                </td>
+                                <td>
+                                    {{ conversionrate?.inr_amount }}
+                                </td>
+                                <td>
+                                    {{ conversionrate?.actual_value }}
+                                </td>
+                                <td v-if="(conversionrate.status == 1)">Active</td>
+                                <td v-else="( conversionrate.status == 0 )">Inactive</td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${industries.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${conversionrate.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -197,17 +202,17 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${industries.id}`">
+                                            :aria-labelled:by="`dropdown-${conversionrate.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/industries/${industries.id}/edit`">Edit
+                                                    :href="`/conversion-rate/${conversionrate.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                        industries.id, index
+                                                        conversionrate.id, index
                                                     )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
@@ -222,8 +227,9 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="industries.meta">
-                    <Pagination :links="industries.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end"
+                    v-if="conversionrates.meta">
+                    <Pagination :links="conversionrates.meta.links" />
                 </div>
             </div>
         </div>

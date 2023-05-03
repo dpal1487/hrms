@@ -12,4 +12,8 @@ class ClientAddress extends Model
     {
         return $this->hasOne(Address::class, 'id', 'address_id');
     }
+    public function addresss()
+    {
+        return $this->hasMany(Address::class, 'id', 'address_id');
+    }
 }

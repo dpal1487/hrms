@@ -15,6 +15,7 @@ use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ConversionRateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -170,5 +171,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('{id}/update', 'update')->name('invoices.update');
             Route::delete('{id}/delete', 'destroy')->name('invoices.delete');
         });
+    });
+
+    Route::controller(ConversionRateController::class)->group(function () {
+        Route::group(['prefix' => 'conversion-rate'], function () {
+            Route::get('/', 'index')->name('conversion-rate.index');
+            Route::get('/add', 'create')->name('conversion-rate.add');
+            Route::post('/store', 'store')->name('conversion-rate.store');
+            Route::get('{id}/edit', 'edit')->name('conversion-rate.edit');
+            Route::post('{id}/update', 'update')->name('conversion-rate.update');
+            Route::delete('{id}/delete', 'destroy')->name('conversion-rate.delete');
+        });
+        Route::get('invoices/{id}/conversion-value', 'conversionValue')->name('invoices.conversion-value');
     });
 });

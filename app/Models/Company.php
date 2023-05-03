@@ -23,6 +23,10 @@ class Company extends UID
     {
         return $this->hasOne(CorporationType::class , 'id','corporation_type_id');
     }
+    public function company_address()
+    {
+        return $this->hasOne(CompanyAddress::class , 'company_id' , 'id');
+    }
     public function company_addresss()
     {
         return $this->hasMany(CompanyAddress::class , 'company_id' , 'id');
