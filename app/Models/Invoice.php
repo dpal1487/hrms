@@ -34,6 +34,10 @@ class Invoice extends UID
     {
         return $this->hasMany(ClientAddress::class, 'client_id', 'client_id');
     }
+    public function currency()
+    {
+        return $this->hasOne(ConversionRate::class , 'id' , 'conversion_rate');
+    }
 
     public static function boot()
     {
@@ -41,8 +45,8 @@ class Invoice extends UID
 
         static::deleting(function ($invoice) {
             // before delete() method call this
-            $invoice->company()->delete();
-            $invoice->item()->delete();
+            // $invoice->company()->delete();
+            // $invoice->item()->delete();
             // do the rest of the cleanup...
         });
     }

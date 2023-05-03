@@ -181,7 +181,7 @@ export default defineComponent({
                                 <td>{{ invoice?.invoice_due_date }}</td>
                                 <td>{{ invoice?.client?.name }}</td>
                                 <td>
-                                   
+
                                     <span v-if="(invoice?.status == 0)">New</span>
                                     <span v-if="(invoice?.status == 1)">Paid</span>
                                     <span v-if="(invoice?.status == 2)">Cancelled</span>

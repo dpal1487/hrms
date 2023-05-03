@@ -62,7 +62,7 @@ class InvoiceController extends Controller
         $request->validate([
             'invoice_number' => 'required',
             'invoice_date' => 'required',
-            'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            // 'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'notes' => 'required',
             'status' => 'required',
         ]);
@@ -72,10 +72,10 @@ class InvoiceController extends Controller
             'company_id' => $request->company,
             'invoice_number' => $request->invoice_number,
             'invoice_date' => $request->invoice_date,
-            'conversion_rate' => $request->conversion_rate,
+            'conversion_rate' => $request->currency,
             'invoice_due_date' => $request->invoice_due_date,
             'total_amount_usd' => $request->total_amount_usd,
-            'total_amount_inr' => $request->total_amount_inr,
+            'total_amount_inr' => $request->afterGST,
             'notes' => $request->notes,
             'status' => $request->status,
         ]);
@@ -84,13 +84,14 @@ class InvoiceController extends Controller
             $invoiceItem = InvoiceItem::create([
                 'invoice_id' => $invoice->id,
                 'project_name' => $value['name'],
-                'price' => $value['cpi'],
+                'description' => $value['description'],
+                'cpi' => $value['cpi'],
                 'quantity' => $value['quantity'],
             ]);
         }
 
         $companyInvoice = CompanyInvoice::create([
-            'company_id' => Auth::user()->id,
+            'company_id' => $request->company,
             'invoice_id' => $invoice->id,
         ]);
         if ($companyInvoice) {
@@ -100,23 +101,20 @@ class InvoiceController extends Controller
         }
     }
 
-    public function conversionValue($id)
-    {
-        
-    }
-
     public function edit($id)
     {
         $invoice = Invoice::where('company_id', $this->companyId())->find($id);
+        $conversionrates = ConversionRate::get();
 
         $companies = Company::where('id', $this->companyId())->get();
         $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
         $clients = Client::where('company_id', $this->companyId())->get();
 
         return Inertia::render('Invoices/Form', [
-            'invoice' => new InvoiceResource($invoice),
             'companies' => $companies,
             'clients' => $clients,
+            'conversionrates' => $conversionrates,
+            'invoice' => new InvoiceResource($invoice),
         ]);
     }
 
@@ -144,6 +142,16 @@ class InvoiceController extends Controller
             'status' => $request->status,
         ]);
 
+        foreach ($request->items as $value) {
+            $invoiceItem = InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'project_name' => $value['name'],
+                'description' => $value['description'],
+                'cpi' => $value['cpi'],
+                'quantity' => $value['quantity'],
+            ]);
+        }
+
         if ($invoice) {
             return redirect('/invoices')->with('message', 'Invoice updated successfully');
         } else {
@@ -154,6 +162,7 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         $invoice = Invoice::find($id);
+
         if ($invoice->delete()) {
             return response()->json(['success' => true, 'message' => 'Invoice has been deleted successfully.']);
         }
