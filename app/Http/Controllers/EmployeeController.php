@@ -12,8 +12,7 @@ use App\Models\Country;
 use App\Models\User;
 use Auth;
 use Hash;
-use Image;
-use App\Models\Image as DBImage;
+
 
 class EmployeeController extends Controller
 {
@@ -68,7 +67,6 @@ class EmployeeController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
             'image_id' => $request->image_id,
-            // 'avatar' => $image,
         ]);
 
         if (
