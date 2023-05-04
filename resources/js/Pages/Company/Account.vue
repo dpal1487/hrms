@@ -1,15 +1,16 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import CompanyLayout from "@/Layouts/CompanyLayout.vue";
+import Header from "../../Components/Company/Header.vue";
+
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 import AccountComponent from "../../Components/Company/Account/AccountComponent.vue";
 import FormAccount from "../../Components/Company/Account/Model/FormAccount.vue";
 
 export default defineComponent({
-    props: ['company' , 'onOnhide'],
-    emits: ['onhide','hidemodel'],
+    props: ['company', 'onOnhide'],
+    emits: ['onhide', 'hidemodel'],
     setup() {
         return {
             v$: useVuelidate(),
@@ -23,7 +24,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
-        CompanyLayout,
+        Header,
         Link,
         Head,
         AccountComponent,
@@ -46,7 +47,7 @@ export default defineComponent({
 <template>
     <Head title="Company Account" />
     <AppLayout>
-        <CompanyLayout :company="company">
+        <Header>
             <!--begin::details View-->
             <!--begin::Billing Account-->
             <div class="card mb-5 mb-xl-10">
@@ -54,7 +55,7 @@ export default defineComponent({
                 <div class="card-header">
                     <!--begin::Title-->
                     <div class="card-title">
-                        <h3>Billing Account</h3>
+                        <h3>Company Account Details</h3>
                     </div>
                     <!--end::Title-->
                 </div>
@@ -97,6 +98,6 @@ export default defineComponent({
                 <!--end::Card body-->
             </div>
             <!--end::Billing Account-->
-        </CompanyLayout>
+        </Header>
     </AppLayout>
 </template>

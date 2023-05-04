@@ -1,7 +1,8 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import CompanyLayout from "@/Layouts/CompanyLayout.vue";
+import Header from "../../Components/Company/Header.vue";
+
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 import AddressComponent from "../../Components/Company/Address/AddressComponent.vue";
@@ -11,7 +12,7 @@ import FormAddress from "../../Components/Company/Address/Model/formAddress.vue"
 
 export default defineComponent({
     props: ['company', 'countries', 'onOnhide'],
-    emits: [ 'hidemodal'],
+    emits: ['hidemodal'],
     setup() {
         return {
             v$: useVuelidate(),
@@ -25,7 +26,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
-        CompanyLayout,
+        Header,
         Link,
         Head,
         AddressComponent,
@@ -47,15 +48,15 @@ export default defineComponent({
 <template>
     <Head title="Company Address" />
     <AppLayout>
-        <CompanyLayout :company="company">
+        <Header>
             <!--begin::details View-->
-            <!--begin::Billing Address-->
+            <!--begin::Company Address-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
                 <div class="card-header">
                     <!--begin::Title-->
                     <div class="card-title">
-                        <h3>Billing Address</h3>
+                        <h3>Company Address</h3>
                     </div>
                     <!--end::Title-->
                 </div>
@@ -97,7 +98,7 @@ export default defineComponent({
                 </div>
                 <!--end::Card body-->
             </div>
-            <!--end::Billing Address-->
-        </CompanyLayout>
+            <!--end::Company Address-->
+        </Header>
     </AppLayout>
 </template>

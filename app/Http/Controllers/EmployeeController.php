@@ -19,7 +19,7 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $employees = new Employee();
+        $employees = Employee::where('company_id', $this->companyId());
         if (!empty($request->q)) {
             $employees = $employees
                 ->whereHas('user', function ($q) use ($request) {
@@ -68,7 +68,7 @@ class EmployeeController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
             'image_id' => $request->image_id,
-            'avatar' => $image,
+            // 'avatar' => $image,
         ]);
 
         if (
@@ -90,6 +90,7 @@ class EmployeeController extends Controller
                 'full_final' => $request->full_final,
                 'department_id' => $request->department_id,
                 'user_id' => $user->id,
+                'company_id' => $this->companyId(),
             ])
         ) {
             // return response()->json(['success' => true, 'message' => 'Employee created successfully']);
@@ -101,13 +102,15 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
 
-        // $employee = new EmployeeResources($employee);
+        if ($employee) {
 
-        return Inertia::render('Employee/Form', [
-            'employee' => new EmployeeResources($employee),
-        ]);
+            return Inertia::render('Employee/Form', [
+                'employee' => new EmployeeResources($employee),
+            ]);
+        }
+        return redirect()->back();
     }
 
     public function update(Request $request, $id)
@@ -213,80 +216,107 @@ class EmployeeController extends Controller
     }
     public function show($id)
     {
-        $employee = Employee::find($id);
 
-        return Inertia::render('Employee/Overview', [
-            'employee' => new EmployeeResources($employee),
-        ]);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
+
+        if ($employee) {
+
+            return Inertia::render('Employee/Overview', [
+                'employee' => new EmployeeResources($employee),
+            ]);
+        }
+        return redirect()->back();
     }
     public function overview($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
 
-        return Inertia::render('Employee/Overview', [
-            'employee' => new EmployeeResources($employee),
-        ]);
+        if ($employee) {
+
+            return Inertia::render('Employee/Overview', [
+                'employee' => new EmployeeResources($employee),
+            ]);
+        }
+        return redirect()->back();
     }
 
     function overviewEdit($id)
     {
-        $employee = Employee::find($id);
-
-        return Inertia::render('Employee/Edit', [
-            'employee' => new EmployeeResources($employee),
-        ]);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
+        if ($employee) {
+            return Inertia::render('Employee/Edit', [
+                'employee' => new EmployeeResources($employee),
+            ]);
+        }
+        return redirect()->back();
     }
 
     public function setting($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
 
+        if ($employee) {
         return Inertia::render('Employee/Setting', [
             'employee' => new EmployeeResources($employee),
         ]);
+        }
+        return redirect()->back();
     }
     public function security($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
 
+        if ($employee) {
         return Inertia::render('Employee/Security', [
             'employee' => new EmployeeResources($employee),
         ]);
+        }
+        return redirect()->back();
     }
     public function address($id)
     {
-        $employee = Employee::find($id);
-        // return new EmployeeResources($employee);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
 
+        // return new EmployeeResources($employee);
+        if ($employee) {
         return Inertia::render('Employee/Address', [
             'employee' => new EmployeeResources($employee),
         ]);
+        }
+        return redirect()->back();
     }
 
     public function addressEdit($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
+
         $countries = Country::get();
 
         // dd($countries);
-
+        if ($employee) {
         return Inertia::render('Employee/UserAddress', [
             'employee' => new EmployeeResources($employee),
             'countries' => $countries,
         ]);
+        }
+        return redirect()->back();
     }
     public function attendance($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
 
+        if ($employee) {
         return Inertia::render('Employee/Attendance', [
             'employee' => new EmployeeResources($employee),
         ]);
+        }
+        return redirect()->back();
     }
 
     public function destroy($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
+
         if ($employee->delete()) {
             return response()->json(['success' => true, 'message' => 'Employee has been deleted successfully.']);
         }

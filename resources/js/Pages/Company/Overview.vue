@@ -1,21 +1,17 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import CompanyLayout from "@/Layouts/CompanyLayout.vue";
+import Header from "../../Components/Company/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import PrimaryButton from "@/Jetstream/Button.vue";
 
 
-
-// Vue.use(Datetime);
-// import { Datetime } from 'vue-datetime';
-
 export default defineComponent({
-    props: ['company','Overview'],
+    props: ['company'],
 
     components: {
         AppLayout,
-        CompanyLayout,
+        Header,
         PrimaryButton,
         Link,
         Head
@@ -24,9 +20,9 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="Overview" />
+    <Head title="Overview" />
     <AppLayout>
-        <CompanyLayout :company="company">
+        <Header>
             <!--begin::details View-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
@@ -37,8 +33,8 @@ export default defineComponent({
                         <!-- {{ company.data }} -->
                     </div>
                     <!--end::Card title-->
-                    <Link class="btn btn-primary align-self-center"
-                        :href="`/company/${company?.data?.id}/overview/edit`">Edit
+                    <Link class="btn btn-primary align-self-center" :href="`/company/${company?.data?.id}/overview/edit`">
+                    Edit
                     Profile
                     </Link>
                     <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
@@ -47,18 +43,19 @@ export default defineComponent({
                 <!--begin::Card body-->
                 <div class="card-body p-9">
                     <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">User Name</label>
-                            <!--end::Label-->
-                            <!-- {{ company?.data?.user }} -->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user?.first_name +" "+ company?.data?.user.last_name }}</span>
-                            </div>
-                            <!--end::Col-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">User Name</label>
+                        <!--end::Label-->
+                        <!-- {{ company?.data?.user }} -->
+                        <!--begin::Col-->
+                        <div class="col-lg-8">
+                            <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user?.first_name + " " +
+                                company?.data?.user.last_name }}</span>
                         </div>
-                        <!--end::Row-->
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Row-->
                     <!--begin::Row-->
                     <div class="row mb-7">
                         <!--begin::Label-->
@@ -100,18 +97,18 @@ export default defineComponent({
                     </div>
                     <!--end::Input group-->
 
-                     <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Contact Email</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.contact_email }} </span>
-                            </div>
-                            <!--end::Col-->
+                    <!--begin::Input group-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Contact Email</label>
+                        <!--end::Label-->
+                        <!--begin::Col-->
+                        <div class="col-lg-8 d-flex align-items-center">
+                            <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.contact_email }} </span>
                         </div>
-                        <!--end::Input group-->
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Input group-->
 
                     <!--begin::Input group-->
                     <div class="row mb-7">
@@ -179,6 +176,6 @@ export default defineComponent({
                 <!--end::Card body-->
             </div>
             <!--end::details View-->
-        </CompanyLayout>
+        </Header>
     </AppLayout>
 </template>

@@ -1,7 +1,6 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import UserLayout from "@/Layouts/UserLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import PrimaryButton from "@/Jetstream/Button.vue";
@@ -13,6 +12,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from 'vue3-toastify';
 import axios from "axios";
+import Header from "../../Components/User/Header.vue";
 
 export default defineComponent({
     props: ["employees", 'employee', 'countries'],
@@ -58,18 +58,18 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Multiselect,
-        PrimaryButton,
-        JetInput,
-        JetLabel,
-        InputError,
-        JetValidationErrors,
-        UserLayout
-
-    },
+    AppLayout,
+    Link,
+    Head,
+    Multiselect,
+    PrimaryButton,
+    JetInput,
+    JetLabel,
+    InputError,
+    JetValidationErrors,
+    
+    Header
+},
     methods: {
         submit() {
             this.v$.$touch();
@@ -89,7 +89,7 @@ export default defineComponent({
 <template>
     <Head title="User Address" />
     <AppLayout>
-        <UserLayout :employee="employee">
+        <Header :employee="employee">
             <!--begin::details View-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
@@ -264,6 +264,6 @@ export default defineComponent({
                 <!--end::Card body-->
             </div>
             <!--end::details View-->
-        </UserLayout>
+        </Header>
     </AppLayout>
 </template>

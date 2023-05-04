@@ -1,7 +1,8 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import UserLayout from "@/Layouts/UserLayout.vue";
+import Header from "../../Components/User/Header.vue";
+
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 import UserEmail from "@/Components/User/security/UserEmail.vue";
@@ -19,7 +20,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
-        UserLayout,
+        Header,
         Link,
         Head,
         UserEmail,
@@ -42,7 +43,7 @@ export default defineComponent({
     <Head title="Employee Security" />
 
     <AppLayout>
-        <UserLayout :employee="employee">
+        <Header :employee="employee">
             <!--begin::Sign-in Method-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
@@ -78,6 +79,6 @@ export default defineComponent({
             <!--begin::Deactivate Account-->
             <DeactivateAccount :employee="this.employee" />
             <!--end::Deactivate Account-->
-        </UserLayout>
+        </Header>
     </AppLayout>
 </template>

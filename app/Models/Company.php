@@ -14,6 +14,10 @@ class Company extends UID
     {
         return $this->hasOne(User::class , 'id' , 'user_id');
     }
+    public function employee()
+    {
+        // return $this->
+    }
 
     public function size()
     {
@@ -33,6 +37,18 @@ class Company extends UID
     }
     public function company_account()
     {
+        return $this->hasOne(CompanyAccount::class , 'company_id' , 'id');
+    }
+    public function company_accounts()
+    {
         return $this->hasMany(CompanyAccount::class , 'company_id' , 'id');
+    }
+    public function company_email()
+    {
+        return $this->hasOne(CompanyEmail::class , 'company_id' , 'id');
+    }
+    public function company_emails()
+    {
+        return $this->hasMany(CompanyEmail::class , 'company_id' , 'id');
     }
 }

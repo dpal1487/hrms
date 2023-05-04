@@ -1,7 +1,8 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import CompanyLayout from "@/Layouts/CompanyLayout.vue";
+import Header from "../../Components/Company/Header.vue";
+
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
@@ -45,7 +46,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
-        CompanyLayout,
+        Header,
         Link,
         Head,
         Pagination,
@@ -73,34 +74,19 @@ export default defineComponent({
     <Head :title="Address" />
 
     <AppLayout>
-        <CompanyLayout :company="company">
+        <Header>
 
             <!--begin::Billing History-->
             <div class="card">
                 <!--begin::Card header-->
-                <div>
-                    <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
-                        <!--begin::Card title-->
-                        <!--begin::Search-->
-                        <!-- <SearchComponent /> -->
-                        <!--begin::Card toolbar-->
-                        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                            <!--begin::Add industries-->
-                            <Link :href="`/company/${company?.data?.id}/invoices/add`" class="btn btn-primary">
-                            Add Invoice
-                            </Link>
-                            <!--end::Add industries-->
+                 <div class="card-header">
+                        <!--begin::Title-->
+                        <div class="card-title">
+                            <h3>Invoices</h3>
                         </div>
-                        <!--end::Card toolbar-->
-                    </form>
-                </div>
-                <div class="card-header card-header-stretch border-bottom border-gray-200">
-                    <!--begin::Title-->
-                    <div class="card-title">
-                        <h3 class="fw-bold m-0">Billing History</h3>
+                        <!--begin::Card toolbar-->
                     </div>
-                    <!--end::Title-->
-                </div>
+
                 <!--end::Card header-->
                 <!--begin::Tab Content-->
                 <div class="tab-content">
@@ -416,6 +402,6 @@ export default defineComponent({
             </div>
 
             <!--end::Billing Address-->
-        </CompanyLayout>
+        </Header>
     </AppLayout>
 </template>

@@ -181,7 +181,9 @@ export default defineComponent({
                                 <td>{{ invoice?.invoice_due_date }}</td>
                                 <td>{{ invoice?.client?.name }}</td>
                                 <td>
-
+                                    <Multiselect :options="status" label="name" :valueProp="invoice.status" v-model="status"
+                                        class="form-control form-control-lg form-control-solid min-w-100px"
+                                        track-by="name" />
                                     <span v-if="(invoice?.status == 0)">New</span>
                                     <span v-if="(invoice?.status == 1)">Paid</span>
                                     <span v-if="(invoice?.status == 2)">Cancelled</span>

@@ -2,12 +2,14 @@
 <script>
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
+import NavBar from "./NavBar.vue";
 
 export default defineComponent({
     props: ["company"],
 
     components: {
         Link,
+        NavBar
     },
 
 });
@@ -34,7 +36,8 @@ export default defineComponent({
                                 <div class="d-flex flex-column">
                                     <!--begin::Name-->
                                     <div class="d-flex align-items-center mb-2">
-                                        <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{ company?.data?.company_name }}</a>
+                                        <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">
+                                            {{ $page.props.ziggy.company.company_name }}</a>
                                         <a href="">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
                                             <span class="svg-icon svg-icon-1 svg-icon-primary">
@@ -69,7 +72,7 @@ export default defineComponent({
                                                     <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->{{ company?.data?.company_name }}</a>
+                                            <!--end::Svg Icon-->{{ $page.props.ziggy.company.company_name }}</a>
                                         <a href="#"
                                             class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
@@ -84,7 +87,7 @@ export default defineComponent({
                                                         fill="currentColor" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->{{ company?.data?.company_address?.city + " "+ company?.data?.company_address?.state +" , " + company?.data?.company_address?.country?.name}}</a>
+                                            <!--end::Svg Icon--></a>
                                         <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                             <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                             <span class="svg-icon svg-icon-4 me-1">
@@ -98,7 +101,7 @@ export default defineComponent({
                                                         fill="currentColor" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->{{ company.data.contact_email }}</a>
+                                            <!--end::Svg Icon-->{{ $page.props.ziggy.company.contact_email }}</a>
                                     </div>
                                     <!--end::Info-->
                                 </div>
@@ -211,62 +214,8 @@ export default defineComponent({
                     </div>
                     <!--end::Details-->
                     <!--begin::Navs-->
+                    <NavBar />
 
-                    <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
-                        <!--begin::Nav item-->
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('company.overview') && 'active'}`"
-                                :href="'/company/' + this.company?.data?.id + '/overview'">Overview
-                            </Link>
-                        </li>
-                        <!--end::Nav item-->
-
-                        <!--begin::Nav item-->
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('company.address') && 'active'}`"
-                                :href="'/company/' + this.company?.data?.id + '/address'">Address
-                            </Link>
-                        </li>
-                        <!--end::Nav item-->
-                        <!--begin::Nav item-->
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('company.account') && 'active'}`"
-                                :href="'/company/' + this.company?.data?.id + '/account'">Account
-                            </Link>
-                        </li>
-                        <!--end::Nav item-->
-                        <!--begin::Nav item-->
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('company.emails') && 'active'}`"
-                                :href="'/company/' + this.company?.data?.id + '/emails'">Emails
-                            </Link>
-                        </li>
-                        <!--end::Nav item-->
-                        <!--begin::Nav item-->
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('company.invoices') && 'active'}`"
-                                :href="'/company/' + this.company?.data?.id + '/invoices'">Invoices
-                            </Link>
-                        </li>
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('company.projects') && 'active'}`"
-                                :href="'/company/' + this.company?.data?.id + '/projects'">Projects
-                            </Link>
-                        </li>
-                        <li class="nav-item mt-2">
-                            <Link
-                                :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('company.suppliers') && 'active'}`"
-                                :href="'/company/' + this.company?.data?.id + '/suppliers'">Suppliers
-                            </Link>
-                        </li>
-                        <!--end::Nav item-->
-                    </ul>
                     <!--begin::Navs-->
                 </div>
             </div>

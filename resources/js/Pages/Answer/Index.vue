@@ -209,10 +209,7 @@ export default defineComponent({
                                             </li>
 
                                             <li class="menu-item px-3">
-                                                <button @click="confirmDelete(
-                                                        answers.id, index
-                                                    )
-                                                    "
+                                                <button @click="confirmDelete(answers.id, index)"
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>

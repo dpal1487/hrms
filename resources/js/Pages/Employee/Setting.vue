@@ -1,19 +1,12 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import UserLayout from "@/Layouts/UserLayout.vue";
+import Header from "../../Components/User/Header.vue";
+
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Multiselect from "@vueform/multiselect";
-import PrimaryButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+
 import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-import Dropdown from "../../Jetstream/Dropdown.vue";
+
 
 
 
@@ -32,7 +25,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
-        UserLayout,
+        Header,
         Link,
         Head,
     },
@@ -51,7 +44,7 @@ export default defineComponent({
     <Head title="Employee Setting" />
 
     <AppLayout>
-        <UserLayout :employee="employee">
+        <Header :employee="employee">
 
             <!--begin::Sign-in Method-->
             <div class="card mb-5 mb-xl-10">
@@ -289,6 +282,6 @@ export default defineComponent({
                 <!--end::Content-->
             </div>
             <!--end::Deactivate Account-->
-        </UserLayout>
+        </Header>
     </AppLayout>
 </template>

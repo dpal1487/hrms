@@ -1,13 +1,8 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import UserLayout from "@/Layouts/UserLayout.vue";
+import Header from "../../Components/User/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-
-
-
-// Vue.use(Datetime);
-// import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
     props: ["employees", 'employee'],
@@ -16,7 +11,7 @@ export default defineComponent({
 
     components: {
         AppLayout,
-        UserLayout,
+        Header,
         Link,
         Head,
     },
@@ -32,7 +27,7 @@ export default defineComponent({
     <Head title="Employee Attendance" />
 
     <AppLayout>
-        <UserLayout :employee="employee">
+        <Header :employee="employee">
             <!--begin::details View-->
             <div class="card mb-5 mb-xl-10">
                 <!--begin::Card header-->
@@ -139,6 +134,6 @@ export default defineComponent({
                 <!--end::Card body-->
             </div>
             <!--end::details View-->
-        </UserLayout>
+        </Header>
     </AppLayout>
 </template>

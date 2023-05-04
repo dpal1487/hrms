@@ -1,7 +1,14 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
-import {resolve} from 'path'
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
+
+console.log(__dirname);
 
 export default defineConfig({
     plugins: [
@@ -22,6 +29,11 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias:{
+            '@components/': 'resources/js/Components',
+        }
+    },
     ssr: {
         noExternal: ['@inertiajs/server'],
     },

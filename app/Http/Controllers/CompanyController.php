@@ -7,15 +7,9 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
-
 use App\Models\CompanySize;
-use App\Models\Country;
-use App\Models\User;
 use App\Models\Invoice;
 use Auth;
-use Hash;
-use Image;
-use App\Models\Image as DBImage;
 
 class CompanyController extends Controller
 {
@@ -47,22 +41,13 @@ class CompanyController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return Inertia::render('Company/Form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $req)
     {
         // dd($req);
@@ -106,9 +91,9 @@ class CompanyController extends Controller
     {
         return $id;
     }
-    public function show($id)
+    public function show()
     {
-        $company = Company::find($id);
+        $company = Company::find($this->companyId());
         // return new AddressResource($company);
         return Inertia::render('Company/Overview', [
             'company' => new CompanyResource($company),
@@ -141,7 +126,7 @@ class CompanyController extends Controller
         // dd($id);
         $company = Company::find($id);
         // return new CompanyResource($company);
-        return Inertia::render('Company/Address', [
+        return Inertia::render('Company/Email', [
             'company' => new CompanyResource($company),
         ]);
     }
@@ -169,12 +154,7 @@ class CompanyController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         $company = Company::find($id);

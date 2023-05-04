@@ -31,7 +31,8 @@ class CompanyResource extends JsonResource
             'size' => $this->size,
             'corporationtype' => $this->corporationtype,
             'company_addresss' => AddressResource::collection($this->company_addresss),
-            'company_accounts' => AccountResource::collection($this->company_account),
+            'company_accounts' => AccountResource::collection($this->company_accounts),
+            'company_emails' => CompanyEmailResource::collection($this->company_emails),
         ];
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Http\Resources\NotificationResource;
+use App\Models\Company;
+use App\Models\CompanyUser;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -17,6 +20,7 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
     protected $company = [];
+    protected $employee = [];
     protected $notificationCount = [];
     protected $status = [
         [
@@ -52,12 +56,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        $user = Auth::user();
+        $this->company = CompanyUser::where(['user_id' => $user->id])->first();
+        // $this->employee = Employee::where(['user_id' => $user->id])->first();
         return array_merge(parent::share($request), [
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
                     'status' => $this->status,
+                    'company' => $this->company['company'],
+                    // 'employee' => $this->employee['employee'],
                     'flash' => [
-                        'message' => fn() => $request->session()->get('message'),
+                        'message' => fn () => $request->session()->get('message'),
                     ],
                 ]);
             },

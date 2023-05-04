@@ -9,7 +9,7 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'date_of_joining', 'number', 'qualification', 'emergency_number', 'pan_number', 'father_name', 'formalities', 'salary', 'offer_acceptance', 'probation_period', 'date_of_confirmation', 'notice_period', 'last_working_day', 'full_final', 'department_id', 'user_id'];
+    protected $fillable = ['code', 'date_of_joining', 'number', 'qualification', 'emergency_number', 'pan_number', 'father_name', 'formalities', 'salary', 'offer_acceptance', 'probation_period', 'date_of_confirmation', 'notice_period', 'last_working_day', 'full_final', 'department_id', 'user_id', 'company_id'];
 
     public function user()
     {
@@ -25,6 +25,7 @@ class Employee extends Model
     {
         return $this->hasOne(EmployeeAddress::class, 'employee_id', 'id');
     }
+
 
     public static function boot()
     {
