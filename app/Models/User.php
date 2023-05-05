@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
@@ -33,6 +35,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function address()
     {
         return $this->hasOne(Address::class, 'user_id', 'id');
+    }
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'user_id', 'id');
     }
     /**
      * The attributes that should be hidden for serialization.

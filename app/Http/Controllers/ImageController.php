@@ -17,8 +17,6 @@ class ImageController extends Controller
      */
     public function index()
     {
-
-        
     }
 
     /**
@@ -72,14 +70,14 @@ class ImageController extends Controller
             if ($Imagefile) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Image uploade successfull',
+                    // 'message' => 'Image uploade successfull',
                     'data' => $Imagefile,
                 ]);
             }
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'something went wrong',
+                'message' => 'Image uploade Fail',
             ]);
         }
     }
@@ -119,14 +117,15 @@ class ImageController extends Controller
             if ($Imagefile) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Industry Image uploade',
+                    // 'message' => 'Industry Image uploade',
                     'data' => $Imagefile,
                 ]);
             }
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'something went wrong',
+                'message' => 'Image uploade Fail',
+
             ]);
         }
     }
@@ -136,7 +135,7 @@ class ImageController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function show(Image $image)
+    public function show()
     {
         $images = DBImage::get();
 
@@ -151,7 +150,7 @@ class ImageController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function edit(Image $image)
+    public function edit()
     {
         //
     }
@@ -163,7 +162,7 @@ class ImageController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Image $image)
+    public function update(Request $request)
     {
         //
     }
@@ -174,7 +173,7 @@ class ImageController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Image $image)
+    public function destroy()
     {
         //
     }

@@ -12,7 +12,7 @@ import useVuelidate from "@vuelidate/core";
 import { required, url, numeric, integer } from "@vuelidate/validators";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import ItemFormList from "../../Components/invoices/ItemFormList.vue";
+import ItemFormList from "./Components/ItemFormList.vue";
 import { toast } from 'vue3-toastify';
 import axios from 'axios';
 
@@ -242,8 +242,8 @@ export default defineComponent({
                                                 <VueDatePicker v-model="v$.form.invoice_date.$model"
                                                     :enable-time-picker="false" auto-apply
                                                     input-class-name="form-control form-control-solid fw-bold pe-5" :class="v$.form.invoice_date.$errors.length > 0
-                                                            ? 'is-invalid'
-                                                            : ''
+                                                        ? 'is-invalid'
+                                                        : ''
                                                         " placeholder="Select date">
                                                 </VueDatePicker>
                                                 <!--end::Datepicker-->
@@ -264,8 +264,8 @@ export default defineComponent({
                                             <input type="text"
                                                 class="form-control form-control-flush fw-bold text-muted fs-3 w-125px"
                                                 v-model="v$.form.invoice_number.$model" :class="v$.form.invoice_number.$errors.length > 0
-                                                        ? 'is-invalid'
-                                                        : ''
+                                                    ? 'is-invalid'
+                                                    : ''
                                                     " placeholder="..." />
                                             <div v-for="(error, index) of v$.form.invoice_number.$errors" :key="index">
                                                 <input-error :message="error.$message" />
@@ -286,8 +286,8 @@ export default defineComponent({
                                                 <VueDatePicker v-model="v$.form.invoice_due_date.$model"
                                                     :enable-time-picker="false" auto-apply
                                                     input-class-name="form-control form-control-solid fw-bold pe-5" :class="v$.form.invoice_due_date.$errors.length > 0
-                                                            ? 'is-invalid'
-                                                            : ''
+                                                        ? 'is-invalid'
+                                                        : ''
                                                         " placeholder="Select date">
                                                 </VueDatePicker>
                                                 <!--end::Datepicker-->
@@ -319,8 +319,8 @@ export default defineComponent({
                                                     <Multiselect :options="companies" label="company_name" valueProp="id"
                                                         class="form-control form-control-lg form-control-solid"
                                                         :searchable="true" v-model="v$.form.company.$model" :class="v$.form.company.$errors.length > 0
-                                                                ? 'is-invalid'
-                                                                : ''
+                                                            ? 'is-invalid'
+                                                            : ''
                                                             " track-by="company_name" placeholder="Select One"
                                                         @change="getCompanyDetails" />
                                                     <!--end::Select-->
@@ -358,8 +358,8 @@ export default defineComponent({
                                                     <Multiselect :options="clients" label="name" valueProp="c_id"
                                                         class="form-control form-control-lg form-control-solid"
                                                         :searchable="true" v-model="v$.form.client.$model" :class="v$.form.client.$errors.length > 0
-                                                                ? 'is-invalid'
-                                                                : ''
+                                                            ? 'is-invalid'
+                                                            : ''
                                                             " track-by="name" placeholder="Select One"
                                                         @change="getClientDetails" />
                                                     <!--end::Select-->
@@ -481,8 +481,8 @@ export default defineComponent({
                                             <textarea name="notes" class="form-control form-control-solid" rows="3"
                                                 placeholder="Thanks for your business" v-model="v$.form.notes.$model"
                                                 :class="v$.form.notes.$errors.length > 0
-                                                        ? 'is-invalid'
-                                                        : ''
+                                                    ? 'is-invalid'
+                                                    : ''
                                                     "></textarea>
                                         </div>
                                         <div v-for="(error, index) of v$.form.notes.$errors" :key="index">
@@ -515,8 +515,8 @@ export default defineComponent({
                                     <Multiselect :options="conversionrates" label="currency_name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid mb-2" :searchable="true"
                                         v-model="v$.form.currency.$model" :class="v$.form.currency.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
+                                            ? 'is-invalid'
+                                            : ''
                                             " placeholder="Select One" track-by="currency_name"
                                         @change="getConversionRate" />
 
@@ -537,8 +537,8 @@ export default defineComponent({
                                     <label class="form-label fw-bold fs-6 text-gray-700">Status</label>
                                     <Multiselect :options="status" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" :class="v$.form.status.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
+                                            ? 'is-invalid'
+                                            : ''
                                             " placeholder="Select One" v-model="v$.form.status.$model"
                                         track-by="name" />
                                     <div v-for="(error, index) of v$.form.status.$errors" :key="index">

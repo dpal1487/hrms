@@ -43,6 +43,8 @@ export default defineComponent({
     data() {
         return {
             isEdit: false,
+            isUploading: false,
+
             form: this.$inertia.form({
                 id: this.industry?.data?.id || '',
                 name: this.industry?.data?.name || '',
@@ -95,30 +97,33 @@ export default defineComponent({
                     .post(route().current() == 'industries.add' ? this.route("industries.store") : this.route('industries.update', this.form.id), config);
             }
         },
-       async onFileChange(e) {
+        onFileChange(e) {
             const file = e.target.files[0];
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
-             const formdata = new FormData();
+            const formdata = new FormData();
             formdata.append("image", file)
+            
+            this.isUploading = true;
 
-            const response = await axios.post("/industries/image-upload", formdata, {
+            axios.post("/industries/image-upload", formdata, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 }
             }).then((response) => {
                 if (response.data.success) {
-                    toast.success(response.data.message);
+                    // toast.success(response.data.message);
                     this.form.image_id = response.data.data.id;
                 } else {
                     toast.error(response.data.message);
                 }
 
+            }).finally(() => {
+                this.isUploading = false;
             })
         },
         removeSelectedAvatar() {
-            console.log("I am working...")
             this.url = null;
         }
 
@@ -152,11 +157,11 @@ export default defineComponent({
                             <div class="col-4">
                                 <div class="card p-6">
                                     <div class="fv-row">
-                                    <input type="hidden" v-model="form.image_id" />
+                                        <input type="hidden" v-model="form.image_id" />
 
                                         <ImageInput :image="this.industry?.data?.image?.medium_path"
                                             :onchange="onFileChange" :remove="removeSelectedAvatar" :selectedImage="url"
-                                            :errors="v$.form.image.$errors" />
+                                            :errors="v$.form.image.$errors" :isUploading="isUploading" />
                                     </div>
                                 </div>
                             </div>
@@ -167,8 +172,8 @@ export default defineComponent({
 
                                         <jet-label for="name" value="Name" />
                                         <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
+                                            ? 'is-invalid'
+                                            : ''
                                             " placeholder="Industry name" />
                                         <div v-for="(error, index) of v$.form.name.$errors" :key="index">
                                             <input-error :message="error.$message" />
@@ -180,8 +185,8 @@ export default defineComponent({
                                         <Multiselect :options="status" label="name" valueProp="id"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                             v-model="v$.form.status.$model" track-by="name" :class="v$.form.status.$errors.length > 0
-                                                    ? 'is-invalid'
-                                                    : ''
+                                                ? 'is-invalid'
+                                                : ''
                                                 " />
                                         <div v-for="(error, index) of v$.form.name.$errors" :key="index">
                                             <input-error :message="error.$message" />

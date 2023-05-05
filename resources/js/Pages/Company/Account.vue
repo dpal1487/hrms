@@ -1,12 +1,12 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Header from "../../Components/Company/Header.vue";
+import Header from "./Components/Header.vue";
 
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
-import AccountComponent from "../../Components/Company/Account/AccountComponent.vue";
-import FormAccount from "../../Components/Company/Account/Model/FormAccount.vue";
+import AccountComponent from "./Components/Account/AccountComponent.vue";
+import FormAccount from "./Components/Account/FormAccount.vue";
 
 export default defineComponent({
     props: ['company', 'onOnhide'],

@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Header from "../../Components/Company/Header.vue";
+import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import PrimaryButton from "@/Jetstream/Button.vue";
 

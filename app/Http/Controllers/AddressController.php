@@ -2,34 +2,100 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\Client;
 use App\Models\Address;
 use App\Models\Company;
 use App\Models\Country;
-use App\Models\Client;
-use App\Models\EmployeeAddress;
-use App\Models\CompanyAddress;
+use App\Models\Employee;
 use Illuminate\Http\Request;
-use App\Http\Resources\AddressResource;
-use App\Http\Resources\CompanyResource;
+use App\Models\CompanyAddress;
+use App\Models\EmployeeAddress;
 use App\Http\Resources\ClientResource;
 
-use Inertia\Inertia;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\CompanyResource;
+use App\Http\Resources\EmployeeResources;
 
 class AddressController extends Controller
 {
-    public function store(Request $request)
+    public function empAddress($id)
     {
-        // $address = CompanyAddress::with('address')->where('company_id' , $request->company_id)->get();
+        $employee = $this->employee($id);
+        if ($employee) {
+            return Inertia::render('Employee/Address', [
+                'employee' => new EmployeeResources($employee),
+                'user' => $this->employeeHeader($id),
+            ]);
+        }
+        return redirect()->back();
+    }
+    public function empAddressEdit($id)
+    {
+        $employee = $this->employee($id);
 
-        //     if ($address->isprimary == 1) {
-        //         echo "primary";
-        //     }
-        //     else {
-        //         echo "sdasd";
-        //     }
 
-        // dd($address);
+        $countries = Country::get();
 
+        if ($employee) {
+            return Inertia::render('Employee/UserAddress', [
+                'employee' => new EmployeeResources($employee),
+                'countries' => $countries,
+                'user' => $this->employeeHeader($id),
+
+            ]);
+        }
+        return redirect()->back();
+    }
+    public function empAddressUpdate(Request $request, $type, $id)
+    {
+        $request->validate([
+            'address_line_1' => 'required',
+            'address_line_2' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            'pincode' => 'required',
+        ]);
+        if ($type == "employees") {
+            if ($request->address_id) {
+                $address = Address::where('id', $request->address_id)->update([
+                    'address_line_1' => $request->address_line_1,
+                    'address_line_2' => $request->address_line_2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+            } else {
+                $address = Address::create([
+                    'address_line_1' => $request->address_line_1,
+                    'address_line_2' => $request->address_line_2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+                $employeeAddress = EmployeeAddress::create([
+                    'employee_id' => $id,
+                    'address_id' => $address->id,
+                ]);
+                if ($employeeAddress) {
+                    return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address Updated successfully');
+                } else {
+                    return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on update');
+                }
+            }
+
+            if ($address) {
+                return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address created successfully');
+            } else {
+                return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on create');
+            }
+        }
+    }
+    public function savecompanyAddress(Request $request)
+    {
         $request->validate([
             'address_line_1' => 'required',
             'address_line_2' => 'required',
@@ -74,53 +140,8 @@ class AddressController extends Controller
         }
     }
 
-    public function empaddress(Request $request, $id)
-    {
-        // dd($request->address_id);
-        $request->validate([
-            'address_line_1' => 'required',
-            'address_line_2' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            // 'country' => 'required',
-            'pincode' => 'required',
-        ]);
-        if ($request->address_id) {
-            $address = Address::where('id', $request->id)->update([
-                'address_line_1' => $request->address_line_1,
-                'address_line_2' => $request->address_line_2,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country_id' => $request->country,
-                'pincode' => $request->pincode,
-            ]);
-        } else {
-            $address = Address::create([
-                'address_line_1' => $request->address_line_1,
-                'address_line_2' => $request->address_line_2,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country_id' => $request->country,
-                'pincode' => $request->pincode,
-            ]);
-            $employeeAddress = EmployeeAddress::create([
-                'employee_id' => $id,
-                'address_id' => $address->id,
-            ]);
-            if ($employeeAddress) {
-                return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address Updated successfully');
-            } else {
-                return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on update');
-            }
-        }
 
-        if ($address) {
-            return redirect(url('employees/' . $id . '/address'))->with('message', 'Employee Address created successfully');
-        } else {
-            return redirect(url('employees/' . $id . '/address'))->with('message', 'Something went wrong on create');
-        }
-    }
-    public function addressShow($id)
+    public function getcompanyAddress($id)
     {
         $countries = Country::get();
         $company = Company::find($id);

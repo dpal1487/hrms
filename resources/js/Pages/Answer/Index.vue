@@ -119,7 +119,7 @@ export default defineComponent({
                             </span>
                             <!--end::Svg Icon-->
                             <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                                placeholder="Search Employees" />
+                                placeholder="Search " />
                         </div>
 
                         <button type="submit" class="btn btn-primary">
@@ -132,16 +132,7 @@ export default defineComponent({
                     <div class="card-toolbar">
                         <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <!--begin::Filter-->
-                            <div class="w-150px me-3">
-                                <!--begin::Select2-->
-                                <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
-                                    class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                                <!--end::Select2-->
-                            </div>
-                            <!--end::Filter-->
-
-                            <!--end::Export-->
+                           
                             <!--begin::Add customer-->
                             <Link href="/answer/add" class="btn btn-primary">
                             Add Answer

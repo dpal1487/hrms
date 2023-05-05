@@ -122,7 +122,7 @@ export default defineComponent({
                             </span>
                             <!--end::Svg Icon-->
                             <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                                placeholder="Search Employees" />
+                                placeholder="Search " />
                         </div>
 
                         <button type="submit" class="btn btn-primary">
@@ -135,21 +135,9 @@ export default defineComponent({
                     <div class="card-toolbar">
                         <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <!--begin::Filter-->
-                            <div class="w-150px me-3">
-                                <!--begin::Select2-->
-                                <Multiselect :options="$page.props.ziggy.status" label="label" valueProp="value"
-                                    class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                                <!--end::Select2-->
-                            </div>
-                            <!--end::Filter-->
-
-                            <!--end::Export-->
-                            <!--begin::Add customer-->
                             <Link href="/question/add" class="btn btn-primary">
                             Add Question
                             </Link>
-                            <!--end::Add customer-->
                         </div>
                         <!--end::Toolbar-->
                     </div>
@@ -176,19 +164,9 @@ export default defineComponent({
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(questions, index) in questions.data" :key="index">
                                 <td>
-
-                                    <Link :href="'/questions/' + questions.id"
-                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        questions-filter="questions_name">{{ questions.data }} {{
-                                            questions.industry?.name }}</Link>
+                                    {{ questions.industry?.name }}
                                 </td>
                                 <td>{{ questions.question_key }}</td>
-                                <!-- <td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span :class="`badge bg-${questions.status.value == 1
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ? 'success'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    : 'danger'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }`">{{ questions.status.label }}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </td> -->
                                 <td>{{ questions.text }}</td>
                                 <td>{{ questions.language }}</td>
 
@@ -224,7 +202,7 @@ export default defineComponent({
                                                 <button @click="confirmDelete(
                                                     questions.id, index
                                                 )
-                                                "
+                                                    "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>

@@ -11,14 +11,6 @@ class Address extends Model
 
     protected $fillable = ['address_line_1', 'address_line_2', 'city', 'state', 'country_id', 'pincode'];
 
-    // public function user()
-    // {
-    //     return $this->hasOne(User::class, 'id', 'user_id');
-    // }
-    // public function employee()
-    // {
-    //     return $this->hasOne(Employee::class, 'id', 'id');
-    // }
     public function country()
     {
         return $this->hasOne(Country::class, 'id', 'country_id');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\EmployeeResources;
 use App\Http\Resources\NotificationResource;
 use App\Models\Company;
 use App\Models\CompanyUser;
@@ -57,14 +58,24 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $user = Auth::user();
-        $this->company = CompanyUser::where(['user_id' => $user->id])->first();
-        // $this->employee = Employee::where(['user_id' => $user->id])->first();
+        if ($user) {
+            $this->company = CompanyUser::where(['user_id' => $user->id])->first();
+            return array_merge(parent::share($request), [
+                'ziggy' => function () use ($request) {
+                    return array_merge((new Ziggy())->toArray(), [
+                        'status' => $this->status,
+                        'company' => $this->company['company'],
+                        'flash' => [
+                            'message' => fn () => $request->session()->get('message'),
+                        ],
+                    ]);
+                },
+            ]);
+        }
         return array_merge(parent::share($request), [
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
                     'status' => $this->status,
-                    'company' => $this->company['company'],
-                    // 'employee' => $this->employee['employee'],
                     'flash' => [
                         'message' => fn () => $request->session()->get('message'),
                     ],

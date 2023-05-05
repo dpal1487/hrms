@@ -4,7 +4,7 @@ import InputError from "@/jetstream/InputError.vue";
 
 
 export default defineComponent({
-    props: ["image", "selectedImage", "errors"],
+    props: ["image", "selectedImage", "errors", "isUploading"],
     components: {
         InputError,
     },
@@ -24,10 +24,15 @@ export default defineComponent({
                 style="background-image: url('/assets/media/svg/avatars/blank.svg')">
                 <!--begin::Preview existing avatar-->
                 <!-- {{ this.industry?.data?.image?.medium_path }} -->
-                <img class="image-input-wrapper w-125px h-125px" v-if="image && !selectedImage" :src="image" />
-                <img class="image-input-wrapper w-125px h-125px" v-else-if="!selectedImage"
-                    src="/assets/media/svg/avatars/blank.svg" />
-                <img class="image-input-wrapper w-125px h-125px" v-else :src="selectedImage" />
+                <div class="w-125px h-125px d-flex align-items-center justify-content-center rounded-1 bg-secondary" v-if="isUploading">
+                    <div class="spinner-border spinner-border-sm w-50px h-50px"></div>
+                </div>
+                <div v-else>
+                    <img class="image-input-wrapper w-125px h-125px" v-if="image && !selectedImage" :src="image" />
+                    <img class="image-input-wrapper w-125px h-125px" v-else-if="!selectedImage"
+                        src="/assets/media/svg/avatars/blank.svg" />
+                    <img class="image-input-wrapper w-125px h-125px" v-else :src="selectedImage" />
+                </div>
 
 
                 <!--end::Preview existing avatar-->

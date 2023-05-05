@@ -22,7 +22,6 @@ export default defineComponent({
                 "Employee Code",
                 "Number",
                 "Salary",
-                "Status",
                 "Created At",
                 "Action",
             ],
@@ -126,7 +125,7 @@ export default defineComponent({
                         </span>
                         <!--end::Svg Icon-->
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search Industry" />
+                            placeholder="Search " />
                     </div>
                     <div class="w-100 mw-200px">
                         <!-- {{ $page.props.ziggy.status }} -->
@@ -179,10 +178,7 @@ export default defineComponent({
                                 <td>{{ employees.code }}</td>
                                 <td>{{ employees.number }}</td>
                                 <td>{{ employees.salary }}</td>
-                                <td>
-                                    <p v-if="employees.user?.active_status == 1">Active</p>
-                                    <p v-if="employees.user?.active_status == 0">Inactive</p>
-                                </td>
+                               
                                 <td>{{ employees.created_at }}</td>
 
                                 <td>
@@ -221,7 +217,7 @@ export default defineComponent({
                                                 <button @click="confirmDelete(
                                                     employees.id, index
                                                 )
-                                                " class="btn btn-sm dropdown-item">
+                                                    " class="btn btn-sm dropdown-item">
                                                     Delete
                                                 </button>
                                             </li>

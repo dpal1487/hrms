@@ -15,7 +15,6 @@ export default defineComponent({
     data() {
         return {
             q: "",
-            s: "",
             message: '',
             tbody: [
                 "Invoice No",
@@ -102,7 +101,7 @@ export default defineComponent({
         search() {
             Inertia.get(
                 "/invoices",
-                { q: this.q, status: this.s },
+                { q: this.q },
             );
         },
     },
@@ -136,7 +135,7 @@ export default defineComponent({
                         </span>
                         <!--end::Svg Icon-->
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search ..." />
+                            placeholder="Search " />
                     </div>
                     <!--  -->
                     <button type="submit" class="btn btn-primary">
@@ -181,9 +180,9 @@ export default defineComponent({
                                 <td>{{ invoice?.invoice_due_date }}</td>
                                 <td>{{ invoice?.client?.name }}</td>
                                 <td>
-                                    <Multiselect :options="status" label="name" :valueProp="invoice.status" v-model="status"
+                                    <!-- <Multiselect :options="status" label="name" :valueProp="status" v-model="status"
                                         class="form-control form-control-lg form-control-solid min-w-100px"
-                                        track-by="name" />
+                                        track-by="name" /> -->
                                     <span v-if="(invoice?.status == 0)">New</span>
                                     <span v-if="(invoice?.status == 1)">Paid</span>
                                     <span v-if="(invoice?.status == 2)">Cancelled</span>
@@ -226,8 +225,8 @@ export default defineComponent({
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                        invoice.id, index
-                                                    )
+                                                    invoice.id, index
+                                                )
                                                     " class="btn btn-sm dropdown-item">
                                                     Delete
                                                 </button>

@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Header from "../../Components/Company/Header.vue";
+import Header from "./Components/Header.vue";
 
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
@@ -79,13 +79,13 @@ export default defineComponent({
             <!--begin::Billing History-->
             <div class="card">
                 <!--begin::Card header-->
-                 <div class="card-header">
-                        <!--begin::Title-->
-                        <div class="card-title">
-                            <h3>Invoices</h3>
-                        </div>
-                        <!--begin::Card toolbar-->
+                <div class="card-header">
+                    <!--begin::Title-->
+                    <div class="card-title">
+                        <h3>Invoices</h3>
                     </div>
+                    <!--begin::Card toolbar-->
+                </div>
 
                 <!--end::Card header-->
                 <!--begin::Tab Content-->
@@ -158,8 +158,8 @@ export default defineComponent({
 
                                                     <li class="menu-item px-3">
                                                         <button @click="confirmDelete(
-                                                                invoices?.id, index
-                                                            )
+                                                            invoices?.id, index
+                                                        )
                                                             " class="btn btn-sm dropdown-item">
                                                             Delete
                                                         </button>

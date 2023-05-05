@@ -1,4 +1,4 @@
-<template>
+
         <template #step1>
             <div class="form-setup">
                 <!--begin::Wrapper-->
@@ -107,7 +107,7 @@
             <input type="text" name="first_name">
             <input type="text" name="last_name">
         </template>
-</template>
+
 <script>
 import { defineComponent } from 'vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'

@@ -1,14 +1,14 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Header from "../../Components/Company/Header.vue";
+import Header from "./Components/Header.vue";
 
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import useVuelidate from "@vuelidate/core";
 import SearchComponent from "../../Components/SearchComponent.vue";
-import FormEmail from "../../Components/Company/Email/Model/FormEmail.vue";
+import FormEmail from "./Components/Email/FormEmail.vue";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import axios from "axios";

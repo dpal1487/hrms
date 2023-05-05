@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Header from "../../Components/User/Header.vue";
+import Header from "./Components/Header.vue";
 
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
@@ -25,7 +25,8 @@ import { toast } from "vue3-toastify";
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ['employee'],
+    props: ['employee', 'user'],
+
     setup() {
         return { v$: useVuelidate() };
     },
@@ -88,9 +89,12 @@ export default defineComponent({
         return {
 
             isEdit: false,
+            isUploading: false,
+
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
                 image: this.employee?.data?.user?.image?.medium_path || '',
+                image_id: '',
                 first_name: this.employee?.data?.user?.first_name || '',
                 last_name: this.employee?.data?.user?.last_name || '',
                 email: this.employee?.data?.user?.email || '',
@@ -108,7 +112,7 @@ export default defineComponent({
                 department_id: this.employee?.data?.department_id || '',
             }),
             value: null,
-            url:null,
+            url: null,
             options: [
                 { name: 'Vue.js', department: 'Vue.js' },
                 { name: 'Rails', department: 'Rails' },
@@ -152,6 +156,28 @@ export default defineComponent({
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
+
+            const formdata = new FormData();
+            formdata.append("image", file)
+
+            this.isUploading = true;
+            axios.post("/employee/image-upload", formdata, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            }).then((response) => {
+                if (response.data.success) {
+                    // toast.success(response.data.message);
+                    this.form.image_id = response.data.data.id;
+                } else {
+                    toast.error(response.data.message);
+                }
+            }).finally(() => {
+                this.isUploading = false;
+            })
+
+
+
         },
         removeSelectedAvatar() {
             this.url = null;
@@ -166,252 +192,242 @@ export default defineComponent({
 <template>
     <Head title="Employee Edit" />
     <AppLayout>
-        <Header :employee="employee">
-            <!--begin::details View-->
-            <div class="card mb-5 mb-xl-10">
-                <!--begin::Card header-->
-                <div class="card-header cursor-pointer">
-                    <!--begin::Card title-->
-                    <div class="card-title m-0">
-                        <h3 class="fw-bold m-0">Profile Edit</h3>
-                        <!-- {{ employee }} -->
+        <div class="app-content flex-column-fluid ">
+            <!--begin::Content container-->
+            <div class="app-container container-xxl">
+                <Header :user="user.data" :employee="employee.data" />
+                <!--begin::details View-->
+                <div class="card mb-5 mb-xl-10">
+                    <!--begin::Card header-->
+                    <div class="card-header cursor-pointer">
+                        <!--begin::Card title-->
+                        <div class="card-title m-0">
+                            <h3 class="fw-bold m-0">Profile Edit</h3>
+                            <!-- {{ employee }} -->
+                        </div>
+                        <!--end::Card title-->
+
                     </div>
-                    <!--end::Card title-->
-                    <!-- <Link class="btn btn-primary align-self-center"
-                                                                                                                                                                                                        :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
-                                                                                                                                                                                                    Profile
-                                                                                                                                                                                                    </Link> -->
-                    <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
-                </div>
-                <!--begin::Card header-->
-                <!--begin::Card body-->
-                <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
-                    <div class="col-12">
-                        <JetValidationErrors />
-                        <!-- {{ form }} -->
-                        <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row g-5 col-md-12">
-                                        <div class="fv-row col-6">
-                                            <ImageInput :image="this.employee?.data?.image?.medium_path"
-                                                :onchange="onFileChange" :remove="removeSelectedAvatar" :selectedImage="url"
-                                                :errors="v$.form.image.$errors" />
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="first_name" value="First Name" />
-                                            <jet-input id="first_name" type="text" v-model="v$.form.first_name.$model"
-                                                :class="
-                                                    v$.form.first_name.$errors.length > 0
+                    <!--begin::Card header-->
+                    <!--begin::Card body-->
+                    <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
+                        <div class="col-12">
+                            <JetValidationErrors />
+                            <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row g-5 col-md-12">
+                                            <div class="fv-row col-6">
+                                                <input type="hidden" v-model="form.image_id" />
+                                                <ImageInput :image="this.employee?.data?.user?.image?.medium_path"
+                                                    :onchange="onFileChange" :remove="removeSelectedAvatar"
+                                                    :selectedImage="url" :errors="v$.form.image.$errors"
+                                                    :isUploading="isUploading" />
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="first_name" value="First Name" />
+                                                <jet-input id="first_name" type="text" v-model="v$.form.first_name.$model"
+                                                    :class="v$.form.first_name.$errors.length > 0
                                                         ? 'is-invalid'
                                                         : ''
-                                                " placeholder="First name" />
-                                            <div v-for="(error, index) of v$.form.first_name.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                        " placeholder="First name" />
+                                                <div v-for="(error, index) of v$.form.first_name.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+
+                                                <jet-label for="last_name" value="Last Name" />
+                                                <jet-input id="last_name" type="text" v-model="v$.form.last_name.$model"
+                                                    :class="v$.form.last_name.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Last Name" />
+                                                <div v-for="(error, index) of v$.form.last_name.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
 
-                                            <jet-label for="last_name" value="Last Name" />
-                                            <jet-input id="last_name" type="text" v-model="v$.form.last_name.$model" :class="
-                                                v$.form.last_name.$errors.length > 0
+                                            <div class="fv-row col-6">
+                                                <jet-label for="date_of_joining" value="Date Of Joining" />
+                                                <VueDatePicker v-model="v$.form.date_of_joining.$model"
+                                                    :enable-time-picker="false" auto-apply
+                                                    input-class-name="form-control form-control-lg form-control-solid fw-normal"
+                                                    :class="v$.form.date_of_joining.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Date Of Joining"></VueDatePicker>
+                                                <div v-for="(error, index) of v$.form.date_of_joining.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="number" value="Number" />
+                                                <jet-input id="number" type="text" v-model="v$.form.number.$model" :class="v$.form.number.$errors.length > 0
                                                     ? 'is-invalid'
                                                     : ''
-                                            " placeholder="Last Name" />
-                                            <div v-for="(error, index) of v$.form.last_name.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                    " placeholder="Enter Employee Number" />
+                                                <div v-for="(error, index) of v$.form.number.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <div class="fv-row col-6">
-                                            <jet-label for="date_of_joining" value="Date Of Joining" />
-                                            <VueDatePicker v-model="v$.form.date_of_joining.$model"
-                                                :enable-time-picker="false" auto-apply
-                                                input-class-name="form-control form-control-lg form-control-solid fw-normal"
-                                                :class="
-                                                    v$.form.date_of_joining.$errors.length > 0
+                                            <div class="fv-row col-6">
+                                                <jet-label for="qualification" value="Qualification" />
+                                                <jet-input id="qualification" type="text"
+                                                    v-model="v$.form.qualification.$model" :class="v$.form.qualification.$errors.length > 0
                                                         ? 'is-invalid'
                                                         : ''
-                                                " placeholder="Date Of Joining"></VueDatePicker>
-                                            <div v-for="(error, index) of v$.form.date_of_joining.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                        " placeholder="Qualification" />
+                                                <div v-for="(error, index) of v$.form.qualification.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="number" value="Number" />
-                                            <jet-input id="number" type="text" v-model="v$.form.number.$model" :class="
-                                                v$.form.number.$errors.length > 0
+                                            <div class="fv-row col-6">
+                                                <jet-label for="emergency_number" value="Emergency Number" />
+                                                <jet-input id="emergency_number" type="text"
+                                                    v-model="v$.form.emergency_number.$model" :class="v$.form.emergency_number.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Emergency Number" />
+                                                <div v-for="(error, index) of v$.form.emergency_number.$errors"
+                                                    :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="pan_number" value="Pan Number" />
+                                                <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model"
+                                                    :class="v$.form.pan_number.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Pan Number" />
+                                                <div v-for="(error, index) of v$.form.pan_number.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="father_name" value="Father Name" />
+                                                <jet-input id="father_name" type="text" v-model="v$.form.father_name.$model"
+                                                    :class="v$.form.father_name.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Father Name" />
+                                                <div v-for="(error, index) of v$.form.father_name.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="formalities" value="Formalities" />
+                                                <jet-input id="formalities" type="text" v-model="v$.form.formalities.$model"
+                                                    :class="v$.form.formalities.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Formalities" />
+                                                <div v-for="(error, index) of v$.form.formalities.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="salary" value="Salary" />
+                                                <jet-input id="salary" type="text" v-model="v$.form.salary.$model" :class="v$.form.salary.$errors.length > 0
                                                     ? 'is-invalid'
                                                     : ''
-                                            " placeholder="Enter Employee Number" />
-                                            <div v-for="(error, index) of v$.form.number.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                    " placeholder="Salary" />
+                                                <div v-for="(error, index) of v$.form.salary.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="qualification" value="Qualification" />
-                                            <jet-input id="qualification" type="text" v-model="v$.form.qualification.$model"
-                                                :class="
-                                                    v$.form.qualification.$errors.length > 0
+                                            <div class="fv-row col-6">
+                                                <jet-label for="offer_acceptance" value="Offer Acceptance" />
+                                                <jet-input id="offer_acceptance" type="text"
+                                                    v-model="v$.form.offer_acceptance.$model" :class="v$.form.offer_acceptance.$errors.length > 0
                                                         ? 'is-invalid'
                                                         : ''
-                                                " placeholder="Qualification" />
-                                            <div v-for="(error, index) of v$.form.qualification.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                        " placeholder="Offer Acceptance" />
+                                                <div v-for="(error, index) of v$.form.offer_acceptance.$errors"
+                                                    :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="emergency_number" value="Emergency Number" />
-                                            <jet-input id="emergency_number" type="text"
-                                                v-model="v$.form.emergency_number.$model" :class="
-                                                    v$.form.emergency_number.$errors.length > 0
+                                            <div class="fv-row col-6">
+                                                <jet-label for="probation_period" value="Probation Period" />
+                                                <jet-input id="probation_period" type="text"
+                                                    v-model="v$.form.probation_period.$model" :class="v$.form.probation_period.$errors.length > 0
                                                         ? 'is-invalid'
                                                         : ''
-                                                " placeholder="Emergency Number" />
-                                            <div v-for="(error, index) of v$.form.emergency_number.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                        " placeholder="Probation Period" />
+                                                <div v-for="(error, index) of v$.form.probation_period.$errors"
+                                                    :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="pan_number" value="Pan Number" />
-                                            <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model"
-                                                :class="
-                                                    v$.form.pan_number.$errors.length > 0
+                                            <div class="fv-row col-6">
+                                                <jet-label for="date_of_confirmation" value="Date Of Confirmation" />
+                                                <VueDatePicker v-model="v$.form.date_of_confirmation.$model"
+                                                    :enable-time-picker="false" auto-apply
+                                                    input-class-name="form-control form-control-lg form-control-solid fw-normal"
+                                                    :class="v$.form.date_of_confirmation.$errors.length > 0
                                                         ? 'is-invalid'
                                                         : ''
-                                                " placeholder="Pan Number" />
-                                            <div v-for="(error, index) of v$.form.pan_number.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                        " placeholder="Date Of Confirmation"></VueDatePicker>
+                                                <div v-for="(error, index) of v$.form.date_of_confirmation.$errors"
+                                                    :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="father_name" value="Father Name" />
-                                            <jet-input id="father_name" type="text" v-model="v$.form.father_name.$model"
-                                                :class="
-                                                    v$.form.father_name.$errors.length > 0
-                                                        ? 'is-invalid'
-                                                        : ''
-                                                " placeholder="Father Name" />
-                                            <div v-for="(error, index) of v$.form.father_name.$errors" :key="index">
-                                                <input-error :message="error.$message" />
-                                            </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="formalities" value="Formalities" />
-                                            <jet-input id="formalities" type="text" v-model="v$.form.formalities.$model"
-                                                :class="
-                                                    v$.form.formalities.$errors.length > 0
-                                                        ? 'is-invalid'
-                                                        : ''
-                                                " placeholder="Formalities" />
-                                            <div v-for="(error, index) of v$.form.formalities.$errors" :key="index">
-                                                <input-error :message="error.$message" />
-                                            </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="salary" value="Salary" />
-                                            <jet-input id="salary" type="text" v-model="v$.form.salary.$model" :class="
-                                                v$.form.salary.$errors.length > 0
-                                                    ? 'is-invalid'
-                                                    : ''
-                                            " placeholder="Salary" />
-                                            <div v-for="(error, index) of v$.form.salary.$errors" :key="index">
-                                                <input-error :message="error.$message" />
-                                            </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="offer_acceptance" value="Offer Acceptance" />
-                                            <jet-input id="offer_acceptance" type="text"
-                                                v-model="v$.form.offer_acceptance.$model" :class="
-                                                    v$.form.offer_acceptance.$errors.length > 0
-                                                        ? 'is-invalid'
-                                                        : ''
-                                                " placeholder="Offer Acceptance" />
-                                            <div v-for="(error, index) of v$.form.offer_acceptance.$errors" :key="index">
-                                                <input-error :message="error.$message" />
-                                            </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="probation_period" value="Probation Period" />
-                                            <jet-input id="probation_period" type="text"
-                                                v-model="v$.form.probation_period.$model" :class="
-                                                    v$.form.probation_period.$errors.length > 0
-                                                        ? 'is-invalid'
-                                                        : ''
-                                                " placeholder="Probation Period" />
-                                            <div v-for="(error, index) of v$.form.probation_period.$errors" :key="index">
-                                                <input-error :message="error.$message" />
-                                            </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="date_of_confirmation" value="Date Of Confirmation" />
-                                            <VueDatePicker v-model="v$.form.date_of_confirmation.$model"
-                                                :enable-time-picker="false" auto-apply
-                                                input-class-name="form-control form-control-lg form-control-solid fw-normal"
-                                                :class="
-                                                    v$.form.date_of_confirmation.$errors.length > 0
-                                                        ? 'is-invalid'
-                                                        : ''
-                                                " placeholder="Date Of Confirmation"></VueDatePicker>
-                                            <div v-for="(error, index) of v$.form.date_of_confirmation.$errors"
-                                                :key="index">
-                                                <input-error :message="error.$message" />
-                                            </div>
-                                        </div>
 
-                                        <div class="fv-row col-6">
+                                            <div class="fv-row col-6">
 
-                                            <jet-label for="department_id" value="Department" />
-                                            <jet-input id="department_id" type="text" v-model="v$.form.department_id.$model"
-                                                :class="
-                                                    v$.form.department_id.$errors.length > 0
+                                                <jet-label for="department_id" value="Department" />
+                                                <jet-input id="department_id" type="text"
+                                                    v-model="v$.form.department_id.$model" :class="v$.form.department_id.$errors.length > 0
                                                         ? 'is-invalid'
                                                         : ''
-                                                " placeholder="Department" />
-                                            <div v-for="(error, index) of v$.form.department_id.$errors" :key="index">
-                                                <input-error :message="error.$message" />
+                                                        " placeholder="Department" />
+                                                <div v-for="(error, index) of v$.form.department_id.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="fv-row col-6">
-                                            <jet-label for="department_id" value="Department" />
-                                            <Multiselect :options="options" label="name" valueProp="department"
-                                                
-                                                class="form-control form-control-lg form-control-solid"
-                                                placeholder="Select One" v-model="form.department_id" track-by="name" />
+                                            <div class="fv-row col-6">
+                                                <jet-label for="department_id" value="Department" />
+                                                <Multiselect :options="options" label="name" valueProp="department"
+                                                    class="form-control form-control-lg form-control-solid"
+                                                    placeholder="Select One" v-model="form.department_id" track-by="name" />
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--end::Variations-->
-                            <div class="row text-align-center p-3">
-                                <div class="col-12">
+                                <!--end::Variations-->
+                                <div class="row text-align-center p-3">
+                                    <div class="col-12">
 
-                                    <div class="d-flex justify-content-end gap-2">
-                                        <Link :href="`/employees/${employee?.data?.id}/overview`"
-                                            class="btn btn-secondary align-items-center justify-content-center">
-                                        Cancel
-                                        </Link>
-                                        <button type="submit"
-                                            class="btn btn-primary align-items-center justify-content-center"
-                                            :data-kt-indicator="form.processing ? 'on' : 'off'">
-                                            <span class="indicator-label">
-                                                <span>Save</span>
-                                            </span>
-                                            <span class="indicator-progress">
-                                                Please wait... <span
-                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                            </span>
-                                        </button>
-                                        <!--end::Button-->
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <Link :href="`/employees/${employee?.data?.id}/overview`"
+                                                class="btn btn-secondary align-items-center justify-content-center">
+                                            Cancel
+                                            </Link>
+                                            <button type="submit"
+                                                class="btn btn-primary align-items-center justify-content-center"
+                                                :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                                <span class="indicator-label">
+                                                    <span>Save</span>
+                                                </span>
+                                                <span class="indicator-progress">
+                                                    Please wait... <span
+                                                        class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                </span>
+                                            </button>
+                                            <!--end::Button-->
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--end::Actions-->
-                        </form>
+                                <!--end::Actions-->
+                            </form>
+                        </div>
                     </div>
+                    <!--end::Card body-->
                 </div>
-                <!--end::Card body-->
+                <!--end::details View-->
             </div>
-            <!--end::details View-->
-        </Header>
+        </div>
     </AppLayout>
 </template>

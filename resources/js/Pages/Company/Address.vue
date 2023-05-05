@@ -1,13 +1,13 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Header from "../../Components/Company/Header.vue";
+import Header from "./Components/Header.vue";
 
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
-import AddressComponent from "../../Components/Company/Address/AddressComponent.vue";
+import AddressComponent from "./Components/Address/AddressComponent.vue";
 
-import FormAddress from "../../Components/Company/Address/Model/formAddress.vue";
+import FormAddress from "./Components/Address/FormAddress.vue";
 
 
 export default defineComponent({

@@ -122,7 +122,7 @@ export default defineComponent({
                         </span>
                         <!--end::Svg Icon-->
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search Industry" />
+                            placeholder="Search " />
                     </div>
                     <div class="w-100 mw-200px">
                         <!-- {{ $page.props.ziggy.status }} -->
