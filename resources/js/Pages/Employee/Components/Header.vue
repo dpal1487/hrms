@@ -3,7 +3,7 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 export default defineComponent({
-    props: ['user', 'employee'],
+    props: ['user', 'address'],
     components: {
         Link,
     },
@@ -17,6 +17,7 @@ export default defineComponent({
 <template>
     <div class="card mb-5 mb-xl-5">
         <div class="card-body pt-9 pb-0">
+
             <!--begin::Details-->
             <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                 <!--begin: Pic-->
@@ -90,9 +91,9 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon--><span v-if="employee?.address">{{ employee?.address?.city + " " +
-                                        employee?.address?.state + " " +
-                                        employee?.address?.country?.name }}</span>Address</a>
+                                    <!--end::Svg Icon--><span v-if="address">{{ address?.city + " " +
+                                        address?.state + " " +
+                                        address?.country?.name }}</span> Address</a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">
@@ -225,7 +226,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.view') && 'active'}`"
-                        :href="'/employees/' + id">Overview
+                        :href="'/employees/' + $page.props.ziggy.id[1]">Overview
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -234,7 +235,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.security') && 'active'}`"
-                        :href="'/employees/' + id + '/security'">Security
+                        :href="'/employees/' + $page.props.ziggy.id[1] + '/security'">Security
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -242,7 +243,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.address') && 'active'}`"
-                        :href="'/employees/' + id + '/address'">Address
+                        :href="'/employees/' + $page.props.ziggy.id[1] + '/address'">Address
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -250,7 +251,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.settings') && 'active'}`"
-                        :href="'/employees/' + id + '/settings'">Settings
+                        :href="'/employees/' + $page.props.ziggy.id[1] + '/settings'">Settings
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -258,7 +259,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.attendance') && 'active'}`"
-                        :href="'/employees/' + id + '/attendance'">Attendance
+                        :href="'/employees/' + $page.props.ziggy.id[1] + '/attendance'">Attendance
                     </Link>
                 </li>
                 <!--end::Nav item-->
