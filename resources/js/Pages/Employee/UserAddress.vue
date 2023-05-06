@@ -16,7 +16,7 @@ import Header from "./Components/Header.vue";
 
 
 export default defineComponent({
-    props: ['employee', 'countries', 'user'],
+    props: ['countries', 'user'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -46,16 +46,17 @@ export default defineComponent({
     },
     data() {
         return {
-            form: this.$inertia.form({
-                id: this.employee?.data?.id || '',
-                address_id: this.employee?.data?.address?.id || '',
-                address_line_1: this.employee?.data?.address?.address_line_1 || '',
-                address_line_2: this.employee?.data?.address?.address_line_2 || '',
-                city: this.employee?.data?.address?.city || '',
-                state: this.employee?.data?.address?.state || '',
-                country: this.employee?.data?.address?.country?.id || '',
-                pincode: this.employee?.data?.address?.pincode || '',
-            }),
+            id: route().params.id,
+            form: {
+                id: route().params.id,
+                address_id: this.address?.id || '',
+                address_line_1: this.address?.address_line_1 || '',
+                address_line_2: this.address?.address_line_2 || '',
+                city: this.address?.city || '',
+                state: this.address?.state || '',
+                country: this.address?.country?.id || '',
+                pincode: this.address?.pincode || '',
+            },
         };
     },
     components: {
@@ -73,18 +74,9 @@ export default defineComponent({
     },
     methods: {
         submit() {
-            // alert("sd");
-
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-
-                    // .post(route('employees.address.update', this.form.id));
-                    .put(this.route("address.update", ['employees', this.form.id]), { id: this.form.id })
-
+                axios.post(this.route("address.update", ['employees', this.form.id]), this.form)
             }
         },
     },
@@ -98,7 +90,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" :employee="employee.data" />
+                <Header :user="user.data" />
                 <!-- {{ employee.data.address }} -->
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
@@ -106,7 +98,7 @@ export default defineComponent({
                     <div class="card-header cursor-pointer">
                         <!--begin::Card title-->
                         <div class="card-title m-0">
-                            <h3 class="fw-bold m-0">Update User Address</h3>
+                            <h3 class="fw-bold m-0">Edit Address</h3>
                         </div>
                         <!--end::Card title-->
                     </div>
@@ -250,7 +242,7 @@ export default defineComponent({
                             <!--end::Card body-->
                             <!--begin::Actions-->
                             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                <Link :href="`/employees/${employee?.data?.id}/address`"
+                                <Link :href="`/employees/${id}/address`"
                                     class="btn btn-light btn-active-light-primary me-2">
                                 Discard
                                 </Link>

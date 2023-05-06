@@ -173,7 +173,7 @@ export default defineComponent({
 
                                 <td>
 
-                                    <Link :href="'/company/' + companies.id"
+                                    <Link :href="'/my-company/' + companies.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
                                             companies?.company_name }} </Link>
                                 </td>
@@ -220,8 +220,8 @@ export default defineComponent({
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                        companies.id, index
-                                                    )
+                                                    companies.id, index
+                                                )
                                                     " class="btn btn-sm dropdown-item">
                                                     Delete
                                                 </button>

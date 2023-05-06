@@ -12,13 +12,16 @@ use Illuminate\Http\Request;
 use App\Models\CompanyAddress;
 use App\Models\EmployeeAddress;
 use App\Http\Resources\ClientResource;
-
-use App\Http\Resources\AddressResource;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\EmployeeResources;
+use App\Models\CompanyUser;
+use Validator;
 
 class AddressController extends Controller
 {
+    public function show($type)
+    {
+    }
     public function empAddress($id)
     {
         $employee = $this->employee($id);
@@ -30,23 +33,7 @@ class AddressController extends Controller
         }
         return redirect()->back();
     }
-    public function empAddressEdit($id)
-    {
-        $employee = $this->employee($id);
 
-
-        $countries = Country::get();
-
-        if ($employee) {
-            return Inertia::render('Employee/UserAddress', [
-                'employee' => new EmployeeResources($employee),
-                'countries' => $countries,
-                'user' => $this->employeeHeader($id),
-
-            ]);
-        }
-        return redirect()->back();
-    }
     public function empAddressUpdate(Request $request, $type, $id)
     {
         $request->validate([
@@ -58,6 +45,7 @@ class AddressController extends Controller
             'pincode' => 'required',
         ]);
         if ($type == "employees") {
+
             if ($request->address_id) {
                 $address = Address::where('id', $request->address_id)->update([
                     'address_line_1' => $request->address_line_1,
@@ -94,27 +82,79 @@ class AddressController extends Controller
             }
         }
     }
-    public function savecompanyAddress(Request $request)
+    public function store(Request $request, $type)
     {
-        $request->validate([
+
+
+        $validator = Validator::make($request->all(), [
             'address_line_1' => 'required',
             'address_line_2' => 'required',
             'city' => 'required',
             'state' => 'required',
-            // 'country' => 'required',
+            'country' => 'required',
             'pincode' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
+        if ($type == 'company') {
+            if (CompanyUser::where(['user_id' => $this->uid(), 'company_id' => $this->companyId()])->first()) {
+                $address = CompanyAddress::where('company_id', $this->companyId())->get();
+                // if ($address) {
+                $address = Address::create([
+                    'address_line_1' => $request->address_line_1,
+                    'address_line_2' => $request->address_line_2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+                // }
+                $companyAddress = companyAddress::create([
+                    'company_id' => $this->companyId(),
+                    'address_id' => $address->id,
+                ]);
+                if ($companyAddress) {
+                    return response()->json(['message' => 'Address created successfully.', 'success' => true], 200);
+                }
+            }
+        }
 
-        if (!empty($request->id)) {
-            $address = Address::where('id', $request->id)->update([
-                'address_line_1' => $request->address_line_1,
-                'address_line_2' => $request->address_line_2,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country_id' => $request->country,
-                'pincode' => $request->pincode,
-            ]);
-        } else {
+        return response()->json(['message' => 'Unable to craete address.', 'success' => false], 400);
+    }
+    public function update(Request $request, $type, $id)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'address_line_1' => 'required',
+            'address_line_2' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            'pincode' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
+        if ($type == 'company') {
+            if (CompanyUser::where(['user_id' => $this->uid(), 'company_id' => $this->companyId()])->first()) {
+                if (CompanyAddress::where(['company_id' => $this->companyId(), 'address_id' => $id])->first()) {
+                    $address = Address::where('id', $id)->update([
+                        'address_line_1' => $request->address_line_1,
+                        'address_line_2' => $request->address_line_2,
+                        'city' => $request->city,
+                        'state' => $request->state,
+                        'country_id' => $request->country,
+                        'pincode' => $request->pincode,
+                    ]);
+                    if ($address) {
+                        return response()->json(['message' => 'Address updated successfully.', 'success' => true], 200);
+                    }
+                }
+            }
+        }
+        if ($type == 'employees') {
+
             $address = Address::create([
                 'address_line_1' => $request->address_line_1,
                 'address_line_2' => $request->address_line_2,
@@ -123,29 +163,34 @@ class AddressController extends Controller
                 'country_id' => $request->country,
                 'pincode' => $request->pincode,
             ]);
-            $employeeAddress = CompanyAddress::create([
-                'company_id' => $request->company_id,
+            // }
+            $companyAddress = EmployeeAddress::create([
+                'employee_id' => $request->id,
                 'address_id' => $address->id,
             ]);
-            if ($employeeAddress) {
-                return response()->json(['success' => true, 'message' => 'Company Address Added successfully']);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
+            if ($companyAddress) {
+                return response()->json(['message' => 'Address created successfully.', 'success' => true], 200);
             }
         }
-        if ($address) {
-            return response()->json(['success' => true, 'message' => 'Company Address Updates successfully']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
-        }
+        return response()->json(['message' => 'unable to update address.', 'success' => false], 400);
     }
 
 
-    public function getcompanyAddress($id)
+    // public function getcompanyAddress($id)
+    // {
+    //     $countries = Country::get();
+    //     $company = Company::find($id);
+    //     // return new CompanyResource($company);
+    //     return Inertia::render('Company/Address', [
+    //         'company' => new CompanyResource($company),
+    //         'countries' => $countries,
+    //     ]);
+    // }
+    public function getcompanyAddress()
     {
         $countries = Country::get();
-        $company = Company::find($id);
-        // return new CompanyResource($company);
+        $company = Company::where('id', $this->companyId())->first();
+
         return Inertia::render('Company/Address', [
             'company' => new CompanyResource($company),
             'countries' => $countries,
@@ -190,12 +235,17 @@ class AddressController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($type, $id)
     {
-        $address = CompanyAddress::where('address_id', '=', $id)->first();
-        if ($address->delete()) {
-            return response()->json(['success' => true, 'message' => 'Address has been deleted successfully.']);
+        if (CompanyUser::where(['user_id' => $this->uid(), 'company_id' => $this->companyId()])->first()) {
+            if ($address = CompanyAddress::where(['company_id' => $this->companyId(), 'address_id' => $id])->first()) {
+
+                if ($address->delete()) {
+                    return response()->json(['success' => true, 'message' => 'Address has been deleted successfully.'], 200);
+                }
+            }
         }
+
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 }

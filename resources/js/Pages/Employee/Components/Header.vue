@@ -3,9 +3,14 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 export default defineComponent({
-    props: ['user','employee'],
+    props: ['user', 'employee'],
     components: {
         Link,
+    },
+    data() {
+        return {
+            id: route().params.id
+        }
     },
 });
 </script>
@@ -34,8 +39,8 @@ export default defineComponent({
                             <!--begin::Name-->
                             <div class="d-flex align-items-center mb-2">
                                 <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
-                                    user.first_name }}
-                                    {{ user.last_name }}</a>
+                                    user?.first_name }}
+                                    {{ user?.last_name }}</a>
                                 <a href="">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
                                     <span class="svg-icon svg-icon-1 svg-icon-primary">
@@ -69,7 +74,9 @@ export default defineComponent({
                                             <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->Developer</a>
+                                    <!--end::Svg Icon--><span v-if="employee" class="me-2">{{ employee?.department_id }}
+                                    </span> Devloper</a>
+
                                 <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">
@@ -83,7 +90,9 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->SF, Bay Area</a>
+                                    <!--end::Svg Icon--><span v-if="employee?.address">{{ employee?.address?.city + " " +
+                                        employee?.address?.state + " " +
+                                        employee?.address?.country?.name }}</span>Address</a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">
@@ -97,7 +106,7 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->{{ user.email }}</a>
+                                    <!--end::Svg Icon-->{{ user?.email }}</a>
                             </div>
                             <!--end::Info-->
                         </div>
@@ -107,6 +116,7 @@ export default defineComponent({
                     <!--end::Title-->
                     <!--begin::Stats-->
                     <div class="d-flex flex-wrap flex-stack">
+
                         <!--begin::Wrapper-->
                         <div class="d-flex flex-column flex-grow-1 pe-8">
                             <!--begin::Stats-->
@@ -200,7 +210,7 @@ export default defineComponent({
                             </div>
                         </div>
                         <!--end::Progress-->
-                        
+
                     </div>
                     <!--end::Stats-->
                 </div>
@@ -214,8 +224,8 @@ export default defineComponent({
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.overview') && 'active'}`"
-                        :href="'/employees/' + employee?.id + '/overview'">Overview
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.view') && 'active'}`"
+                        :href="'/employees/' + id">Overview
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -224,7 +234,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.security') && 'active'}`"
-                        :href="'/employees/' + employee?.id + '/security'">Security
+                        :href="'/employees/' + id + '/security'">Security
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -232,7 +242,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.address') && 'active'}`"
-                        :href="'/employees/' + employee?.id + '/address'">Address
+                        :href="'/employees/' + id + '/address'">Address
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -240,7 +250,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.settings') && 'active'}`"
-                        :href="'/employees/' + employee?.id + '/settings'">Settings
+                        :href="'/employees/' + id + '/settings'">Settings
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -248,7 +258,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.attendance') && 'active'}`"
-                        :href="'/employees/' + employee?.id + '/attendance'">Attendance
+                        :href="'/employees/' + id + '/attendance'">Attendance
                     </Link>
                 </li>
                 <!--end::Nav item-->

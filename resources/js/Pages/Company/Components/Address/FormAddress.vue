@@ -15,10 +15,8 @@ import axios from 'axios';
 
 export default defineComponent({
 
-    props: ['show', 'countries', 'company', 'address', 'onOnhide'],
+    props: ['countries', 'isEdit', 'address'],
     emits: ['hidemodal'],
-
-
     setup() {
         return {
             v$: useVuelidate(),
@@ -52,17 +50,15 @@ export default defineComponent({
     data() {
         return {
             message: '',
-            isEdit: false,
             requesting: false,
-
+            showModal: false,
             form: this.$inertia.form({
                 id: this.address?.id || '',
-                company_id: this.company?.data?.id || '',
                 address_line_1: this.address?.address_line_1 || '',
                 address_line_2: this.address?.address_line_2 || '',
                 city: this.address?.city || '',
                 state: this.address?.state || '',
-                country: this.address?.country.id || '',
+                country: this.address?.country?.id || '',
                 pincode: this.address?.pincode || '',
                 isPrimary: '',
             }),
@@ -86,16 +82,16 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.requesting = true;
-                axios.post(this.route("company.address.store"), { ...this.form, id: this.form.id })
+                axios.post(!this.isEdit ? this.route("address.store", 'company') : this.route('address.update', ['company', this.form.id]), this.form)
                     .then((response) => {
+                        console.log(response)
                         if (response.data.success) {
-                            toast(response.data.message)
+                            toast.success(response.data.message)
                             this.requesting = false;
                             this.$emit('hidemodal', false);
                             location.reload();
-                            return;
                         } else {
-                            toast(response.data.message)
+                            toast.error(response.data.message)
                         }
                     });
             }
@@ -106,7 +102,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <Modal :show="show" title="Company Address" @onhide="$emit('hidemodal', false)">
+    <Modal :show="showModal" :title="isEdit ? 'Edit Address' : 'Add Address'" @onhide="$emit('hidemodal', false)">
         <!-- <Modal :show="show" title="Edit Address" @onhide="$emit('hidemodal', false)"> -->
         <JetValidationErrors />
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">

@@ -409,7 +409,7 @@ export default defineComponent({
                                                 class="btn btn-primary align-items-center justify-content-center"
                                                 :data-kt-indicator="form.processing ? 'on' : 'off'">
                                                 <span class="indicator-label">
-                                                    <span>Save</span>
+                                                    <span>Update</span>
                                                 </span>
                                                 <span class="indicator-progress">
                                                     Please wait... <span

@@ -10,7 +10,6 @@ class EmployeeAddress extends Model
     use HasFactory;
 
     protected $fillable = ['employee_id', 'address_id'];
-
     public function address()
     {
         return $this->hasOne(Address::class, 'id', 'address_id');

@@ -65,6 +65,7 @@ class HandleInertiaRequests extends Middleware
                     return array_merge((new Ziggy())->toArray(), [
                         'status' => $this->status,
                         'company' => $this->company['company'],
+                        'id' => request()->segments(1),
                         'flash' => [
                             'message' => fn () => $request->session()->get('message'),
                         ],

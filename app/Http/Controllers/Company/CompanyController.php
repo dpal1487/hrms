@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AddressResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
+use App\Models\CompanyAddress;
 use App\Models\CompanySize;
+use App\Models\Country;
 use App\Models\Invoice;
 use Auth;
 
@@ -100,11 +103,19 @@ class CompanyController extends Controller
             'company' => new CompanyResource($company),
         ]);
     }
-
+    public function addresses()
+    {
+        $countries = Country::get();
+        $addresses = CompanyAddress::where('company_id', $this->companyId())->get();
+        return Inertia::render('Company/Address', [
+            'addresses' => AddressResource::collection($addresses),
+            'countries' => $countries,
+        ]);
+    }
     public function accountShow($id)
     {
         // dd($id);
-        $company = Company::find($id);
+        $company = Company::find($this->companyId());
         // return new CompanyResource($company);
         return Inertia::render('Company/Address', [
             'company' => new CompanyResource($company),

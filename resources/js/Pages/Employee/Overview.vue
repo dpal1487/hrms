@@ -25,7 +25,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <!--begin::Navbar-->
-                <Header :user="user.data" :employee="employee.data"/>
+                <Header :user="user.data" :employee="employee.data" />
                 <!-- {{ $page }} -->
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
@@ -33,7 +33,7 @@ export default defineComponent({
                     <div class="card-header cursor-pointer">
                         <!--begin::Card title-->
                         <div class="card-title m-0">
-                            <h3 class="fw-bold m-0">Profile Details</h3>
+                            <h3 class="fw-bold m-0">Manage Profile </h3>
                             <!-- {{ employee }} -->
                         </div>
                         <!--end::Card title-->
@@ -96,21 +96,6 @@ export default defineComponent({
                             <div class="col-lg-8">
                                 <a href="#" class="fw-semibold fs-6 text-gray-800 text-hover-primary">{{
                                     this.employee?.data?.emergency_number }} </a>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Country
-                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
-                                    title="Country of origination"></i></label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.employee?.data?.address?.country?.name }}
-                                </span>
                             </div>
                             <!--end::Col-->
                         </div>

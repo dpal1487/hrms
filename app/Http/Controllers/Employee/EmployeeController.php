@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Employee;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Resources\EmployeeResources;
-use Inertia\Inertia;
-use App\Models\Employee;
-use App\Models\User;
 use Auth;
 use Hash;
+use App\Models\User;
+use Inertia\Inertia;
+use App\Models\Country;
+use App\Models\Employee;
+use Illuminate\Http\Request;
+use App\Models\EmployeeAddress;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\EmployeeResources;
 
 
 class EmployeeController extends Controller
@@ -17,6 +20,7 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $employees = Employee::where('company_id', $this->companyId());
+
         if (!empty($request->q)) {
             $employees = $employees
                 ->whereHas('user', function ($q) use ($request) {
@@ -42,10 +46,11 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:users,email',
             'date_of_joining' => 'required',
             'number' => 'required|numeric',
             'qualification' => 'required',
@@ -59,37 +64,41 @@ class EmployeeController extends Controller
             'date_of_confirmation' => 'required',
             'department_id' => 'required',
         ]);
+        $employee = Employee::where('company_id', $this->companyId())->first();
 
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'image_id' => $request->image_id,
-        ]);
+        if ($employee) {
 
-        if (
-            $employee = Employee::create([
-                'code' => 'ARS' . date('Y') . $user->id,
-                'date_of_joining' => $request->date_of_joining,
-                'number' => $request->number,
-                'qualification' => $request->qualification,
-                'emergency_number' => $request->emergency_number,
-                'pan_number' => $request->pan_number,
-                'father_name' => $request->father_name,
-                'formalities' => $request->formalities,
-                'salary' => $request->salary,
-                'offer_acceptance' => $request->offer_acceptance,
-                'probation_period' => $request->probation_period,
-                'date_of_confirmation' => $request->date_of_confirmation,
-                'notice_period' => $request->notice_period,
-                'last_working_day' => $request->last_working_day,
-                'full_final' => $request->full_final,
-                'department_id' => $request->department_id,
-                'user_id' => $user->id,
-                'company_id' => $this->companyId(),
-            ])
-        ) {
-            return redirect('/employees')->with(['message', 'Employee created successfully']);
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'image_id' => $request->image_id,
+            ]);
+
+            if (
+                $employee = Employee::create([
+                    'code' => 'ARS' . date('Y') . $user->id,
+                    'date_of_joining' => $request->date_of_joining,
+                    'number' => $request->number,
+                    'qualification' => $request->qualification,
+                    'emergency_number' => $request->emergency_number,
+                    'pan_number' => $request->pan_number,
+                    'father_name' => $request->father_name,
+                    'formalities' => $request->formalities,
+                    'salary' => $request->salary,
+                    'offer_acceptance' => $request->offer_acceptance,
+                    'probation_period' => $request->probation_period,
+                    'date_of_confirmation' => $request->date_of_confirmation,
+                    'notice_period' => $request->notice_period,
+                    'last_working_day' => $request->last_working_day,
+                    'full_final' => $request->full_final,
+                    'department_id' => $request->department_id,
+                    'user_id' => $user->id,
+                    'company_id' => $this->companyId(),
+                ])
+            ) {
+                return redirect('/employees')->with(['message', 'Employee created successfully']);
+            }
         }
         return redirect('/employees')->with(['message', 'Employee not created']);
     }
@@ -111,7 +120,7 @@ class EmployeeController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            // 'email' => 'required',
+            'email' => 'required',
             'date_of_joining' => 'required',
             'number' => 'required|numeric',
             'qualification' => 'required',
@@ -125,51 +134,75 @@ class EmployeeController extends Controller
             'date_of_confirmation' => 'required',
             'department_id' => 'required',
         ]);
+        $employee = Employee::where('company_id', $this->companyId())->find($id);
 
-        $employee = Employee::find($id);
-
-        $employee = new EmployeeResources($employee);
-
-        $user = User::where(['id' => $employee->user->id])->get();
-
-        if ($request->image_id) {
-            $user = User::where(['id' => $employee->user->id])->update([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'image_id' => $request->image_id,
-            ]);
-        } else {
-            $user = User::where(['id' => $employee->user->id])->update([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-            ]);
-        }
-
-        if (
-            $employee = Employee::where(['id' => $employee->id])->update([
-                'date_of_joining' => $request->date_of_joining,
-                'number' => $request->number,
-                'qualification' => $request->qualification,
-                'emergency_number' => $request->emergency_number,
-                'pan_number' => $request->pan_number,
-                'father_name' => $request->father_name,
-                'formalities' => $request->formalities,
-                'salary' => $request->salary,
-                'offer_acceptance' => $request->offer_acceptance,
-                'probation_period' => $request->probation_period,
-                'date_of_confirmation' => $request->date_of_confirmation,
-                'department_id' => $request->department_id,
-                'user_id' => $employee->user->id,
-            ])
-        ) {
-            if ($request->requsetingFrom == 'employees/edit') {
-                return redirect(url('employees'))->with('message', 'Employee Updated successfully');
+        if ($employee) {
+            if ($request->image_id) {
+                User::where('id', $employee->user_id)->update([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'image_id' => $request->image_id,
+                ]);
+            } else {
+                User::where('id', $employee->user_id)->update([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                ]);
             }
-            return redirect(url('employees/' . $id . '/overview'))->with('message', 'Employee Updated successfully');
+
+            if (
+                $employee = Employee::where(['id' => $employee->id])->update([
+                    'date_of_joining' => $request->date_of_joining,
+                    'number' => $request->number,
+                    'qualification' => $request->qualification,
+                    'emergency_number' => $request->emergency_number,
+                    'pan_number' => $request->pan_number,
+                    'father_name' => $request->father_name,
+                    'formalities' => $request->formalities,
+                    'salary' => $request->salary,
+                    'offer_acceptance' => $request->offer_acceptance,
+                    'probation_period' => $request->probation_period,
+                    'date_of_confirmation' => $request->date_of_confirmation,
+                    'department_id' => $request->department_id,
+                    'user_id' => $employee->user->id,
+                ])
+            ) {
+                if ($request->requsetingFrom == 'employees/edit') {
+                    return redirect(url('employees'))->with('message', 'Employee Updated successfully');
+                }
+                return redirect(url('employees/' . $id))->with('message', 'Employee Updated successfully');
+            }
         }
         return redirect()->with('message', 'Employee not updated');
+    }
+
+    public function address($id)
+    {
+        $employee = $this->employee($id);
+        
+        if ($employee) {
+            return Inertia::render('Employee/Address', [
+                'address' => new AddressResource($employee?->address?->address),
+                'user' => $this->employeeHeader($id),
+            ]);
+        }
+        return redirect()->back();
+    }
+    public function addressEdit($id)
+    {
+        $employee = $this->employee($id);
+        $countries = Country::get();
+        if ($employee) {
+            return Inertia::render('Employee/UserAddress', [
+                'address' => new AddressResource($employee->address->address),
+                'countries' => $countries,
+                'user' => $this->employeeHeader($id),
+
+            ]);
+        }
+        return redirect()->back();
     }
 
     public function emailUpdate(Request $request, $id)
@@ -231,11 +264,11 @@ class EmployeeController extends Controller
 
     public function setting($id)
     {
-        $employee = Employee::where('company_id', $this->companyId())->find($id);
-
+        $employee = $this->employee($id);
         if ($employee) {
             return Inertia::render('Employee/Setting', [
                 'employee' => new EmployeeResources($employee),
+                'user' => $this->employeeHeader($id),
             ]);
         }
         return redirect()->back();
@@ -243,7 +276,6 @@ class EmployeeController extends Controller
     public function security($id)
     {
         $employee = $this->employee($id);
-        dd($employee);
         if ($employee) {
             return Inertia::render('Employee/Security', [
                 'employee' => new EmployeeResources($employee),
@@ -255,11 +287,12 @@ class EmployeeController extends Controller
 
     public function attendance($id)
     {
-        $employee = Employee::where('company_id', $this->companyId())->find($id);
-
+        $employee = $this->employee($id);
         if ($employee) {
             return Inertia::render('Employee/Attendance', [
                 'employee' => new EmployeeResources($employee),
+                'user' => $this->employeeHeader($id),
+
             ]);
         }
         return redirect()->back();

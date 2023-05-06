@@ -1,19 +1,20 @@
 <script>
 import { defineComponent } from 'vue';
-import formAddress from './Model/formAddress.vue';
+import formAddress from './FormAddress.vue';
+
 import { Link } from '@inertiajs/inertia-vue3';
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 import axios from "axios";
 export default defineComponent({
-    props: ['countries', 'company', 'onOnhide'],
-
+    props: ['countries', 'addresses', 'onOnhide'],
     data() {
         return {
             isEdit: false,
             isLoading: false,
-            address: []
+            address: [],
+            showModal: false,
         }
     },
 
@@ -23,8 +24,14 @@ export default defineComponent({
     },
     methods: {
         toggleModal(value, address) {
-            this.isEdit = value;
-            this.address = address;
+            if (value) {
+                this.isEdit = true;
+                this.showModal = true;
+                this.address = address;
+            }
+            else {
+                this.showModal = false;
+            }
         },
         confirmDelete(id, index) {
             this.isLoading = true;
@@ -39,13 +46,12 @@ export default defineComponent({
                 confirmButtonText: "Yes, delete it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     axios
-                        .delete("/company/" + id + "/address/delete")
+                        .delete(this.route("address.destory", ['company', id]))
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
-                                this.company.data.company_addresss.splice(index, 1);
+                                this.addresses.data.splice(index, 1);
                                 return;
                             }
                         })
@@ -73,9 +79,9 @@ export default defineComponent({
 })
 </script>
 <template>
-    <formAddress v-if="isEdit" :show="isEdit" @hidemodal="toggleModal" :countries="countries" :address="address"
-        :company="company" />
-    <div class="col-xl-6" v-for="(address, index) in company.data.company_addresss" :key="index">
+    <formAddress v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :countries="countries"
+        :address="address" />
+    <div class="col-xl-6" v-for="(address, index) in addresses.data" :key="index">
         <!--begin::Address-->
         <div class="card card-dashed h-xl-100 flex-row flex-stack flex-wrap p-6">
             <div class="d-flex flex-column py-2">

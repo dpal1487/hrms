@@ -20,6 +20,11 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
+                    link: "/company",
+                    title: "Company",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
                     link: "/industries",
                     title: "Industries",
                     icon: "bi bi-pie-chart-fill",
@@ -37,12 +42,6 @@ export default defineComponent({
                 {
                     link: "/decision-makers",
                     title: "Decision Makers",
-                    icon: "bi bi-pie-chart-fill",
-                },
-
-                {
-                    link: "/company",
-                    title: "Company",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
