@@ -75,8 +75,7 @@ export default defineComponent({
                                             <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon--><span v-if="employee" class="me-2">{{ employee?.department_id }}
-                                    </span> Devloper</a>
+                                    <!--end::Svg Icon--><span> Devloper </span></a>
 
                                 <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
@@ -90,6 +89,7 @@ export default defineComponent({
                                                 d="M12.0624 13.0453C13.7193 13.0453 15.0624 11.7022 15.0624 10.0453C15.0624 8.38849 13.7193 7.04535 12.0624 7.04535C10.4056 7.04535 9.06241 8.38849 9.06241 10.0453C9.06241 11.7022 10.4056 13.0453 12.0624 13.0453Z"
                                                 fill="currentColor" />
                                         </svg>
+
                                     </span>
                                     <!--end::Svg Icon--><span v-if="address">{{ address?.city + " " +
                                         address?.state + " " +
@@ -116,6 +116,7 @@ export default defineComponent({
                     </div>
                     <!--end::Title-->
                     <!--begin::Stats-->
+
                     <div class="d-flex flex-wrap flex-stack">
 
                         <!--begin::Wrapper-->
@@ -226,7 +227,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.view') && 'active'}`"
-                        :href="'/employees/' + $page.props.ziggy.id[1]">Overview
+                        :href="'/employees/' + $page.props.ziggy.id[1]"> Overview
                     </Link>
                 </li>
                 <!--end::Nav item-->

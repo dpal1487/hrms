@@ -8,7 +8,7 @@ import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 import axios from "axios";
 export default defineComponent({
-    props: ['countries', 'addresses', 'onOnhide'],
+    props: ['countries', 'addresses'],
     data() {
         return {
             isEdit: false,
@@ -47,7 +47,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete(this.route("address.destory", ['company', id]))
+                        .delete(this.route("address.delete", ['company', id]))
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {

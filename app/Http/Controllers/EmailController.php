@@ -1,65 +1,79 @@
 <?php
 
-namespace App\Http\Controllers\Company;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\CompanyEmailResource;
-use Inertia\Inertia;
 use App\Models\CompanyEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class CompanyEmailController extends Controller
+class EmailController extends Controller
 {
 
-    public function index($id)
-    {
-        $emails = CompanyEmail::where('company_id', $id)->get();
-        // return new CompanyResource($company);
-        return Inertia::render('Company/Email', [
-            'emails' => CompanyEmailResource::collection($emails),
-        ]);
-    }
 
-    public function store(Request $request)
+    public function store(Request $request, $type)
     {
-        // dd($request);
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+
             'email_address' => 'required',
             'is_primary' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
 
-        if (!empty($request->id)) {
-            $emailUpdate = CompanyEmail::where('id', $request->id)->update([
-                'email_address' => $request->email_address,
-                'is_primary' => $request->is_primary,
-            ]);
-        } else {
-            $emailCreate = CompanyEmail::create([
-                'email_address' => $request->email_address,
-                'is_primary' => $request->is_primary,
-                'company_id' => $request->company_id,
-            ]);
-
-            if ($emailCreate) {
-                return response()->json(['success' => true, 'message' => 'Company Email Created successfully']);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
+        if ($type == "company") {
+            $email = CompanyEmail::where('company_id', $this->companyId());
+            if ($email) {
+                CompanyEmail::create([
+                    'email_address' => $request->email_address,
+                    'is_primary' => $request->is_primary,
+                    'company_id' => $this->companyId(),
+                ]);
             }
+            return response()->json(['success' => true, 'message' => 'Company Email created successfully']);
         }
-        if ($emailUpdate) {
+
+        return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
+    }
+    public function update(Request $request, $type, $id)
+    {
+        $validator = Validator::make($request->all(), [
+
+            'email_address' => 'required',
+            'is_primary' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
+
+        if ($type == "company") {
+            $email = CompanyEmail::where('company_id', $this->companyId());
+            if ($email) {
+                CompanyEmail::where('id', $id,)->update([
+                    'email_address' => $request->email_address,
+                    'is_primary' => $request->is_primary,
+                    'company_id' => $this->companyId(),
+                ]);
+            }
             return response()->json(['success' => true, 'message' => 'Company Email Updates successfully']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
         }
+
+        return response()->json(['success' => false, 'message' => 'Something Went Wrong !']);
     }
 
 
-    public function destroy($id)
+    public function destroy($type, $id)
     {
-        $companyemail = CompanyEmail::find($id);
-        if ($companyemail->delete()) {
-            return response()->json(['success' => true, 'message' => 'Email has been deleted successfully.']);
+
+        if ($type == "company") {
+
+            $email = CompanyEmail::where(['id' => $id, 'company_id' => $this->companyId()])->first();
+            if ($email->delete()) {
+                return response()->json(['success' => true, 'message' => 'Email has been deleted successfully.']);
+            }
         }
+
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 }

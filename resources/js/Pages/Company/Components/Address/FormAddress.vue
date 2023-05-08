@@ -15,7 +15,7 @@ import axios from 'axios';
 
 export default defineComponent({
 
-    props: ['countries', 'isEdit', 'address'],
+    props: ['show', 'countries', 'isEdit', 'address'],
     emits: ['hidemodal'],
     setup() {
         return {
@@ -84,7 +84,6 @@ export default defineComponent({
                 this.requesting = true;
                 axios.post(!this.isEdit ? this.route("address.store", 'company') : this.route('address.update', ['company', this.form.id]), this.form)
                     .then((response) => {
-                        console.log(response)
                         if (response.data.success) {
                             toast.success(response.data.message)
                             this.requesting = false;
@@ -102,76 +101,84 @@ export default defineComponent({
 </script>
 
 <template>
-    <Modal :show="showModal" :title="isEdit ? 'Edit Address' : 'Add Address'" @onhide="$emit('hidemodal', false)">
-        <!-- <Modal :show="show" title="Edit Address" @onhide="$emit('hidemodal', false)"> -->
+    <Modal :show="show" :title="isEdit ? 'Edit Address' : 'Add Address'" @onhide="$emit('hidemodal', false)">
         <JetValidationErrors />
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
             <!--begin::Modal body-->
-            <!-- <input type="text" v-model="addressId"> -->
             <div class="me-n7 pe-7 mh-lg-400px" style="overflow-y: auto;">
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="address1" value="Address Line 1" />
-                    <jet-input id="address1" type="text" v-model="v$.form.address_line_1.$model" :class="v$.form.address_line_1.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Address Line 1" />
-                    <div v-for="(error, index) of v$.form.address_line_1.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="address2" value="Address Line 2" />
-                    <jet-input id="address2" type="text" v-model="v$.form.address_line_2.$model" :class="v$.form.address_line_2.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Address Line 2" />
-                    <div v-for="(error, index) of v$.form.address_line_2.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="city" value="City" />
-                    <jet-input id="city" type="text" v-model="v$.form.city.$model" :class="v$.form.city.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="City" />
-                    <div v-for="(error, index) of v$.form.city.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="state" value="State" />
-                    <jet-input id="state" type="text" v-model="v$.form.state.$model" :class="v$.form.state.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="State" />
-                    <div v-for="(error, index) of v$.form.state.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="pincode" value="Pincode" />
-                    <jet-input id="pincode" type="text" v-model="v$.form.pincode.$model" :class="v$.form.pincode.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Pincode" />
-                    <div v-for="(error, index) of v$.form.pincode.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="contry" value="Country" />
-                    <Multiselect :options="countries" label="name" valueProp="id"
-                        class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                        v-model="v$.form.country.$model" track-by="name" :searchable="true" :class="v$.form.country.$errors.length > 0
+                <div class="row g-5 mb-5 col-md-12">
+
+                    <div class="col-6">
+                        <jet-label for="address1" value="Address Line 1" />
+                        <jet-input id="address1" type="text" v-model="v$.form.address_line_1.$model" :class="v$.form.address_line_1.$errors.length > 0
                             ? 'is-invalid'
                             : ''
-                            " />
-                    <div v-for="(error, index) of v$.form.country.$errors" :key="index">
-                        <input-error :message="error.$message" />
+                            " placeholder="Address Line 1" />
+                        <div v-for="(error, index) of v$.form.address_line_1.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
                     </div>
-
+                    <div class="col-6">
+                        <jet-label for="address2" value="Address Line 2" />
+                        <jet-input id="address2" type="text" v-model="v$.form.address_line_2.$model" :class="v$.form.address_line_2.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Address Line 2" />
+                        <div v-for="(error, index) of v$.form.address_line_2.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
                 </div>
+                <div class="row g-5 mb-5 col-md-12">
+
+                    <div class="col-6">
+                        <jet-label for="city" value="City" />
+                        <jet-input id="city" type="text" v-model="v$.form.city.$model" :class="v$.form.city.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="City" />
+                        <div v-for="(error, index) of v$.form.city.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <jet-label for="state" value="State" />
+                        <jet-input id="state" type="text" v-model="v$.form.state.$model" :class="v$.form.state.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="State" />
+                        <div v-for="(error, index) of v$.form.state.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-5 mb-5 col-md-12">
+                    <div class="col-6">
+                        <jet-label for="pincode" value="Pincode" />
+                        <jet-input id="pincode" type="text" v-model="v$.form.pincode.$model" :class="v$.form.pincode.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Pincode" />
+                        <div v-for="(error, index) of v$.form.pincode.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <jet-label for="contry" value="Country" />
+                        <Multiselect :options="countries" label="name" valueProp="id"
+                            class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                            v-model="v$.form.country.$model" track-by="name" :searchable="true" :class="v$.form.country.$errors.length > 0
+                                ? 'is-invalid'
+                                : ''
+                                " />
+                        <div v-for="(error, index) of v$.form.country.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+
+                    </div>
+                </div>
+
+
                 <!--begin::Input group-->
                 <div class="fv-row mb-5">
                     <!--begin::Wrapper-->
@@ -208,7 +215,8 @@ export default defineComponent({
             <div class="d-flex flex-end mt-5">
                 <button type="reset" @click="$emit('hidemodal', false)" class="btn btn-light me-3">Discard</button>
                 <button type="submit" class="btn btn-primary" :data-kt-indicator="requesting ? 'on' : 'off'">
-                    <span class="indicator-label">Save</span>
+                    <span class="indicator-label" v-if="this.isEdit">Update </span>
+                    <span class="indicator-label" v-if="!this.isEdit">Save </span>
                     <span class="indicator-progress">Please wait...
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                 </button>

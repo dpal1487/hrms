@@ -16,7 +16,7 @@ import Header from "./Components/Header.vue";
 
 
 export default defineComponent({
-    props: ['countries', 'user'],
+    props: ['countries', 'user', 'address'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -48,14 +48,14 @@ export default defineComponent({
         return {
             id: route().params.id,
             form: {
-                id: route().params.id,
-                address_id: this.address?.id || '',
-                address_line_1: this.address?.address_line_1 || '',
-                address_line_2: this.address?.address_line_2 || '',
-                city: this.address?.city || '',
-                state: this.address?.state || '',
-                country: this.address?.country?.id || '',
-                pincode: this.address?.pincode || '',
+                emp_id: route().params.id,
+                id: this.address?.data.id || '',
+                address_line_1: this.address?.data?.address_line_1 || '',
+                address_line_2: this.address?.data?.address_line_2 || '',
+                city: this.address?.data?.city || '',
+                state: this.address?.data?.state || '',
+                country: this.address?.data?.country?.id || '',
+                pincode: this.address?.data?.pincode || '',
             },
         };
     },
@@ -77,6 +77,17 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 axios.post(this.route("address.update", ['employees', this.form.id]), this.form)
+                    .then((response) => {
+                        if (response.data.success) {
+                            toast(response.data.message)
+                            // this.$router.replace("/employees/" + this.$page.props.ziggy.id[1] + "/address");
+                            return;
+                        } else {
+                            toast(response.data.message)
+                        }
+                    }).finally(() => {
+                        window.location = "/employees/" + this.$page.props.ziggy.id[1] + "/address";
+                    });
             }
         },
     },
@@ -91,7 +102,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <Header :user="user.data" />
-                <!-- {{ employee.data.address }} -->
+
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -107,11 +118,12 @@ export default defineComponent({
                     <!--begin::Content-->
                     <div>
                         <JetValidationErrors />
+                        <!-- {{ address }} -->
+
                         <!--begin::Form-->
                         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                             <!--begin::Card body-->
                             <div class="card-body border-top p-9">
-                                <!-- {{ this.employee?.data?.id }} -->
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->

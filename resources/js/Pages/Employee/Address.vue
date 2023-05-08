@@ -32,6 +32,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <Header :user="user.data" :address="address.data" />
+
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -54,6 +55,7 @@ export default defineComponent({
                         <!--begin::Row-->
                         <div class="row mb-7">
                             <!--begin::Label-->
+
                             <label class="col-lg-4 fw-semibold text-muted">Address Line 1</label>
                             <!--end::Label-->
                             <!--begin::Col-->

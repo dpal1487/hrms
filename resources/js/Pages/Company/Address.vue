@@ -14,7 +14,6 @@ export default defineComponent({
     setup() {
         return {
             v$: useVuelidate(),
-            // isEdit: false
         };
     },
     data() {
@@ -37,7 +36,6 @@ export default defineComponent({
         toggleModal(value) {
             if (value) {
                 this.showModal = true;
-                // this.address = address;
             }
             else {
                 this.showModal = false;
@@ -73,7 +71,6 @@ export default defineComponent({
                     <div class="card-body">
                         <!--begin::Addresses-->
                         <div class="row gx-9 gy-6">
-                            <!-- {{ company.data.company_addresss }} -->
                             <!--begin::Col-->
                             <AddressCard :countries="countries" :addresses="addresses" />
                             <!--end::Col-->

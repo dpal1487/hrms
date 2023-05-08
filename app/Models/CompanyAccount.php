@@ -12,7 +12,11 @@ class CompanyAccount extends Model
 
     public function account()
     {
-        return $this->hasOne(AccountDetail::class, 'id', 'account_id');
+        return $this->hasOne(Account::class, 'id', 'account_id');
+    }
+    public function accounts()
+    {
+        return $this->hasMany(Account::class, 'id', 'account_id');
     }
 
     public static function boot()

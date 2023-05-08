@@ -181,10 +181,17 @@ class EmployeeController extends Controller
     public function address($id)
     {
         $employee = $this->employee($id);
-        
-        if ($employee) {
+        // dd($employee->address);
+        // return $employee->address->address;
+        // return new AddressResource($employee->address->address);
+        if ($employee->address != null) {
             return Inertia::render('Employee/Address', [
-                'address' => new AddressResource($employee?->address?->address),
+                'address' => new AddressResource($employee?->address),
+                'user' => $this->employeeHeader($id),
+            ]);
+        } else {
+            return Inertia::render('Employee/Address', [
+                'address' => new AddressResource($employee),
                 'user' => $this->employeeHeader($id),
             ]);
         }
@@ -192,14 +199,21 @@ class EmployeeController extends Controller
     }
     public function addressEdit($id)
     {
+        // dd($id);
         $employee = $this->employee($id);
+        // return new AddressResource($employee?->address?->address);
         $countries = Country::get();
-        if ($employee) {
+        if ($employee->address != null) {
             return Inertia::render('Employee/UserAddress', [
-                'address' => new AddressResource($employee->address->address),
+                'address' => new AddressResource($employee?->address),
                 'countries' => $countries,
                 'user' => $this->employeeHeader($id),
 
+            ]);
+        } else {
+            return Inertia::render('Employee/UserAddress', [
+                'countries' => $countries,
+                'user' => $this->employeeHeader($id),
             ]);
         }
         return redirect()->back();

@@ -16,7 +16,7 @@ import axios from 'axios';
 
 export default defineComponent({
 
-    props: ['show', 'company', 'onOnhide', 'email'],
+    props: ['show', 'company', 'isEdit', 'onOnhide', 'email'],
     emits: ['hidemodal'],
     setup() {
         return {
@@ -38,11 +38,12 @@ export default defineComponent({
     data() {
         return {
             message: '',
-            isEdit: false,
+            showModal: false,
             requesting: false,
             form: {
-                email_address: this.email_address || '',
-                company_id: '',
+                id: this.email?.id || '',
+                email_address: this.email?.email_address || '',
+                is_primary: this.email?.is_primary,
             },
             is_primary: [
                 { value: 1, name: "Primary" },
@@ -67,15 +68,17 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.requesting = true;
-                axios.post(this.route("company.email.store"), { ...this.form, id: this.form.id })
+                // axios.post(this.route("company.email.store"), { ...this.form, id: this.form.id })
+                axios.post(!this.isEdit ? this.route("email.store", 'company') : this.route('email.update', ['company', this.form.id]), this.form)
                     .then((response) => {
                         if (response.data.success) {
-                            toast(response.data.message)
+                            toast.success(response.data.message)
                             this.requesting = false;
                             this.$emit('hidemodal', false);
+                            location.reload();
                             return;
                         } else {
-                            toast(response.data.message)
+                            toast.error(response.data.message)
                         }
                     }).finally({
 
@@ -87,16 +90,10 @@ export default defineComponent({
 </script>
 
 <template>
-    <Modal :show="show" title="Company Email" @onhide="$emit('hidemodal', false)">
-        {{ company }}
+    <Modal :show="show" :title="isEdit ? 'Edit Email' : 'Add Email'" @onhide="$emit('hidemodal', false)">
         <JetValidationErrors />
-        <!-- {{ this.email.is_primary }} -->
-        <!-- {{ this.email }} -->
 
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-            <!--begin::Modal body-->
-            <!-- <input type="text" v-model="addressId"> -->
-            <!-- {{ this.company.data.id }} d<br> -->
             <div class="me-n7 pe-7 mh-lg-400px" style="overflow-y: auto;">
                 <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
                     <jet-label for="contry" value="Status" />
@@ -128,7 +125,8 @@ export default defineComponent({
             <div class="d-flex flex-end mt-5">
                 <button type="reset" @click="$emit('hidemodal', false)" class="btn btn-light me-3">Discard</button>
                 <button type="submit" class="btn btn-primary" :data-kt-indicator="requesting ? 'on' : 'off'">
-                    <span class="indicator-label">Save</span>
+                    <span class="indicator-label" v-if="this.isEdit">Update </span>
+                    <span class="indicator-label" v-if="!this.isEdit">Save </span>
                     <span class="indicator-progress">Please wait...
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                 </button>

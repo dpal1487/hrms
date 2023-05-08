@@ -73,15 +73,5 @@ class HandleInertiaRequests extends Middleware
                 },
             ]);
         }
-        return array_merge(parent::share($request), [
-            'ziggy' => function () use ($request) {
-                return array_merge((new Ziggy())->toArray(), [
-                    'status' => $this->status,
-                    'flash' => [
-                        'message' => fn () => $request->session()->get('message'),
-                    ],
-                ]);
-            },
-        ]);
     }
 }

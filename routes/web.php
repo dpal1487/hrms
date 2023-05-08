@@ -13,7 +13,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\Company\CompanyEmailController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\Auth\SocialLoginController;
@@ -42,7 +42,7 @@ use App\Http\Controllers\Employee\OverViewController;
             DecisionMakerController = 142
             CompanyController = 153 
             AccountController =  171
-            CompanyEmailController = 178 
+            EmailController = 178 
             InvoiceController = 186
             ConversionRateController = 197 
 
@@ -99,13 +99,45 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
     Route::controller(AddressController::class)->group(function () {
         Route::group(['prefix' => 'address'], function () {
-            Route::get('{type}/{id}', 'show')->name('address.show');
             Route::post('{type}', 'store')->name('address.store');
             Route::post('{type}/{id}', 'update')->name('address.update');
-            Route::delete('{type}/{id}', 'destroy')->name('address.destory');
+            Route::delete('{type}/{id}', 'destroy')->name('address.delete');
         });
         Route::get('invoices/{id}/company-address', 'companyAddress')->name('invoices.company-address');
         Route::get('invoices/{id}/client-address', 'clientAddress')->name('invoices.client-address');
+    });
+
+    Route::controller(CompanyController::class)->group(function () {
+        Route::group(['prefix' => 'company'], function () {
+            Route::get('/', 'show')->name('company.index');
+            Route::get('add', 'create')->name('company.add');
+            Route::post('store', 'store')->name('company.store');
+            Route::get('{id}/edit', 'edit')->name('company.edit');
+            Route::post('{id}/update', 'update')->name('company.update');
+            Route::get('address', 'addresses')->name('company.address');
+            Route::get('accounts', 'accounts')->name('company.accounts');
+            Route::get('emails', 'emails')->name('company.emails');
+            Route::get('invoices', 'invoices')->name('company.invoices');
+            Route::get('projects', 'projects')->name('company.projects');
+            Route::get('suppliers', 'suppliers')->name('company.suppliers');
+            Route::delete('delete', 'destroy')->name('company.delete');
+        });
+    });
+
+    Route::controller(AccountController::class)->group(function () {
+        Route::group(['prefix' => 'account'], function () {
+            Route::post('{type}/{id}', 'update')->name('account.update');
+            Route::post('{type}', 'store')->name('account.store');
+            Route::delete('{type}/{id}', 'destroy')->name('account.delete');
+        });
+    });
+
+    Route::controller(EmailController::class)->group(function () {
+        Route::group(['prefix' => 'email'], function () {
+            Route::post('{type}/{id}', 'update')->name('email.update');
+            Route::post('{type}', 'store')->name('email.store');
+            Route::delete('{type}/{id}', 'destroy')->name('email.delete');
+        });
     });
 
     Route::controller(IndustryController::class)->group(function () {
@@ -150,37 +182,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
-    Route::controller(CompanyController::class)->group(function () {
-        Route::group(['prefix' => 'company'], function () {
-            Route::get('/', 'show')->name('company.index');
-            Route::get('/add', 'create')->name('company.add');
-            Route::post('/store', 'store')->name('company.store');
-            Route::get('{id}/edit', 'edit')->name('company.edit');
-            Route::post('{id}/update', 'update')->name('company.update');
-            Route::get('/address', 'addresses')->name('company.address');
-            Route::get('accounts', 'accounts')->name('company.accounts');
-            Route::get('invoices', 'invoices')->name('company.invoices');
-            Route::get('projects', 'projects')->name('company.projects');
-            Route::get('suppliers', 'suppliers')->name('company.suppliers');
-            Route::delete('delete', 'destroy')->name('company.delete');
-        });
-    });
 
-    Route::controller(AccountController::class)->group(function () {
-        Route::group(['prefix' => 'account'], function () {
-            Route::get('{type}/{id}', 'show')->name('account.show');
-            Route::put('{type}/{id}', 'update')->name('account.update');
-            Route::post('{type}', 'store')->name('account.store');
-            Route::delete('{type}/{id}/delete', 'destroy')->name('account.delete');
-        });
-    });
-    Route::controller(CompanyEmailController::class)->group(function () {
-        Route::group(['prefix' => 'company'], function () {
-            Route::get('{id}/emails', 'index')->name('company.emails');
-            Route::post('/email/store', 'store')->name('company.email.store');
-            Route::delete('{id}/email/delete', 'destroy')->name('company.email.delete');
-        });
-    });
+
+
 
     Route::controller(InvoiceController::class)->group(function () {
         Route::group(['prefix' => 'invoices'], function () {

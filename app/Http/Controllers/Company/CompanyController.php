@@ -3,25 +3,24 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AccountResource;
 use App\Http\Resources\AddressResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\EmailResource;
 use App\Http\Resources\InvoiceResource;
+use App\Models\CompanyAccount;
 use App\Models\CompanyAddress;
+use App\Models\CompanyEmail;
+use App\Models\CompanyInvoice;
 use App\Models\CompanySize;
 use App\Models\Country;
-use App\Models\Invoice;
 use Auth;
 
 class CompanyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $companies = new Company();
@@ -33,13 +32,7 @@ class CompanyController extends Controller
                 ->orWhere('description', 'like', "%$request->q%")
                 ->orWhere('company_name', 'like', "%$request->q%");
         }
-        // if (!empty($request->status) || $request->status != '') {
-        //     $companies = $companies->whereHas('user', function ($q) use ($request) {
-        //         $q->where('active_status', '=', $request->status);
-        //     });
-        // }
 
-        // return CompanyResource::collection($companies->paginate(10)->append($request->all()));
         return Inertia::render('Company/Index', [
             'companies' => CompanyResource::collection($companies->paginate(10)->append($request->all())),
         ]);
@@ -54,11 +47,6 @@ class CompanyController extends Controller
 
     public function store(Request $req)
     {
-        // dd($req);
-        // $request->validate([
-        //     'account_type' => 'required',
-        // ]);
-
         $companySize = CompanySize::create([
             'size' => $req->account_team_size,
         ]);
@@ -91,14 +79,9 @@ class CompanyController extends Controller
         }
     }
 
-    public function edit($id)
-    {
-        return $id;
-    }
     public function show()
     {
         $company = Company::find($this->companyId());
-        // return new AddressResource($company);
         return Inertia::render('Company/Overview', [
             'company' => new CompanyResource($company),
         ]);
@@ -112,36 +95,32 @@ class CompanyController extends Controller
             'countries' => $countries,
         ]);
     }
-    public function accountShow($id)
+    public function accounts()
     {
-        // dd($id);
-        $company = Company::find($this->companyId());
-        // return new CompanyResource($company);
-        return Inertia::render('Company/Address', [
-            'company' => new CompanyResource($company),
+        $company = CompanyAccount::where('company_id', $this->companyId())->get();
+        return Inertia::render('Company/Account', [
+            'accounts' => AccountResource::collection($company),
         ]);
     }
-    public function invoicesShow($id)
+    public function emails()
     {
-        // dd($id);
-        $company = Company::find($id);
-        $invoices = Invoice::get();
-        // return InvoiceResource::collection($invoices);
-        // return new CompanyResource($company);
+
+        $emails = CompanyEmail::where('company_id', $this->companyId())->get();
+
+        // return EmailResource::collection($emails);
+        return Inertia::render('Company/Email', [
+            'emails' => EmailResource::collection($emails)
+        ]);
+    }
+    public function invoices()
+    {
+        $invoices = CompanyInvoice::where('company_id', $this->companyId())->get();
+        return InvoiceResource::collection($invoices);
         return Inertia::render('Company/Invoices', [
-            'company' => new CompanyResource($company),
             'invoices' => InvoiceResource::collection($invoices),
         ]);
     }
-    public function emialsShow($id)
-    {
-        // dd($id);
-        $company = Company::find($id);
-        // return new CompanyResource($company);
-        return Inertia::render('Company/Email', [
-            'company' => new CompanyResource($company),
-        ]);
-    }
+
 
     public function projectsShow($id)
     {

@@ -14,6 +14,10 @@ class CompanyAddress extends Model
     {
         return $this->hasOne(Address::class, 'id', 'address_id');
     }
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'id', 'address_id');
+    }
 
     public static function boot()
     {

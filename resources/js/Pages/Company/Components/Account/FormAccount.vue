@@ -17,7 +17,7 @@ import axios from 'axios';
 
 export default defineComponent({
 
-    props: ['show', 'company', 'account'],
+    props: ['show', 'isEdit', 'account'],
     emits: ['hidemodal'],
     setup() {
         return {
@@ -61,12 +61,12 @@ export default defineComponent({
     data() {
         return {
             message: '',
-            isEdit: false,
+            showModal: false,
             requesting: false,
+
 
             form: this.$inertia.form({
                 id: this.account?.id || '',
-                company_id: this.company?.data?.id,
                 bank_name: this.account?.bank_name || '',
                 bank_address: this.account?.bank_address || '',
                 beneficiary_name: this.account?.beneficiary_name || '',
@@ -97,16 +97,16 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.requesting = true;
-                axios.put(this.route("account.update", ['client', this.form.id]), { ...this.form, id: this.form.id })
+                axios.post(!this.isEdit ? this.route("account.store", 'company') : this.route('account.update', ['company', this.form.id]), this.form)
                     .then((response) => {
                         if (response.data.success) {
-                            toast(response.data.message)
+                            toast.success(response.data.message)
                             this.requesting = false;
                             this.$emit('hidemodal', false);
                             location.reload();
                             return;
                         } else {
-                            toast(response.data.message)
+                            toast.error(response.data.message)
                         }
                     });
             }
@@ -117,25 +117,12 @@ export default defineComponent({
 </script>
 
 <template>
-    <Modal :show="show" title="Company Account" @onhide="$emit('hidemodal', false)">
+    <Modal :show="show" :title="isEdit ? 'Edit Account' : 'Add Account'" @onhide="$emit('hidemodal', false)">
         <JetValidationErrors />
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-            <!-- {{ this.account }}
-            {{ this.company.data.id }} -->
-            <!--begin::Modal body-->
-            <!-- <input type="text" v-model="addressId"> -->
             <div class="me-n7 pe-7 mh-lg-400px" style="overflow-y: auto;">
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="bank_name" value="Bank Name" />
-                    <jet-input id="bank_name" type="text" v-model="v$.form.bank_name.$model" :class="v$.form.bank_name.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Bank Name" />
-                    <div v-for="(error, index) of v$.form.bank_name.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
+
+                <div class="col-12 mb-5">
                     <jet-label for="bank_address" value="Bank Address" />
                     <jet-input id="bank_address" type="text" v-model="v$.form.bank_address.$model" :class="v$.form.bank_address.$errors.length > 0
                         ? 'is-invalid'
@@ -145,83 +132,107 @@ export default defineComponent({
                         <input-error :message="error.$message" />
                     </div>
                 </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="beneficiary_name" value="Beneficiary Name" />
-                    <jet-input id="beneficiary_name" type="text" v-model="v$.form.beneficiary_name.$model" :class="v$.form.beneficiary_name.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Beneficiary Name" />
-                    <div v-for="(error, index) of v$.form.beneficiary_name.$errors" :key="index">
-                        <input-error :message="error.$message" />
+                <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
+                    <div class="w-100 w-sm-50">
+
+                        <jet-label for="bank_name" value="Bank Name" />
+                        <jet-input id="bank_name" type="text" v-model="v$.form.bank_name.$model" :class="v$.form.bank_name.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Bank Name" />
+                        <div v-for="(error, index) of v$.form.bank_name.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+
+                    <div class="w-100 w-sm-50">
+                        <jet-label for="beneficiary_name" value="Beneficiary Name" />
+                        <jet-input id="beneficiary_name" type="text" v-model="v$.form.beneficiary_name.$model" :class="v$.form.beneficiary_name.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Beneficiary Name" />
+                        <div v-for="(error, index) of v$.form.beneficiary_name.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
                     </div>
                 </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="account_number" value="Account Number" />
-                    <jet-input id="account_number" type="text" v-model="v$.form.account_number.$model" :class="v$.form.account_number.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Account Number" />
-                    <div v-for="(error, index) of v$.form.account_number.$errors" :key="index">
-                        <input-error :message="error.$message" />
+
+                <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
+                        <div class="w-100 w-sm-50">
+                        <jet-label for="account_number" value="Account Number" />
+                        <jet-input id="account_number" type="text" v-model="v$.form.account_number.$model" :class="v$.form.account_number.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Account Number" />
+                        <div v-for="(error, index) of v$.form.account_number.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <div class="w-100 w-sm-50">
+                        <jet-label for="ifsc_code" value="IFSC Code" />
+                        <jet-input id="ifsc_code" type="text" v-model="v$.form.ifsc_code.$model" :class="v$.form.ifsc_code.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="IFSC Code" />
+                        <div v-for="(error, index) of v$.form.ifsc_code.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
                     </div>
                 </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="routing_number" value="Routing Number" />
-                    <jet-input id="routing_number" type="text" v-model="v$.form.routing_number.$model" :class="v$.form.routing_number.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Routing Number" />
-                    <div v-for="(error, index) of v$.form.routing_number.$errors" :key="index">
-                        <input-error :message="error.$message" />
+               <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
+                        <div class="w-100 w-sm-50">
+                        <jet-label for="routing_number" value="Routing Number" />
+                        <jet-input id="routing_number" type="text" v-model="v$.form.routing_number.$model" :class="v$.form.routing_number.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Routing Number" />
+                        <div v-for="(error, index) of v$.form.routing_number.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <div class="w-100 w-sm-50">
+                        <jet-label for="swift_code" value="Swift Code" />
+                        <jet-input id="swift_code" type="text" v-model="v$.form.swift_code.$model" :class="v$.form.swift_code.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Swift Code" />
+                        <div v-for="(error, index) of v$.form.swift_code.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
                     </div>
                 </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="swift_code" value="Swift Code" />
-                    <jet-input id="swift_code" type="text" v-model="v$.form.swift_code.$model" :class="v$.form.swift_code.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="Swift Code" />
-                    <div v-for="(error, index) of v$.form.swift_code.$errors" :key="index">
-                        <input-error :message="error.$message" />
+                <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
+                        <div class="w-100 w-sm-50">
+                        <jet-label for="sort_code" value="SORT Code" />
+                        <jet-input id="sort_code" type="text" v-model="v$.form.sort_code.$model" :class="v$.form.sort_code.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="SORT Code" />
+                        <div v-for="(error, index) of v$.form.sort_code.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="ifsc_code" value="IFSC Code" />
-                    <jet-input id="ifsc_code" type="text" v-model="v$.form.ifsc_code.$model" :class="v$.form.ifsc_code.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="IFSC Code" />
-                    <div v-for="(error, index) of v$.form.ifsc_code.$errors" :key="index">
-                        <input-error :message="error.$message" />
+
+                    <div class="w-100 w-sm-50">
+                        <jet-label for="pan_number" value="PAN Number" />
+                        <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="v$.form.pan_number.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="PAN Number" />
+                        <div v-for="(error, index) of v$.form.pan_number.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="sort_code" value="SORT Code" />
-                    <jet-input id="sort_code" type="text" v-model="v$.form.sort_code.$model" :class="v$.form.sort_code.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="SORT Code" />
-                    <div v-for="(error, index) of v$.form.sort_code.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-5 fv-row fv-plugins-icon-container">
-                    <jet-label for="pan_number" value="PAN Number" />
-                    <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="v$.form.pan_number.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " placeholder="PAN Number" />
-                    <div v-for="(error, index) of v$.form.pan_number.$errors" :key="index">
-                        <input-error :message="error.$message" />
-                    </div>
+
                 </div>
 
 
             </div>
-            <div class="d-flex flex-end mt-5">
+            <div class="d-flex flex-end">
                 <button type="reset" @click="$emit('hidemodal', false)" class="btn btn-light me-3">Discard</button>
                 <button type="submit" class="btn btn-primary" :data-kt-indicator="requesting ? 'on' : 'off'">
-                    <span class="indicator-label">Update</span>
+                    <span class="indicator-label" v-if="this.isEdit">Update </span>
+                    <span class="indicator-label" v-if="!this.isEdit">Save </span>
                     <span class="indicator-progress">Please wait...
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                 </button>

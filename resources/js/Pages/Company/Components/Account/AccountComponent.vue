@@ -7,13 +7,15 @@ import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 import axios from "axios";
 export default defineComponent({
-    props: ['countries', 'company', 'onOnhide'],
+    props: ['accounts'],
     emits: ['onhide'],
     data() {
         return {
             isEdit: false,
             isLoading: false,
-            account: []
+            account: [],
+            showModal: false,
+
         }
     },
 
@@ -23,8 +25,15 @@ export default defineComponent({
     },
     methods: {
         toggleModal(value, account) {
-            this.isEdit = value;
-            this.account = account;
+            if (value) {
+                this.isEdit = true;
+                this.showModal = true;
+                this.account = account;
+            }
+            else {
+                this.showModal = false;
+            }
+
         },
         confirmDelete(id, index) {
             this.isLoading = true;
@@ -41,11 +50,12 @@ export default defineComponent({
                 if (result.isConfirmed) {
 
                     axios
-                        .delete("/company/" + id + "/account/delete")
+                        .delete(this.route("account.delete", ['account', id]))
+
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
-                                this.company.data.company_accounts.splice(index, 1);
+                                this.accounts.data.splice(index, 1);
                                 return;
                             }
                         })
@@ -73,15 +83,14 @@ export default defineComponent({
 })
 </script>
 <template>
-    <FormAccount v-if="isEdit" :show="isEdit" @hidemodal="toggleModal" :account="account" :company="company" />
-    <div class="col-xl-6" v-for="(account, index) in company.data.company_accounts" :key="index">
+    <FormAccount v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :account="account" />
+    <div class="col-xl-6" v-for="(account, index) in accounts.data" :key="index">
         <!--begin::account-->
         <div class="card card-dashed h-xl-100 flex-row gap-6 p-6">
             <div class="d-flex flex-column flex-root">
                 <div class="d-flex align-items-center fs-5 fw-bold mb-5">Account {{ index + 1 }}
                     <span class="badge badge-light-success fs-7 ms-2" v-if="account?.is_primary == 1">Primary</span>
                 </div>
-
                 <div class="d-flex flex-column gap-2">
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="fw-bold me-4 text-gray-800">Bank Name : </div>
