@@ -6,6 +6,7 @@ use App\Models\ConversionRate;
 use Illuminate\Http\Request;
 use App\Http\Resources\ConversionRateResources;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class ConversionRateController extends Controller
 {
@@ -15,10 +16,7 @@ class ConversionRateController extends Controller
         if (!empty($request->q)) {
             $conversionrates = $conversionrates
                 ->where('currency_name', 'like', "%$request->q")
-                ->orWhere('currency_value', 'like', "%$request->q%")
-                ->orWhere('conversion_rate', 'like', "%$request->q%")
-                ->orWhere('inr_amount', 'like', "%$request->q%")
-                ->orWhere('actual_value', 'like', "%$request->q%");
+                ->orWhere('currency_value', 'like', "%$request->q%");
         }
         if (!empty($request->status) || $request->status != '') {
             $conversionrates = $conversionrates->where('status', '=', $request->status);
@@ -30,35 +28,30 @@ class ConversionRateController extends Controller
 
     public function create()
     {
-        // $questions = Question::get();
         return Inertia::render('ConversionRate/Form');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'currency_name' => 'required',
             'currency_value' => 'required',
-            'conversion_rate' => 'required',
-            'inr_amount' => 'required',
-            'actual_value' => 'required',
-            'status' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
 
-        if (
-            $ConversionRate = ConversionRate::create([
-                'currency_name' => $request->currency_name,
-                'currency_value' => $request->currency_value,
-                'conversion_rate' => $request->conversion_rate,
-                'inr_amount' => $request->inr_amount,
-                'actual_value' => $request->actual_value,
-                'status' => $request->status,
-            ])
-        ) {
+
+        $conversionrate = ConversionRate::create([
+            'currency_name' => $request->currency_name,
+            'currency_value' => $request->currency_value,
+        ]);
+        if ($conversionrate) {
             // return response()->json(['success' => true, 'message' => 'ConversionRate created successfully']);
 
             return redirect('/conversion-rate')->with(['message' => 'Conversion Rate created successfully']);
         }
+        return redirect('/conversion-rate')->with(['message' => 'Conversion Rate Not created']);
     }
 
     public function edit($id)
@@ -70,16 +63,15 @@ class ConversionRateController extends Controller
         ]);
     }
 
-    public function update(Request $request, ConversionRate $ConversionRate, $id)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'currency_name' => 'required',
             'currency_value' => 'required',
-            'conversion_rate' => 'required',
-            'inr_amount' => 'required',
-            'actual_value' => 'required',
-            'status' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
 
         $conversionrate = ConversionRate::find($id);
 
@@ -87,21 +79,9 @@ class ConversionRateController extends Controller
             $conversionrate = ConversionRate::where(['id' => $conversionrate->id])->update([
                 'currency_name' => $request->currency_name,
                 'currency_value' => $request->currency_value,
-                'conversion_rate' => $request->conversion_rate,
-                'inr_amount' => $request->inr_amount,
-                'actual_value' => $request->actual_value,
-                'status' => $request->status,
             ])
         ) {
             return redirect('/conversion-rate')->with(['message' => 'Conversion Rate Updated successfully']);
-
-            // return response()->json([
-            //     'success' => true,
-            //     'message' => 'Conversion Rate Updated successfully',
-            //     'redirect' => '/address',
-            // ]);
-
-            // return redirect('/ConversionRate');
         } else {
             return response()->json([
                 'success' => false,
@@ -124,7 +104,7 @@ class ConversionRateController extends Controller
 
     public function conversionValue(Request $request, $id)
     {
-        $conversionrate = ConversionRate::where('id',$id)->first();
+        $conversionrate = ConversionRate::where('id', $id)->first();
         if ($request->ajax()) {
             if ($conversionrate) {
                 return response()->json([

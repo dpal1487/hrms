@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Employee;
-
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -12,11 +10,12 @@ use App\Models\User;
 use App\Http\Resources\EmployeeResources;
 use Inertia\Inertia;
 
-class EmployeeSecurityController extends Controller
+class SecurityController extends Controller
 {
     public function security($id)
     {
         $employee = $this->employee($id);
+        $employee = Employee::where(['id' => $employee->id, 'company_id' => $this->companyId()])->first();
         if ($employee) {
             return Inertia::render('Employee/Security', [
                 'employee' => new EmployeeResources($employee),
@@ -27,7 +26,6 @@ class EmployeeSecurityController extends Controller
     }
     public function emailUpdate(Request $request, $id)
     {
-        // dd($request);
         if ($request->ajax()) {
             if ($request->confirm_password == null) {
                 return response()->json(['success' => false, 'message' => 'Please Insert password']);
@@ -59,13 +57,11 @@ class EmployeeSecurityController extends Controller
     }
     public function deactivate($id)
     {
-        $employee = Employee::join('users', 'users.id', 'employees.user_id')
-            ->select('users.id as userId', 'users.active_status', 'employees.id as empId')
-            ->where('employees.id', $id)
-            ->update([
-                'active_status' => 0,
-            ]);
+
+        $employee = Employee::where(['company_id'=> $this->companyId(),'id'=>$id])->first();
+        
         if ($employee) {
+            User::where(['id',$employee->user_id])->update('status',0);
             return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
         }
         return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);

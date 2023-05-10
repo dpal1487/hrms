@@ -10,6 +10,11 @@ export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
     },
+    data() {
+        return {
+            id: route().params.id
+        }
+    },
 
     components: {
         AppLayout,
@@ -42,8 +47,7 @@ export default defineComponent({
                             <h3 class="fw-bold m-0">Address</h3>
                         </div>
                         <!--end::Card title-->
-                        <Link class="btn btn-primary align-self-center"
-                            :href="`/employees/${$page.props.ziggy.id[1]}/address/edit`">
+                        <Link class="btn btn-primary align-self-center" :href="`/employees/${id}/address/edit`">
                         Edit
                         Address
                         </Link>

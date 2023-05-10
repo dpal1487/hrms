@@ -87,10 +87,9 @@ export default defineComponent({
     },
     data() {
         return {
-
             isEdit: false,
             isUploading: false,
-
+            id: route().params.id,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
                 image: this.employee?.data?.user?.image?.medium_path || '',
@@ -399,10 +398,9 @@ export default defineComponent({
                                 <!--end::Variations-->
                                 <div class="row text-align-center p-3">
                                     <div class="col-12">
-                                        
 
                                         <div class="d-flex justify-content-end gap-2">
-                                            <Link :href="`/employees/${ $page.props.ziggy.id[1] }`"
+                                            <Link :href="`/employees/${id}`"
                                                 class="btn btn-secondary align-items-center justify-content-center">
                                             Cancel
                                             </Link>

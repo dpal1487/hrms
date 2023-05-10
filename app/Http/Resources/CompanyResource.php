@@ -30,6 +30,7 @@ class CompanyResource extends JsonResource
             'user' => $this->user,
             'size' => $this->size,
             'corporationtype' => $this->corporationtype,
+
         ];
     }
 }

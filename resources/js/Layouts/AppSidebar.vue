@@ -60,18 +60,13 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/holidays",
-                    title: "Holidays",
+                    link: "/plan",
+                    title: "Plan",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
                     link: "/meetings",
                     title: "Meetings",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/plans",
-                    title: "Plans",
                     icon: "bi bi-pie-chart-fill",
                 }
 

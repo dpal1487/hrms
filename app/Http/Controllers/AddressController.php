@@ -2,25 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use App\Models\Client;
 use App\Models\Address;
-use App\Models\Company;
-use App\Models\Country;
-use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\CompanyAddress;
 use App\Models\EmployeeAddress;
-use App\Http\Resources\ClientResource;
-use App\Http\Resources\CompanyResource;
-use App\Http\Resources\EmployeeResources;
 use App\Models\CompanyUser;
 use Validator;
 
 class AddressController extends Controller
 {
-
-
     public function store(Request $request, $type)
     {
         $validator = Validator::make($request->all(), [

@@ -23,7 +23,9 @@ class CompanyController extends Controller
 {
     public function index(Request $request)
     {
-        $companies = new Company();
+
+        $companies = Company::where('id', $this->companyId());
+
         if (!empty($request->q)) {
             $companies = $companies
                 ->whereHas('user', function ($q) use ($request) {
@@ -106,8 +108,6 @@ class CompanyController extends Controller
     {
 
         $emails = CompanyEmail::where('company_id', $this->companyId())->get();
-
-        // return EmailResource::collection($emails);
         return Inertia::render('Company/Email', [
             'emails' => EmailResource::collection($emails)
         ]);
@@ -124,7 +124,6 @@ class CompanyController extends Controller
 
     public function projectsShow($id)
     {
-        // dd($id);
         $company = Company::find($id);
         // return new CompanyResource($company);
         return Inertia::render('Company/Invoices', [
@@ -140,12 +139,6 @@ class CompanyController extends Controller
             'company' => new CompanyResource($company),
         ]);
     }
-    public function update(Request $request, Company $company)
-    {
-        //
-    }
-
-
     public function destroy($id)
     {
         $company = Company::find($id);

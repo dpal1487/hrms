@@ -10,15 +10,18 @@ import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 export default defineComponent({
-    props: ["conversionrates", "message"],
+    props: ["plans", "message"],
 
     data() {
         return {
             q: "",
             s: "",
             tbody: [
-                "Currency Name",
-                "Currency Value",
+                "Name",
+                "Description",
+                "Currency",
+                "Price",
+                "Stripe ID",
                 "Status",
                 "Action",
             ],
@@ -38,7 +41,7 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            const name = this.conversionrates.data[index].currency_name;
+            const name = this.plans.data[index].currency_name;
 
             Swal.fire({
                 title: "Are you sure you want to delete " + name + " ?",
@@ -51,11 +54,11 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/conversion-rate/" + id + "/delete")
+                        .delete("/plan/" + id + "/delete")
                         .then((response) => {
                             toast.success(response.data.message)
                             if (response.data.success) {
-                                this.conversionrates.data.splice(index, 1);
+                                this.plans.data.splice(index, 1);
                                 return;
                             }
                         })
@@ -81,7 +84,7 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/conversion-rate",
+                "/plan",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
@@ -135,8 +138,8 @@ export default defineComponent({
                         <!--begin::Toolbar-->
 
                         <!--begin::Add customer-->
-                        <Link href="/conversion-rate/add" class="btn btn-primary">
-                        Add Conversion Rate
+                        <Link href="/plan/add" class="btn btn-primary">
+                        Add New Plan
                         </Link>
                         <!--end::Add customer-->
                         <!--end::Toolbar-->
@@ -162,19 +165,29 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(conversionrate, index) in conversionrates.data" :key="index">
+                            <tr v-for="(plan, index) in plans.data" :key="index">
                                 <td>
-                                    {{ conversionrate?.currency_name }}
+                                    {{ plan?.name }}
                                 </td>
                                 <td>
-                                    {{ conversionrate?.currency_value }}
+                                    {{ plan?.description }}
                                 </td>
-                                <td v-if="(conversionrate.status == 1)">Active</td>
-                                <td v-else="( conversionrate.status == 0 )">Inactive</td>
+                                <td>
+                                    {{ plan?.currency }}
+                                </td>
+                                <td>
+                                    {{ plan?.price }}
+                                </td>
+                                <td>
+                                    {{ plan?.stripe_id }}
+                                </td>
+                                <td v-if="(plan.status == 1)">Active</td>
+                                <td v-else="( plan.status == 0 )">Inactive</td>
+
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${conversionrate.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${plan.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -187,18 +200,19 @@ export default defineComponent({
                                             </span>
                                             <!--end::Svg Icon-->
                                         </a>
+
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${conversionrate.id}`">
+                                            :aria-labelled:by="`dropdown-${plan.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/conversion-rate/${conversionrate.id}/edit`">Edit
+                                                    :href="`/plan/${plan.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    conversionrate.id, index
+                                                    plan.id, index
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
@@ -213,9 +227,8 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end"
-                    v-if="conversionrates.meta">
-                    <Pagination :links="conversionrates.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="plans.meta">
+                    <Pagination :links="plans.meta.links" />
                 </div>
             </div>
         </div>

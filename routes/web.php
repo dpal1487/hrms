@@ -6,7 +6,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AnswerController;
-use App\Http\Controllers\Company\AccountController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\InvoiceController;
@@ -17,8 +17,9 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\Employee\EmployeeSecurityController;
+use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\Employee\OverViewController;
+use App\Http\Controllers\PlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,19 +33,21 @@ use App\Http\Controllers\Employee\OverViewController;
 
 | Routes 
 
-            ImageController = 52
-            EmployeeController = 60
-            EmployeeSecurityController = 77
-            AddressController = 84
-            IndustryController = 101
-            QuestionController = 113
-            AnswerController  = 131
-            DecisionMakerController = 142
-            CompanyController = 153 
-            AccountController =  171
-            EmailController = 178 
-            InvoiceController = 186
-            ConversionRateController = 197 
+            EmployeeController = 67
+            OverViewController = 84
+            ImageController = 88
+            AddressController = 93
+            SecurityController = 102
+            CompanyController = 110 
+            AccountController =  126
+            EmailController = 133 
+            IndustryController = 140
+            QuestionController = 150
+            AnswerController  = 160
+            DecisionMakerController = 170
+            InvoiceController = 180
+            ConversionRateController = 202 
+            Plan = 
 
 */
 
@@ -89,14 +92,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('/employee/image-upload', 'empImage')->name('employee.image-upload');
         Route::post('/industries/image-upload', 'indImage')->name('industries.image-upload');
     });
-    Route::controller(EmployeeSecurityController::class)->group(function () {
-        Route::group(['prefix' => 'employees'], function () {
-            Route::get('{id}/security', 'security')->name('employees.security');
-            Route::post('{id}/email/update', 'emailUpdate')->name('employees.email.update');
-            Route::post('{id}/change-password', 'changePassword')->name('employees.change-password');
-            Route::post('{id}/deactivate', 'deactivate')->name('employees.deactivate');
-        });
-    });
     Route::controller(AddressController::class)->group(function () {
         Route::group(['prefix' => 'address'], function () {
             Route::post('{type}', 'store')->name('address.store');
@@ -106,7 +101,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('invoices/{id}/company-address', 'companyAddress')->name('invoices.company-address');
         Route::get('invoices/{id}/client-address', 'clientAddress')->name('invoices.client-address');
     });
-
+    Route::controller(SecurityController::class)->group(function () {
+        Route::group(['prefix' => 'employees'], function () {
+            Route::get('{id}/security', 'security')->name('employees.security');
+            Route::post('{id}/email/update', 'emailUpdate')->name('employees.email.update');
+            Route::post('{id}/change-password', 'changePassword')->name('employees.change-password');
+            Route::post('{id}/deactivate', 'deactivate')->name('employees.deactivate');
+        });
+    });
     Route::controller(CompanyController::class)->group(function () {
         Route::group(['prefix' => 'company'], function () {
             Route::get('/', 'show')->name('company.index');
@@ -123,7 +125,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('delete', 'destroy')->name('company.delete');
         });
     });
-
     Route::controller(AccountController::class)->group(function () {
         Route::group(['prefix' => 'account'], function () {
             Route::post('{type}/{id}', 'update')->name('account.update');
@@ -131,7 +132,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{type}/{id}', 'destroy')->name('account.delete');
         });
     });
-
     Route::controller(EmailController::class)->group(function () {
         Route::group(['prefix' => 'email'], function () {
             Route::post('{type}/{id}', 'update')->name('email.update');
@@ -139,7 +139,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{type}/{id}', 'destroy')->name('email.delete');
         });
     });
-
     Route::controller(IndustryController::class)->group(function () {
         Route::group(['prefix' => 'industries'], function () {
             Route::get('/', 'index')->name('industries.index');
@@ -170,7 +169,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/delete', 'destroy')->name('answer.delete');
         });
     });
-
     Route::controller(DecisionMakerController::class)->group(function () {
         Route::group(['prefix' => 'decision-makers'], function () {
             Route::get('/', 'index')->name('decision-makers.index');
@@ -181,11 +179,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/delete', 'destroy')->name('decision-makers.delete');
         });
     });
-
-
-
-
-
     Route::controller(InvoiceController::class)->group(function () {
         Route::group(['prefix' => 'invoices'], function () {
             Route::get('/', 'index')->name('invoices.index');
@@ -196,7 +189,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/delete', 'destroy')->name('invoices.delete');
         });
     });
-
     Route::controller(ConversionRateController::class)->group(function () {
         Route::group(['prefix' => 'conversion-rate'], function () {
             Route::get('/', 'index')->name('conversion-rate.index');
@@ -207,5 +199,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/delete', 'destroy')->name('conversion-rate.delete');
         });
         Route::get('invoices/{id}/conversion-value', 'conversionValue')->name('invoices.conversion-value');
+    });
+    Route::controller(PlanController::class)->group(function () {
+        Route::group(['prefix' => 'plan'], function () {
+            Route::get('/', 'index')->name('plan.index');
+            Route::get('/add', 'create')->name('plan.add');
+            Route::post('/store', 'store')->name('plan.store');
+            Route::get('{id}/edit', 'edit')->name('plan.edit');
+            Route::post('{id}/update', 'update')->name('plan.update');
+            Route::delete('{id}/delete', 'destroy')->name('plan.delete');
+        });
     });
 });

@@ -93,7 +93,7 @@ export default defineComponent({
                                     </span>
                                     <!--end::Svg Icon--><span v-if="address">{{ address?.city + " " +
                                         address?.state + " " +
-                                        address?.country?.name }}</span> Address</a>
+                                        address?.country?.name }}</span> </a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">
@@ -227,7 +227,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.view') && 'active'}`"
-                        :href="'/employees/' + $page.props.ziggy.id[1]"> Overview
+                        :href="'/employees/' + id"> Overview
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -236,7 +236,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.security') && 'active'}`"
-                        :href="'/employees/' + $page.props.ziggy.id[1] + '/security'">Security
+                        :href="'/employees/' + id + '/security'">Security
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -244,7 +244,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.address') && 'active'}`"
-                        :href="'/employees/' + $page.props.ziggy.id[1] + '/address'">Address
+                        :href="'/employees/' + id + '/address'">Address
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -252,7 +252,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.settings') && 'active'}`"
-                        :href="'/employees/' + $page.props.ziggy.id[1] + '/settings'">Settings
+                        :href="'/employees/' + id + '/settings'">Settings
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -260,7 +260,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employees.attendance') && 'active'}`"
-                        :href="'/employees/' + $page.props.ziggy.id[1] + '/attendance'">Attendance
+                        :href="'/employees/' + id + '/attendance'">Attendance
                     </Link>
                 </li>
                 <!--end::Nav item-->

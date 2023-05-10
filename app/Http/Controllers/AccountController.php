@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Company;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use App\Models\ClientAccount;
 use App\Models\CompanyAccount;
-use App\Http\Controllers\Controller;
 use App\Models\Account;
 use Illuminate\Support\Facades\Validator;
 

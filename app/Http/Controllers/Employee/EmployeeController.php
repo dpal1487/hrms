@@ -9,7 +9,7 @@ use Inertia\Inertia;
 use App\Models\Country;
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use App\Models\EmployeeAddress;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\EmployeeResources;
@@ -20,7 +20,6 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $employees = Employee::where('company_id', $this->companyId());
-
         if (!empty($request->q)) {
             $employees = $employees
                 ->whereHas('user', function ($q) use ($request) {
@@ -47,7 +46,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|unique:users,email',
@@ -64,10 +63,11 @@ class EmployeeController extends Controller
             'date_of_confirmation' => 'required',
             'department_id' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
         $employee = Employee::where('company_id', $this->companyId())->first();
-
         if ($employee) {
-
             $user = User::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -117,10 +117,10 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:users,email',
             'date_of_joining' => 'required',
             'number' => 'required|numeric',
             'qualification' => 'required',
@@ -134,6 +134,9 @@ class EmployeeController extends Controller
             'date_of_confirmation' => 'required',
             'department_id' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
         $employee = Employee::where('company_id', $this->companyId())->find($id);
 
         if ($employee) {
@@ -151,7 +154,6 @@ class EmployeeController extends Controller
                     'email' => $request->email,
                 ]);
             }
-
             if (
                 $employee = Employee::where(['id' => $employee->id])->update([
                     'date_of_joining' => $request->date_of_joining,
@@ -181,9 +183,7 @@ class EmployeeController extends Controller
     public function address($id)
     {
         $employee = $this->employee($id);
-        // dd($employee->address);
-        // return $employee->address->address;
-        // return new AddressResource($employee->address->address);
+
         if ($employee->address != null) {
             return Inertia::render('Employee/Address', [
                 'address' => new AddressResource($employee?->address),
