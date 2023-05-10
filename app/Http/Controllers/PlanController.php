@@ -53,7 +53,7 @@ class PlanController extends Controller
             'description' => $request->description,
             'status' => $request->status,
             'price' => $request->price,
-            'short_order' => $request->short_order,
+            'sort_order' => $request->short_order,
             'stripe_id' => $request->stripe_id,
             'currency' => $request->currency,
         ]);
@@ -98,7 +98,7 @@ class PlanController extends Controller
                 'description' => $request->description,
                 'status' => $request->status,
                 'price' => $request->price,
-                'short_order' => $request->short_order,
+                'sort_order' => $request->short_order,
                 'stripe_id' => $request->stripe_id,
                 'currency' => $request->currency,
             ])

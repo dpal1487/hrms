@@ -82,8 +82,8 @@ export default defineComponent({
 
                 axios.post(route().current() == 'plan.add' ? this.route("plan.store") : this.route('plan.update', this.form.id), this.form)
                     .then((response) => {
+                        console.log(response.data)
                         if (response.data.success) {
-                            console.log(response.data.success)
                             toast.success(response.data.message)
                         }
                         else {
