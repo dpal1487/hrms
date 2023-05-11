@@ -32,7 +32,7 @@ export default defineComponent({
                 price: {
                     required,
                 },
-                short_order: {
+                sort_order: {
                     required,
                 },
                 stripe_id: {
@@ -52,7 +52,7 @@ export default defineComponent({
                 id: this.plan?.data?.id || '',
                 name: this.plan?.data?.name || '',
                 description: this.plan?.data?.description || '',
-                status: this.plan?.data?.is_active || '',
+                status: this.plan?.data?.status || '',
                 price: this.plan?.data?.price || '',
                 stripe_id: this.plan?.data?.stripe_id || '',
                 currency: this.plan?.data?.currency || '',
@@ -82,14 +82,15 @@ export default defineComponent({
 
                 axios.post(route().current() == 'plan.add' ? this.route("plan.store") : this.route('plan.update', this.form.id), this.form)
                     .then((response) => {
-                        console.log(response.data)
                         if (response.data.success) {
                             toast.success(response.data.message)
+                            window.location = response.data.redirect;
                         }
                         else {
                             toast.error(response.data.message)
                         }
                     }).finally(() => {
+
 
                     });
             }
@@ -152,14 +153,13 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-
                                 <div class="w-100 w-sm-50">
-                                    <jet-label for="short_order" value="Short Order" />
-                                    <jet-input id="short_order" type="text" v-model="v$.form.short_order.$model" :class="v$.form.short_order.$errors.length > 0
+                                    <jet-label for="sort_order" value="Sort Order" />
+                                    <jet-input id="sort_order" type="text" v-model="v$.form.sort_order.$model" :class="v$.form.sort_order.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        " placeholder="Short Order" />
-                                    <div v-for="(error, index) of v$.form.short_order.$errors" :key="index">
+                                        " placeholder="Sort Order" />
+                                    <div v-for="(error, index) of v$.form.sort_order.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
@@ -178,9 +178,8 @@ export default defineComponent({
 
                                 <div class="w-100 w-sm-50">
                                     <jet-label for="status" value="Status" />
-                                    <!-- {{ this.industry?.data?.status }} -->
                                     <Multiselect :options="status" label="name" valueProp="id"
-                                        class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                        class="form-control form-control-lg form-control-solid" placeholder="Choose One"
                                         v-model="v$.form.status.$model" track-by="name" :class="v$.form.status.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''

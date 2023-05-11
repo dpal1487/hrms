@@ -101,8 +101,7 @@ export default defineComponent({
 
         <Head title="Conversion Rate" />
         <div class="card card-flush">
-            <!-- {{ this.message }} -->
-
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <!--begin::Card title-->

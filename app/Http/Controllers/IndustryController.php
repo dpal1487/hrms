@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Industry;
 use App\Http\Resources\IndustryResource;
-use Image;
-use App\Models\Image as DBImage;
+use Illuminate\Support\Facades\Validator;
+
 use Inertia\Inertia;
 
 use Illuminate\Http\Request;
 
 class IndustryController extends Controller
 {
-   
+
     public function index(Request $request)
     {
         $industries = new Industry();
@@ -35,23 +35,27 @@ class IndustryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'image' => 'required|mimes:jpeg,png,jpg',
             'status' => 'required',
         ]);
-
-        if (
-            $industry = Industry::create([
-                'name' => $request->name,
-                'image_id' => $request->image_id,
-                'status' => $request->status,
-            ])
-        ) {
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
+        $industry = Industry::create([
+            'name' => $request->name,
+            'image_id' => $request->image_id,
+            'status' => $request->status,
+        ]);
+        if ($industry) {
             return redirect()
                 ->route('industries.index')
                 ->with('message', 'Industries created Successfully');
         }
+        return redirect()
+            ->route('industries.index')
+            ->with('message', 'Industries not created');
     }
 
     public function show(Industry $industry)
@@ -70,7 +74,7 @@ class IndustryController extends Controller
         ]);
     }
 
-  
+
     public function update(Request $request, Industry $industry, $id)
     {
         $request->validate([
@@ -80,6 +84,8 @@ class IndustryController extends Controller
         ]);
         $industry = Industry::find($id);
         $industry = new IndustryResource($industry);
+
+
         if ($request->image_id) {
             $industry = Industry::where(['id' => $industry->id])->update([
                 'name' => $request->name,
@@ -92,9 +98,15 @@ class IndustryController extends Controller
                 'status' => $request->status,
             ]);
         }
+
+        if ($industry > 0) {
+            return redirect()
+                ->route('industries.index')
+                ->with('message', 'Industries updated Successfully');
+        }
         return redirect()
             ->route('industries.index')
-            ->with('message', 'Industries updated Successfully');
+            ->with('message', 'Industries not created');
     }
 
     /**

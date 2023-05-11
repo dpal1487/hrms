@@ -11,7 +11,7 @@ use Tightenco\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
-   
+
     protected $rootView = 'app';
     protected $company = [];
     protected $status = [
@@ -29,13 +29,13 @@ class HandleInertiaRequests extends Middleware
         ],
     ];
 
-   
+
     public function version(Request $request)
     {
         return parent::version($request);
     }
 
-    
+
     public function share(Request $request)
     {
         $user = Auth::user();

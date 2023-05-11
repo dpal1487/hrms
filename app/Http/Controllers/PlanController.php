@@ -15,8 +15,11 @@ class PlanController extends Controller
         $plans = new Plan();
         if (!empty($request->q)) {
             $plans = $plans
-                ->where('currency_name', 'like', "%$request->q")
-                ->orWhere('currency_value', 'like', "%$request->q%");
+                ->where('name', 'like', "%$request->q")
+                ->orWhere('description', 'like', "%$request->q%")
+                ->orWhere('currency', 'like', "%$request->q%")
+                ->orWhere('price', 'like', "%$request->q%")
+                ->orWhere('stripe_id', 'like', "%$request->q%");
         }
         if (!empty($request->status) || $request->status != '') {
             $plans = $plans->where('status', '=', $request->status);
@@ -31,14 +34,15 @@ class PlanController extends Controller
         return Inertia::render('Plan/Form');
     }
 
-    public function store(Request $request)
+    public function store(Plan $plan, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'slug' => 'unique:plans,slug',
             'description' => 'required',
             'status' => 'required',
             'price' => 'required',
-            'short_order' => 'required',
+            'sort_order' => 'required',
             'stripe_id' => 'required',
             'currency' => 'required',
         ]);
@@ -53,35 +57,43 @@ class PlanController extends Controller
             'description' => $request->description,
             'status' => $request->status,
             'price' => $request->price,
-            'sort_order' => $request->short_order,
+            'sort_order' => $request->sort_order,
             'stripe_id' => $request->stripe_id,
             'currency' => $request->currency,
         ]);
         if ($plan) {
-            // return response()->json(['success' => true, 'message' => 'ConversionRate created successfully']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Plan created successfully'
 
-            return redirect('/plan')->with(['message' => 'Plan Rate created successfully'], 200);
+            ], 200);
+
+            // return redirect('/plan')->with(['message' => 'Plan Rate created successfully'], 200);
         }
-        return redirect('/plan')->with(['message' => 'Plan Rate Not created'], 400);
+        return response()->json(['success' => false, 'message' => 'Plan create fail successfully'], 200);
+
+        // return redirect('/plan')->with(['message' => 'Plan Rate Not created'], 400);
+
     }
 
-    public function edit($id)
+    public function edit(Plan $id)
     {
         $plan = Plan::find($id);
+        // return new PlanResource($plan);
 
         return Inertia::render('Plan/Form', [
-            'plan' => new PlanResource($plan),
+            'plan' => new PlanResource($id),
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,  $id)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'required',
             'status' => 'required',
             'price' => 'required',
-            'short_order' => 'required',
+            'sort_order' => 'required',
             'stripe_id' => 'required',
             'currency' => 'required',
         ]);
@@ -89,37 +101,40 @@ class PlanController extends Controller
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
 
-        $conversionrate = Plan::find($id);
+        $plan = Plan::find($id);
 
         if (
-            $conversionrate = Plan::where(['id' => $conversionrate->id])->update([
+            $plan = Plan::where(['id' => $plan->id])->update([
                 'name' => $request->name,
                 'slug' => $request->slug,
                 'description' => $request->description,
                 'status' => $request->status,
                 'price' => $request->price,
-                'sort_order' => $request->short_order,
+                'sort_order' => $request->sort_order,
                 'stripe_id' => $request->stripe_id,
                 'currency' => $request->currency,
             ])
         ) {
-            return redirect('/plan')->with(['message' => 'Conversion Rate Updated successfully']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Plan updated successfull',
+                'redirect' => '/plan',
+            ]);
+            // return redirect('/plan')->with(['message' => 'Conversion Rate Updated successfully']);
         } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Something Went Wrong !',
-                'redirect' => '/address',
+                'redirect' => '/plan',
             ]);
         }
     }
 
-    public function destroy($id)
+    public function destroy(Plan $plan)
     {
-        // dd($id);
-
-        $conversionrate = Plan::find($id);
-        if ($conversionrate->delete()) {
-            return response()->json(['success' => true, 'message' => 'Conversion Rate has been deleted successfully.']);
+        $plan = Plan::find($plan);
+        if ($plan->delete()) {
+            return response()->json(['success' => true, 'message' => 'Plan has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

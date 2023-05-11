@@ -75,20 +75,20 @@ class ConversionRateController extends Controller
 
         $conversionrate = ConversionRate::find($id);
 
-        if (
-            $conversionrate = ConversionRate::where(['id' => $conversionrate->id])->update([
-                'currency_name' => $request->currency_name,
-                'currency_value' => $request->currency_value,
-            ])
-        ) {
-            return redirect('/conversion-rate')->with(['message' => 'Conversion Rate Updated successfully']);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Something Went Wrong !',
-                'redirect' => '/address',
-            ]);
+
+        $conversionrate = ConversionRate::where(['id' => $id])->update([
+            'currency_name' => $request->currency_name,
+            'currency_value' => $request->currency_value,
+        ]);
+
+        if ($conversionrate > 0) {
+            return redirect()
+                ->route('conversion-rate.index')
+                ->with('message', 'Conversion Rate updated Successfully');
         }
+        return redirect()
+            ->route('conversion-rate.index')
+            ->with('message', 'Industries not created');
     }
 
     public function destroy($id)

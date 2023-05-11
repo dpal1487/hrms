@@ -321,7 +321,7 @@ export default defineComponent({
                                                         :searchable="true" v-model="v$.form.company.$model" :class="v$.form.company.$errors.length > 0
                                                             ? 'is-invalid'
                                                             : ''
-                                                            " track-by="company_name" placeholder="Select One"
+                                                            " track-by="company_name" placeholder="Select Company"
                                                         @change="getCompanyDetails" />
                                                     <!--end::Select-->
                                                 </div>
@@ -360,7 +360,7 @@ export default defineComponent({
                                                         :searchable="true" v-model="v$.form.client.$model" :class="v$.form.client.$errors.length > 0
                                                             ? 'is-invalid'
                                                             : ''
-                                                            " track-by="name" placeholder="Select One"
+                                                            " track-by="name" placeholder="Select Client"
                                                         @change="getClientDetails" />
                                                     <!--end::Select-->
                                                 </div>
@@ -517,7 +517,7 @@ export default defineComponent({
                                         v-model="v$.form.currency.$model" :class="v$.form.currency.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                            " placeholder="Select One" track-by="currency_name"
+                                            " placeholder="Select Currency" track-by="currency_name"
                                         @change="getConversionRate" />
 
                                     <div v-for="(error, index) of v$.form.currency.$errors" :key="index">

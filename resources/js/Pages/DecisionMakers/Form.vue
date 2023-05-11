@@ -97,7 +97,7 @@ export default defineComponent({
                                 <div class="fv-row col-6">
                                     <jet-label for="industry" value="Industry" />
                                     <Multiselect :options="industries" label="name" valueProp="id"
-                                        class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                        class="form-control form-control-lg form-control-solid" placeholder="Select Industry"
                                         v-model="v$.form.industry.$model" track-by="name" :searchable="true" :class="
                                             v$.form.industry.$errors.length > 0
                                                 ? 'is-invalid'

@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["conversionrates", "message"],
 
@@ -32,6 +33,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        Alert
     },
     methods: {
 
@@ -98,8 +100,7 @@ export default defineComponent({
 
         <Head title="Conversion Rate" />
         <div class="card card-flush">
-            <!-- {{ this.message }} -->
-
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <!--begin::Card title-->

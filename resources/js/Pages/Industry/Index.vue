@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["industries", 'message'],
     data() {
@@ -30,6 +31,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        Alert
     },
     methods: {
 
@@ -96,17 +98,11 @@ export default defineComponent({
 
         <Head title="Industry" />
         <div class="card card-flush">
-            <div v-if="$page.props.ziggy.flash.message" class="alert">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="font-medium">
-                        {{ $page.props.ziggy.flash.message }}
-                    </span>
-                </div>
-
-            </div>
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <div>
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
                     <!--begin::Card title-->
+
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -144,6 +140,7 @@ export default defineComponent({
                     <!--end::Card toolbar-->
                 </form>
             </div>
+
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
@@ -207,8 +204,8 @@ export default defineComponent({
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                        industries.id, index
-                                                    )
+                                                    industries.id, index
+                                                )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete

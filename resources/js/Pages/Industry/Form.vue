@@ -93,8 +93,7 @@ export default defineComponent({
                     formdata.append("status", data.status);
                     formdata.append("image_id", data.image_id);
                     return formdata;
-                })
-                    .post(route().current() == 'industries.add' ? this.route("industries.store") : this.route('industries.update', this.form.id), config);
+                }).post(route().current() == 'industries.add' ? this.route("industries.store") : this.route('industries.update', this.form.id), config);
             }
         },
         onFileChange(e) {
@@ -104,7 +103,7 @@ export default defineComponent({
             this.url = URL.createObjectURL(file);
             const formdata = new FormData();
             formdata.append("image", file)
-            
+
             this.isUploading = true;
 
             axios.post("/industries/image-upload", formdata, {
@@ -183,7 +182,7 @@ export default defineComponent({
                                         <jet-label for="status" value="Status" />
                                         <!-- {{ this.industry?.data?.status }} -->
                                         <Multiselect :options="status" label="name" valueProp="id"
-                                            class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                            class="form-control form-control-lg form-control-solid" placeholder="Choose One"
                                             v-model="v$.form.status.$model" track-by="name" :class="v$.form.status.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''

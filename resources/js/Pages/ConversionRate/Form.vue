@@ -56,18 +56,23 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
 
-                axios.post(route().current() == 'conversion-rate.add' ? this.route("conversion-rate.store") : this.route('conversion-rate.update', this.form.id), this.form)
-                    .then((response) => {
-                        if (response.data.success) {
-                            toast.success(response.data.message)
-                        }
-                        else {
-                            toast.error(response.data.message)
-                        }
-                    }).finally(() => {
+                    .post(route().current() == 'conversion-rate.add' ? this.route("conversion-rate.store") : this.route('conversion-rate.update', this.form.id))
+                // .then((response) => {
+                //     if (response.data.success) {
+                //         toast.success(response.data.message)
+                //         return route('plan.index');
+                //     }
+                //     else {
+                //         toast.error("something went wrong")
+                //     }
+                // }).finally(() => {
 
-                    });
+                // });
             }
         },
 

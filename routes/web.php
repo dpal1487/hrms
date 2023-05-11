@@ -202,6 +202,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
     Route::controller(PlanController::class)->group(function () {
         Route::group(['prefix' => 'plan'], function () {
+
+
             Route::get('/', 'index')->name('plan.index');
             Route::get('/add', 'create')->name('plan.add');
             Route::post('/store', 'store')->name('plan.store');
@@ -210,4 +212,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/delete', 'destroy')->name('plan.delete');
         });
     });
+
+    // Route::resource('plan', PlanController::class);
 });
