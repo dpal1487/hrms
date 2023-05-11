@@ -9,7 +9,7 @@ export default defineComponent({
     <div
         :class="`alert bg-light-success border-success border  d-flex flex-column flex-sm-row align-items-sm-center py-0 mb-10`">
         <!-- replace with icon -->
-        This line is added from another branch
+        
         <!--begin::Wrapper-->
         <div :class="`d-flex flex-column text-success  pe-0`">
             <!--begin::Title-->
