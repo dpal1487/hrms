@@ -9,6 +9,8 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+
 import axios from "axios";
 import { toast } from "vue3-toastify";
 
@@ -73,26 +75,27 @@ export default defineComponent({
         JetInput,
         JetLabel,
         InputError,
+        JetValidationErrors
     },
     methods: {
 
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                if (route().current() == 'plan.create') {
+                    this.form
+                        .transform((data) => ({
+                            ...data,
+                        }))
+                        .post(this.route("plan.store"))
+                } else {
 
-                axios.post(route().current() == 'plan.add' ? this.route("plan.store") : this.route('plan.update', this.form.id), this.form)
-                    .then((response) => {
-                        if (response.data.success) {
-                            toast.success(response.data.message)
-                            window.location = response.data.redirect;
-                        }
-                        else {
-                            toast.error(response.data.message)
-                        }
-                    }).finally(() => {
-
-
-                    });
+                    this.form
+                        .transform((data) => ({
+                            ...data,
+                        }))
+                        .put(this.route('plan.update', this.form.id))
+                }
             }
         },
 
@@ -106,10 +109,12 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Plan" />
-
     <AppLayout>
+        <!-- {{ route().current() }} -->
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
+
+                <JetValidationErrors />
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
                         <div class="card-header">
@@ -211,11 +216,12 @@ export default defineComponent({
                                     class="btn btn-secondary d-flex align-items-center justify-content-center">
                                 Cancel
                                 </Link>
+
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="(form.processing) ? 'true' : 'false'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'plan.edit'">Update</span>
-                                        <span v-if="route().current() == 'plan.add'">Save</span>
+                                        <span v-if="route().current() == 'plan.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span

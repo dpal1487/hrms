@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["plans", "message"],
 
@@ -35,14 +36,13 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        Alert
     },
     methods: {
 
         confirmDelete(id, index) {
             this.isLoading = true;
-
-            const name = this.plans.data[index].currency_name;
-
+            const name = this.plans.data[index].name;
             Swal.fire({
                 title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",
@@ -137,7 +137,7 @@ export default defineComponent({
                         <!--begin::Toolbar-->
 
                         <!--begin::Add customer-->
-                        <Link href="/plan/add" class="btn btn-primary">
+                        <Link href="/plan/create" class="btn btn-primary">
                         Add New Plan
                         </Link>
                         <!--end::Add customer-->

@@ -104,7 +104,9 @@ class ConversionRateController extends Controller
 
     public function conversionValue(Request $request, $id)
     {
+
         $conversionrate = ConversionRate::where('id', $id)->first();
+        return new ConversionRateResources($conversionrate);
         if ($request->ajax()) {
             if ($conversionrate) {
                 return response()->json([

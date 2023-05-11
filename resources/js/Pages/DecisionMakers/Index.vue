@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["decisionmakers"],
 
@@ -33,6 +34,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        Alert
     },
     methods: {
 
@@ -101,7 +103,7 @@ export default defineComponent({
 
         <Head title="Decision Makers" />
         <div class="card card-flush">
-
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <div class="card-header border-0 pt-6">

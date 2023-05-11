@@ -35,14 +35,20 @@ class IndustryController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required',
+            'status' => 'required',
+        ]);
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image' => 'required|mimes:jpeg,png,jpg',
+            'image' => 'required',
             'status' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
+
         $industry = Industry::create([
             'name' => $request->name,
             'image_id' => $request->image_id,
@@ -63,11 +69,8 @@ class IndustryController extends Controller
         //
     }
 
-    public function edit(Industry $industry, $id)
+    public function edit(Industry $industry)
     {
-        $industry = Industry::find($id);
-
-        // return new IndustryResource($industry);
 
         return Inertia::render('Industry/Form', [
             'industry' => new IndustryResource($industry),
@@ -75,14 +78,14 @@ class IndustryController extends Controller
     }
 
 
-    public function update(Request $request, Industry $industry, $id)
+    public function update(Request $request, Industry $industry)
     {
         $request->validate([
             'name' => 'required',
             'image' => 'required',
             'status' => 'required',
         ]);
-        $industry = Industry::find($id);
+
         $industry = new IndustryResource($industry);
 
 
@@ -109,15 +112,9 @@ class IndustryController extends Controller
             ->with('message', 'Industries not created');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Industry  $industry
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Industry $industry, $id)
+    public function destroy(Industry $industry)
     {
-        $industry = Industry::find($id);
+
         if ($industry->delete()) {
             return response()->json(['success' => true, 'message' => 'Industry has been deleted successfully.']);
         }

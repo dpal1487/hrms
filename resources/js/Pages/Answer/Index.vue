@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["answers", "message"],
 
@@ -26,13 +27,14 @@ export default defineComponent({
         };
     },
     components: {
-        AppLayout,
-        Link,
-        Head,
-        Pagination,
-        Multiselect,
-        Loading,
-    },
+    AppLayout,
+    Link,
+    Head,
+    Pagination,
+    Multiselect,
+    Loading,
+    Alert
+},
     methods: {
 
         confirmDelete(id, index) {
@@ -98,7 +100,7 @@ export default defineComponent({
 
         <Head title="Answers" />
         <div class="card card-flush">
-            {{ this.message }}
+            <Alert v-if="$page.props.ziggy.flash.message" />
 
             <!--begin::Actions-->
             <div>

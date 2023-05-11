@@ -68,22 +68,11 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                // this.form
-                //     .transform((data) => ({
-                //         ...data,
-                //     }))
-                axios.post(route().current() == 'answer.add' ? this.route("answer.store") : this.route('answer.update', this.form.id), this.form)
-                    .then((response) => {
-                        if (response.data.success) {
-                            toast.success(response.data.message)
-                                                    }
-                        else {
-                            toast.warning(response.data.message)
-                        }
-                    }).finally(() => {
-                        // window.location.href('/answer')
-
-                    });
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(route().current() == 'answer.add' ? this.route("answer.store") : this.route('answer.update', this.form.id))
             }
         },
 
@@ -119,8 +108,8 @@ export default defineComponent({
                                     <Multiselect :options="questions" label="question_key" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                         v-model="v$.form.question.$model" track-by="question_key" :searchable="true" :class="v$.form.question.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
+                                            ? 'is-invalid'
+                                            : ''
                                             " />
                                     <div v-for="(error, index) of v$.form.question.$errors" :key="index">
                                         <input-error :message="error.$message" />
@@ -129,8 +118,8 @@ export default defineComponent({
                                 <div class="fv-row col-6">
                                     <jet-label for="answer" value="Answer" />
                                     <jet-input id="answer" type="text" v-model="v$.form.answer.$model" :class="v$.form.answer.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
+                                        ? 'is-invalid'
+                                        : ''
                                         " placeholder="Answer" />
                                     <div v-for="(error, index) of v$.form.answer.$errors" :key="index">
                                         <input-error :message="error.$message" />
@@ -141,8 +130,8 @@ export default defineComponent({
                                     <Multiselect :options="order_by" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                         v-model="v$.form.order_by.$model" track-by="name" :searchable="true" :class="v$.form.order_by.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
+                                            ? 'is-invalid'
+                                            : ''
                                             " />
                                     <div v-for="(error, index) of v$.form.order_by.$errors" :key="index">
                                         <input-error :message="error.$message" />

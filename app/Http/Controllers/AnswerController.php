@@ -39,17 +39,21 @@ class AnswerController extends Controller
             'order_by' => 'required',
         ]);
 
-        if (
-            $Answer = Answer::create([
-                'question_id' => $request->question,
-                'answer' => $request->answer,
-                'order_by' => $request->order_by,
-            ])
-        ) {
-            // return response()->json(['success' => true, 'message' => 'Answer created successfully']);
 
-            return redirect('/answer');
+        $answer = Answer::create([
+            'question_id' => $request->question,
+            'answer' => $request->answer,
+            'order_by' => $request->order_by,
+        ]);
+
+        if ($answer) {
+            return redirect()
+                ->route('answer.index')
+                ->with('message', 'Answer craeted Successfully');
         }
+        return redirect()
+            ->route('answer.index')
+            ->with('message', 'Answer not created');
     }
 
     public function edit($id)
@@ -74,28 +78,20 @@ class AnswerController extends Controller
 
         $answer = Answer::find($id);
 
-        if (
-            $answer = Answer::where(['id' => $answer->id])->update([
-                'question_id' => $request->question,
-                'answer' => $request->answer,
-                'order_by' => $request->order_by,
-            ])
-        ) {
-            // return response()->json(['success' => true, 'message' => 'Answer created successfully']);
-            return response()->json([
-                'success' => true,
-                'message' => 'Employee Address Updated successfully',
-                'redirect' => '/address',
-            ]);
 
-            // return redirect('/answer');
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Something Went Wrong !',
-                'redirect' => '/address',
-            ]);
+        $answer = Answer::where(['id' => $answer->id])->update([
+            'question_id' => $request->question,
+            'answer' => $request->answer,
+            'order_by' => $request->order_by,
+        ]);
+        if ($answer > 0) {
+            return redirect()
+                ->route('answer.index')
+                ->with('message', 'Answer updated Successfully');
         }
+        return redirect()
+            ->route('answer.index')
+            ->with('message', 'Answer not updated');
     }
 
     public function destroy($id)

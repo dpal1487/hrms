@@ -132,7 +132,7 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add industries-->
-                        <Link href="/industries/add" class="btn btn-primary">
+                        <Link href="/industries/create" class="btn btn-primary">
                         Add Industry
                         </Link>
                         <!--end::Add industries-->

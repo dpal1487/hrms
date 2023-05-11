@@ -60,19 +60,7 @@ export default defineComponent({
                     .transform((data) => ({
                         ...data,
                     }))
-
                     .post(route().current() == 'conversion-rate.add' ? this.route("conversion-rate.store") : this.route('conversion-rate.update', this.form.id))
-                // .then((response) => {
-                //     if (response.data.success) {
-                //         toast.success(response.data.message)
-                //         return route('plan.index');
-                //     }
-                //     else {
-                //         toast.error("something went wrong")
-                //     }
-                // }).finally(() => {
-
-                // });
             }
         },
 

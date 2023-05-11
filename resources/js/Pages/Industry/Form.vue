@@ -14,13 +14,14 @@ import { required, email, url, numeric, integer } from "@vuelidate/validators";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { toast } from "vue3-toastify";
+import axios from "axios";
 
 
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ["industries", 'industry'],
+    props: ['industry'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -78,22 +79,27 @@ export default defineComponent({
     },
     methods: {
         submit() {
-            const config = {
-                headers: { 'content-type': 'multipart/form-data' }
-            }
             this.v$.$touch();
 
             if (!this.v$.form.$invalid) {
-                this.form.transform((data) => {
 
-                    const formdata = new FormData();
-                    formdata.append("id", data.id);
-                    formdata.append("name", data.name);
-                    formdata.append("image", data.image);
-                    formdata.append("status", data.status);
-                    formdata.append("image_id", data.image_id);
-                    return formdata;
-                }).post(route().current() == 'industries.add' ? this.route("industries.store") : this.route('industries.update', this.form.id), config);
+                if (route().current() == 'industries.create') {
+                    // this.form.transform((data) => ({
+                    //     ...data,
+                    // }))
+                    axios.post(this.route("industries.store"), this.form)
+                        .then((response) => {
+
+                            toast.success(response.data.message);
+
+
+                        })
+                } else {
+                    // this.form.transform((data) => ({
+                    //     ...data,
+                    // }))
+                    axios.put(this.route('industries.update', this.form.id), this.form)
+                }
             }
         },
         onFileChange(e) {
@@ -140,6 +146,7 @@ export default defineComponent({
     <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
+
                 <JetValidationErrors />
                 <!-- {{ form }} -->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10"
@@ -168,7 +175,6 @@ export default defineComponent({
                             <div class="col-8">
                                 <div class="card p-6">
                                     <div class="fv-row mb-6">
-
                                         <jet-label for="name" value="Name" />
                                         <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                             ? 'is-invalid'
@@ -210,7 +216,7 @@ export default defineComponent({
                                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                         :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                         <span v-if="route().current() == 'industries.edit'">Update</span>
-                                        <span v-if="route().current() == 'industries.add'">Save</span>
+                                        <span v-if="route().current() == 'industries.create'">Save</span>
                                         <span class="indicator-progress">
                                             Please wait... <span
                                                 class="spinner-border spinner-border-sm align-middle ms-2"></span>

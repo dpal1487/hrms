@@ -120,7 +120,7 @@ class EmployeeController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|unique:users,email',
+            'email' => 'required',
             'date_of_joining' => 'required',
             'number' => 'required|numeric',
             'qualification' => 'required',

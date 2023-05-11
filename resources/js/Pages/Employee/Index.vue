@@ -10,6 +10,7 @@ import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["employees"],
     data() {
@@ -41,6 +42,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        Alert
     },
     methods: {
 
@@ -106,7 +108,7 @@ export default defineComponent({
 
         <Head title="Employees" />
         <div class="card card-flush">
-            <div v-if="message">{{ message }}</div>
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
@@ -178,7 +180,7 @@ export default defineComponent({
                                 <td>{{ employees.code }}</td>
                                 <td>{{ employees.number }}</td>
                                 <td>{{ employees.salary }}</td>
-                               
+
                                 <td>{{ employees.created_at }}</td>
 
                                 <td>

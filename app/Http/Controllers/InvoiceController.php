@@ -9,12 +9,10 @@ use App\Models\CompanyAddress;
 use App\Models\InvoiceItem;
 use App\Models\ConversionRate;
 use App\Models\CompanyInvoice;
-use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
-use App\Http\Resources\ClientResource;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\AddressResource;
 use Inertia\Inertia;
-use Auth;
 
 use Illuminate\Http\Request;
 
@@ -41,6 +39,7 @@ class InvoiceController extends Controller
     }
     public function create()
     {
+
         $companies = Company::where('id', $this->companyId())->get();
         $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
         $clients = Client::where('company_id', $this->companyId())->get();
@@ -59,13 +58,16 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'invoice_number' => 'required',
             'invoice_date' => 'required',
-            // 'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'notes' => 'required',
             'status' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
 
         $invoice = Invoice::create([
             'client_id' => $request->client,
@@ -120,14 +122,18 @@ class InvoiceController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'invoice_number' => 'required',
             'invoice_date' => 'required',
-            'conversion_rate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'conversion_rate' => 'required',
             'invoice_due_date' => 'required',
             'notes' => 'required',
             'status' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
+
 
         $invoice = Invoice::where('id', $id)->update([
             'client_id' => $request->client,

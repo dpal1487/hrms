@@ -139,16 +139,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{type}/{id}', 'destroy')->name('email.delete');
         });
     });
-    Route::controller(IndustryController::class)->group(function () {
-        Route::group(['prefix' => 'industries'], function () {
-            Route::get('/', 'index')->name('industries.index');
-            Route::get('/add', 'create')->name('industries.add');
-            Route::post('/store', 'store')->name('industries.store');
-            Route::get('{id}/edit', 'edit')->name('industries.edit');
-            Route::post('{id}/update', 'update')->name('industries.update');
-            Route::delete('{id}/delete', 'destroy')->name('industries.delete');
-        });
-    });
+    // Route::controller(IndustryController::class)->group(function () {
+    //     Route::group(['prefix' => 'industries'], function () {
+    //         Route::get('/', 'index')->name('industries.index');
+    //         Route::get('/add', 'create')->name('industries.add');
+    //         Route::post('/store', 'store')->name('industries.store');
+    //         Route::get('{id}/edit', 'edit')->name('industries.edit');
+    //         Route::post('{id}/update', 'update')->name('industries.update');
+    //         Route::delete('{id}/delete', 'destroy')->name('industries.delete');
+    //     });
+    // });
+
+    Route::resource('industries', IndustryController::class);
     Route::controller(QuestionController::class)->group(function () {
         Route::group(['prefix' => 'question'], function () {
             Route::get('/', 'index')->name('question.index');
@@ -200,18 +202,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
         Route::get('invoices/{id}/conversion-value', 'conversionValue')->name('invoices.conversion-value');
     });
-    Route::controller(PlanController::class)->group(function () {
-        Route::group(['prefix' => 'plan'], function () {
 
-
-            Route::get('/', 'index')->name('plan.index');
-            Route::get('/add', 'create')->name('plan.add');
-            Route::post('/store', 'store')->name('plan.store');
-            Route::get('{id}/edit', 'edit')->name('plan.edit');
-            Route::post('{id}/update', 'update')->name('plan.update');
-            Route::delete('{id}/delete', 'destroy')->name('plan.delete');
-        });
-    });
-
-    // Route::resource('plan', PlanController::class);
+    Route::resource('plan', PlanController::class);
 });
