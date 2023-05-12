@@ -49,7 +49,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/industries/" + id + "/delete")
+                        .delete("/industries/" + id )
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {

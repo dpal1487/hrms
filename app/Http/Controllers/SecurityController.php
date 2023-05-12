@@ -15,6 +15,7 @@ class SecurityController extends Controller
     public function security($id)
     {
         $employee = $this->employee($id);
+
         $employee = Employee::where(['id' => $employee->id, 'company_id' => $this->companyId()])->first();
         if ($employee) {
             return Inertia::render('Employee/Security', [
@@ -58,10 +59,10 @@ class SecurityController extends Controller
     public function deactivate($id)
     {
 
-        $employee = Employee::where(['company_id'=> $this->companyId(),'id'=>$id])->first();
-        
+        $employee = Employee::where(['company_id' => $this->companyId(), 'id' => $id])->first();
+
         if ($employee) {
-            User::where(['id',$employee->user_id])->update('status',0);
+            User::where(['id', $employee->user_id])->update('status', 0);
             return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
         }
         return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);

@@ -35,14 +35,10 @@ class IndustryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'image' => 'required',
-            'status' => 'required',
-        ]);
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image' => 'required',
+            'image_id' => 'required',
             'status' => 'required',
         ]);
         if ($validator->fails()) {
@@ -55,13 +51,15 @@ class IndustryController extends Controller
             'status' => $request->status,
         ]);
         if ($industry) {
-            return redirect()
-                ->route('industries.index')
-                ->with('message', 'Industries created Successfully');
+            return response()->json([
+                'success' => true,
+                'message' => 'Industries created successfully',
+            ], 200);
         }
-        return redirect()
-            ->route('industries.index')
-            ->with('message', 'Industries not created');
+        return response()->json([
+            'success' => true,
+            'message' => 'Industries not crated',
+        ], 200);
     }
 
     public function show(Industry $industry)
@@ -102,14 +100,16 @@ class IndustryController extends Controller
             ]);
         }
 
-        if ($industry > 0) {
-            return redirect()
-                ->route('industries.index')
-                ->with('message', 'Industries updated Successfully');
+        if ($industry) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Industries updated successfully',
+            ], 200);
         }
-        return redirect()
-            ->route('industries.index')
-            ->with('message', 'Industries not created');
+        return response()->json([
+            'success' => true,
+            'message' => 'Industries not updated',
+        ], 400);
     }
 
     public function destroy(Industry $industry)

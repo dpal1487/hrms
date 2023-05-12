@@ -62,10 +62,19 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    })).post(route().current() == 'decision-makers.add' ? this.route("decision-makers.store") : this.route('decision-makers.update', this.form.id));
+                if (route().current() == 'decision-makers.create') {
+                    this.form
+                        .transform((data) => ({
+                            ...data,
+                        })).post(this.route("decision-makers.store"));
+
+                } else {
+                    this.form
+                        .transform((data) => ({
+                            ...data,
+                        })).put(this.route('decision-makers.update', this.form.id));
+
+                }
             }
         },
 
@@ -97,12 +106,12 @@ export default defineComponent({
                                 <div class="fv-row col-6">
                                     <jet-label for="industry" value="Industry" />
                                     <Multiselect :options="industries" label="name" valueProp="id"
-                                        class="form-control form-control-lg form-control-solid" placeholder="Select Industry"
-                                        v-model="v$.form.industry.$model" track-by="name" :searchable="true" :class="
-                                            v$.form.industry.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                        " />
+                                        class="form-control form-control-lg form-control-solid"
+                                        placeholder="Select Industry" v-model="v$.form.industry.$model" track-by="name"
+                                        :searchable="true" :class="v$.form.industry.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " />
                                     <div v-for="(error, index) of v$.form.industry.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -111,11 +120,10 @@ export default defineComponent({
 
                                 <div class="fv-row col-6">
                                     <jet-label for="title" value="Title" />
-                                    <jet-input type="text" v-model="v$.form.title.$model" :class="
-                                        v$.form.title.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Title" />
+                                    <jet-input type="text" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Title" />
                                     <div v-for="(error, index) of v$.form.title.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -126,11 +134,10 @@ export default defineComponent({
                                     <jet-label for="type" value="Order By" />
                                     <Multiselect :options="options" label="name" valueProp="value"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        v-model="v$.form.order_by.$model" track-by="name" :class="
-                                            v$.form.order_by.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                        " />
+                                        v-model="v$.form.order_by.$model" track-by="name" :class="v$.form.order_by.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " />
                                     <div v-for="(error, index) of v$.form.order_by.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -148,10 +155,10 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing) ? 'true' : 'false'">
+                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'decision-makers.edit'">Update</span>
-                                        <span v-if="route().current() == 'decision-makers.add'">Save</span>
+                                        <span v-if="route().current() == 'decision-makers.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span

@@ -46,12 +46,18 @@ class ConversionRateController extends Controller
             'currency_name' => $request->currency_name,
             'currency_value' => $request->currency_value,
         ]);
-        if ($conversionrate) {
-            // return response()->json(['success' => true, 'message' => 'ConversionRate created successfully']);
 
-            return redirect('/conversion-rate')->with(['message' => 'Conversion Rate created successfully']);
+        if ($conversionrate) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Conversion Rate created successfully',
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Conversion Rate not created',
+            ], 400);
         }
-        return redirect('/conversion-rate')->with(['message' => 'Conversion Rate Not created']);
     }
 
     public function edit($id)
@@ -70,7 +76,7 @@ class ConversionRateController extends Controller
             'currency_value' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+            return response()->json(['error' => $validator->errors()->first(), 'success' => false], 400);
         }
 
         $conversionrate = ConversionRate::find($id);
@@ -81,14 +87,26 @@ class ConversionRateController extends Controller
             'currency_value' => $request->currency_value,
         ]);
 
-        if ($conversionrate > 0) {
-            return redirect()
-                ->route('conversion-rate.index')
-                ->with('message', 'Conversion Rate updated Successfully');
+        if ($conversionrate) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Conversion Rate updated successfully',
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => true,
+                'message' => 'Conversion Rate not updated',
+            ], 400);
         }
-        return redirect()
-            ->route('conversion-rate.index')
-            ->with('message', 'Industries not created');
+
+        // if ($conversionrate) {
+        //     return redirect()
+        //         ->route('conversion-rate.index')
+        //         ->with('message', 'Conversion Rate updated Successfully');
+        // }
+        // return redirect()
+        //     ->route('conversion-rate.index')
+        //     ->with('message', 'Conversion Rate not updated');
     }
 
     public function destroy($id)

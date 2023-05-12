@@ -93,13 +93,9 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function edit(Question $question, $id)
+    public function edit(Question $question)
     {
         $industries = Industry::get();
-
-        $question = question::find($id);
-
-        // $question = new questionResources($question);
 
         return Inertia::render('Question/Form', [
             'question' => new questionResources($question),
@@ -114,7 +110,7 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Question $question, $id)
+    public function update(Request $request, Question $question)
     {
         $request->validate([
             'question_key' => 'required',
@@ -123,8 +119,6 @@ class QuestionController extends Controller
             'industry' => 'required',
             'language' => 'required',
         ]);
-
-        $question = question::find($id);
 
         if (
             $question = question::where(['id' => $question->id])->update([
@@ -148,11 +142,10 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Question $question)
     {
         // dd($id);
 
-        $question = Question::find($id);
         if ($question->delete()) {
             return response()->json(['success' => true, 'message' => 'Question has been deleted successfully.']);
         }

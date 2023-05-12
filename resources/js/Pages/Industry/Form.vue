@@ -51,7 +51,8 @@ export default defineComponent({
                 name: this.industry?.data?.name || '',
                 image: this.industry?.data?.image?.name || '',
                 status: this.industry?.data?.status || '',
-                image_id: '',
+                image_id: this.industry?.data?.image.id || '',
+
 
             }),
             url: null,
@@ -89,16 +90,34 @@ export default defineComponent({
                     // }))
                     axios.post(this.route("industries.store"), this.form)
                         .then((response) => {
-
-                            toast.success(response.data.message);
-
-
+                            // console.log(route.)
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                location.assign('/industries')
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
                         })
                 } else {
                     // this.form.transform((data) => ({
                     //     ...data,
                     // }))
                     axios.put(this.route('industries.update', this.form.id), this.form)
+                        .then((response) => {
+                            // console.log(route.)
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                location.assign('/industries')
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        })
                 }
             }
         },
@@ -163,7 +182,7 @@ export default defineComponent({
                             <div class="col-4">
                                 <div class="card p-6">
                                     <div class="fv-row">
-                                        <input type="hidden" v-model="form.image_id" />
+                                     
 
                                         <ImageInput :image="this.industry?.data?.image?.medium_path"
                                             :onchange="onFileChange" :remove="removeSelectedAvatar" :selectedImage="url"

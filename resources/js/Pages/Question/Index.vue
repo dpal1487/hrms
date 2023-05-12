@@ -56,7 +56,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/question/" + id + "/delete")
+                        .delete("/question/" + id )
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
@@ -136,7 +136,7 @@ export default defineComponent({
                     <div class="card-toolbar">
                         <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <Link href="/question/add" class="btn btn-primary">
+                            <Link href="/question/create" class="btn btn-primary">
                             Add Question
                             </Link>
                         </div>

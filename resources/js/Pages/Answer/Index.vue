@@ -27,14 +27,14 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    Alert
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        Alert
+    },
     methods: {
 
         confirmDelete(id, index) {
@@ -53,7 +53,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/answer/" + id + "/delete")
+                        .delete("/answer/" + id)
                         .then((response) => {
                             toast.success(response.data.message)
                             if (response.data.success) {
@@ -134,9 +134,9 @@ export default defineComponent({
                     <div class="card-toolbar">
                         <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                           
+
                             <!--begin::Add customer-->
-                            <Link href="/answer/add" class="btn btn-primary">
+                            <Link href="/answer/create" class="btn btn-primary">
                             Add Answer
                             </Link>
                             <!--end::Add customer-->

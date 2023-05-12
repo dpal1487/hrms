@@ -56,11 +56,9 @@ class AnswerController extends Controller
             ->with('message', 'Answer not created');
     }
 
-    public function edit($id)
+    public function edit(Answer $answer)
     {
         $questions = Question::get();
-
-        $answer = Answer::find($id);
 
         return Inertia::render('Answer/Form', [
             'answer' => new AnswerResources($answer),
@@ -68,16 +66,13 @@ class AnswerController extends Controller
         ]);
     }
 
-    public function update(Request $request, Answer $answer, $id)
+    public function update(Request $request, Answer $answer)
     {
         $request->validate([
             'question' => 'required',
             'answer' => 'required',
             'order_by' => 'required',
         ]);
-
-        $answer = Answer::find($id);
-
 
         $answer = Answer::where(['id' => $answer->id])->update([
             'question_id' => $request->question,
@@ -94,11 +89,9 @@ class AnswerController extends Controller
             ->with('message', 'Answer not updated');
     }
 
-    public function destroy($id)
+    public function destroy(Answer $answer)
     {
-        // dd($id);
 
-        $answer = Answer::find($id);
         if ($answer->delete()) {
             return response()->json(['success' => true, 'message' => 'Answer has been deleted successfully.']);
         }

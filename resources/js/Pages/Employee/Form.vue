@@ -140,13 +140,8 @@ export default defineComponent({
             }
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id));
-
-
+               
+                axios.post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id), this.form);
             }
         },
         onFileChange(e) {

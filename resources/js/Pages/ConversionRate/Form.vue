@@ -12,6 +12,7 @@ import { required } from "@vuelidate/validators";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 
+
 export default defineComponent({
     props: ["questions", 'conversionrate', 'message'],
     setup() {
@@ -34,6 +35,7 @@ export default defineComponent({
         return {
 
             isEdit: false,
+            requesting: false,
             form: this.$inertia.form({
                 id: this.conversionrate?.data?.id || '',
                 currency_name: this.conversionrate?.data?.currency_name || '',
@@ -56,11 +58,43 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route().current() == 'conversion-rate.add' ? this.route("conversion-rate.store") : this.route('conversion-rate.update', this.form.id))
+                this.requesting = true;
+
+                if (route().current() == 'conversion-rate.create') {
+                    axios.post(this.route("conversion-rate.store"), this.form)
+                        .then((response) => {
+                            // console.log(route.)
+                            if (response.data.success) {
+                                this.requesting = false;
+
+                                toast.success(response.data.message)
+                                location.assign('/conversion-rate')
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        })
+                } else {
+
+                    axios.put(this.route('conversion-rate.update', this.form.id), this.form)
+                        .then((response) => {
+                            // console.log(route.)
+                            if (response.data.success) {
+                                this.requesting = false;
+
+                                toast.success(response.data.message)
+                                location.assign('/conversion-rate')
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+
+                        })
+                }
             }
         },
 
@@ -120,10 +154,10 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
+                                    :data-kt-indicator="requesting ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'conversion-rate.edit'">Update</span>
-                                        <span v-if="route().current() == 'conversion-rate.add'">Save</span>
+                                        <span v-if="route().current() == 'conversion-rate.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span

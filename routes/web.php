@@ -139,48 +139,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{type}/{id}', 'destroy')->name('email.delete');
         });
     });
-    // Route::controller(IndustryController::class)->group(function () {
-    //     Route::group(['prefix' => 'industries'], function () {
-    //         Route::get('/', 'index')->name('industries.index');
-    //         Route::get('/add', 'create')->name('industries.add');
-    //         Route::post('/store', 'store')->name('industries.store');
-    //         Route::get('{id}/edit', 'edit')->name('industries.edit');
-    //         Route::post('{id}/update', 'update')->name('industries.update');
-    //         Route::delete('{id}/delete', 'destroy')->name('industries.delete');
-    //     });
-    // });
 
-    Route::resource('industries', IndustryController::class);
-    Route::controller(QuestionController::class)->group(function () {
-        Route::group(['prefix' => 'question'], function () {
-            Route::get('/', 'index')->name('question.index');
-            Route::get('/add', 'create')->name('question.add');
-            Route::post('/store', 'store')->name('question.store');
-            Route::get('{id}/edit', 'edit')->name('question.edit');
-            Route::post('{id}/update', 'update')->name('question.update');
-            Route::delete('{id}/delete', 'destroy')->name('question.delete');
-        });
-    });
-    Route::controller(AnswerController::class)->group(function () {
-        Route::group(['prefix' => 'answer'], function () {
-            Route::get('/', 'index')->name('answer.index');
-            Route::get('/add', 'create')->name('answer.add');
-            Route::post('/store', 'store')->name('answer.store');
-            Route::get('{id}/edit', 'edit')->name('answer.edit');
-            Route::post('{id}/update', 'update')->name('answer.update');
-            Route::delete('{id}/delete', 'destroy')->name('answer.delete');
-        });
-    });
-    Route::controller(DecisionMakerController::class)->group(function () {
-        Route::group(['prefix' => 'decision-makers'], function () {
-            Route::get('/', 'index')->name('decision-makers.index');
-            Route::get('/add', 'create')->name('decision-makers.add');
-            Route::post('/store', 'store')->name('decision-makers.store');
-            Route::get('{id}/edit', 'edit')->name('decision-makers.edit');
-            Route::post('{id}/update', 'update')->name('decision-makers.update');
-            Route::delete('{id}/delete', 'destroy')->name('decision-makers.delete');
-        });
-    });
     Route::controller(InvoiceController::class)->group(function () {
         Route::group(['prefix' => 'invoices'], function () {
             Route::get('/', 'index')->name('invoices.index');
@@ -192,16 +151,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
     Route::controller(ConversionRateController::class)->group(function () {
-        Route::group(['prefix' => 'conversion-rate'], function () {
-            Route::get('/', 'index')->name('conversion-rate.index');
-            Route::get('/add', 'create')->name('conversion-rate.add');
-            Route::post('/store', 'store')->name('conversion-rate.store');
-            Route::get('{id}/edit', 'edit')->name('conversion-rate.edit');
-            Route::post('{id}/update', 'update')->name('conversion-rate.update');
-            Route::delete('{id}/delete', 'destroy')->name('conversion-rate.delete');
-        });
+        // 
         Route::get('invoices/{id}/conversion-value', 'conversionValue')->name('invoices.conversion-value');
     });
 
+    Route::resource('industries', IndustryController::class);
+    Route::resource('decision-makers', DecisionMakerController::class);
+    Route::resource('question', QuestionController::class);
+    Route::resource('answer', AnswerController::class);
     Route::resource('plan', PlanController::class);
+    Route::resource('conversion-rate', ConversionRateController::class);
 });

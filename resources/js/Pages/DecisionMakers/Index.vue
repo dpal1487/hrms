@@ -56,7 +56,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/decision-makers/" + id + "/delete")
+                        .delete("/decision-makers/" + id )
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
@@ -138,7 +138,7 @@ export default defineComponent({
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
 
                             <!--begin::Add customer-->
-                            <Link href="/decision-makers/add" class="btn btn-primary">
+                            <Link href="/decision-makers/create" class="btn btn-primary">
                             Add Decision Makers
                             </Link>
                             <!--end::Add customer-->

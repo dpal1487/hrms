@@ -50,6 +50,7 @@ export default defineComponent({
         return {
 
             isEdit: false,
+            processing:false,
             form: this.$inertia.form({
                 id: this.plan?.data?.id || '',
                 name: this.plan?.data?.name || '',
@@ -218,7 +219,7 @@ export default defineComponent({
                                 </Link>
 
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing) ? 'true' : 'false'">
+                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'plan.edit'">Update</span>
                                         <span v-if="route().current() == 'plan.create'">Save</span>

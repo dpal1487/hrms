@@ -68,11 +68,20 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route().current() == 'answer.add' ? this.route("answer.store") : this.route('answer.update', this.form.id))
+                if (route().current() == 'answer.create') {
+                    this.form
+                        .transform((data) => ({
+                            ...data,
+                        }))
+                        .post(this.route("answer.store"))
+                }
+                else {
+                    this.form
+                        .transform((data) => ({
+                            ...data,
+                        }))
+                        .put(this.route('answer.update', this.form.id))
+                }
             }
         },
 
@@ -152,7 +161,7 @@ export default defineComponent({
                                     :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'answer.edit'">Update</span>
-                                        <span v-if="route().current() == 'answer.add'">Save</span>
+                                        <span v-if="route().current() == 'answer.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span

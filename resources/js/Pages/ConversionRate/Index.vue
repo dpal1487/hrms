@@ -53,7 +53,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/conversion-rate/" + id + "/delete")
+                        .delete("/conversion-rate/" + id)
                         .then((response) => {
                             toast.success(response.data.message)
                             if (response.data.success) {
@@ -136,7 +136,7 @@ export default defineComponent({
                         <!--begin::Toolbar-->
 
                         <!--begin::Add customer-->
-                        <Link href="/conversion-rate/add" class="btn btn-primary">
+                        <Link href="/conversion-rate/create" class="btn btn-primary">
                         Add Conversion Rate
                         </Link>
                         <!--end::Add customer-->
