@@ -12,6 +12,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import axios from "axios";
 import { toast } from "vue3-toastify";
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
     props: ["questions", 'answer', 'message'],
@@ -38,6 +39,7 @@ export default defineComponent({
         return {
 
             isEdit: false,
+            processing: false,
             form: this.$inertia.form({
                 id: this.answer?.data?.id || '',
                 question: this.answer?.data?.question?.id || {},
@@ -68,19 +70,38 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                this.processing = true
                 if (route().current() == 'answer.create') {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        }))
-                        .post(this.route("answer.store"))
+                    axios.post(this.route("answer.store"), this.form)
+                        .then((response) => {
+                            // console.log(route.)
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                this.processing = false
+                                Inertia.get('/answer')
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        })
                 }
                 else {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        }))
-                        .put(this.route('answer.update', this.form.id))
+                    axios.put(this.route('answer.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.success == true) {
+                                toast.success(response.data.message)
+                                this.processing = false
+                                Inertia.get('/answer')
+                            } else if (response.data.success == false) {
+
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        })
                 }
             }
         },
@@ -158,7 +179,7 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
+                                    :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'answer.edit'">Update</span>
                                         <span v-if="route().current() == 'answer.create'">Save</span>

@@ -15,6 +15,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { toast } from "vue3-toastify";
 import axios from "axios";
+import { Inertia } from "@inertiajs/inertia";
 
 
 // Vue.use(Datetime);
@@ -45,7 +46,7 @@ export default defineComponent({
         return {
             isEdit: false,
             isUploading: false,
-
+            processing: false,
             form: this.$inertia.form({
                 id: this.industry?.data?.id || '',
                 name: this.industry?.data?.name || '',
@@ -83,17 +84,16 @@ export default defineComponent({
             this.v$.$touch();
 
             if (!this.v$.form.$invalid) {
-
+                this.processing = true;
                 if (route().current() == 'industries.create') {
-                    // this.form.transform((data) => ({
-                    //     ...data,
-                    // }))
+
                     axios.post(this.route("industries.store"), this.form)
                         .then((response) => {
-                            // console.log(route.)
+
                             if (response.data.success) {
                                 toast.success(response.data.message)
-                                location.assign('/industries')
+                                this.processing = false
+                                Inertia.get('/industries')
                             } else {
                                 toast.info(response.data.message)
                             }
@@ -102,15 +102,13 @@ export default defineComponent({
                             }
                         })
                 } else {
-                    // this.form.transform((data) => ({
-                    //     ...data,
-                    // }))
+
                     axios.put(this.route('industries.update', this.form.id), this.form)
                         .then((response) => {
-                            // console.log(route.)
                             if (response.data.success) {
                                 toast.success(response.data.message)
-                                location.assign('/industries')
+                                this.processing = false
+                                Inertia.get('/industries')
                             } else {
                                 toast.info(response.data.message)
                             }
@@ -137,12 +135,10 @@ export default defineComponent({
                 }
             }).then((response) => {
                 if (response.data.success) {
-                    // toast.success(response.data.message);
                     this.form.image_id = response.data.data.id;
                 } else {
                     toast.error(response.data.message);
                 }
-
             }).finally(() => {
                 this.isUploading = false;
             })
@@ -182,7 +178,7 @@ export default defineComponent({
                             <div class="col-4">
                                 <div class="card p-6">
                                     <div class="fv-row">
-                                     
+
 
                                         <ImageInput :image="this.industry?.data?.image?.medium_path"
                                             :onchange="onFileChange" :remove="removeSelectedAvatar" :selectedImage="url"
@@ -233,7 +229,7 @@ export default defineComponent({
 
                                 <div>
                                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                        :data-kt-indicator="(form.processing) ? 'on' : 'off'">
+                                        :data-kt-indicator="processing ? 'on' : 'off'">
                                         <span v-if="route().current() == 'industries.edit'">Update</span>
                                         <span v-if="route().current() == 'industries.create'">Save</span>
                                         <span class="indicator-progress">

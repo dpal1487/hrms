@@ -11,7 +11,8 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-
+import axios from "axios";
+import { Inertia } from "@inertiajs/inertia";
 export default defineComponent({
     props: ['decisionmaker', 'industries'],
     setup() {
@@ -35,6 +36,7 @@ export default defineComponent({
     data() {
         return {
             isEdit: false,
+            processing: false,
             form: this.$inertia.form({
                 id: this.decisionmaker?.data?.id || '',
                 title: this.decisionmaker?.data?.title || '',
@@ -62,17 +64,37 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                this.processing = true
                 if (route().current() == 'decision-makers.create') {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        })).post(this.route("decision-makers.store"));
+                    axios.post(this.route("decision-makers.store"), this.form)
+                        .then((response) => {
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                this.processing = false
+                                Inertia.get('/decision-makers')
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        });
 
                 } else {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        })).put(this.route('decision-makers.update', this.form.id));
+
+                    axios.put(this.route('decision-makers.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                this.processing = false
+                                Inertia.get('/decision-makers')
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        });
 
                 }
             }

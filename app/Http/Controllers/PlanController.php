@@ -36,8 +36,10 @@ class PlanController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'slug' => 'unique:plans,slug',
             'description' => 'required',
             'status' => 'required',
             'price' => 'required',
@@ -45,19 +47,9 @@ class PlanController extends Controller
             'stripe_id' => 'required',
             'currency' => 'required',
         ]);
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required',
-        //     'slug' => 'unique:plans,slug',
-        //     'description' => 'required',
-        //     'status' => 'required',
-        //     'price' => 'required',
-        //     'sort_order' => 'required',
-        //     'stripe_id' => 'required',
-        //     'currency' => 'required',
-        // ]);
-        // if ($validator->fails()) {
-        //     return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
-        // }
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
 
 
         $plan = Plan::create([
@@ -71,20 +63,19 @@ class PlanController extends Controller
             'currency' => $request->currency,
         ]);
         if ($plan) {
-            return redirect()
-                ->route('plan.index')
-                ->with('message', 'Plan created Successfully');
+            return response()->json([
+                'success' => true,
+                'message' => 'Plan created Successfully',
+            ]);
         }
-        return redirect()
-            ->route('plan.index')
-            ->with('message', 'Plan not created');
+        return response()->json([
+            'success' => false,
+            'message' => 'Plan not created'
+        ]);
     }
 
     public function edit(Plan $plan)
     {
-        // $plan = Plan::find($plan);
-        // return new PlanResource($plan);
-
         return Inertia::render('Plan/Form', [
             'plan' => new PlanResource($plan),
         ]);
@@ -93,7 +84,8 @@ class PlanController extends Controller
     public function update(Request $request, Plan $plan)
     {
 
-        $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'required',
             'status' => 'required',
@@ -102,19 +94,9 @@ class PlanController extends Controller
             'stripe_id' => 'required',
             'currency' => 'required',
         ]);
-        // return $plan->id;
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required',
-        //     'description' => 'required',
-        //     'status' => 'required',
-        //     'price' => 'required',
-        //     'sort_order' => 'required',
-        //     'stripe_id' => 'required',
-        //     'currency' => 'required',
-        // ]);
-        // if ($validator->fails()) {
-        //     return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
-        // }
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
 
 
 
@@ -130,16 +112,18 @@ class PlanController extends Controller
         ]);
 
         if ($plan) {
-            return redirect()
-                ->route('plan.index')
-                ->with('message', 'Plan updated Successfully');
+            return response()->json([
+                'success' => true,
+                'message' => 'Plan updated Successfully',
+            ]);
         }
-        return redirect()
-            ->route('plan.index')
-            ->with('message', 'Plan not updated');
+        return response()->json([
+            'success' => false,
+            'message', 'Plan not updated',
+        ]);
     }
 
-    public function destroy($plan)
+    public function destroy(Plan $plan)
     {
         // $plan = Plan::find($id);
         if ($plan->delete()) {

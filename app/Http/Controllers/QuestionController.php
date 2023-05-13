@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
+use Inertia\Inertia;
 use App\Models\Industry;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Resources\QuestionResources;
-
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
@@ -52,28 +52,30 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+
             'question_key' => 'required',
             'text' => 'required',
             'type' => 'required',
             'industry' => 'required',
             'language' => 'required',
         ]);
-
-        if (
-            $question = question::create([
-                'question_key' => $request->question_key,
-                'text' => $request->text,
-                'type' => $request->type,
-                'industry_id' => $request->industry,
-                'language' => $request->language,
-            ])
-        ) {
-            // return response()->json(['success' => true, 'message' => 'question created successfully']);
-
-            return redirect('/question')->with('message', 'Question created successfully');
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
-        return redirect('/question')->with('message', 'Question not created');
+
+        $question = question::create([
+            'question_key' => $request->question_key,
+            'text' => $request->text,
+            'type' => $request->type,
+            'industry_id' => $request->industry,
+            'language' => $request->language,
+        ]);
+        if ($question) {
+            return response()->json(['success' => true, 'message' => 'question created successfully']);
+        } else {
+            return response()->json(['success' => true, 'message' => 'question not created']);
+        }
     }
 
     /**
@@ -112,28 +114,31 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+
             'question_key' => 'required',
             'text' => 'required',
             'type' => 'required',
             'industry' => 'required',
             'language' => 'required',
         ]);
-
-        if (
-            $question = question::where(['id' => $question->id])->update([
-                'question_key' => $request->question_key,
-                'text' => $request->text,
-                'type' => $request->type,
-                'industry_id' => $request->industry,
-                'language' => $request->language,
-            ])
-        ) {
-            // return response()->json(['success' => true, 'message' => 'question created successfully']);
-
-            return redirect('/question')->with('message', 'Question updated successfully');
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
-        return redirect('/question')->with('message', 'Question not updated.');
+
+
+        $question = question::where(['id' => $question->id])->update([
+            'question_key' => $request->question_key,
+            'text' => $request->text,
+            'type' => $request->type,
+            'industry_id' => $request->industry,
+            'language' => $request->language,
+        ]);
+        if ($question) {
+            return response()->json(['success' => true, 'message' => 'Question updated successfully']);
+        } else {
+            return response()->json(['success' => true, 'message' => 'question not updated']);
+        }
     }
 
     /**

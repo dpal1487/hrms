@@ -25,7 +25,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :company="company" />
+                <Header />
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -36,11 +36,11 @@ export default defineComponent({
                             <!-- {{ company.data }} -->
                         </div>
                         <!--end::Card title-->
-                        <Link class="btn btn-primary align-self-center"
+                        <!-- <Link class="btn btn-primary align-self-center"
                             :href="`/company/${company?.data?.id}/overview/edit`">
                         Edit
                         Profile
-                        </Link>
+                        </Link> -->
                         <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
                     </div>
                     <!--begin::Card header-->

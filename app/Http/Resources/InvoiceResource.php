@@ -16,8 +16,8 @@ class InvoiceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'client_id' => $this->client_id,
-            'company_id' => $this->company_id,
+            'company' => $this->company,
+            'client' => $this->client,
             'gst_status' => $this->gst_status,
             'invoice_number' => $this->invoice_number,
             'invoice_date' => $this->invoice_date,
@@ -33,7 +33,7 @@ class InvoiceResource extends JsonResource
             'items' => $this->items,
             'currency' => $this->currency,
 
-            
+
         ];
     }
 }

@@ -19,6 +19,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import Dropdown from "../../Jetstream/Dropdown.vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
+import { Inertia } from "@inertiajs/inertia";
 
 
 // Vue.use(Datetime);
@@ -89,6 +90,7 @@ export default defineComponent({
         return {
             isEdit: false,
             isUploading: false,
+            processing: false,
             id: route().params.id,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
@@ -141,11 +143,18 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.form
-                    .transform((data) => ({
-                        ...data,
-                    }))
-                    .post(route('employees.update', this.form.id));
+                this.processing = true,
+                    axios.post(this.route('employees.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.message) {
+                                this.processing = false,
+                                    toast.success(response.data.message)
+                                Inertia.get('/employees/' + this.form.id)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        })
             }
         },
         onFileChange(e) {
@@ -406,7 +415,7 @@ export default defineComponent({
                                             </Link>
                                             <button type="submit"
                                                 class="btn btn-primary align-items-center justify-content-center"
-                                                :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                                :data-kt-indicator="processing ? 'on' : 'off'">
                                                 <span class="indicator-label">
                                                     <span>Update</span>
                                                 </span>

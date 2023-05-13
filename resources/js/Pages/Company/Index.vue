@@ -38,14 +38,14 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    Alert
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        Alert
+    },
     methods: {
 
         confirmDelete(id, index) {
@@ -145,9 +145,9 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add industries-->
-                        <Link href="/company/add" class="btn btn-primary">
+                        <!-- <Link href="/company/add" class="btn btn-primary">
                         Add Company
-                        </Link>
+                        </Link> -->
                         <!--end::Add industries-->
                     </div>
                     <!--end::Card toolbar-->

@@ -16,6 +16,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import Dropdown from "../../Jetstream/Dropdown.vue";
 import { toast } from 'vue3-toastify';
 import axios from "axios";
+import { Inertia } from "@inertiajs/inertia";
 
 // Vue.use(Datetime);
 // import { Datetime } from 'vue-datetime';
@@ -86,6 +87,7 @@ export default defineComponent({
 
             message: '',
             isEdit: false,
+            processing: false,
             isUploading: false,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
@@ -140,8 +142,18 @@ export default defineComponent({
             }
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-               
-                axios.post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id), this.form);
+                this.processing = true,
+                    axios.post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.message) {
+                                this.processing = false,
+                                    toast.success(response.data.message)
+                                Inertia.get('/employees')
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        })
             }
         },
         onFileChange(e) {
@@ -381,7 +393,7 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                    :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'employees.edit'">Update</span>
                                         <span v-if="route().current() == 'employees.add'">Save</span>

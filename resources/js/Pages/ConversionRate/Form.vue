@@ -11,6 +11,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import axios from "axios";
 import { toast } from "vue3-toastify";
+import { Inertia } from "@inertiajs/inertia";
 
 
 export default defineComponent({
@@ -54,21 +55,17 @@ export default defineComponent({
         InputError,
     },
     methods: {
-
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.requesting = true;
-
                 if (route().current() == 'conversion-rate.create') {
                     axios.post(this.route("conversion-rate.store"), this.form)
                         .then((response) => {
-                            // console.log(route.)
                             if (response.data.success) {
                                 this.requesting = false;
-
                                 toast.success(response.data.message)
-                                location.assign('/conversion-rate')
+                                Inertia.get('/conversion-rate')
                             } else {
                                 toast.info(response.data.message)
                             }
@@ -77,22 +74,19 @@ export default defineComponent({
                             }
                         })
                 } else {
-
                     axios.put(this.route('conversion-rate.update', this.form.id), this.form)
                         .then((response) => {
                             // console.log(route.)
                             if (response.data.success) {
                                 this.requesting = false;
-
                                 toast.success(response.data.message)
-                                location.assign('/conversion-rate')
+                                Inertia.get('/conversion-rate')
                             } else {
                                 toast.info(response.data.message)
                             }
                             if (response.data.error) {
                                 toast.error(response.data.error)
                             }
-
                         })
                 }
             }
@@ -108,7 +102,6 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="isEdit ? 'Edit Conversion Rate' : `Add New Conversion Rate`" />
-
     <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">

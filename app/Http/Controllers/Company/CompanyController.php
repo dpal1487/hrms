@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Company;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\AccountResource;
-use App\Http\Resources\AddressResource;
-use App\Models\Company;
-use Illuminate\Http\Request;
+use Auth;
 use Inertia\Inertia;
-use App\Http\Resources\CompanyResource;
-use App\Http\Resources\EmailResource;
-use App\Http\Resources\InvoiceResource;
+use App\Models\Company;
+use App\Models\Country;
+use App\Models\Invoice;
+use App\Models\CompanySize;
+use App\Models\CompanyEmail;
+use Illuminate\Http\Request;
 use App\Models\CompanyAccount;
 use App\Models\CompanyAddress;
-use App\Models\CompanyEmail;
-use App\Models\CompanyInvoice;
-use App\Models\CompanySize;
-use App\Models\Country;
-use Auth;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\EmailResource;
+use App\Http\Resources\AccountResource;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\CompanyResource;
+use App\Http\Resources\InvoiceResource;
 
 class CompanyController extends Controller
 {
@@ -114,29 +114,28 @@ class CompanyController extends Controller
     }
     public function invoices()
     {
-        $invoices = CompanyInvoice::where('company_id', $this->companyId())->get();
-        return InvoiceResource::collection($invoices);
+        $invoices = Invoice::where('company_id', $this->companyId())->get();
+        // return InvoiceResource::collection($invoices);
         return Inertia::render('Company/Invoices', [
             'invoices' => InvoiceResource::collection($invoices),
         ]);
     }
 
 
-    public function projectsShow($id)
+    public function projects()
     {
-        $company = Company::find($id);
-        // return new CompanyResource($company);
+        $invoices = Invoice::where('company_id', $this->companyId())->get();
+        // return InvoiceResource::collection($invoices);
         return Inertia::render('Company/Invoices', [
-            'company' => new CompanyResource($company),
+            'invoices' => InvoiceResource::collection($invoices),
         ]);
     }
-    public function suppliersShow($id)
+    public function suppliers()
     {
-        // dd($id);
-        $company = Company::find($id);
-        // return new CompanyResource($company);
+        $invoices = Invoice::where('company_id', $this->companyId())->get();
+        // return InvoiceResource::collection($invoices);
         return Inertia::render('Company/Invoices', [
-            'company' => new CompanyResource($company),
+            'invoices' => InvoiceResource::collection($invoices),
         ]);
     }
     public function destroy($id)

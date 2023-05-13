@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Industry;
-use App\Models\DecisionMaker;
-use App\Http\Resources\DecisionMakerResources;
 use Inertia\Inertia;
+use App\Models\Industry;
+use Illuminate\Http\Request;
+use App\Models\DecisionMaker;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\DecisionMakerResources;
 
 class DecisionMakerController extends Controller
 {
@@ -35,23 +36,25 @@ class DecisionMakerController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+
             'title' => 'required',
             'order_by' => 'required',
             'industry' => 'required',
         ]);
-
-        if (
-            $decisionmaker = DecisionMaker::create([
-                'title' => $request->title,
-                'industry_id' => $request->industry,
-                'order_by' => $request->order_by,
-            ])
-        ) {
-            // return response()->json(['success' => true, 'message' => 'DecisionMaker created successfully']);
-            return redirect('/decision-makers')->with('message', 'DecisionMaker created successfully');
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first(), 'success' => false], 400);
         }
-        return redirect('/decision-makers')->with('message', 'DecisionMaker not created');
+        $decisionmaker = DecisionMaker::create([
+            'title' => $request->title,
+            'industry_id' => $request->industry,
+            'order_by' => $request->order_by,
+        ]);
+        if ($decisionmaker) {
+            return response()->json(['success' => true, 'message' => 'DecisionMaker created successfully']);
+        } else {
+            return response()->json(['success' => true, 'message' => 'DecisionMaker not created']);
+        }
     }
 
     public function edit($id)
@@ -70,26 +73,28 @@ class DecisionMakerController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+
             'title' => 'required',
             'order_by' => 'required',
             'industry' => 'required',
         ]);
-
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first(), 'success' => false], 400);
+        }
         $decisionmaker = DecisionMaker::find($id);
 
-        if (
-            $decisionmaker = DecisionMaker::where(['id' => $decisionmaker->id])->update([
-                'title' => $request->title,
-                'industry_id' => $request->industry,
-                'order_by' => $request->order_by,
-            ])
-        ) {
-            // return response()->json(['success' => true, 'message' => 'DecisionMaker Updated successfully']);
 
-            return redirect('/decision-makers')->with('message', 'DecisionMaker Updated successfully');
+        $decisionmaker = DecisionMaker::where(['id' => $decisionmaker->id])->update([
+            'title' => $request->title,
+            'industry_id' => $request->industry,
+            'order_by' => $request->order_by,
+        ]);
+        if ($decisionmaker) {
+            return response()->json(['success' => true, 'message' => 'DecisionMaker updated successfully']);
+        } else {
+            return response()->json(['success' => true, 'message' => 'DecisionMaker not updated']);
         }
-        return redirect('/decision-makers')->with('message', 'DecisionMaker not Updated');
     }
 
     /**

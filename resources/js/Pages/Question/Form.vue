@@ -13,6 +13,8 @@ import { required, integer } from "@vuelidate/validators";
 import Dropdown from "../../Jetstream/Dropdown.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import axios from "axios";
+import { Inertia } from "@inertiajs/inertia";
 
 
 // Vue.use(Datetime);
@@ -57,6 +59,8 @@ export default defineComponent({
         return {
 
             isEdit: false,
+            processing: false,
+
             form: this.$inertia.form({
                 id: this.question?.data?.id || '',
                 question_key: this.question?.data?.question_key || '',
@@ -93,19 +97,40 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                this.processing = true
                 if (route().current() == 'question.create') {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        }))
-                        .post(this.route("question.store"));
+
+                    axios.post(this.route("question.store"), this.form)
+                        .then((response) => {
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                this.processing = false
+                                Inertia.get('/question')
+
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        });
+
                 }
                 else {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        }))
-                        .put(this.route('question.update', this.form.id));
+                    axios.put(this.route('question.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                this.processing = false
+                                Inertia.get('/question')
+
+                            } else {
+                                toast.info(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        });
                 }
             }
         },
@@ -220,7 +245,7 @@ export default defineComponent({
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="form.processing ? 'on' : 'off'">
+                                    :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'question.edit'">Update</span>
                                         <span v-if="route().current() == 'question.create'">Save</span>

@@ -135,7 +135,7 @@ class EmployeeController extends Controller
             'department_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+            return response()->json(['error' => $validator->errors()->first(), 'success' => false], 400);
         }
         $employee = Employee::where('company_id', $this->companyId())->find($id);
 
@@ -154,30 +154,32 @@ class EmployeeController extends Controller
                     'email' => $request->email,
                 ]);
             }
-            if (
-                $employee = Employee::where(['id' => $employee->id])->update([
-                    'date_of_joining' => $request->date_of_joining,
-                    'number' => $request->number,
-                    'qualification' => $request->qualification,
-                    'emergency_number' => $request->emergency_number,
-                    'pan_number' => $request->pan_number,
-                    'father_name' => $request->father_name,
-                    'formalities' => $request->formalities,
-                    'salary' => $request->salary,
-                    'offer_acceptance' => $request->offer_acceptance,
-                    'probation_period' => $request->probation_period,
-                    'date_of_confirmation' => $request->date_of_confirmation,
-                    'department_id' => $request->department_id,
-                    'user_id' => $employee->user->id,
-                ])
-            ) {
-                if ($request->requsetingFrom == 'employees/edit') {
-                    return redirect(url('employees'))->with('message', 'Employee Updated successfully');
-                }
-                return redirect(url('employees/' . $id))->with('message', 'Employee Updated successfully');
+            $employee = Employee::where(['id' => $employee->id])->update([
+                'date_of_joining' => $request->date_of_joining,
+                'number' => $request->number,
+                'qualification' => $request->qualification,
+                'emergency_number' => $request->emergency_number,
+                'pan_number' => $request->pan_number,
+                'father_name' => $request->father_name,
+                'formalities' => $request->formalities,
+                'salary' => $request->salary,
+                'offer_acceptance' => $request->offer_acceptance,
+                'probation_period' => $request->probation_period,
+                'date_of_confirmation' => $request->date_of_confirmation,
+                'department_id' => $request->department_id,
+                'user_id' => $employee->user->id,
+            ]);
+            if ($employee) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Employee Updated Successfully'
+                ], 200);
             }
         }
-        return redirect()->with('message', 'Employee not updated');
+        return response()->json([
+            'success' => false,
+            'message' => 'employee not updated'
+        ], 400);
     }
 
     public function address($id)

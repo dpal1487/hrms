@@ -11,8 +11,10 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
+
 import axios from "axios";
 import { toast } from "vue3-toastify";
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
     props: ['plan', 'message'],
@@ -50,7 +52,7 @@ export default defineComponent({
         return {
 
             isEdit: false,
-            processing:false,
+            processing: false,
             form: this.$inertia.form({
                 id: this.plan?.data?.id || '',
                 name: this.plan?.data?.name || '',
@@ -83,19 +85,38 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                this.processing = true
                 if (route().current() == 'plan.create') {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        }))
-                        .post(this.route("plan.store"))
-                } else {
+                    axios.post(this.route("plan.store"), this.form)
+                        .then((response) => {
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                this.processing = false
+                                Inertia.get('/plan')
 
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                        }))
-                        .put(this.route('plan.update', this.form.id))
+                            } else {
+                                toast.warning(response.data.message)
+                            }
+                            if (response.data.error) {
+                                toast.error(response.data.error)
+                            }
+                        })
+                } else {
+                    axios.put(this.route('plan.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.success) {
+                                toast.success(response.data.message)
+                                this.processing = false;
+                                Inertia.get('/plan')
+                            } else {
+                                toast.error(response.data.message)
+                            }
+
+                        }).catch((error) => {
+                            if (error.response.status == 400) {
+                                toast.error(error.response.data.message);
+                            }
+                        });
                 }
             }
         },
@@ -111,10 +132,8 @@ export default defineComponent({
 <template>
     <Head title="Plan" />
     <AppLayout>
-        <!-- {{ route().current() }} -->
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
-
                 <JetValidationErrors />
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
@@ -219,7 +238,7 @@ export default defineComponent({
                                 </Link>
 
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
+                                    :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span v-if="route().current() == 'plan.edit'">Update</span>
                                         <span v-if="route().current() == 'plan.create'">Save</span>

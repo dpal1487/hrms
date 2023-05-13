@@ -13,6 +13,7 @@ import { required } from "@vuelidate/validators";
 import { toast } from 'vue3-toastify';
 import axios from "axios";
 import Header from "./Components/Header.vue";
+import { Inertia } from "@inertiajs/inertia";
 
 
 export default defineComponent({
@@ -46,6 +47,7 @@ export default defineComponent({
     },
     data() {
         return {
+            processing: false,
             id: route().params.id,
             form: {
                 emp_id: route().params.id,
@@ -76,17 +78,18 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
+                this.processing = true
                 axios.post(this.route("address.update", ['employees', this.form.id]), this.form)
                     .then((response) => {
                         if (response.data.success) {
                             toast(response.data.message)
-                            // this.$router.replace("/employees/" + this.$page.props.ziggy.id[1] + "/address");
+                            this.processing = false
+                            Inertia.get('/employees/' + this.id + '/address')
                             return;
                         } else {
                             toast(response.data.message)
                         }
                     }).finally(() => {
-                        window.location = "/employees/" + this.$page.props.ziggy.id[1] + "/address";
                     });
             }
         },
@@ -260,7 +263,7 @@ export default defineComponent({
                                 </Link>
                                 <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="(form.processing) ? 'on' : 'off'">
+                                    :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
                                         <span>Address Add</span>
                                     </span>

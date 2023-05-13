@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\CompanyAddress;
 use App\Models\EmployeeAddress;
 use App\Models\CompanyUser;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class AddressController extends Controller
 {
@@ -22,7 +22,7 @@ class AddressController extends Controller
             'pincode' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+            return response()->json(['error' => $validator->errors()->first(), 'success' => false], 400);
         }
         if ($type == 'company') {
 
