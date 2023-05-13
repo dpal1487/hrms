@@ -65,8 +65,8 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/meetings",
-                    title: "Meetings",
+                    link: "/supplier",
+                    title: "Supplier",
                     icon: "bi bi-pie-chart-fill",
                 }
 

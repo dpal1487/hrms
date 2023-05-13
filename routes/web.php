@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\Employee\OverViewController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -161,4 +162,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('answer', AnswerController::class);
     Route::resource('plan', PlanController::class);
     Route::resource('conversion-rate', ConversionRateController::class);
+    Route::resource('supplier', SupplierController::class);
+
+    Route::controller(SupplierController::class)->group(function () {
+        Route::get('supplier/{id}/address', 'address')->name('supplier.address');
+        Route::get('supplier/{id}/account', 'account')->name('supplier.account');
+    });
 });

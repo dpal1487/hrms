@@ -27,7 +27,7 @@ class QuestionController extends Controller
 
         // return QuestionResources::collection($questions->paginate(10));
         return Inertia::render('Question/Index', [
-            'questions' => QuestionResources::collection($questions->paginate(10)),
+            'questions' => QuestionResources::collection($questions->paginate(10)->appends($request->all())),
         ]);
     }
 
@@ -118,7 +118,7 @@ class QuestionController extends Controller
 
             'question_key' => 'required',
             'text' => 'required',
-            'type' => 'required',
+            'typse' => 'required',
             'industry' => 'required',
             'language' => 'required',
         ]);

@@ -83,8 +83,6 @@ class PlanController extends Controller
 
     public function update(Request $request, Plan $plan)
     {
-
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'required',
@@ -97,9 +95,6 @@ class PlanController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
-
-
-
         $plan = Plan::where(['id' => $plan->id])->update([
             'name' => $request->name,
             'slug' => $request->slug,
@@ -125,7 +120,6 @@ class PlanController extends Controller
 
     public function destroy(Plan $plan)
     {
-        // $plan = Plan::find($id);
         if ($plan->delete()) {
             return response()->json(['success' => true, 'message' => 'Plan has been deleted successfully.']);
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SupplierResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -10,6 +11,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CompanyUser;
 use App\Models\Employee;
+use App\Models\Supplier;
 
 class Controller extends BaseController
 {
@@ -38,5 +40,11 @@ class Controller extends BaseController
     {
         $employee = Employee::where('company_id', $this->companyId())->find($id);
         return new UserResource($employee->user);
+    }
+    public function supplierHeader($id)
+    {
+        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
+
+        return new SupplierResource($supplier);
     }
 }
