@@ -1,8 +1,9 @@
 <script>
+import { defineComponent } from 'vue';
 import { Link } from "@inertiajs/inertia-vue3";
 import axios from "axios";
 
-export default {
+export default defineComponent({
     components: {
         Link,
     },
@@ -32,7 +33,7 @@ export default {
                 .finally(() => (this.isNotifLoading = false));
         },
     },
-};
+});
 </script>
 <template>
     <div id="kt_app_header" class="app-header">
@@ -268,17 +269,16 @@ export default {
                     <!--end::Theme mode-->
 
                     <!--begin::User menu-->
-                    <div class="app-navbar-item ms-1 ms-md-3" id="kt_header_user_menu_toggle">
+                    <div class="app-navbar-item ms-1 ms-md-3">
                         <!--begin::Menu wrapper-->
-                        <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
-                            data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
-                            data-kt-menu-placement="bottom-end">
+                        <div class="cursor-pointer symbol symbol-30px symbol-md-40px" id="dropdown-profile"
+                            data-bs-toggle="dropdown">
                             <img src="/assets/media/avatars/300-1.jpg" alt="user" />
                         </div>
 
                         <!--begin::User account menu-->
-                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
-                            data-kt-menu="true">
+                        <div aria-labelled:by="dropdown-profile"
+                            class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px">
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
                                 <div class="menu-content d-flex align-items-center px-3">
@@ -310,20 +310,17 @@ export default {
 
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <a href="/../demo1/account/overview.html" class="menu-link px-5">
-                                    My Profile
-                                </a>
+                                <Link href="/account" class="menu-link px-5">
+                                My Profile
+                                </Link>
                             </div>
                             <!--end::Menu item-->
 
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <a href="/../demo1/apps/projects/list.html" class="menu-link px-5">
-                                    <span class="menu-text">My Projects</span>
-                                    <span class="menu-badge">
-                                        <span class="badge badge-light-danger badge-circle fw-bold fs-7">3</span>
-                                    </span>
-                                </a>
+                                <Link href="company" class="menu-link px-5">
+                                <span class="menu-text">My Company</span>
+                                </Link>
                             </div>
                             <!--end::Menu item-->
 

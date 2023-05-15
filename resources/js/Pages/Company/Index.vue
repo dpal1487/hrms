@@ -51,8 +51,6 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            console.log(this.companies?.company_name)
-
             const company_name = this.companies.data[index].company_name;
 
             Swal.fire({

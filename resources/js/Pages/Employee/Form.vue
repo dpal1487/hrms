@@ -7,9 +7,8 @@ import PrimaryButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, email, url, numeric, integer } from "@vuelidate/validators";
+import { required,  url, integer } from "@vuelidate/validators";
 import ImageInput from '@/components/ImageInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -82,7 +81,6 @@ export default defineComponent({
         };
     },
     data() {
-        // console.log("see this", this.employee?.data?.user?.image?.medium_path)
         return {
 
             message: '',
@@ -130,7 +128,6 @@ export default defineComponent({
         JetInput,
         JetLabel,
         InputError,
-        JetValidationErrors,
         VueDatePicker,
         Dropdown,
         ImageInput,
@@ -158,8 +155,6 @@ export default defineComponent({
         },
         onFileChange(e) {
             const file = e.target.files[0];
-            // console.log("see file", file.name)
-
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);
@@ -205,8 +200,6 @@ export default defineComponent({
 
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
-                <JetValidationErrors />
-
                 <!-- {{ form }} -->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">

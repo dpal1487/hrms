@@ -145,8 +145,6 @@ export default defineComponent({
         },
         onFileChange(e) {
             const file = e.target.files[0];
-            // console.log("see file", file.name)
-
             this.$data.form.image = file;
             this.selectedFilename = file?.name;
             this.url = URL.createObjectURL(file);

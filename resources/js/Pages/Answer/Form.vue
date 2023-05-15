@@ -74,7 +74,6 @@ export default defineComponent({
                 if (route().current() == 'answer.create') {
                     axios.post(this.route("answer.store"), this.form)
                         .then((response) => {
-                            // console.log(route.)
                             if (response.data.success) {
                                 toast.success(response.data.message)
                                 this.processing = false

@@ -17,7 +17,7 @@ import { Inertia } from "@inertiajs/inertia";
 
 
 export default defineComponent({
-    props: ['countries', 'user', 'address'],
+    props: ['countries', 'address', 'supplier'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -50,7 +50,7 @@ export default defineComponent({
             processing: false,
             id: route().params.id,
             form: {
-                emp_id: route().params.id,
+                sup_id: route().params.id,
                 id: this.address?.data.id || '',
                 address_line_1: this.address?.data?.address_line_1 || '',
                 address_line_2: this.address?.data?.address_line_2 || '',
@@ -79,12 +79,12 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.processing = true
-                axios.post(this.route("address.update", ['employee', this.form.id]), this.form)
+                axios.post(this.route("address.update", ['supplier', this.form.id]), this.form)
                     .then((response) => {
                         if (response.data.success) {
                             toast.success(response.data.message)
                             this.processing = false
-                            Inertia.get('/employee/' + this.id + '/address')
+                            Inertia.get('/supplier/' + this.id + '/address')
                             return;
                         } else {
                             toast.error(response.data.message)
@@ -99,13 +99,12 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head title="User Address" />
+    <Head title="Supplier Address" />
     <AppLayout>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" />
-
+                <Header :supplier="supplier.data" />
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -257,7 +256,7 @@ export default defineComponent({
                             <!--end::Card body-->
                             <!--begin::Actions-->
                             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                <Link :href="`/employee/${id}/address`"
+                                <Link :href="`/employees/${id}/address`"
                                     class="btn btn-light btn-active-light-primary me-2">
                                 Discard
                                 </Link>
@@ -265,7 +264,7 @@ export default defineComponent({
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span>Address Add</span>
+                                        <span>Address</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span

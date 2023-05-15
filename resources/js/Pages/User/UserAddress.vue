@@ -79,15 +79,15 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.processing = true
-                axios.post(this.route("address.update", ['employees', this.form.id]), this.form)
+                axios.post(this.route("address.update", ['employee', this.form.id]), this.form)
                     .then((response) => {
                         if (response.data.success) {
-                            toast(response.data.message)
+                            toast.success(response.data.message)
                             this.processing = false
-                            Inertia.get('/employees/' + this.id + '/address')
+                            Inertia.get('/employee/' + this.id + '/address')
                             return;
                         } else {
-                            toast(response.data.message)
+                            toast.error(response.data.message)
                         }
                     }).finally(() => {
                     });
@@ -257,7 +257,7 @@ export default defineComponent({
                             <!--end::Card body-->
                             <!--begin::Actions-->
                             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                <Link :href="`/employees/${id}/address`"
+                                <Link :href="`/employee/${id}/address`"
                                     class="btn btn-light btn-active-light-primary me-2">
                                 Discard
                                 </Link>

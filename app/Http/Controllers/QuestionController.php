@@ -118,7 +118,7 @@ class QuestionController extends Controller
 
             'question_key' => 'required',
             'text' => 'required',
-            'typse' => 'required',
+            'type' => 'required',
             'industry' => 'required',
             'language' => 'required',
         ]);

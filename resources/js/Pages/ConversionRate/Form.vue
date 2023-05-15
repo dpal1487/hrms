@@ -76,7 +76,6 @@ export default defineComponent({
                 } else {
                     axios.put(this.route('conversion-rate.update', this.form.id), this.form)
                         .then((response) => {
-                            // console.log(route.)
                             if (response.data.success) {
                                 this.requesting = false;
                                 toast.success(response.data.message)

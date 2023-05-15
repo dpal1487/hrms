@@ -9,7 +9,6 @@ export default defineComponent({
     },
     data() {
         return {
-            id: route().params.id
         }
     },
 });
@@ -17,7 +16,6 @@ export default defineComponent({
 <template>
     <div class="card mb-5 mb-xl-5">
         <div class="card-body pt-9 pb-0">
-
             <!--begin::Details-->
             <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                 <!--begin: Pic-->
@@ -226,8 +224,8 @@ export default defineComponent({
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employee.view') && 'active'}`"
-                        :href="'/employee/' + id"> Overview
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.overview') && 'active'}`"
+                        href="/account"> Overview
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -235,32 +233,32 @@ export default defineComponent({
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employee.security') && 'active'}`"
-                        :href="'/employee/' + id + '/security'">Security
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.security') && 'active'}`"
+                        href="/account/security">Security
                     </Link>
                 </li>
                 <!--end::Nav item-->
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employee.address') && 'active'}`"
-                        :href="'/employee/' + id + '/address'">Address
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.address') && 'active'}`"
+                        href="/account/address">Address
                     </Link>
                 </li>
                 <!--end::Nav item-->
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employee.settings') && 'active'}`"
-                        :href="'/employee/' + id + '/settings'">Settings
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.settings') && 'active'}`"
+                        href="/account/settings">Settings
                     </Link>
                 </li>
                 <!--end::Nav item-->
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('employee.attendance') && 'active'}`"
-                        :href="'/employee/' + id + '/attendance'">Attendance
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.attendance') && 'active'}`"
+                        href="/account/attendance">Attendance
                     </Link>
                 </li>
                 <!--end::Nav item-->

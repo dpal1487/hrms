@@ -38,7 +38,7 @@ export default defineComponent({
                         </div>
                         <!--end::Card title-->
                         <Link class="btn btn-primary align-self-center"
-                            :href="`/employees/${employee?.data?.id}/overview/edit`">Edit
+                            :href="`/employee/${employee?.data?.id}/overview/edit`">Edit
                         Profile
                         </Link>
                         <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->

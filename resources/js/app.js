@@ -24,10 +24,10 @@ createInertiaApp({
             autoSetContainer: true,
             appendToBody: true,
             })
-            .use(plugin).use(Vue3Toastify, {autoClose: 3000,})
+            .use(plugin).use(Vue3Toastify, {autoClose: 3000, theme: "colored"})
             .mixin({ methods: { route } })
             .mount(el);
     },
 });
 
-InertiaProgress.init({ color: '#4B5563' });
+InertiaProgress.init({ color: '#ad3861' });

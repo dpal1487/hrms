@@ -21,7 +21,6 @@ export default defineComponent({
     validations() {
         return {
             form: {
-
                 company_id: {
                     required,
                 },
@@ -99,17 +98,20 @@ export default defineComponent({
                             }
                         })
                 }
-                axios.put(this.route('supplier.update', this.form.id), this.form)
-                    .then((response) => {
-                        if (response.data.success == true) {
-                            this.processing = false,
-                                toast.success(response.data.message)
-                            Inertia.get('/supplier')
-                        }
-                        if (response.data.success == false) {
-                            toast.error(response.data.message)
-                        }
-                    })
+                else {
+
+                    axios.put(this.route('supplier.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.success == true) {
+                                this.processing = false,
+                                    toast.success(response.data.message)
+                                Inertia.get('/supplier')
+                            }
+                            if (response.data.success == false) {
+                                toast.error(response.data.message)
+                            }
+                        })
+                }
             }
         },
 

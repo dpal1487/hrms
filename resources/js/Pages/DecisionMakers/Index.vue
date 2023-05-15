@@ -41,8 +41,6 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            // console.log(this.decisionmakers.data[index].user.first_name)
-
             const name = this.decisionmakers.data[index].industry?.name;
 
             Swal.fire({

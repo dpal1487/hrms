@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AddressResource;
-use App\Http\Resources\SupplierResource;
+use App\Http\Resources\AccountResource;
 use Inertia\Inertia;
 use App\Models\Company;
+use App\Models\Country;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\SupplierResource;
 use Illuminate\Support\Facades\Validator;
 
 class SupplierController extends Controller
@@ -87,23 +89,83 @@ class SupplierController extends Controller
             ]);
         }
     }
-    public function address($id)
+    public function supplierEdit($id)
     {
-        $supplier = Supplier::where(['company_id' => $this->companyId(), 'id' => $id])->first();
+        $company = Company::get();
 
+        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
         if ($supplier) {
-            return Inertia::render('Supplier/Address', [
-                'address' => new AddressResource($supplier),
-                'supplier' => $this->supplierHeader($id),
+            return Inertia::render('Supplier/Edit', [
+                'supplier' => new SupplierResource($supplier),
+                'company' => $company,
+
             ]);
         }
     }
-    public function account(Supplier $supplier)
+    public function address($id)
     {
-        $supplier = Supplier::where(['company_id' => $this->companyId(), 'id' => $supplier->id])->first();
-        if ($supplier) {
-            return Inertia::render('Supplier/Overview', [
-                'supplier' => new SupplierResource($supplier)
+        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
+
+        if ($supplier->address) {
+            return Inertia::render('Supplier/Address', [
+                'address' => new AddressResource($supplier->address),
+                'supplier' => $this->supplierHeader($id),
+            ]);
+        }
+        return Inertia::render('Supplier/Address', [
+            'address' => new AddressResource($supplier),
+            'supplier' => $this->supplierHeader($id),
+        ]);
+    }
+    public function addressEdit($id)
+    {
+        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
+        $countries = Country::get();
+
+        if ($supplier->address) {
+            return Inertia::render('Supplier/SupplierAddress', [
+                'address' => new AddressResource($supplier->address),
+                'countries' => $countries,
+                'supplier' => $this->supplierHeader($id),
+            ]);
+        }
+        return Inertia::render('Supplier/SupplierAddress', [
+            'address' => new AddressResource($supplier),
+            'countries' => $countries,
+            'supplier' => $this->supplierHeader($id),
+        ]);
+    }
+    public function account($id)
+    {
+        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
+        if ($supplier->account) {
+            return Inertia::render('Supplier/Account', [
+                'account' => new AccountResource($supplier->account),
+                'supplier' => $this->supplierHeader($id),
+
+            ]);
+        } else {
+            return Inertia::render('Supplier/Account', [
+                'account' => new AccountResource($supplier),
+                'supplier' => $this->supplierHeader($id),
+
+            ]);
+        }
+    }
+    public function accountEdit($id)
+    {
+        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
+
+        // return $supplier->account;
+        if ($supplier->account) {
+            return Inertia::render('Supplier/SupplierAccount', [
+                'account' => new AccountResource($supplier->account),
+                'supplier' => $this->supplierHeader($id),
+            ]);
+        } else {
+            return Inertia::render('Supplier/SupplierAccount', [
+                'account' => new AccountResource($supplier),
+                'supplier' => $this->supplierHeader($id),
             ]);
         }
     }

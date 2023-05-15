@@ -62,16 +62,13 @@ export default defineComponent({
     },
     methods: {
         submit() {
-            console.log("see this value", this.form);
-            // this.v$.$touch();
-            // if (!this.v$.form.$invalid) {
+          
             this.form
 
                 .transform((data) => ({
                     ...data,
                 }))
                 .post(this.route('company.store'), this.form)
-            // }
         },
         onPrev() {
             if (this.currStep > 0) this.currStep--;

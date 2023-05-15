@@ -6,7 +6,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 
 export default defineComponent({
-    props: ['supplier', 'address'],
+    props: ['supplier', 'account'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -44,12 +44,12 @@ export default defineComponent({
                     <div class="card-header cursor-pointer">
                         <!--begin::Card title-->
                         <div class="card-title m-0">
-                            <h3 class="fw-bold m-0">Address</h3>
+                            <h3 class="fw-bold m-0">Account</h3>
                         </div>
                         <!--end::Card title-->
-                        <Link class="btn btn-primary align-self-center" :href="`/supplier/${id}/address/edit`">
+                        <Link class="btn btn-primary align-self-center" :href="`/supplier/${id}/account/edit`">
                         Edit
-                        Address
+                        Account
                         </Link>
                     </div>
                     <!--begin::Card header-->
@@ -60,12 +60,12 @@ export default defineComponent({
                         <div class="row mb-7">
                             <!--begin::Label-->
 
-                            <label class="col-lg-4 fw-semibold text-muted">Address Line 1</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Bank Name</label>
                             <!--end::Label-->
                             <!--begin::Col-->
 
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.address?.data?.address_line_1
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-800">{{ this.account?.data?.bank_name
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -74,11 +74,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Address Line 2</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Bank Address</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.address?.data?.address_line_2
+                            <div class="col-lg-6 fv-row">
+                                <span class="fw-bold fs-6 text-gray-800">{{ this.account?.data?.bank_address
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -87,11 +87,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">City</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Benificiary Name</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.city
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.account?.data?.beneficiary_name
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -100,11 +100,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">State</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Account Number</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.state
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.account?.data?.account_number
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -113,13 +113,13 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Country
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Routing Number
                             </label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
+                            <div class="col-lg-6 d-flex align-items-center">
                                 <span class="fw-bold fs-6 text-gray-800 me-2">{{
-                                    this.address?.data?.country?.name
+                                    this.account?.data?.routing_number
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -128,12 +128,57 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Pincode
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">SWIFT Code
                             </label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.pincode
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                    this.account?.data?.swift_code
+                                }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">IFSC Code
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                    this.account?.data?.ifsc_code
+                                }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Sort Code
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                    this.account?.data?.sort_code
+                                }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Pan Number
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.account?.data?.pan_number
                                 }}</span>
                             </div>
                             <!--end::Col-->

@@ -48,7 +48,6 @@ export default defineComponent({
     },
     methods: {
         onAvatarChange(e) {
-            // console.log("see file", e.target.files[0], this);
             this.avatar = URL.createObjectURL(e.target.files[0]);
         },
     },

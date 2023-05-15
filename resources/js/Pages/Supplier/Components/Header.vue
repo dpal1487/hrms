@@ -210,7 +210,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('supplier.show') && 'active'}`"
-                        :href="'/supplier/' + id"> Overview
+                        :href="'/supplier/' + supplier.id"> Overview
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -218,7 +218,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('supplier.address') && 'active'}`"
-                        :href="'/supplier/' + id + '/address'">Address
+                        :href="'/supplier/' + supplier.id + '/address'">Address
                     </Link>
                 </li>
                 <!--end::Nav item-->
@@ -226,7 +226,7 @@ export default defineComponent({
                 <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('supplier.account') && 'active'}`"
-                        :href="'/supplier/' + id + '/account'">Account
+                        :href="'/supplier/' + supplier.id + '/account'">Account
                     </Link>
                 </li>
                 <!--end::Nav item-->
