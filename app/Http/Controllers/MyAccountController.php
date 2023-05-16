@@ -38,7 +38,24 @@ class MyAccountController extends Controller
         }
         return redirect()->back();
     }
-
+    public function setting()
+    {
+        $user = User::where('id', Auth::user()->id)->first();
+        if ($user->address) {
+            return Inertia::render('User/Setting', [
+                'user' => new UserResource($user),
+                'address' => new AddressResource($user->address),
+            ]);
+        } else {
+            return Inertia::render(
+                'User/Overview',
+                [
+                    'user' => new UserResource($user),
+                ]
+            );
+        }
+        return redirect()->back();
+    }
     public function security()
     {
         $user = User::where('id', Auth::user()->id)->first();
@@ -79,23 +96,21 @@ class MyAccountController extends Controller
         }
         return redirect()->back();
     }
-    public function addressEdit($id)
+    public function addressEdit()
     {
-        // dd($id);
-        $employee = $this->employee($id);
-        // return new AddressResource($employee?->address?->address);
+        $user = Auth::user();
         $countries = Country::get();
-        if ($employee->address != null) {
-            return Inertia::render('Employee/UserAddress', [
-                'address' => new AddressResource($employee?->address),
+        if ($user->address != null) {
+            return Inertia::render('User/UserAddress', [
+                'address' => new AddressResource($user?->address),
                 'countries' => $countries,
-                'user' => $this->employeeHeader($id),
+                'user' => $user,
 
             ]);
         } else {
             return Inertia::render('Employee/UserAddress', [
                 'countries' => $countries,
-                'user' => $this->employeeHeader($id),
+                'user' => $user,
             ]);
         }
         return redirect()->back();
@@ -148,17 +163,7 @@ class MyAccountController extends Controller
         return redirect()->back();
     }
 
-    public function setting($id)
-    {
-        $employee = $this->employee($id);
-        if ($employee) {
-            return Inertia::render('Employee/Setting', [
-                'employee' => new EmployeeResources($employee),
-                'user' => $this->employeeHeader($id),
-            ]);
-        }
-        return redirect()->back();
-    }
+
 
 
     public function attendance($id)

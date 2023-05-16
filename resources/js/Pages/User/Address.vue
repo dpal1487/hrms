@@ -47,7 +47,7 @@ export default defineComponent({
                             <h3 class="fw-bold m-0">Address</h3>
                         </div>
                         <!--end::Card title-->
-                        <Link class="btn btn-primary align-self-center" :href="`/employee/${id}/address/edit`">
+                        <Link class="btn btn-primary align-self-center" href="/account/address/edit">
                         Edit
                         Address
                         </Link>

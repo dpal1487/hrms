@@ -21,7 +21,7 @@ export default defineComponent({
                 <!--begin: Pic-->
                 <div class="me-7 mb-4">
                     <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                        <img v-if="user?.image?.medium_path" :src="user?.image?.medium_path" alt="image" />
+                        <img v-if="user?.full_path" :src="user?.full_path" alt="image" />
                         <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image">
                         <div
                             class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px">
@@ -229,14 +229,21 @@ export default defineComponent({
                     </Link>
                 </li>
                 <!--end::Nav item-->
-
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
+                    <Link
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.setting') && 'active'}`"
+                        href="/account/setting">Settings
+                    </Link>
+                </li>
+                <!--end::Nav item-->
+                <!--begin::Nav item-->
+                <!-- <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.security') && 'active'}`"
                         href="/account/security">Security
                     </Link>
-                </li>
+                </li> -->
                 <!--end::Nav item-->
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
@@ -246,21 +253,14 @@ export default defineComponent({
                     </Link>
                 </li>
                 <!--end::Nav item-->
+
                 <!--begin::Nav item-->
-                <li class="nav-item mt-2">
-                    <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.settings') && 'active'}`"
-                        href="/account/settings">Settings
-                    </Link>
-                </li>
-                <!--end::Nav item-->
-                <!--begin::Nav item-->
-                <li class="nav-item mt-2">
+                <!-- <li class="nav-item mt-2">
                     <Link
                         :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.attendance') && 'active'}`"
                         href="/account/attendance">Attendance
                     </Link>
-                </li>
+                </li> -->
                 <!--end::Nav item-->
             </ul>
 

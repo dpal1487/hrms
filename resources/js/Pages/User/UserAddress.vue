@@ -79,12 +79,12 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.processing = true
-                axios.post(this.route("address.update", ['employee', this.form.id]), this.form)
+                axios.post(this.route("address.update", ['account', this.form.id]), this.form)
                     .then((response) => {
                         if (response.data.success) {
                             toast.success(response.data.message)
                             this.processing = false
-                            Inertia.get('/employee/' + this.id + '/address')
+                            Inertia.get('/account/address')
                             return;
                         } else {
                             toast.error(response.data.message)
@@ -174,8 +174,6 @@ export default defineComponent({
                                     <!--begin::Label-->
                                     <label class="col-lg-4 col-form-label fw-semibold fs-6">
                                         <span class="required">City</span>
-                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
-                                            title="Phone number must be active"></i>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Col-->

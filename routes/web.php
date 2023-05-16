@@ -21,6 +21,7 @@ use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\MyAccountController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,11 +88,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::controller(MyAccountController::class)->group(function () {
         Route::group(['prefix' => 'account'], function () {
             Route::get('/', 'overview')->name('account.overview');
+            Route::get('setting', 'setting')->name('account.setting');
+
             Route::get('/security', 'security')->name('account.security');
             Route::get('address', 'address')->name('account.address');
             Route::get('address/edit', 'addressEdit')->name('account.address.edit');
             Route::get('overview/edit', 'overviewEdit')->name('account.overview.edit');
-            Route::get('settings', 'setting')->name('account.settings');
             Route::get('attendance', 'attendance')->name('account.attendance');
         });
     });
@@ -110,17 +112,21 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('invoice/{id}/company-address', 'companyAddress')->name('invoice.company-address');
         Route::get('invoice/{id}/client-address', 'clientAddress')->name('invoice.client-address');
     });
+    Route::controller(SettingController::class)->group(function () {
+        Route::prefix('account')->group(function () {
+            Route::post('/', 'store')->name('account.user.store');
+            Route::post('/avatar-upload', 'avatarImage');
+            Route::post('/email/update', 'emailUpdate')->name('account.email.update');
+            Route::post('/change-password', 'changePassword')->name('account.change-password');
+            Route::post('/deactivate', 'deactivate')->name('account.deactivate');
+        });
+    });
     Route::controller(SecurityController::class)->group(function () {
         Route::group(['prefix' => 'employee'], function () {
             Route::get('{id}/security', 'security')->name('employee.security');
             Route::post('{id}/email/update', 'emailUpdate')->name('employee.email.update');
             Route::post('{id}/change-password', 'changePassword')->name('employee.change-password');
             Route::post('{id}/deactivate', 'deactivate')->name('employee.deactivate');
-        });
-        Route::group(['prefix' => 'account'], function () {
-            Route::post('/email/update', 'emailUpdate')->name('account.email.update');
-            Route::post('/change-password', 'changePassword')->name('account.change-password');
-            Route::post('/deactivate', 'deactivate')->name('account.deactivate');
         });
     });
     Route::controller(CompanyController::class)->group(function () {

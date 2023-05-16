@@ -8,7 +8,7 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
-import { required,  url, integer } from "@vuelidate/validators";
+import { required, url, integer } from "@vuelidate/validators";
 import ImageInput from '@/components/ImageInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -107,7 +107,7 @@ export default defineComponent({
                 date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
                 department_id: this.employee?.data?.department_id || '',
                 department: '',
-                requsetingFrom: "employees/edit",
+                requsetingFrom: "employee/edit",
             }),
             url: null,
             value: null,
@@ -140,12 +140,12 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.processing = true,
-                    axios.post(route().current() == 'employees.add' ? this.route("employees.store") : this.route('employees.update', this.form.id), this.form)
+                    axios.post(route().current() == 'employee.add' ? this.route("employee.store") : this.route('employee.update', this.form.id), this.form)
                         .then((response) => {
                             if (response.data.message) {
                                 this.processing = false,
                                     toast.success(response.data.message)
-                                Inertia.get('/employees')
+                                Inertia.get('/employee')
                             }
                             if (response.data.error) {
                                 toast.error(response.data.error)
@@ -187,7 +187,7 @@ export default defineComponent({
 
     },
     created() {
-        if (route().current() == 'employees.edit') {
+        if (route().current() == 'employee.edit') {
             this.isEdit = true;
         }
     }
@@ -381,14 +381,14 @@ export default defineComponent({
                     <div class="row text-align-center">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <Link href="/employees" class="btn btn-secondary align-items-center justify-content-center">
+                                <Link href="/employee" class="btn btn-secondary align-items-center justify-content-center">
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'employees.edit'">Update</span>
-                                        <span v-if="route().current() == 'employees.add'">Save</span>
+                                        <span v-if="route().current() == 'employee.edit'">Update</span>
+                                        <span v-if="route().current() == 'employee.add'">Save</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span
