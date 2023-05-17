@@ -102,7 +102,7 @@ export default defineComponent({
 
 <template>
     <Modal :show="show" :title="isEdit ? 'Edit Address' : 'Add Address'" @onhide="$emit('hidemodal', false)">
-        <JetValidationErrors />
+        
         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
             <!--begin::Modal body-->
             <div class="me-n7 pe-7 mh-lg-400px" style="overflow-y: auto;">

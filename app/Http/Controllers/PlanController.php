@@ -7,6 +7,8 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Resources\PlanResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 class PlanController extends Controller
 {
@@ -97,7 +99,7 @@ class PlanController extends Controller
         }
         $plan = Plan::where(['id' => $plan->id])->update([
             'name' => $request->name,
-            'slug' => $request->slug,
+            'slug' => Str::slug($request->name),
             'description' => $request->description,
             'status' => $request->status,
             'price' => $request->price,

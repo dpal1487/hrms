@@ -12,7 +12,6 @@ export default defineComponent({
     data() {
         return {
             isEdit: false,
-            isLoading: false,
             address: [],
             showModal: false,
         }
@@ -34,7 +33,7 @@ export default defineComponent({
             }
         },
         confirmDelete(id, index) {
-            this.isLoading = true;
+            
 
             Swal.fire({
                 title: "Are you sure you want to delete ?",

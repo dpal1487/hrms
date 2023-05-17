@@ -58,8 +58,8 @@ export default defineComponent({
                     axios
                         .delete("/plan/" + id)
                         .then((response) => {
-                            toast.success(response.data.message)
-                            if (response.data.success) {
+                            if (response.data.success == true) {
+                                toast.success(response.data.message)
                                 this.plans.data.splice(index, 1);
                                 return;
                             }

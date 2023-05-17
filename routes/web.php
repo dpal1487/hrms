@@ -21,6 +21,9 @@ use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\MyAccountController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleAndPermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 
 /*
@@ -191,4 +194,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('supplier/{id}/account', 'account')->name('supplier.account');
         Route::get('supplier/{id}/account/edit', 'accountEdit')->name('supplier.account.edit');
     });
+
+    Route::controller(RoleAndPermissionController::class)->group(function () {
+        Route::group(['prefix' => 'roles'], function () {
+            Route::get('/user', 'index')->name('roles.user');
+        });
+        Route::group(['prefix' => 'users'], function () {
+            Route::get('/', 'userList')->name('user.list');
+        });
+    });
+
+    Route::resource('permission', PermissionController::class);
+    Route::resource('roles', RoleController::class);
 });

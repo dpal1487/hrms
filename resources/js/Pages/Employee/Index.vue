@@ -108,7 +108,6 @@ export default defineComponent({
 
         <Head title="Employees" />
         <div class="card card-flush">
-            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
@@ -158,8 +157,8 @@ export default defineComponent({
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
-                                <th v-for="(th, index) in tbody" :key="index">
+                            <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                                <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
@@ -169,9 +168,7 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(employees, index) in employees.data" :key="index">
-
                                 <td>
-
                                     <Link :href="'/employee/' + employees.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
                                         employees-filter="employees_name">{{ employees.user?.first_name }} {{

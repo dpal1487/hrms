@@ -73,6 +73,31 @@ export default defineComponent({
                     title: "Plan",
                     icon: "bi bi-pie-chart-fill",
                 },
+                {
+                    link: "/users",
+                    title: "Users List",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/users/view",
+                    title: "User View",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/roles/user",
+                    title: "Role List",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/roles/user/view",
+                    title: "View Role",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/permission",
+                    title: "Permission",
+                    icon: "bi bi-pie-chart-fill",
+                },
 
 
             ],
@@ -163,56 +188,6 @@ export default defineComponent({
                             <span class="menu-arrow"></span>
                         </span>
                         <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div class="menu-item pt-5">
-                        <!--begin:Menu content-->
-                        <div class="menu-content">
-                            <span class="menu-heading fw-bold text-uppercase fs-7">Pages</span>
-                        </div>
-                        <!--end:Menu content-->
-                    </div>
-                    <div class="menu-item"><!--begin:Menu link--><span class="menu-title menu-link">User Management</span>
-                        <div class=""><!--begin:Menu item-->
-                            <div class="menu-item menu-accordion mb-1">
-                                <!--begin:Menu link--><span class="menu-link">Users</span>
-                                <div class=""><!--begin:Menu item-->
-                                    <div class="menu-item"><!--begin:Menu link--><a class="menu-link"
-                                            href="/metronic8/demo1/../demo1/apps/user-management/users/list.html"><span
-                                                class="menu-bullet"><span class="bullet bullet-dot"></span></span><span
-                                                class="menu-title">Users List</span></a><!--end:Menu link--></div>
-                                    <!--end:Menu item--><!--begin:Menu item-->
-                                    <div class="menu-item"><!--begin:Menu link--><a class="menu-link"
-                                            href="/metronic8/demo1/../demo1/apps/user-management/users/view.html"><span
-                                                class="menu-bullet"><span class="bullet bullet-dot"></span></span><span
-                                                class="menu-title">View User</span></a><!--end:Menu link--></div>
-                                    <!--end:Menu item-->
-                                </div><!--end:Menu sub-->
-                            </div><!--end:Menu item--><!--begin:Menu item-->
-                            <div class="menu-item menu-accordion"><!--begin:Menu link--><span class="menu-link"><span
-                                        class="menu-bullet"><span class="bullet bullet-dot"></span></span><span
-                                        class="menu-title">Roles</span><span
-                                        class="menu-arrow"></span></span><!--end:Menu link--><!--begin:Menu sub-->
-                                <div class=""><!--begin:Menu item-->
-                                    <div class="menu-item"><!--begin:Menu link--><a class="menu-link"
-                                            href="/metronic8/demo1/../demo1/apps/user-management/roles/list.html"><span
-                                                class="menu-bullet"><span class="bullet bullet-dot"></span></span><span
-                                                class="menu-title">Roles List</span></a><!--end:Menu link--></div>
-                                    <!--end:Menu item--><!--begin:Menu item-->
-                                    <div class="menu-item"><!--begin:Menu link--><a class="menu-link"
-                                            href="/metronic8/demo1/../demo1/apps/user-management/roles/view.html"><span
-                                                class="menu-bullet"><span class="bullet bullet-dot"></span></span><span
-                                                class="menu-title">View Role</span></a><!--end:Menu link--></div>
-                                    <!--end:Menu item-->
-                                </div><!--end:Menu sub-->
-                            </div><!--end:Menu item--><!--begin:Menu item-->
-                            <div class="menu-item"><!--begin:Menu link--><a class="menu-link active"
-                                    href="/metronic8/demo1/../demo1/apps/user-management/permissions.html"><span
-                                        class="menu-bullet"><span class="bullet bullet-dot"></span></span><span
-                                        class="menu-title">Permissions</span></a><!--end:Menu link--></div>
-                            <!--end:Menu item-->
-                        </div><!--end:Menu sub-->
                     </div>
                     <!--end:Menu item-->
                     <!--begin:Menu item-->

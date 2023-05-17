@@ -19,7 +19,6 @@ export default defineComponent({
     data() {
         return {
             isEdit: false,
-            isLoading: false,
             address: [],
             showModal: false,
         }
