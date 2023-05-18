@@ -67,20 +67,23 @@ export default defineComponent({
                             }
                         })
                 }
-                axios.put(this.route('permission.update', this.form.id), this.form)
-                    .then((response) => {
-                        if (response.data.success == true) {
-                            this.processing = false,
-                                this.$emit('hidemodal', false);
-                            toast.success(response.data.message)
+                if (this.isEdit) {
+
+                    axios.put(this.route('permission.update', this.form.id), this.form)
+                        .then((response) => {
+                            if (response.data.success == true) {
+                                this.processing = false,
+                                    this.$emit('hidemodal', false);
+                                toast.success(response.data.message)
+                                return
+                            }
+                            if (response.data.success == false) {
+                                toast.error(response.data.message)
+                            }
+                        }).finally(() => {
                             return
-                        }
-                        if (response.data.success == false) {
-                            toast.error(response.data.message)
-                        }
-                    }).finally(() => {
-                        return
-                    });
+                        });
+                }
             }
         }
     }

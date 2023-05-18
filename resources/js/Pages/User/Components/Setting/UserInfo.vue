@@ -2,14 +2,13 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
-import PrimaryButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, url, integer } from "@vuelidate/validators";
+import { required, url } from "@vuelidate/validators";
 import ImageInput from '@/components/ImageInput.vue';
 
 import VueDatePicker from '@vuepic/vue-datepicker';
@@ -64,24 +63,18 @@ export default defineComponent({
             }),
             value: null,
             url: null,
-            gender: [
-                { name: 'male', value: 'male' },
-                { name: 'female', value: 'female' }
-            ]
+
         };
     },
     components: {
         AppLayout,
         Link,
-        Head,
         Multiselect,
-        PrimaryButton,
         JetInput,
         JetLabel,
         InputError,
         VueDatePicker,
         ImageInput,
-
     },
     methods: {
 
@@ -273,7 +266,8 @@ export default defineComponent({
                     <!--begin::Label-->
                     <div class="col-lg-8 d-flex align-items-center">
                         <div class="form-check form-check-solid form-switch form-check-custom ">
-                            <input class="form-check-input" type="checkbox" v-model="form.dark_mode" valueProp="dark_mode" />
+                            <input class="form-check-input" type="checkbox" v-model="form.dark_mode"
+                                valueProp="dark_mode" />
                             <label class="form-check-label" for="allowmarketing"></label>
                         </div>
                     </div>

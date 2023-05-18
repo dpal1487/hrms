@@ -3,9 +3,12 @@ import { defineComponent } from 'vue';
 import { Head } from '@inertiajs/inertia-vue3';
 import AppLayout from '@/Layouts/AppLayout.vue'
 import PermissionForm from './Components/PermissionForm.vue';
+import Pagination from "../../Jetstream/Pagination.vue";
+
 import Swal from "sweetalert2";
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
+import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
     props: ['permissions'],
@@ -29,6 +32,7 @@ export default defineComponent({
         Head,
         AppLayout,
         PermissionForm,
+        Pagination
 
     },
     methods: {
@@ -87,6 +91,17 @@ export default defineComponent({
 
             });
         },
+        search() {
+            Inertia.get(
+                "/permission",
+                { q: this.q, status: this.s },
+                {
+                    preserveState: true, onSuccess: (data) => {
+                        this.answers = data.props.answers;
+                    },
+                }
+            );
+        },
     }
 });
 </script>
@@ -95,7 +110,7 @@ export default defineComponent({
     <Head />
     <AppLayout>
         <PermissionForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)"
-            :permisssion="permission" />
+            :permission="permission" />
         <!--begin::Card-->
         <div class="card card-flush">
             <!--begin::Card header-->
@@ -229,6 +244,9 @@ export default defineComponent({
                 <!--end::Table-->
             </div>
             <!--end::Card body-->
+            <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="permissions.meta">
+                <Pagination :links="permissions.meta.links" />
+            </div>
         </div>
         <!--end::Card-->
 

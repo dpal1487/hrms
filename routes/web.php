@@ -71,7 +71,6 @@ Route::get('login/{provider}/callback', [SocialLoginController::class, 'handleCa
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-
     Route::controller(EmployeeController::class)->group(function () {
         Route::group(['prefix' => 'employee'], function () {
             Route::get('/', 'index')->name('employee.index');
@@ -198,6 +197,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::controller(RoleAndPermissionController::class)->group(function () {
         Route::group(['prefix' => 'roles'], function () {
             Route::get('/user', 'index')->name('roles.user');
+            Route::get('/user/view', 'roleView')->name('roles.user.view');
         });
         Route::group(['prefix' => 'users'], function () {
             Route::get('/', 'userList')->name('user.list');

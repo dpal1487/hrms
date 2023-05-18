@@ -8,23 +8,23 @@ import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
-import Loading from "vue-loading-overlay";
 import axios from "axios";
 import AddUser from "./Components/AddUser.vue";
 export default defineComponent({
-    props: ["employees"],
+    props: ['users', 'roles'],
     data() {
         return {
+            str: '',
             q: "",
-            s: "",
-            message: '',
+            isEdit: false,
+            showModal: false,
+            user: [],
             tbody: [
                 "User",
                 "Role",
                 "Join Date",
                 "Action",
             ],
-            isLoading: false,
             statusOptions: [
                 { value: "all", label: "All" },
                 { value: 1, label: "Active" },
@@ -34,14 +34,13 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    AddUser
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        AddUser
+    },
     methods: {
 
         confirmDelete(id, index) {
@@ -90,21 +89,32 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/employee",
+                "/users",
                 { q: this.q, status: this.s },
             );
         },
+        toggleModal(value, user) {
+            if (value, user) {
+                this.isEdit = true;
+                this.showModal = true;
+                this.user = user;
+            }
+            else if (value) {
+                this.showModal = true;
+            }
+            else {
+                this.showModal = false;
+            }
+        },
     },
-    setup() {
-
-    },
-
 });
 </script>
 <template>
     <app-layout>
 
         <Head title="Employees" />
+        <AddUser v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :roles="roles.data" />
+
         <!--begin::Card-->
         <div class="card card-flush">
 
@@ -148,8 +158,7 @@ export default defineComponent({
                         <!--begin::Toolbar-->
                         <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                             <!--begin::Add user-->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_add_user">
+                            <button type="button" class="btn btn-primary" @click=toggleModal(true)>
                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                                 <span class="svg-icon svg-icon-2">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -164,7 +173,6 @@ export default defineComponent({
                         </div>
                         <!--end::Toolbar-->
                         <!--begin::Modal - Add task-->
-                       <AddUser />
                         <!--end::Modal - Add task-->
                     </div>
                     <!--end::Card toolbar-->
@@ -190,22 +198,29 @@ export default defineComponent({
                         <tbody class="text-gray-600 fw-semibold">
 
                             <!--begin::Table row-->
-                            <tr>
+                            <tr v-for="(user, index) in users.data" :key="index">
 
                                 <!--begin::User=-->
                                 <td class="d-flex align-items-center">
                                     <!--begin:: Avatar -->
                                     <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                        <a href="view.html">
-                                            <div class="symbol-label fs-3 bg-light-danger text-danger">M</div>
+                                        <a href="#" v-if="user.full_path">
+                                            <div class="symbol-label">
+                                                <img :src="user.full_path" alt="Emma Smith" class="w-100">
+                                            </div>
+                                        </a>
+                                        <a href="#" v-else>
+                                            <div class="symbol-label fs-3 bg-light-danger text-danger"> A </div>
                                         </a>
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::User details-->
                                     <div class="d-flex flex-column">
-                                        <a href="view.html" class="text-gray-800 text-hover-primary mb-1">Melody
-                                            Macy</a>
-                                        <span>melody@altbox.com</span>
+                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">{{ user.first_name + " " +
+                                            user.last_name }}
+                                        </a>
+
+                                        <span>{{ user.email }}</span>
                                     </div>
                                     <!--begin::User details-->
                                 </td>
@@ -221,177 +236,54 @@ export default defineComponent({
 
 
                                 <!--begin::Action=-->
-                                <td class="text-end">
-                                    <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
-                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                                        <span class="svg-icon svg-icon-5 m-0">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
-                                                    fill="currentColor" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon--></a>
-                                    <!--begin::Menu-->
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                        data-kt-menu="true">
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="view.html" class="menu-link px-3">Edit</a>
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="#" class="menu-link px-3"
-                                                data-kt-users-table-filter="delete_row">Delete</a>
-                                        </div>
-                                        <!--end::Menu item-->
-                                    </div>
-                                    <!--end::Menu-->
-                                </td>
-                                <!--end::Action=-->
-                            </tr>
-                            <!--end::Table row-->
-                            <!--begin::Table row-->
-                            <tr>
-
-                                <!--begin::User=-->
-                                <td class="d-flex align-items-center">
-                                    <!--begin:: Avatar -->
-                                    <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                        <a href="view.html">
-                                            <div class="symbol-label">
-                                                <img src="assets/media/avatars/300-1.jpg" alt="Max Smith" class="w-100" />
-                                            </div>
+                                <td>
+                                    <div class="dropdown">
+                                        <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                            :id="`dropdown-${user?.id}`" data-bs-toggle="dropdown"
+                                            aria-expanded="false">Actions
+                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                            <span class="svg-icon svg-icon-5 m-0">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                        fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
                                         </a>
-                                    </div>
-                                    <!--end::Avatar-->
-                                    <!--begin::User details-->
-                                    <div class="d-flex flex-column">
-                                        <a href="view.html" class="text-gray-800 text-hover-primary mb-1">Max
-                                            Smith</a>
-                                        <span>max@kt.com</span>
-                                    </div>
-                                    <!--begin::User details-->
-                                </td>
-                                <!--end::User=-->
-                                <!--begin::Role=-->
-                                <td>Developer</td>
-                                <!--end::Role=-->
 
-                                <!--begin::Two step=-->
-                                <td></td>
-                                <!--end::Two step=-->
+                                        <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
+                                            :aria-labelled:by="`dropdown-${user?.id}`">
+                                            <li class="menu-item px-3">
+                                                <Link
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
+                                                    :href="`/user/${user?.id}/edit`">Edit
+                                                </Link>
+                                            </li>
 
-                                <!--begin::Action=-->
-                                <td class="text-end">
-                                    <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
-                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                                        <span class="svg-icon svg-icon-5 m-0">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
-                                                    fill="currentColor" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon--></a>
-                                    <!--begin::Menu-->
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                        data-kt-menu="true">
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="view.html" class="menu-link px-3">Edit</a>
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="#" class="menu-link px-3"
-                                                data-kt-users-table-filter="delete_row">Delete</a>
-                                        </div>
-                                        <!--end::Menu item-->
+                                            <li class="menu-item px-3">
+                                                <button @click="confirmDelete(
+                                                    user?.id, index
+                                                )
+                                                    "
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center">
+                                                    Delete
+                                                </button>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <!--end::Menu-->
                                 </td>
                                 <!--end::Action=-->
                             </tr>
                             <!--end::Table row-->
-
-                            <!--begin::Table row-->
-                            <tr>
-
-                                <!--begin::User=-->
-                                <td class="d-flex align-items-center">
-                                    <!--begin:: Avatar -->
-                                    <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                        <a href="view.html">
-                                            <div class="symbol-label">
-                                                <img src="/assets/media/avatars/300-25.jpg" alt="Brian Cox" class="w-100" />
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <!--end::Avatar-->
-                                    <!--begin::User details-->
-                                    <div class="d-flex flex-column">
-                                        <a href="view.html" class="text-gray-800 text-hover-primary mb-1">Brian
-                                            Cox</a>
-                                        <span>brian@exchange.com</span>
-                                    </div>
-                                    <!--begin::User details-->
-                                </td>
-                                <!--end::User=-->
-                                <!--begin::Role=-->
-                                <td>Developer</td>
-                                <!--end::Role=-->
-
-                                <!--begin::Joined-->
-                                <td>15 Apr 2022, 9:23 pm</td>
-                                <!--begin::Joined-->
-                                <!--begin::Action=-->
-                                <td class="text-end">
-                                    <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
-                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                                        <span class="svg-icon svg-icon-5 m-0">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
-                                                    fill="currentColor" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon--></a>
-                                    <!--begin::Menu-->
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                        data-kt-menu="true">
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="view.html" class="menu-link px-3">Edit</a>
-                                        </div>
-                                        <!--end::Menu item-->
-                                        <!--begin::Menu item-->
-                                        <div class="menu-item px-3">
-                                            <a href="#" class="menu-link px-3"
-                                                data-kt-users-table-filter="delete_row">Delete</a>
-                                        </div>
-                                        <!--end::Menu item-->
-                                    </div>
-                                    <!--end::Menu-->
-                                </td>
-                                <!--end::Action=-->
-                            </tr>
-                            <!--end::Table row-->
-
                         </tbody>
                         <!--end::Table body-->
                     </table>
                     <!--end::Table-->
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="employees?.meta">
-                    <Pagination :links="employees.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="users?.meta">
+                    <Pagination :links="users.meta.links" />
                 </div>
             </div>
             <!--end::Card body-->

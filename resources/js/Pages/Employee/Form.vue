@@ -107,7 +107,6 @@ export default defineComponent({
                 date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
                 department_id: this.employee?.data?.department_id || '',
                 department: '',
-                requsetingFrom: "employee/edit",
             }),
             url: null,
             value: null,
@@ -142,13 +141,13 @@ export default defineComponent({
                 this.processing = true,
                     axios.post(route().current() == 'employee.add' ? this.route("employee.store") : this.route('employee.update', this.form.id), this.form)
                         .then((response) => {
-                            if (response.data.message) {
+                            if (response.data.success == true) {
                                 this.processing = false,
                                     toast.success(response.data.message)
                                 Inertia.get('/employee')
                             }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
+                            if (response.data.success == false) {
+                                toast.error(response.data.message)
                             }
                         })
             }

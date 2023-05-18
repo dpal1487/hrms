@@ -3,12 +3,15 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link, Head } from "@inertiajs/inertia-vue3";
 import { required } from "@vuelidate/validators";
-import ComponyAside from "../../Components/Company/CompanyAside.vue"
-import CompanyStepFirst from "../../Components/Company/CompanyStepFirst.vue";
-import CompanysecondStepVue from "../../Components/Company/CompanysecondStep.vue";
-import CompanyThirdStep from "../../Components/Company/CompanyThirdStep.vue";
-import CompanyFourthStep from "../../Components/Company/CompanyFourthStep.vue";
-import CompanyFifthStep from "../../Components/Company/CompanyFifthStep.vue";
+import CompanyAside from "../../Pages/Company/Components/CompanyForm/CompanyAside.vue";
+import CompanyStepFirst from "../Company/Components/CompanyForm/CompanyStepFirst.vue";
+import CompanysecondStepVue from "../../Pages/Company/Components/CompanyForm/CompanysecondStep.vue";
+import CompanyThirdStep from "../../Pages/Company/Components/CompanyForm/CompanyThirdStep.vue";
+import CompanyFourthStep from "../../Pages/Company/Components/CompanyForm/CompanyFourthStep.vue";
+import CompanyFifthStep from "../../Pages/Company/Components/CompanyForm/CompanyFifthStep.vue";
+import { toast } from "vue3-toastify";
+import axios from "axios";
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
     props: [''],
@@ -24,7 +27,9 @@ export default defineComponent({
         return {
             currStep: 0,
             isEdit: false,
-            onNext:0,
+            processing: false,
+
+            onNext: 0,
             form: this.$inertia.form({
                 company_type: 'personal',
                 account_team_size: '2-10',
@@ -50,7 +55,7 @@ export default defineComponent({
     },
     components: {
         AppLayout,
-        ComponyAside,
+        CompanyAside,
         CompanyStepFirst,
         CompanysecondStepVue,
         CompanyThirdStep,
@@ -62,13 +67,17 @@ export default defineComponent({
     },
     methods: {
         submit() {
-          
-            this.form
+            this.processing = true;
 
-                .transform((data) => ({
-                    ...data,
-                }))
-                .post(this.route('company.store'), this.form)
+            axios.post(this.route('company.store'), this.form)
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message)
+                        this.processing = false
+
+                        Inertia.render('CompanyForm/CompanyFifth')
+                    }
+                })
         },
         onPrev() {
             if (this.currStep > 0) this.currStep--;
@@ -96,7 +105,8 @@ export default defineComponent({
         <div class="d-flex flex-column flex-lg-row flex-column-fluid stepper stepper-pills stepper-column stepper-multistep"
             id="kt_create_account_stepper">
             <!--begin::Aside-->
-            <ComponyAside :currStep="currStep" />
+
+            <CompanyAside :currStep="currStep" />
             <!--begin::Aside-->
             <!--begin::Body-->
             <div class="d-flex flex-column flex-lg-row-fluid py-10">
@@ -107,6 +117,7 @@ export default defineComponent({
                         <!--begin::Form-->
                         <form @submit.prevent="submit()" class="my-auto pb-5">
                             <!--begin::Step 1-->
+
                             <CompanyStepFirst :form="form" v-if="currStep === 0" @next="onNext" />
                             <!--end::Step 1-->
                             <!--begin::Step 2-->

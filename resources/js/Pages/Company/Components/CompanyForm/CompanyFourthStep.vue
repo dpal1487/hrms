@@ -6,6 +6,7 @@ export default defineComponent({
     props:  ['form'],
     data() {
         return {
+            processing:false,
 
         }
     },

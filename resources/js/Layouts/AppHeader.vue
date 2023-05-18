@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue';
 import { Link } from "@inertiajs/inertia-vue3";
 import axios from "axios";
+import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
     components: {
@@ -32,6 +33,9 @@ export default defineComponent({
                 })
                 .finally(() => (this.isNotifLoading = false));
         },
+        logout() {
+            Inertia.post(route('logout'));
+        }
     },
 });
 </script>
@@ -323,17 +327,17 @@ export default defineComponent({
                                 </Link>
                             </div>
                             <!--end::Menu item-->
-                          
                             <!--begin::Menu separator-->
                             <div class="separator my-2"></div>
                             <!--end::Menu separator-->
-
-
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <a href="{{/assets/authentication/layouts/corporate/sign-in.html}}" class="menu-link px-5">
-                                    Sign Out
-                                </a>
+                                <form method="post" @submit.prevent="logout">
+                                    <button type="submit" class="btn btn-sm"
+                                        style="border: transparent; background-color: transparent; ">
+                                        Logout
+                                    </button>
+                                </form>
                             </div>
                             <!--end::Menu item-->
                         </div>
@@ -341,7 +345,6 @@ export default defineComponent({
                         <!--end::Menu wrapper-->
                     </div>
                     <!--end::User menu-->
-
                     <!--begin::Header menu toggle-->
                     <div class="app-navbar-item d-lg-none ms-2 me-n3" title="Show header menu">
                         <div class="btn btn-icon btn-active-color-primary w-30px h-30px w-md-35px h-md-35px"

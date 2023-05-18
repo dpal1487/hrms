@@ -20,6 +20,8 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $employees = Employee::where('company_id', $this->companyId());
+        // return $this->companyId();
+        // return $employees;
         if (!empty($request->q)) {
             $employees = $employees
                 ->whereHas('user', function ($q) use ($request) {
@@ -66,8 +68,9 @@ class EmployeeController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
-        $employee = Employee::where('company_id', $this->companyId())->first();
-        if ($employee) {
+        // $employee = Employee::where('company_id', $this->companyId())->first();
+        // return $this->companyId();
+        // if ($employee) {
             $user = User::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -97,15 +100,23 @@ class EmployeeController extends Controller
                     'company_id' => $this->companyId(),
                 ])
             ) {
-                return redirect('/employees')->with(['message', 'Employee created successfully']);
+                return response()->json([
+                    'success' => true,
+                    'message' => "Employee Created successfully"
+                ]);
             }
-        }
-        return redirect('/employees')->with(['message', 'Employee not created']);
+        // }
+        return response()->json([
+            'success' => false,
+            'message' => "Employee Not Created"
+        ]);
     }
 
     public function edit($id)
     {
         $employee = Employee::where('company_id', $this->companyId())->find($id);
+
+        return new EmployeeResources($employee);
 
         if ($employee) {
             return Inertia::render('Employee/Form', [

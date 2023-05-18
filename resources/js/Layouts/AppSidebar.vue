@@ -79,18 +79,8 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/users/view",
-                    title: "User View",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
                     link: "/roles/user",
                     title: "Role List",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/roles/user/view",
-                    title: "View Role",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {

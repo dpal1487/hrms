@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PermissionResource;
+use App\Http\Resources\RoleResource;
+use App\Http\Resources\UserResource;
+use App\Models\Role as ModelsRole;
+use App\Models\User;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,18 +21,27 @@ class RoleAndPermissionController extends Controller
      */
     public function index()
     {
-        return Inertia::render('UserManagement/Roles/RoleList');
+        $permissions = Permission::get();
+        $roles = Role::get();
+        return Inertia::render('UserManagement/Roles/RoleList', [
+            'permissions' => PermissionResource::collection($permissions),
+            'roles' => RoleResource::collection($roles),
+        ]);
     }
     public function userList()
     {
-        return Inertia::render('UserManagement/Users/UserList');
+        $roles = ModelsRole::get();
+        $users = User::get();
+        return Inertia::render('UserManagement/Users/UserList', [
+            'roles' => RoleResource::collection($roles),
+            'users' => UserResource::collection($users),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function roleView()
+    {
+        return Inertia::render(('UserManagement/Roles/RoleView'));
+    }
     public function create()
     {
         //

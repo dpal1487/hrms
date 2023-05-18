@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
-use App\Models\Permission;
+use Spatie\Permission\Models\Permission;
+
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
@@ -16,12 +17,19 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $permissions = Permission::get();
+        $permissions = new Permission();
+        if (!empty($request->q)) {
+            $permissions = $permissions
+                ->where('name', 'like', "%$request->q");
+        }
+        if (!empty($request->status) || $request->status != '') {
+            $permissions = $permissions->where('status', '=', $request->status);
+        }
         return Inertia::render('UserManagement/Permission', [
-            'permissions' => PermissionResource::collection($permissions)
-        ]);
+            'permissions' => PermissionResource::collection($permissions->paginate(10)->appends($request->all())),
+        ]);       
     }
 
     /**
