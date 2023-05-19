@@ -83,6 +83,8 @@ class MyAccountController extends Controller
         $user = User::where('id', Auth::user()->id)->first();
 
 
+
+
         if ($user->address != null) {
             return Inertia::render('User/Address', [
                 'address' => new AddressResource($user?->address),
@@ -98,19 +100,20 @@ class MyAccountController extends Controller
     }
     public function addressEdit()
     {
-        $user = Auth::user();
+        $user = User::where('id', Auth::user()->id)->first();
+
         $countries = Country::get();
         if ($user->address != null) {
             return Inertia::render('User/UserAddress', [
                 'address' => new AddressResource($user?->address),
                 'countries' => $countries,
-                'user' => $user,
+                'user' => new UserResource($user),
 
             ]);
         } else {
             return Inertia::render('Employee/UserAddress', [
                 'countries' => $countries,
-                'user' => $user,
+                'user' => new UserResource($user),
             ]);
         }
         return redirect()->back();

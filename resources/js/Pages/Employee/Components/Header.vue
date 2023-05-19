@@ -3,7 +3,7 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 export default defineComponent({
-    props: ['user', 'address'],
+    props: ['employee', 'address' , 'user'],
     components: {
         Link,
     },
@@ -17,13 +17,12 @@ export default defineComponent({
 <template>
     <div class="card mb-5 mb-xl-5">
         <div class="card-body pt-9 pb-0">
-
             <!--begin::Details-->
             <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                 <!--begin: Pic-->
                 <div class="me-7 mb-4">
                     <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                        <img v-if="user?.image?.medium_path" :src="user?.image?.medium_path" alt="image" />
+                        <img v-if="employee?.image?.medium_path" :src="employee?.image?.medium_path" alt="image" />
                         <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image">
                         <div
                             class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px">
@@ -40,8 +39,8 @@ export default defineComponent({
                             <!--begin::Name-->
                             <div class="d-flex align-items-center mb-2">
                                 <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
-                                    user?.first_name }}
-                                    {{ user?.last_name }}</a>
+                                    employee?.first_name }}
+                                    {{ employee?.last_name }}</a>
                                 <a href="">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
                                     <span class="svg-icon svg-icon-1 svg-icon-primary">
@@ -91,7 +90,7 @@ export default defineComponent({
                                         </svg>
 
                                     </span>
-                                    <!--end::Svg Icon--><span v-if="address">{{ address?.city + " " +
+                                    <!--end::Svg Icon--><span v-if="address" class="text-capitalize">{{ address?.city + " " +
                                         address?.state + " " +
                                         address?.country?.name }}</span> </a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">

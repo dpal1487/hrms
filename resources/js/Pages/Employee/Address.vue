@@ -6,7 +6,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 
 export default defineComponent({
-    props: ['address', 'user'],
+    props: ['address', 'user', 'employee'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -36,7 +36,8 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" :address="address.data" />
+                <Header :user="user.data" :address="address.data" :employee="employee.data" />
+
 
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
@@ -65,7 +66,8 @@ export default defineComponent({
                             <!--begin::Col-->
 
                             <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.address?.data?.address_line_1
+                                <span class="fw-bold fs-6 text-gray-800 text-capitalize">{{
+                                    this.address?.data?.address_line_1
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -78,7 +80,8 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8 fv-row">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.address?.data?.address_line_2
+                                <span class="fw-bold fs-6 text-gray-800 text-capitalize">{{
+                                    this.address?.data?.address_line_2
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -91,7 +94,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.city
+                                <span class="fw-bold fs-6 text-gray-800 me-2 text-capitalize">{{ this.address?.data?.city
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -104,7 +107,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.state
+                                <span class="fw-bold fs-6 text-gray-800 me-2 text-capitalize">{{ this.address?.data?.state
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -118,7 +121,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                <span class="fw-bold fs-6 text-gray-800 me-2 text-capitalize">{{
                                     this.address?.data?.country?.name
                                 }}</span>
                             </div>

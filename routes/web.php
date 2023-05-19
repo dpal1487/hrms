@@ -177,8 +177,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('invoice/{id}/conversion-value', 'conversionValue')->name('invoice.conversion-value');
     });
 
-    Route::resource('industries', IndustryController::class);
-    Route::resource('decision-makers', DecisionMakerController::class);
+    Route::resource('industrie', IndustryController::class);
+    Route::resource('decision-maker', DecisionMakerController::class);
     Route::resource('question', QuestionController::class);
     Route::resource('answer', AnswerController::class);
     Route::resource('plan', PlanController::class);

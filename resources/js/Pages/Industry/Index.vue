@@ -81,7 +81,7 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/industries",
+                "/industrie",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
@@ -132,7 +132,7 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add industries-->
-                        <Link href="/industries/create" class="btn btn-primary">
+                        <Link href="/industrie/create" class="btn btn-primary">
                         Add Industry
                         </Link>
                         <!--end::Add industries-->
@@ -158,12 +158,12 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(industries, index) in industries.data" :key="index">
+                            <tr v-for="(industry, index) in industries.data" :key="index">
 
-                                <td>{{ industries.name }}</td>
-                                <td v-if="industries.image?.medium_path">
+                                <td>{{ industry.name }}</td>
+                                <td v-if="industry.image?.medium_path">
                                     <div class="symbol symbol-50px me-5">
-                                        <img alt="Logo" :src="industries.image?.medium_path">
+                                        <img alt="Logo" :src="industry.image?.medium_path">
                                     </div>
                                 </td>
                                 <td v-else>
@@ -172,14 +172,14 @@ export default defineComponent({
                                     </div>
                                 </td>
                                 <td>
-                                    <p v-if="(industries.status == 1)">Active </p>
-                                    <p v-if="(industries.status == 0)">Inactive </p>
+                                    <p v-if="(industry.status == 1)">Active </p>
+                                    <p v-if="(industry.status == 0)">Inactive </p>
                                 </td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${industries.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${industry.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -194,17 +194,17 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${industries.id}`">
+                                            :aria-labelled:by="`dropdown-${industry.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/industries/${industries.id}/edit`">Edit
+                                                    :href="`/industrie/${industry.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    industries.id, index
+                                                    industry.id, index
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">

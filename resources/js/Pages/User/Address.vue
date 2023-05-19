@@ -36,7 +36,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" :address="address.data" />
+                <Header :user="user?.data" :address="address?.data" />
 
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">

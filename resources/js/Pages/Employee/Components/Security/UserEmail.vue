@@ -72,22 +72,17 @@ export default defineComponent({
 
 <template>
     <div v-if="isEdit" class="flex-row-fluid">
-        <!--begin::Form-->
-        <JetValidationErrors />
         <form @submit.prevent="submit()" class="">
             <div class="row mb-6">
+                
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="fv-row mb-0">
-                        <!-- <label for="emailaddress" class="form-label fs-6 fw-bold mb-3">Enter New
-                            Email Address </label>
-                        <input type="email" class="form-control form-control-lg form-control-solid"
-                            placeholder="Email Address" v-model="v$.form.email.$modal" /> -->
-
                         <jet-label for="email" value="Enter New
                             Email Address" />
+
                         <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="v$.form.email.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
+                            ? 'is-invalid'
+                            : ''
                             " placeholder="Email Id" />
 
                     </div>
@@ -96,8 +91,8 @@ export default defineComponent({
                     <div class="fv-row mb-0">
                         <jet-label for="password" value="Confirm Password" />
                         <jet-input id="password" type="password" v-model="v$.form.confirm_password.$model" :class="v$.form.confirm_password.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
+                            ? 'is-invalid'
+                            : ''
                             " placeholder="Confirm Password" />
                     </div>
                 </div>

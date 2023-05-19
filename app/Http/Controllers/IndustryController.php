@@ -38,7 +38,6 @@ class IndustryController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image_id' => 'required',
             'status' => 'required',
         ]);
         if ($validator->fails()) {

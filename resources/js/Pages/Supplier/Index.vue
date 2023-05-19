@@ -124,11 +124,6 @@ export default defineComponent({
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search " />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <!-- {{ $page.props.ziggy.status }} -->
-                        <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                    </div>
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
@@ -224,7 +219,7 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                
+
                 <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="suppliers?.meta">
                     <Pagination :links="suppliers?.meta.links" />
                 </div>

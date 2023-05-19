@@ -21,7 +21,7 @@ import { Inertia } from "@inertiajs/inertia";
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ['employee'],
+    props: ['employee' , 'user'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -93,7 +93,7 @@ export default defineComponent({
                 image_id: this.employee?.data?.image_id || '',
                 first_name: this.employee?.data?.first_name || '',
                 last_name: this.employee?.data?.last_name || '',
-                email: this.employee?.data?.email || '',
+                email: this.user?.data?.email || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
                 number: this.employee?.data?.number || '',
                 qualification: this.employee?.data?.qualification || '',

@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\CompanyAddress;
 use App\Models\EmployeeAddress;
 use App\Models\CompanyUser;
+use App\Models\Employee;
 use App\Models\Supplier;
 use App\Models\SupplierAddress;
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -49,9 +51,9 @@ class AddressController extends Controller
                 }
             }
         }
-        if ($type == 'employees') {
+        if ($type == 'employee') {
 
-            if (CompanyUser::where(['user_id' => $this->uid(), 'company_id' => $this->companyId()])->first()) {
+            if (Employee::where(['company_id' => $this->companyId()])->first()) {
                 $address = Address::create([
                     'address_line_1' => $request->address_line_1,
                     'address_line_2' => $request->address_line_2,
@@ -81,6 +83,25 @@ class AddressController extends Controller
                 ]);
                 $supplierAddress = SupplierAddress::create([
                     'supplier_id' => $request->sup_id,
+                    'address_id' => $address->id,
+                ]);
+                if ($supplierAddress) {
+                    return response()->json(['message' => 'Address created successfully.', 'success' => true], 200);
+                }
+            }
+        }
+        if ($type == 'account') {
+            if (User::where('id', Auth::user()->id)->first()) {
+                $address = Address::create([
+                    'address_line_1' => $request->address_line_1,
+                    'address_line_2' => $request->address_line_2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+                $supplierAddress = UserAddress::create([
+                    'user_id' => Auth::user()->id,
                     'address_id' => $address->id,
                 ]);
                 if ($supplierAddress) {
@@ -155,9 +176,8 @@ class AddressController extends Controller
             }
         }
         if ($type == 'account') {
-
+            
             if (User::where('id', Auth::user()->id)->first()) {
-
                 $address = Address::where('id', $id)->update([
                     'address_line_1' => $request->address_line_1,
                     'address_line_2' => $request->address_line_2,

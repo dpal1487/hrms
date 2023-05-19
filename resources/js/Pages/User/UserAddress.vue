@@ -104,8 +104,8 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" />
-
+                <Header :user="user.data" :address="address.data" />
+                {{ address }}
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -255,8 +255,7 @@ export default defineComponent({
                             <!--end::Card body-->
                             <!--begin::Actions-->
                             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                <Link :href="`/employee/${id}/address`"
-                                    class="btn btn-light btn-active-light-primary me-2">
+                                <Link :href="`/employee/${id}/address`" class="btn btn-light btn-active-light-primary me-2">
                                 Discard
                                 </Link>
                                 <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->

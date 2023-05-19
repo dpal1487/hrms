@@ -72,15 +72,13 @@ class EmployeeController extends Controller
 
         $user = User::create([
 
-
-            'image_id' => $request->image_id,
+            'email' => $request->email,
         ]);
 
         $employee =  Employee::create([
 
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'email' => $request->email,
             'code' => 'ARS' . date('Y') . $user->id,
             'date_of_joining' => $request->date_of_joining,
             'number' => $request->number,
@@ -98,6 +96,7 @@ class EmployeeController extends Controller
             'full_final' => $request->full_final,
             'department_id' => $request->department_id,
             'user_id' => $user->id,
+            'image_id' => $request->image_id,
             'company_id' => $this->companyId(),
         ]);
         if ($employee) {
@@ -119,6 +118,7 @@ class EmployeeController extends Controller
         if ($employee) {
             return Inertia::render('Employee/Form', [
                 'employee' => new EmployeeResources($employee),
+                'user' => $this->employeeHeader($id),
             ]);
         }
         return redirect()->back();
@@ -144,17 +144,20 @@ class EmployeeController extends Controller
             'department_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first(), 'success' => false], 400);
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
         $employee = Employee::where('company_id', $this->companyId())->find($id);
 
-        
         if ($employee) {
+            if ($request->image_id) {
+                User::where('id', $employee->user_id)->update([
+                    'email' => $request->email,
+                ]);
+            }
 
             $employee = Employee::where(['id' => $employee->id])->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
-                'email' => $request->email,
                 'date_of_joining' => $request->date_of_joining,
                 'number' => $request->number,
                 'qualification' => $request->qualification,
@@ -191,11 +194,15 @@ class EmployeeController extends Controller
         if ($employee->address != null) {
             return Inertia::render('Employee/Address', [
                 'address' => new AddressResource($employee?->address),
+                'employee' => new EmployeeResources($employee),
+
                 'user' => $this->employeeHeader($id),
             ]);
         } else {
             return Inertia::render('Employee/Address', [
                 'address' => new AddressResource($employee),
+                'employee' => new EmployeeResources($employee),
+
                 'user' => $this->employeeHeader($id),
             ]);
         }
@@ -212,12 +219,16 @@ class EmployeeController extends Controller
                 'address' => new AddressResource($employee?->address),
                 'countries' => $countries,
                 'user' => $this->employeeHeader($id),
+                'employee' => new EmployeeResources($employee),
+
 
             ]);
         } else {
             return Inertia::render('Employee/UserAddress', [
                 'countries' => $countries,
                 'user' => $this->employeeHeader($id),
+                'employee' => new EmployeeResources($employee),
+
             ]);
         }
         return redirect()->back();

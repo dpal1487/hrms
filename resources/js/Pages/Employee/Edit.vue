@@ -96,7 +96,7 @@ export default defineComponent({
                 image_id: this.employee?.data?.image_id || '',
                 first_name: this.employee?.data?.first_name || '',
                 last_name: this.employee?.data?.last_name || '',
-                email: this.employee?.data?.email || '',
+                email: this.user?.data?.email || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
                 number: this.employee?.data?.number || '',
                 qualification: this.employee?.data?.qualification || '',
@@ -195,8 +195,8 @@ export default defineComponent({
 <template>
     <Head title="Employee Edit" />
     <AppLayout>
+
         <div class="app-content flex-column-fluid ">
-            {{ employee }}
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <Header :user="user.data" :employee="employee.data" />
@@ -245,6 +245,16 @@ export default defineComponent({
                                                         : ''
                                                         " placeholder="Last Name" />
                                                 <div v-for="(error, index) of v$.form.last_name.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="email" value="Email" />
+                                                <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="v$.form.email.$errors.length > 0
+                                                    ? 'is-invalid'
+                                                    : ''
+                                                    " placeholder="Email" />
+                                                <div v-for="(error, index) of v$.form.email.$errors" :key="index">
                                                     <input-error :message="error.$message" />
                                                 </div>
                                             </div>

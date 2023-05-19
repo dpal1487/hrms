@@ -43,7 +43,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" :employee="employee.data" />
+                <Header :employee="employee.data" :user="user.data" />
                 <!--begin::Sign-in Method-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -58,7 +58,8 @@ export default defineComponent({
                         <!--begin::Card body-->
                         <div class="card-body border-top p-9">
                             <!--begin::Email Address-->
-                            <UserEmail :email='this.employee?.data?.user' />
+                            <!-- {{ employee }} -->
+                            <UserEmail :email='this.user?.data' />
                             <!--end::Email Address-->
                             <!--begin::Separator-->
                             <div class="separator separator-dashed my-6"></div>
@@ -77,7 +78,7 @@ export default defineComponent({
                 <!--end::Sign-in Method-->
                 <!-- {{ this.employee }} -->
                 <!--begin::Deactivate Account-->
-                <DeactivateAccount :employee="this.employee" />
+                <DeactivateAccount :employee="this.employee" :user="user.data" />
                 <!--end::Deactivate Account-->
             </div>
         </div>

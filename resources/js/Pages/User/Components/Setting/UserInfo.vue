@@ -87,7 +87,7 @@ export default defineComponent({
                             if (response.data.message) {
                                 this.processing = false,
                                     toast.success(response.data.message)
-                                Inertia.get('/account')
+                                Inertia.get('/account/setting')
                             }
                             if (response.data.error) {
                                 toast.error(response.data.error)

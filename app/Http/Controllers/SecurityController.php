@@ -27,6 +27,7 @@ class SecurityController extends Controller
     }
     public function emailUpdate(Request $request, $id)
     {
+
         if ($request->ajax()) {
             if ($request->confirm_password == null) {
                 return response()->json(['success' => false, 'message' => 'Please Insert password']);
@@ -35,7 +36,10 @@ class SecurityController extends Controller
                 $userEmail = User::where('id', $id)->update([
                     'email' => $request->email,
                 ]);
-                return response()->json(['success' => true, 'message' => 'Successfully Change Email!']);
+                if ($userEmail) {
+
+                    return response()->json(['success' => true, 'message' => 'Successfully Change Email!']);
+                }
             }
             return response()->json(['success' => false, 'message' => "Don't Have Autherity To change Email! Please insert correct password"]);
         } else {
@@ -61,8 +65,9 @@ class SecurityController extends Controller
 
         $employee = Employee::where(['company_id' => $this->companyId(), 'id' => $id])->first();
 
+        // return $employee->user_id;
         if ($employee) {
-            User::where(['id', $employee->user_id])->update('status', 0);
+            User::where('id', $employee->user_id)->update(['status'=> 0]);
             return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
         }
         return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);

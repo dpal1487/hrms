@@ -95,6 +95,12 @@ class SettingController extends Controller
             if ($request->confirm_password == null) {
                 return response()->json(['success' => false, 'message' => 'Please Insert password']);
             }
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|unique:users,email',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+            }
             if (Hash::check($request->confirm_password, Auth::user()->password)) {
                 $userEmail = User::where('id', Auth::user()->id)->update([
                     'email' => $request->email,
