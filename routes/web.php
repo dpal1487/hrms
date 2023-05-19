@@ -84,7 +84,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/overview/edit', 'overviewEdit')->name('employee.overview.edit');
             Route::get('{id}/settings', 'setting')->name('employee.settings');
             Route::get('{id}/attendance', 'attendance')->name('employee.attendance');
-            Route::delete('{id}/delete', 'destroy')->name('employee.delete');
+            Route::delete('{id}', 'destroy')->name('employee.delete');
         });
     });
     Route::controller(MyAccountController::class)->group(function () {

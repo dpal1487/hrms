@@ -49,8 +49,8 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            const first_name = this.employees.data[index].user.first_name;
-            const last_name = this.employees.data[index].user.last_name;
+            const first_name = this.employees.data[index].first_name;
+            const last_name = this.employees.data[index].last_name;
             Swal.fire({
                 title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
                 text: "You won't be able to revert this!",
@@ -97,10 +97,6 @@ export default defineComponent({
             );
         },
     },
-    setup() {
-
-    },
-
 });
 </script>
 <template>
@@ -128,11 +124,7 @@ export default defineComponent({
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search " />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <!-- {{ $page.props.ziggy.status }} -->
-                        <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                    </div>
+
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
@@ -167,23 +159,23 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(employees, index) in employees.data" :key="index">
+                            <tr v-for="(employee, index) in employees.data" :key="index">
                                 <td>
-                                    <Link :href="'/employee/' + employees.id"
+                                    <Link :href="'/employee/' + employee.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        employees-filter="employees_name">{{ employees.user?.first_name }} {{
-                                            employees.user?.last_name }}</Link>
+                                        employee-filter="employee_name">{{ employee.first_name }} {{
+                                            employee.last_name }}</Link>
                                 </td>
-                                <td>{{ employees.code }}</td>
-                                <td>{{ employees.number }}</td>
-                                <td>{{ employees.salary }}</td>
+                                <td>{{ employee.code }}</td>
+                                <td>{{ employee.number }}</td>
+                                <td>{{ employee.salary }}</td>
 
-                                <td>{{ employees.created_at }}</td>
+                                <td>{{ employee.created_at }}</td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${employees.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${employee.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -198,23 +190,23 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${employees.id}`">
+                                            :aria-labelled:by="`dropdown-${employee.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employee/${employees.id}/edit`">Edit
+                                                    :href="`/employee/${employee.id}/edit`">Edit
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employee/${employees.id}`">View
+                                                    :href="`/employee/${employee.id}`">View
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    employees.id, index
+                                                    employee.id, index
                                                 )
                                                     " class="btn btn-sm dropdown-item">
                                                     Delete

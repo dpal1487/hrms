@@ -224,6 +224,7 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
+                
                 <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="suppliers?.meta">
                     <Pagination :links="suppliers?.meta.links" />
                 </div>

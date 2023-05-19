@@ -54,11 +54,11 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.form.$invalid) {
                 axios.post(route('employee.email.update', this.form.id), this.form).then((response) => {
-                    if (response.data.success) {
-                        toast(response.data.message)
+                    if (response.data.success == true) {
+                        toast.success(response.data.message)
                         return;
                     } else {
-                        toast(response.data.message)
+                        toast.error(response.data.message)
                     }
                 }).finally(() => {
                     this.isEdit = false;

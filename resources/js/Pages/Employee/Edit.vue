@@ -92,11 +92,11 @@ export default defineComponent({
             id: route().params.id,
             form: this.$inertia.form({
                 id: this.employee?.data?.id || '',
-                image: this.employee?.data?.user?.image?.medium_path || '',
-                image_id: '',
-                first_name: this.employee?.data?.user?.first_name || '',
-                last_name: this.employee?.data?.user?.last_name || '',
-                email: this.employee?.data?.user?.email || '',
+                image: this.employee?.data?.image?.medium_path || '',
+                image_id: this.employee?.data?.image_id || '',
+                first_name: this.employee?.data?.first_name || '',
+                last_name: this.employee?.data?.last_name || '',
+                email: this.employee?.data?.email || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
                 number: this.employee?.data?.number || '',
                 qualification: this.employee?.data?.qualification || '',
@@ -196,6 +196,7 @@ export default defineComponent({
     <Head title="Employee Edit" />
     <AppLayout>
         <div class="app-content flex-column-fluid ">
+            {{ employee }}
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <Header :user="user.data" :employee="employee.data" />
@@ -221,7 +222,7 @@ export default defineComponent({
                                         <div class="row g-5 col-md-12">
                                             <div class="fv-row col-6">
                                                 <input type="hidden" v-model="form.image_id" />
-                                                <ImageInput :image="this.employee?.data?.user?.image?.medium_path"
+                                                <ImageInput :image="this.employee?.data?.image?.medium_path"
                                                     :onchange="onFileChange" :remove="removeSelectedAvatar"
                                                     :selectedImage="url" :errors="v$.form.image.$errors"
                                                     :isUploading="isUploading" />

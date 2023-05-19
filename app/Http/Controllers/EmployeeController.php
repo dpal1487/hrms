@@ -20,21 +20,22 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $employees = Employee::where('company_id', $this->companyId());
+
+        // return $employees;
+
+        // return EmployeeResources::collection($employees);
+
         // return $this->companyId();
         // return $employees;
         if (!empty($request->q)) {
-            $employees = $employees
-                ->whereHas('user', function ($q) use ($request) {
-                    $q->where('first_name', 'like', "%$request->q%")->orWhere('last_name', 'like', "%$request->q%");
-                })
+            $employees =
+                $employees->where('first_name', 'like', "%$request->q%")
+                ->orWhere('last_name', 'like', "%$request->q%")
                 ->orWhere('code', 'like', "%$request->q%")
-                ->orWhere('number', 'like', "%$request->q%");
+                ->orWhere('number', 'like', "%$request->q%")
+                ->orWhere('salary', 'like', "%$request->q%");
         }
-        if (!empty($request->status) || $request->status != '') {
-            $employees = $employees->whereHas('user', function ($q) use ($request) {
-                $q->where('active_status', '=', $request->status);
-            });
-        }
+
         return Inertia::render('Employee/Index', [
             'employees' => EmployeeResources::collection($employees->paginate(10)->append($request->all())),
         ]);
@@ -68,44 +69,43 @@ class EmployeeController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
-        // $employee = Employee::where('company_id', $this->companyId())->first();
-        // return $this->companyId();
-        // if ($employee) {
-            $user = User::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'image_id' => $request->image_id,
-            ]);
 
-            if (
-                $employee = Employee::create([
-                    'code' => 'ARS' . date('Y') . $user->id,
-                    'date_of_joining' => $request->date_of_joining,
-                    'number' => $request->number,
-                    'qualification' => $request->qualification,
-                    'emergency_number' => $request->emergency_number,
-                    'pan_number' => $request->pan_number,
-                    'father_name' => $request->father_name,
-                    'formalities' => $request->formalities,
-                    'salary' => $request->salary,
-                    'offer_acceptance' => $request->offer_acceptance,
-                    'probation_period' => $request->probation_period,
-                    'date_of_confirmation' => $request->date_of_confirmation,
-                    'notice_period' => $request->notice_period,
-                    'last_working_day' => $request->last_working_day,
-                    'full_final' => $request->full_final,
-                    'department_id' => $request->department_id,
-                    'user_id' => $user->id,
-                    'company_id' => $this->companyId(),
-                ])
-            ) {
-                return response()->json([
-                    'success' => true,
-                    'message' => "Employee Created successfully"
-                ]);
-            }
-        // }
+        $user = User::create([
+
+
+            'image_id' => $request->image_id,
+        ]);
+
+        $employee =  Employee::create([
+
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'code' => 'ARS' . date('Y') . $user->id,
+            'date_of_joining' => $request->date_of_joining,
+            'number' => $request->number,
+            'qualification' => $request->qualification,
+            'emergency_number' => $request->emergency_number,
+            'pan_number' => $request->pan_number,
+            'father_name' => $request->father_name,
+            'formalities' => $request->formalities,
+            'salary' => $request->salary,
+            'offer_acceptance' => $request->offer_acceptance,
+            'probation_period' => $request->probation_period,
+            'date_of_confirmation' => $request->date_of_confirmation,
+            'notice_period' => $request->notice_period,
+            'last_working_day' => $request->last_working_day,
+            'full_final' => $request->full_final,
+            'department_id' => $request->department_id,
+            'user_id' => $user->id,
+            'company_id' => $this->companyId(),
+        ]);
+        if ($employee) {
+            return response()->json([
+                'success' => true,
+                'message' => "Employee Created successfully"
+            ]);
+        }
         return response()->json([
             'success' => false,
             'message' => "Employee Not Created"
@@ -115,8 +115,6 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::where('company_id', $this->companyId())->find($id);
-
-        return new EmployeeResources($employee);
 
         if ($employee) {
             return Inertia::render('Employee/Form', [
@@ -150,22 +148,13 @@ class EmployeeController extends Controller
         }
         $employee = Employee::where('company_id', $this->companyId())->find($id);
 
+        
         if ($employee) {
-            if ($request->image_id) {
-                User::where('id', $employee->user_id)->update([
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'email' => $request->email,
-                    'image_id' => $request->image_id,
-                ]);
-            } else {
-                User::where('id', $employee->user_id)->update([
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'email' => $request->email,
-                ]);
-            }
+
             $employee = Employee::where(['id' => $employee->id])->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
                 'date_of_joining' => $request->date_of_joining,
                 'number' => $request->number,
                 'qualification' => $request->qualification,
@@ -179,6 +168,8 @@ class EmployeeController extends Controller
                 'date_of_confirmation' => $request->date_of_confirmation,
                 'department_id' => $request->department_id,
                 'user_id' => $employee->user->id,
+                'image_id' => $request->image_id,
+
             ]);
             if ($employee) {
                 return response()->json([
