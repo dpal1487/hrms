@@ -24,7 +24,7 @@ class DecisionMakerController extends Controller
         }
 
         return Inertia::render('DecisionMakers/Index', [
-            'decisionmakers' => DecisionMakerResources::collection($decisionmakers->paginate(10)),
+            'decisionmakers' => DecisionMakerResources::collection($decisionmakers->paginate(10)->appends($request->all())),
         ]);
     }
 
@@ -107,6 +107,15 @@ class DecisionMakerController extends Controller
     {
         $decisionmaker = DecisionMaker::find($id);
         if ($decisionmaker->delete()) {
+            return response()->json(['success' => true, 'message' => 'Decision Maker has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+    public function selectDelete(Request $request)
+    {
+        $decisionmaker = DecisionMaker::whereIn('id', $request->ids)->delete();
+
+        if ($decisionmaker) {
             return response()->json(['success' => true, 'message' => 'Decision Maker has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);

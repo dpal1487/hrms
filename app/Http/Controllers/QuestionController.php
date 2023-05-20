@@ -156,4 +156,14 @@ class QuestionController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
+
+    public function selectDelete(Request $request)
+    {
+        $question = Question::whereIn('id', $request->ids)->delete();
+
+        if ($question) {
+            return response()->json(['success' => true, 'message' => 'Questions has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
 }

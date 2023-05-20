@@ -37,7 +37,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
 
-                <Header :supplier="supplier?.data" />
+                <Header :supplier="supplier?.data" :address="address?.data"/>
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -60,12 +60,12 @@ export default defineComponent({
                         <div class="row mb-7">
                             <!--begin::Label-->
 
-                            <label class="col-lg-4 fw-semibold text-muted">Address Line 1</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Address Line 1</label>
                             <!--end::Label-->
                             <!--begin::Col-->
 
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.address?.data?.address_line_1
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.address_line_1
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -74,11 +74,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Address Line 2</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Address Line 2</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.address?.data?.address_line_2
+                            <div class="col-lg-6 fv-row">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.address_line_2
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -87,11 +87,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">City</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">City</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.city
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.city
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -100,11 +100,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">State</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">State</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.state
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.state
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -113,12 +113,12 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Country
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Country
                             </label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-700">{{
                                     this.address?.data?.country?.name
                                 }}</span>
                             </div>
@@ -128,12 +128,12 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Pincode
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Pincode
                             </label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.address?.data?.pincode
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.pincode
                                 }}</span>
                             </div>
                             <!--end::Col-->

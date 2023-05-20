@@ -30,6 +30,26 @@ class PlanController extends Controller
             'plans' => PlanResource::collection($plans->paginate(10)->appends($request->all())),
         ]);
     }
+    public function statusUpdate(Request  $request)
+    {
+
+        $plan  = Plan::where('id', $request->id)->update([
+            'status' => $request->status
+        ]);
+        if ($plan) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status Update successfully',
+            ]);
+        } else {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+            ]);
+        }
+    }
 
     public function create()
     {
@@ -123,6 +143,15 @@ class PlanController extends Controller
     public function destroy(Plan $plan)
     {
         if ($plan->delete()) {
+            return response()->json(['success' => true, 'message' => 'Plan has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+    public function selectDelete(Request $request)
+    {
+        $plan = Plan::whereIn('id', $request->ids)->delete();
+
+        if ($plan) {
             return response()->json(['success' => true, 'message' => 'Plan has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);

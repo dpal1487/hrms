@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ClientResource;
+use Inertia\Inertia;
 use App\Models\Client;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,22 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $clients = New Client();
+
+        if (!empty($request->q)) {
+            $clients = $clients
+                ->where('name', 'like', "%$request->q%");
+        }
+        if (!empty($request->status) || $request->status != '') {
+            $clients = $clients->where('status', '=', $request->status);
+        }
+
+        // return QuestionResources::collection($clients->paginate(10));
+        return Inertia::render('Client/Index', [
+            'clients' => ClientResource::collection($clients->paginate(10)->appends($request->all())),
+        ]);
     }
 
     /**

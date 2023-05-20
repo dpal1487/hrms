@@ -25,6 +25,27 @@ class ConversionRateController extends Controller
             'conversionrates' => ConversionRateResources::collection($conversionrates->paginate(10)->appends($request->all())),
         ]);
     }
+    public function statusUpdate(Request  $request)
+    {
+
+        $conversionrate  = ConversionRate::where('id', $request->id)->update([
+            'status' => $request->status
+        ]);
+        if ($conversionrate) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status Update successfully',
+            ]);
+        } else {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+            ]);
+        }
+    }
+
 
     public function create()
     {
@@ -116,6 +137,15 @@ class ConversionRateController extends Controller
         $conversionrate = ConversionRate::find($id);
         if ($conversionrate->delete()) {
             return response()->json(['success' => true, 'message' => 'Conversion Rate has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+    public function selectDelete(Request $request)
+    {
+        $conversionrate = ConversionRate::whereIn('id', $request->ids)->delete();
+
+        if ($conversionrate) {
+            return response()->json(['success' => true, 'message' => 'ConversionRate has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

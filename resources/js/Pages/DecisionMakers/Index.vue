@@ -54,7 +54,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/decision-makers/" + id )
+                        .delete("/decision-maker/" + id)
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
@@ -84,7 +84,7 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/decision-makers",
+                "/decision-maker",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
@@ -136,7 +136,7 @@ export default defineComponent({
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
 
                             <!--begin::Add customer-->
-                            <Link href="/decision-makers/create" class="btn btn-primary">
+                            <Link href="/decision-maker/create" class="btn btn-primary">
                             Add Decision Makers
                             </Link>
                             <!--end::Add customer-->
@@ -165,12 +165,7 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(decisionmakers, index) in decisionmakers.data" :key="index">
-                                <td>
-
-                                    <Link :href="'/decision-makers/' + decisionmakers.id"
-                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        decisionmakers-filter="decisionmakers_name">{{ decisionmakers.data }} {{
-                                            decisionmakers.industry?.name }}</Link>
+                                <td class="text-gray-800 fs-5 fw-bold">{{ decisionmakers.industry?.name }}
                                 </td>
                                 <td>{{ decisionmakers?.title }}</td>
                                 <td v-if="(decisionmakers?.order_by == 1)">Ascending</td>
@@ -198,7 +193,7 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/decision-makers/${decisionmakers.id}/edit`">
+                                                    :href="`/decision-maker/${decisionmakers.id}/edit`">
                                                 Edit
                                                 </Link>
                                             </li>

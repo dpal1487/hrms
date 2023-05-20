@@ -26,13 +26,7 @@ export default defineComponent({
                 "Created At",
                 "Action",
             ],
-            isLoading: false,
-            statusOptions: [
-                { value: "all", label: "All" },
-                { value: 1, label: "Active" },
-                { value: 0, label: "Inactive" }
-            ],
-            filteredStatus: [],
+            checkbox: [],
         };
     },
     components: {
@@ -47,7 +41,6 @@ export default defineComponent({
     methods: {
 
         confirmDelete(id, index) {
-            this.isLoading = true;
 
             const first_name = this.employees.data[index].first_name;
             const last_name = this.employees.data[index].last_name;
@@ -96,6 +89,46 @@ export default defineComponent({
                 { q: this.q, status: this.s },
             );
         },
+        filterFunction(value, index, arr) {
+            if (value === this.employees.data[index].id) {
+                // Removes the value from the original array
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        },
+        selectEmployee(index) {
+            const x = this.checkbox.filter(this.filterFunction);
+            this.checkbox.push(this.employees.data[index].id);
+        },
+        selectAllEmployees() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            const list = [];
+            checkboxes.forEach((cb) => { cb.checked = true; });
+            this.employees.data.map(function (value, key) {
+                list.push(value.id)
+            });
+            this.checkbox = list;
+        },
+
+        deleteEmployee(index) {
+
+            axios
+                .post("/employees/delete", { ids: this.checkbox })
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message);
+                        this.employees.data.splice(index, this.checkbox.length);
+
+                        return;
+                    }
+                    else {
+                        toast.error(response.data.message);
+                    }
+                }).finally({
+                    checkbox: false,
+                })
+        }
     },
 });
 </script>
@@ -137,6 +170,8 @@ export default defineComponent({
                         Add Employee
                         </Link>
                         <!--end::Add industries-->
+                        <button v-if="checkbox.length > 0" @click="deleteEmployee()" class="btn btn-danger">Delete
+                            Selected</button>
                     </div>
                     <!--end::Card toolbar-->
                 </form>
@@ -150,6 +185,11 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 w-100 text-uppercase">
+                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllEmployees()">
+                                    </div>
+                                </th>
                                 <th class="min-w-120px" v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -160,6 +200,11 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(employee, index) in employees.data" :key="index">
+                                <td>
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @input="selectEmployee(index)">
+                                    </div>
+                                </td>
                                 <td>
                                     <Link :href="'/employee/' + employee.id"
                                         class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"

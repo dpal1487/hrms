@@ -17,6 +17,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SupplierController;
@@ -38,21 +39,7 @@ use App\Http\Controllers\SettingController;
 
 | Routes 
 
-            EmployeeController = 67
-            OverViewController = 84
-            ImageController = 88
-            AddressController = 93
-            SecurityController = 102
-            CompanyController = 110 
-            AccountController =  126
-            EmailController = 133 
-            IndustryController = 140
-            QuestionController = 150
-            AnswerController  = 160
-            DecisionMakerController = 170
-            InvoiceController = 180
-            ConversionRateController = 202 
-            Plan = 
+            
 
 */
 
@@ -86,6 +73,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/attendance', 'attendance')->name('employee.attendance');
             Route::delete('{id}', 'destroy')->name('employee.delete');
         });
+        Route::post('employees/delete', 'selectDelete')->name('employees.delete');
     });
     Route::controller(MyAccountController::class)->group(function () {
         Route::group(['prefix' => 'account'], function () {
@@ -103,7 +91,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::controller(ImageController::class)->group(function () {
         Route::get('images', 'show')->name('images');
         Route::post('/employee/image-upload', 'empImage')->name('employee.image-upload');
-        Route::post('/industries/image-upload', 'indImage')->name('industries.image-upload');
+        Route::post('/industry/image-upload', 'indImage')->name('industry.image-upload');
     });
     Route::controller(AddressController::class)->group(function () {
         Route::group(['prefix' => 'address'], function () {
@@ -177,14 +165,29 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('invoice/{id}/conversion-value', 'conversionValue')->name('invoice.conversion-value');
     });
 
-    Route::resource('industrie', IndustryController::class);
+    Route::resource('industry', IndustryController::class);
+    Route::post('industry/status', [IndustryController::class, 'statusUpdate'])->name('industry.status');
+    Route::post('industries/delete', [IndustryController::class, 'selectDelete'])->name('industries.delete');
+
     Route::resource('decision-maker', DecisionMakerController::class);
+    Route::post('decision-makers/delete', [DecisionMakerController::class, 'selectDelete'])->name('decision-makers.delete');
+
     Route::resource('question', QuestionController::class);
+    Route::post('questions/delete', [QuestionController::class, 'selectDelete'])->name('questions.delete');
+
     Route::resource('answer', AnswerController::class);
+    Route::post('answers/delete', [AnswerController::class, 'selectDelete'])->name('answers.delete');
+
     Route::resource('plan', PlanController::class);
+    Route::post('plans/status', [PlanController::class, 'statusUpdate'])->name('plans.status');
+
     Route::resource('conversion-rate', ConversionRateController::class);
+    Route::post('conversion-rate/status', [ConversionRateController::class, 'statusUpdate'])->name('conversion-rate.status');
+    Route::post('conversion-rates/delete', [ConversionRateController::class, 'selectDelete'])->name('conversion-rates.delete');
 
     Route::resource('supplier', SupplierController::class);
+    Route::post('suppliers/delete', [SupplierController::class, 'selectDelete'])->name('suppliers.delete');
+
 
     Route::controller(SupplierController::class)->group(function () {
         Route::get('supplier/{id}/overview/edit', 'supplierEdit')->name('supplier.overview.edit');

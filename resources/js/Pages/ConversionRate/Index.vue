@@ -23,7 +23,8 @@ export default defineComponent({
                 "Status",
                 "Action",
             ],
-            isLoading: false,
+            checkbox: [],
+
         };
     },
     components: {
@@ -87,11 +88,63 @@ export default defineComponent({
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
-                        this.answers = data.props.answers;
+                        this.conversionrates = data.props.conversionrates;
                     },
                 }
             );
         },
+        changeStatus(e, id) {
+            this.isLoading = true;
+            axios
+                .post("/conversion-rate/status", { id: id, status: e })
+                .then((response) => {
+                    if (response.data.success) {
+                        toast.success(response.data.message);
+                        return;
+                    }
+                    toast.error(response.data.message);
+                })
+                .finally(() => (this.isLoading = false));
+        },
+        filterFunction(value, index, arr) {
+            if (value === this.conversionrates.data[index].id) {
+                // Removes the value from the original array
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        },
+        selectConverRate(index) {
+            const x = this.checkbox.filter(this.filterFunction);
+            this.checkbox.push(this.conversionrates.data[index].id);
+        },
+        selectAllConverRates() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            const list = [];
+            checkboxes.forEach((cb) => { cb.checked = true; });
+            this.conversionrates.data.map(function (value, key) {
+                list.push(value.id)
+            });
+            this.checkbox = list;
+        },
+
+        deleteConverRate(index) {
+
+            axios
+                .post("/decision-makers/delete", { ids: this.checkbox })
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message);
+                        this.conversionrates.data.splice(index, this.checkbox.length);
+                        return;
+                    }
+                    else {
+                        toast.error(response.data.message);
+                    }
+                }).finally({
+                    checkbox: false,
+                })
+        }
     },
 });
 </script>
@@ -135,11 +188,13 @@ export default defineComponent({
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Toolbar-->
 
-                        <!--begin::Add customer-->
+                        <!--begin::Add Conversion Rate-->
                         <Link href="/conversion-rate/create" class="btn btn-primary">
                         Add Conversion Rate
                         </Link>
-                        <!--end::Add customer-->
+                        <!--end::Add Conversion Rate-->
+                        <button v-if="checkbox.length > 0" @click="deleteConverRate()" class="btn btn-danger">Delete
+                            Selected</button>
                         <!--end::Toolbar-->
                     </div>
                     <!--end::Card toolbar-->
@@ -154,6 +209,11 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllConverRates()">
+                                    </div>
+                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -165,13 +225,23 @@ export default defineComponent({
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(conversionrate, index) in conversionrates.data" :key="index">
                                 <td>
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @input="selectConverRate(index)">
+                                    </div>
+                                </td>
+                                <td>
                                     {{ conversionrate?.currency_name }}
                                 </td>
                                 <td>
                                     {{ conversionrate?.currency_value }}
                                 </td>
-                                <td v-if="(conversionrate.status == 1)">Active</td>
-                                <td v-else="( conversionrate.status == 0 )">Inactive</td>
+                                <td>
+                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox"
+                                            @input="changeStatus($event.target.checked, conversionrate.id)"
+                                            :checked="conversionrate.status == 1 ? true : false" />
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"

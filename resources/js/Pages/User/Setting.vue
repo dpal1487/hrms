@@ -49,9 +49,9 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" :address="address.data" />
+                <Header :user="user?.data" :address="address?.data" />
                 <!--begin::Basic info-->
-                <UserInfo :user="user.data" :address="address.data" />
+                <UserInfo :user="user?.data" :address="address?.data" />
                 <!--end::Basic info-->
                 <!--begin::Sign-in Method-->
                 <div class="card mb-5 mb-xl-10">

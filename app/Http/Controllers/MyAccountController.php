@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Inertia\Inertia;
 use App\Models\Country;
-use Inertia\Controller;
+use Inertia\Inertia;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\EmployeeResources;
 use App\Http\Resources\UserResource;
+use App\Http\Controllers\Controller;
+
 
 class MyAccountController extends Controller
 {
@@ -47,12 +48,9 @@ class MyAccountController extends Controller
                 'address' => new AddressResource($user->address),
             ]);
         } else {
-            return Inertia::render(
-                'User/Overview',
-                [
-                    'user' => new UserResource($user),
-                ]
-            );
+            return Inertia::render('User/Setting', [
+                'user' => new UserResource($user),
+            ]);
         }
         return redirect()->back();
     }
@@ -111,7 +109,7 @@ class MyAccountController extends Controller
 
             ]);
         } else {
-            return Inertia::render('Employee/UserAddress', [
+            return Inertia::render('User/UserAddress', [
                 'countries' => $countries,
                 'user' => new UserResource($user),
             ]);

@@ -16,12 +16,14 @@ export default defineComponent({
         return {
             q: "",
             s: "",
+            selectAll: false,
             tbody: [
                 "Industry Name",
                 "Industry Image",
                 "Status",
                 "Action",
             ],
+            checkbox: [],
         };
     },
     components: {
@@ -49,7 +51,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/industries/" + id )
+                        .delete("/industry/" + id)
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
@@ -81,7 +83,7 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/industrie",
+                "/industry",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
@@ -90,15 +92,68 @@ export default defineComponent({
                 }
             );
         },
+        changeStatus(e, id) {
+            this.isLoading = true;
+            axios
+                .post("/industry/status", { id: id, status: e })
+                .then((response) => {
+                    if (response.data.success) {
+                        toast.success(response.data.message);
+                        return;
+                    }
+                    toast.error(response.data.message);
+                })
+                .finally(() => (this.isLoading = false));
+        },
+        filterFunction(value, index, arr) {
+            if (value === this.industries.data[index].id) {
+                // Removes the value from the original array
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        },
+        selectIndustry(index) {
+            const x = this.checkbox.filter(this.filterFunction);
+            this.checkbox.push(this.industries.data[index].id);
+        },
+        selectAllIndustries() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            const list = [];
+            checkboxes.forEach((cb) => { cb.checked = true; });
+            this.industries.data.map(function (value, key) {
+                list.push(value.id)
+            });
+            this.checkbox = list;
+        },
+
+        deleteIndustry() {
+            axios
+                .post("/industries/delete", { ids: this.checkbox })
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message);
+                        this.industries.data.splice(index, 1);
+                        return;
+                    }
+                    else {
+                        toast.error(response.data.message);
+                    }
+                }).finally({
+                    checkbox: false,
+                })
+
+        }
+
     },
 });
 </script>
 <template>
     <app-layout>
+        <!-- {{ checkbox }} -->
 
         <Head title="Industry" />
         <div class="card card-flush">
-            <Alert v-if="$page.props.ziggy.flash.message" />
             <div>
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
                     <!--begin::Card title-->
@@ -132,10 +187,12 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add industries-->
-                        <Link href="/industrie/create" class="btn btn-primary">
+                        <Link href="/industry/create" class="btn btn-primary">
                         Add Industry
                         </Link>
                         <!--end::Add industries-->
+                        <button v-if="checkbox.length > 0" @click="deleteIndustry()" class="btn btn-danger">Delete
+                            Selected</button>
                     </div>
                     <!--end::Card toolbar-->
                 </form>
@@ -149,6 +206,11 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllIndustries()">
+                                    </div>
+                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -159,6 +221,11 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(industry, index) in industries.data" :key="index">
+                                <td>
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @input="selectIndustry(index)">
+                                    </div>
+                                </td>
 
                                 <td>{{ industry.name }}</td>
                                 <td v-if="industry.image?.medium_path">
@@ -172,8 +239,11 @@ export default defineComponent({
                                     </div>
                                 </td>
                                 <td>
-                                    <p v-if="(industry.status == 1)">Active </p>
-                                    <p v-if="(industry.status == 0)">Inactive </p>
+                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox"
+                                            @input="changeStatus($event.target.checked, industry.id)"
+                                            :checked="industry.status == 1 ? true : false" />
+                                    </div>
                                 </td>
 
                                 <td>
@@ -198,7 +268,7 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/industrie/${industry.id}/edit`">Edit
+                                                    :href="`/industry/${industry.id}/edit`">Edit
                                                 </Link>
                                             </li>
 

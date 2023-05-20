@@ -336,6 +336,15 @@ class EmployeeController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
+    public function selectDelete(Request $request)
+    {
+        $employee = Employee::whereIn('id', $request->ids)->delete();
+
+        if ($employee) {
+            return response()->json(['success' => true, 'message' => 'Employee has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
 
     public function deactivate($id)
     {

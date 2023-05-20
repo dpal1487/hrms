@@ -25,13 +25,7 @@ export default defineComponent({
                 "Description",
                 "Action",
             ],
-            isLoading: false,
-            statusOptions: [
-                { value: "all", label: "All" },
-                { value: 1, label: "Active" },
-                { value: 0, label: "Inactive" }
-            ],
-            filteredStatus: [],
+            checkbox: [],
         };
     },
     components: {
@@ -44,9 +38,7 @@ export default defineComponent({
         Alert
     },
     methods: {
-
         confirmDelete(id, index) {
-            this.isLoading = true;
             const supplier_name = this.suppliers.data[index].supplier_name;
             Swal.fire({
                 title: "Are you sure you want to delete " + supplier_name + " ?",
@@ -67,7 +59,6 @@ export default defineComponent({
                                 return;
                             }
                         })
-
                         .catch((error) => {
                             if (error.response.status == 400) {
                                 toastr.error(error.response.data.message);
@@ -93,10 +84,47 @@ export default defineComponent({
                 { q: this.q, status: this.s },
             );
         },
-    },
-    setup() {
+        filterFunction(value, index, arr) {
+            if (value === this.suppliers.data[index].id) {
+                // Removes the value from the original array
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        },
+        selectSupplier(index) {
+            const x = this.checkbox.filter(this.filterFunction);
+            this.checkbox.push(this.suppliers.data[index].id);
+        },
+        selectAllSuppliers() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            const list = [];
+            checkboxes.forEach((cb) => { cb.checked = true; });
+            this.suppliers.data.map(function (value, key) {
+                list.push(value.id)
+            });
+            this.checkbox = list;
+        },
 
-    },
+        deleteSupplier(index) {
+
+            axios
+                .post("/suppliers/delete", { ids: this.checkbox })
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message);
+                        this.suppliers.data.splice(index, this.checkbox.length);
+
+                        return;
+                    }
+                    else {
+                        toast.error(response.data.message);
+                    }
+                }).finally({
+                    checkbox: false,
+                })
+        }
+    }
 
 });
 </script>
@@ -136,6 +164,8 @@ export default defineComponent({
                         Add Supplier
                         </Link>
                         <!--end::Add industries-->
+                        <button v-if="checkbox.length > 0" @click="deleteSupplier()" class="btn btn-danger">Delete
+                            Selected</button>
                     </div>
                     <!--end::Card toolbar-->
                 </form>
@@ -149,6 +179,11 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllSuppliers()">
+                                    </div>
+                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -159,6 +194,11 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(supplier, index) in suppliers?.data" :key="index">
+                                <td>
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @input="selectSupplier(index)">
+                                    </div>
+                                </td>
 
                                 <td>
 

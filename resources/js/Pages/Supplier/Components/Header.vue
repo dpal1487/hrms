@@ -3,7 +3,7 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 export default defineComponent({
-    props: ['supplier'],
+    props: ['supplier' , 'address'],
     components: {
         Link,
     },
@@ -47,6 +47,7 @@ export default defineComponent({
                             </div>
                             <!--end::Name-->
                             <!--begin::Info-->
+                            
                             <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
                                 <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
@@ -62,7 +63,7 @@ export default defineComponent({
                                             <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon--><span> {{ supplier?.display_name }} </span></a>
+                                    <!--end::Svg Icon--><span> {{ supplier?.supplier_name }} </span></a>
 
                                 <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
@@ -78,7 +79,7 @@ export default defineComponent({
                                         </svg>
 
                                     </span>
-                                    <!--end::Svg Icon--><span>{{ supplier?.display_name }} </span> </a>
+                                    <!--end::Svg Icon--><span>{{ address?.city }} {{ address?.state }} {{ address?.country?.name }}</span> </a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">
@@ -92,7 +93,7 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->{{ supplier?.display_name }} </a>
+                                    <!--end::Svg Icon-->{{ supplier?.skype_profile }} </a>
                             </div>
                             <!--end::Info-->
                         </div>

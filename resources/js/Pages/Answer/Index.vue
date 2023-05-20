@@ -23,7 +23,8 @@ export default defineComponent({
                 "Order By",
                 "Action",
             ],
-            isLoading: false,
+            checkbox: [],
+
         };
     },
     components: {
@@ -38,8 +39,6 @@ export default defineComponent({
     methods: {
 
         confirmDelete(id, index) {
-            this.isLoading = true;
-
             const name = this.answers.data[index].question?.question_key;
 
             Swal.fire({
@@ -92,6 +91,45 @@ export default defineComponent({
                 }
             );
         },
+        filterFunction(value, index, arr) {
+            if (value === this.answers.data[index].id) {
+                // Removes the value from the original array
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        },
+        selectAnswer(index) {
+            const x = this.checkbox.filter(this.filterFunction);
+            this.checkbox.push(this.answers.data[index].id);
+        },
+        selectAllAnswers() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            const list = [];
+            checkboxes.forEach((cb) => { cb.checked = true; });
+            this.answers.data.map(function (value, key) {
+                list.push(value.id)
+            });
+            this.checkbox = list;
+        },
+
+        deleteAnswer(index) {
+
+            axios
+                .post("/answers/delete", { ids: this.checkbox })
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message);
+                        this.answers.data.splice(index, this.checkbox.length);
+                        return;
+                    }
+                    else {
+                        toast.error(response.data.message);
+                    }
+                }).finally({
+                    checkbox: false,
+                })
+        }
     },
 });
 </script>
@@ -100,8 +138,6 @@ export default defineComponent({
 
         <Head title="Answers" />
         <div class="card card-flush">
-            <Alert v-if="$page.props.ziggy.flash.message" />
-
             <!--begin::Actions-->
             <div>
                 <div class="card-header border-0 pt-6">
@@ -133,13 +169,15 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar">
                         <!--begin::Toolbar-->
-                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                        <div class="d-flex justify-content-end gap-5" data-kt-customer-table-toolbar="base">
 
                             <!--begin::Add customer-->
                             <Link href="/answer/create" class="btn btn-primary">
                             Add Answer
                             </Link>
                             <!--end::Add customer-->
+                            <button v-if="checkbox.length > 0" @click="deleteAnswer()" class="btn btn-danger">Delete
+                                Selected</button>
                         </div>
                         <!--end::Toolbar-->
                     </div>
@@ -155,6 +193,11 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllAnswers()">
+                                    </div>
+                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -164,21 +207,23 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(answers, index) in answers.data" :key="index">
+                            <tr v-for="(answer, index) in answers.data" :key="index">
                                 <td>
-                                    <Link :href="'/answers/' + answers.id"
-                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        answers-filter="answers_name">{{ answers.data }} {{
-                                            answers.question?.question_key }}</Link>
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @input="selectAnswer(index)">
+                                    </div>
                                 </td>
-                                <td>{{ answers.answer }}</td>
-                                <td v-if="(answers.order_by == 1)">Ascending</td>
-                                <td v-else="( answers.order_by == 0 )">Descending</td>
+                                <td class="text-gray-800 fs-5 fw-bold mb-1">
+                                    {{ answer.question?.question_key }}
+                                </td>
+                                <td>{{ answer.answer }}</td>
+                                <td v-if="(answer.order_by == 1)">Ascending</td>
+                                <td v-else="( answer.order_by == 0 )">Descending</td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${answers.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${answer.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -197,12 +242,12 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/answer/${answers.id}/edit`">Edit
+                                                    :href="`/answer/${answer.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
-                                                <button @click="confirmDelete(answers.id, index)"
+                                                <button @click="confirmDelete(answer.id, index)"
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>

@@ -194,7 +194,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Account Number</label>
+                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Account Number</label>
                                     <!--end::Label-->
                                     <div class="col-lg-8">
                                         <jet-input id="account_number" type="text" v-model="v$.form.account_number.$model"
@@ -235,7 +235,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">SWIFT Code</label>
+                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">SWIFT Code</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -253,7 +253,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">IFSC Code</label>
+                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">IFSC Code</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -271,7 +271,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Short Code</label>
+                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Short Code</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -289,7 +289,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Pan Card</label>
+                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Pan Card</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">

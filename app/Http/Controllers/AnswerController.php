@@ -22,7 +22,7 @@ class AnswerController extends Controller
                 ->orWhere('answer', 'like', "%$request->q%");
         }
         return Inertia::render('Answer/Index', [
-            'answers' => AnswerResources::collection($answers->paginate(10)),
+            'answers' => AnswerResources::collection($answers->paginate(10)->appends($request->all())),
         ]);
     }
 
@@ -94,6 +94,15 @@ class AnswerController extends Controller
     {
 
         if ($answer->delete()) {
+            return response()->json(['success' => true, 'message' => 'Answer has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+    public function selectDelete(Request $request)
+    {
+        $answer = Answer::whereIn('id', $request->ids)->delete();
+
+        if ($answer) {
             return response()->json(['success' => true, 'message' => 'Answer has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);

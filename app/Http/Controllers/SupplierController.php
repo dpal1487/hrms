@@ -83,10 +83,17 @@ class SupplierController extends Controller
     public function show(Supplier $supplier)
     {
         $supplier = Supplier::where(['company_id' => $this->companyId(), 'id' => $supplier->id])->first();
-        if ($supplier) {
+        if ($supplier->address) {
             return Inertia::render('Supplier/Overview', [
-                'supplier' => new SupplierResource($supplier)
+                'supplier' => new SupplierResource($supplier),
+                'address' => new AddressResource($supplier->address),
             ]);
+        } else {
+            if ($supplier) {
+                return Inertia::render('Supplier/Overview', [
+                    'supplier' => new SupplierResource($supplier),
+                ]);
+            }
         }
     }
     public function supplierEdit($id)
@@ -94,7 +101,14 @@ class SupplierController extends Controller
         $company = Company::get();
 
         $supplier = Supplier::where('company_id', $this->companyId())->find($id);
-        if ($supplier) {
+        if ($supplier->address) {
+            return Inertia::render('Supplier/Edit', [
+                'supplier' => new SupplierResource($supplier),
+                'address' => $this->supplierAddress($id),
+                'company' => $company,
+
+            ]);
+        } else {
             return Inertia::render('Supplier/Edit', [
                 'supplier' => new SupplierResource($supplier),
                 'company' => $company,
@@ -141,6 +155,8 @@ class SupplierController extends Controller
         if ($supplier->account) {
             return Inertia::render('Supplier/Account', [
                 'account' => new AccountResource($supplier->account),
+                'address' => $this->supplierAddress($id),
+
                 'supplier' => $this->supplierHeader($id),
 
             ]);
@@ -232,5 +248,14 @@ class SupplierController extends Controller
             'success' => false,
             'message' => 'Something Went Wrong '
         ]);
+    }
+
+    public function selectDelete(Request $request)
+    {
+        $supplier = Supplier::whereIn('id', $request->ids)->delete();
+        if ($supplier) {
+            return response()->json(['success' => true, 'message' => 'Suppliers has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 }

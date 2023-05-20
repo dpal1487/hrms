@@ -95,6 +95,19 @@ export default defineComponent({
                 }
             );
         },
+        changeStatus(e, id) {
+            this.isLoading = true;
+            axios
+                .post("/plan/status", { id: id, status: e })
+                .then((response) => {
+                    if (response.data.success) {
+                        toast.success(response.data.message);
+                        return;
+                    }
+                    toast.error(response.data.message);
+                })
+                .finally(() => (this.isLoading = false));
+        },
     },
 });
 </script>
@@ -139,9 +152,13 @@ export default defineComponent({
                                 <td>
                                     {{ plan?.stripe_id }}
                                 </td>
-                                <td v-if="(plan.status == 1)">Active</td>
-                                <td v-else="( plan.status == 0 )">Inactive</td>
-
+                                <td>
+                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox"
+                                            @input="changeStatus($event.target.checked, plan.id)"
+                                            :checked="plan.status == 1 ? true : false" />
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"

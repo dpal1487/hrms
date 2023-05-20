@@ -27,6 +27,26 @@ class IndustryController extends Controller
             'industries' => IndustryResource::collection($industries->paginate(10)->appends($request->all())),
         ]);
     }
+    public function statusUpdate(Request  $request)
+    {
+
+        $industry  = Industry::where('id', $request->id)->update([
+            'status' => $request->status
+        ]);
+        if ($industry) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status Update successfully',
+            ]);
+        } else {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+            ]);
+        }
+    }
 
     public function create()
     {
@@ -77,14 +97,15 @@ class IndustryController extends Controller
 
     public function update(Request $request, Industry $industry)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'image' => 'required',
             'status' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+        }
 
         $industry = new IndustryResource($industry);
-
 
         if ($request->image_id) {
             $industry = Industry::where(['id' => $industry->id])->update([
@@ -115,6 +136,17 @@ class IndustryController extends Controller
     {
 
         if ($industry->delete()) {
+            return response()->json(['success' => true, 'message' => 'Industry has been deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+
+
+    public function selectDelete(Request $request)
+    {
+        $industry = Industry::whereIn('id', $request->ids)->delete();
+
+        if ($industry) {
             return response()->json(['success' => true, 'message' => 'Industry has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);

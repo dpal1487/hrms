@@ -65,13 +65,13 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.processing = true
-                if (route().current() == 'decision-makers.create') {
-                    axios.post(this.route("decision-makers.store"), this.form)
+                if (route().current() == 'decision-maker.create') {
+                    axios.post(this.route("decision-maker.store"), this.form)
                         .then((response) => {
                             if (response.data.success) {
                                 toast.success(response.data.message)
                                 this.processing = false
-                                Inertia.get('/decision-makers')
+                                Inertia.get('/decision-maker')
                             } else {
                                 toast.info(response.data.message)
                             }
@@ -82,12 +82,12 @@ export default defineComponent({
 
                 } else {
 
-                    axios.put(this.route('decision-makers.update', this.form.id), this.form)
+                    axios.put(this.route('decision-maker.update', this.form.id), this.form)
                         .then((response) => {
                             if (response.data.success) {
                                 toast.success(response.data.message)
                                 this.processing = false
-                                Inertia.get('/decision-makers')
+                                Inertia.get('/decision-maker')
                             } else {
                                 toast.info(response.data.message)
                             }
@@ -102,7 +102,7 @@ export default defineComponent({
 
     },
     created() {
-        if (route().current() == 'decision-makers.edit') {
+        if (route().current() == 'decision-maker.edit') {
             this.isEdit = true;
         }
     }
@@ -172,15 +172,15 @@ export default defineComponent({
                     <div class="row">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <Link href="/decision-makers"
+                                <Link href="/decision-maker"
                                     class="btn btn-secondary align-items-center justify-content-center">
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="(form.processing) ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'decision-makers.edit'">Update</span>
-                                        <span v-if="route().current() == 'decision-makers.create'">Save</span>
+                                        <span v-if="route().current() == 'decision-maker.edit'">Update</span>
+                                        <span v-if="route().current() == 'decision-maker.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">
                                         Please wait... <span

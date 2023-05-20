@@ -86,35 +86,31 @@ export default defineComponent({
 
             if (!this.v$.form.$invalid) {
                 this.processing = true;
-                if (route().current() == 'industrie.create') {
+                if (route().current() == 'industry.create') {
 
-                    axios.post(this.route("industrie.store"), this.form)
+                    axios.post(this.route("industry.store"), this.form)
                         .then((response) => {
 
-                            if (response.data.success) {
+                            if (response.data.success == true) {
                                 toast.success(response.data.message)
                                 this.processing = false
-                                Inertia.get('/industrie')
-                            } else {
-                                toast.info(response.data.message)
+                                Inertia.get('/industry')
                             }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
+                            else {
+                                toast.error(response.data.message)
                             }
                         })
                 } else {
 
-                    axios.put(this.route('industrie.update', this.form.id), this.form)
+                    axios.put(this.route('industry.update', this.form.id), this.form)
                         .then((response) => {
-                            if (response.data.success) {
+                            if (response.data.success == true) {
                                 toast.success(response.data.message)
                                 this.processing = false
-                                Inertia.get('/industrie')
-                            } else {
-                                toast.info(response.data.message)
+                                Inertia.get('/industry')
                             }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
+                            else {
+                                toast.error(response.data.message)
                             }
                         })
                 }
@@ -130,11 +126,12 @@ export default defineComponent({
 
             this.isUploading = true;
 
-            axios.post("/industrie/image-upload", formdata, {
+            axios.post("/industry/image-upload", formdata, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 }
             }).then((response) => {
+                console.log(response.data.data.id)
                 if (response.data.success) {
                     this.form.image_id = response.data.data.id;
                 } else {
@@ -150,7 +147,7 @@ export default defineComponent({
 
     },
     created() {
-        if (route().current() == 'industrie.edit') {
+        if (route().current() == 'industry.edit') {
             this.isEdit = true;
         }
     }
@@ -163,8 +160,6 @@ export default defineComponent({
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
 
-                {{ industry }}
-                <!-- {{ form }} -->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10"
                     enctype="multipart/form-data">
                     <div class="card">
@@ -224,15 +219,15 @@ export default defineComponent({
                         <div class="col-12">
                             <div class="d-flex justify-content-end text-align-center gap-2">
 
-                                <Link href="/industrie" class="btn btn-secondary    ">
+                                <Link href="/industry" class="btn btn-secondary    ">
                                 Cancel
                                 </Link>
 
                                 <div>
                                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                         :data-kt-indicator="processing ? 'on' : 'off'">
-                                        <span v-if="route().current() == 'industrie.edit'">Update</span>
-                                        <span v-if="route().current() == 'industrie.create'">Save</span>
+                                        <span v-if="route().current() == 'industry.edit'">Update</span>
+                                        <span v-if="route().current() == 'industry.create'">Save</span>
                                         <span class="indicator-progress">
                                             Please wait... <span
                                                 class="spinner-border spinner-border-sm align-middle ms-2"></span>

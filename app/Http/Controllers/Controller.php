@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AddressResource;
 use App\Http\Resources\SupplierResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -46,5 +47,11 @@ class Controller extends BaseController
         $supplier = Supplier::where('company_id', $this->companyId())->find($id);
 
         return new SupplierResource($supplier);
+    }
+    public function supplierAddress($id)
+    {
+        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
+
+        return new AddressResource($supplier->address);
     }
 }

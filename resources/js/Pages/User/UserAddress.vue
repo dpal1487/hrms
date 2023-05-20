@@ -3,11 +3,9 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
-import PrimaryButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from 'vue3-toastify';
@@ -50,7 +48,6 @@ export default defineComponent({
             processing: false,
             id: route().params.id,
             form: {
-                emp_id: route().params.id,
                 id: this.address?.data.id || '',
                 address_line_1: this.address?.data?.address_line_1 || '',
                 address_line_2: this.address?.data?.address_line_2 || '',
@@ -66,12 +63,9 @@ export default defineComponent({
         Link,
         Head,
         Multiselect,
-        PrimaryButton,
         JetInput,
         JetLabel,
         InputError,
-        JetValidationErrors,
-
         Header
     },
     methods: {
@@ -104,8 +98,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" :address="address.data" />
-                {{ address }}
+                <Header :user="user?.data" :address="address?.data" />
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -120,8 +113,6 @@ export default defineComponent({
                     <!--begin::Card body-->
                     <!--begin::Content-->
                     <div>
-                        <JetValidationErrors />
-                        <!-- {{ address }} -->
 
                         <!--begin::Form-->
                         <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">

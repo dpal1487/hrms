@@ -18,6 +18,7 @@ export default defineComponent({
                     title: "Employee",
                     icon: "bi bi-pie-chart-fill",
                 },
+
                 {
                     link: "/account",
                     title: "User",
@@ -34,8 +35,8 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/industrie",
-                    title: "Industries",
+                    link: "/industry",
+                    title: "Industry",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
@@ -63,14 +64,15 @@ export default defineComponent({
                     title: "Conversion Rate",
                     icon: "bi bi-pie-chart-fill",
                 },
-                {
-                    link: "/image",
-                    title: "Image",
-                    icon: "bi bi-pie-chart-fill",
-                },
+
                 {
                     link: "/plan",
                     title: "Plan",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/image",
+                    title: "Image",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {

@@ -6,7 +6,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 
 export default defineComponent({
-    props: ['supplier', 'account'],
+    props: ['supplier', 'account' , 'address'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -37,7 +37,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
 
-                <Header :supplier="supplier?.data" />
+                <Header :supplier="supplier?.data" :address="address?.data"/>
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -65,7 +65,7 @@ export default defineComponent({
                             <!--begin::Col-->
 
                             <div class="col-lg-6">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.account?.data?.bank_name
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.account?.data?.bank_name
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -78,7 +78,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 fv-row">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.account?.data?.bank_address
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.account?.data?.bank_address
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -91,7 +91,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.account?.data?.beneficiary_name
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.account?.data?.beneficiary_name
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -104,7 +104,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.account?.data?.account_number
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.account?.data?.account_number
                                 }}</span>
                             </div>
                             <!--end::Col-->
@@ -118,7 +118,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                <span class="fw-bold fs-6 text-gray-700">{{
                                     this.account?.data?.routing_number
                                 }}</span>
                             </div>
@@ -133,7 +133,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                <span class="fw-bold fs-6 text-gray-700">{{
                                     this.account?.data?.swift_code
                                 }}</span>
                             </div>
@@ -148,7 +148,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                <span class="fw-bold fs-6 text-gray-700">{{
                                     this.account?.data?.ifsc_code
                                 }}</span>
                             </div>
@@ -163,7 +163,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                                <span class="fw-bold fs-6 text-gray-700">{{
                                     this.account?.data?.sort_code
                                 }}</span>
                             </div>
@@ -178,7 +178,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.account?.data?.pan_number
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.account?.data?.pan_number
                                 }}</span>
                             </div>
                             <!--end::Col-->

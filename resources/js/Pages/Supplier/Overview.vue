@@ -6,7 +6,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import PrimaryButton from "@/Jetstream/Button.vue";
 
 export default defineComponent({
-    props: ['supplier'],
+    props: ['supplier' , 'address'],
     components: {
         AppLayout,
         Header,
@@ -25,7 +25,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <!--begin::Navbar-->
-                <Header :supplier="supplier?.data" />
+                <Header :supplier="supplier?.data" :address="address?.data"/>
                 <!-- {{ $page }} -->
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
@@ -49,11 +49,11 @@ export default defineComponent({
                         <!--begin::Row-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Company Name</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Company Name</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.supplier?.data?.company?.company_name }}
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.supplier?.data?.company?.company_name }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -62,11 +62,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Supplier Name</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Supplier Name</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.supplier?.data?.supplier_name }}
+                            <div class="col-lg-6 fv-row">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.supplier?.data?.supplier_name }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -75,11 +75,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Display Name</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Display Name</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.supplier?.data?.display_name }}
+                            <div class="col-lg-6 fv-row">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.supplier?.data?.display_name }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -88,12 +88,12 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Website
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Website
                             </label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.supplier?.data?.website }} </span>
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.supplier?.data?.website }} </span>
 
                             </div>
                             <!--end::Col-->
@@ -102,11 +102,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Skype ID</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Skype ID</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-700">{{
                                     this.supplier?.data?.skype_profile }} </span>
                             </div>
                             <!--end::Col-->
@@ -115,11 +115,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Linked Profile ID</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Linked Profile ID</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800">{{ this.supplier?.data?.linkedIn_profile }}</span>
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.supplier?.data?.linkedIn_profile }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -127,11 +127,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Description</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Description</label>
                             <!--begin::Label-->
                             <!--begin::Label-->
-                            <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.supplier?.data?.description }}</span>
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.supplier?.data?.description }}</span>
                             </div>
                             <!--begin::Label-->
                         </div>
@@ -139,13 +139,13 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Status</label>
+                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Status</label>
                             <!--begin::Label-->
                             <!--begin::Label-->
-                            <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800"
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-700"
                                     v-if="this.supplier?.data?.status == 1">Active</span>
-                                <span class="fw-semibold fs-6 text-gray-800"
+                                <span class="fw-bold fs-6 text-gray-700"
                                     v-if="this.supplier?.data?.status == 0">Inactive</span>
                             </div>
                             <!--begin::Label-->

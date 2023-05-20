@@ -26,25 +26,22 @@ export default defineComponent({
                 "Type",
                 "Action",
             ],
-            isLoading: false,
+            checkbox: [],
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    Alert
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        Alert
+    },
     methods: {
 
         confirmDelete(id, index) {
-            this.isLoading = true;
-
             const name = this.questions.data[index].industry?.name;
-
             Swal.fire({
                 title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",
@@ -56,7 +53,7 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/question/" + id )
+                        .delete("/question/" + id)
                         .then((response) => {
                             toast.success(response.data.message);
                             if (response.data.success) {
@@ -95,6 +92,46 @@ export default defineComponent({
                 }
             );
         },
+        filterFunction(value, index, arr) {
+            if (value === this.questions.data[index].id) {
+                // Removes the value from the original array
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        },
+        selectQuestion(index) {
+            const x = this.checkbox.filter(this.filterFunction);
+            this.checkbox.push(this.questions.data[index].id);
+        },
+        selectAllQuestions() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            const list = [];
+            checkboxes.forEach((cb) => { cb.checked = true; });
+            this.questions.data.map(function (value, key) {
+                list.push(value.id)
+            });
+            this.checkbox = list;
+        },
+
+        deleteQuestion(index) {
+
+            axios
+                .post("/questions/delete", { ids: this.checkbox })
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message);
+                        this.questions.data.splice(index, this.checkbox.length);
+
+                        return;
+                    }
+                    else {
+                        toast.error(response.data.message);
+                    }
+                }).finally({
+                    checkbox: false,
+                })
+        }
     },
 });
 </script>
@@ -103,7 +140,7 @@ export default defineComponent({
 
         <Head title="Question" />
         <div class="card card-flush">
-    <Alert v-if="$page.props.ziggy.flash.message" />
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <div class="card-header border-0 pt-6">
@@ -135,10 +172,12 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar">
                         <!--begin::Toolbar-->
-                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                        <div class="d-flex justify-content-end gap-5" data-kt-customer-table-toolbar="base">
                             <Link href="/question/create" class="btn btn-primary">
                             Add Question
                             </Link>
+                            <button v-if="checkbox.length > 0" @click="deleteQuestion()" class="btn btn-danger">Delete
+                                Selected</button>
                         </div>
                         <!--end::Toolbar-->
                     </div>
@@ -154,6 +193,11 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllQuestions()">
+                                    </div>
+                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -164,6 +208,11 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(questions, index) in questions.data" :key="index">
+                                <td>
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @input="selectQuestion(index)">
+                                    </div>
+                                </td>
                                 <td>
                                     {{ questions.industry?.name }}
                                 </td>
