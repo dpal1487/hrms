@@ -17,7 +17,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SupplierController;
@@ -39,7 +39,26 @@ use App\Http\Controllers\SettingController;
 
 | Routes 
 
-            
+    login : 60
+    employee : 66
+    account : 85
+    image : 98
+    addressController : 103
+    settingController : 112
+    securityController : 121
+    companyController : 129
+    accountController : 146
+    emailController : 154
+    invoiceController : 163
+    conversionrateController : 173 
+    IndustryController : 187
+    DecisionMakerController : 191
+    QuestionController : 194
+    AnswerController : 197
+    PlanController : 200
+    ConversionRateController : 203
+    SupplierController : 207
+    DepartmentController : 217
 
 */
 
@@ -129,9 +148,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('address', 'addresses')->name('company.address');
             Route::get('accounts', 'accounts')->name('company.accounts');
             Route::get('emails', 'emails')->name('company.emails');
-            Route::get('invoice', 'invoice')->name('company.invoice');
+            Route::get('invoices', 'invoices')->name('company.invoices');
             Route::get('projects', 'projects')->name('company.projects');
             Route::get('suppliers', 'suppliers')->name('company.suppliers');
+            Route::post('suppliers/status', 'statusUpdate')->name('company.suppliers.status');
             Route::delete('delete', 'destroy')->name('company.delete');
         });
     });
@@ -149,7 +169,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{type}/{id}', 'destroy')->name('email.delete');
         });
     });
-
     Route::controller(InvoiceController::class)->group(function () {
         Route::group(['prefix' => 'invoice'], function () {
             Route::get('/', 'index')->name('invoice.index');
@@ -187,8 +206,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     Route::resource('supplier', SupplierController::class);
     Route::post('suppliers/delete', [SupplierController::class, 'selectDelete'])->name('suppliers.delete');
-
-
     Route::controller(SupplierController::class)->group(function () {
         Route::get('supplier/{id}/overview/edit', 'supplierEdit')->name('supplier.overview.edit');
         Route::get('supplier/{id}/address', 'address')->name('supplier.address');
@@ -196,6 +213,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('supplier/{id}/account', 'account')->name('supplier.account');
         Route::get('supplier/{id}/account/edit', 'accountEdit')->name('supplier.account.edit');
     });
+
+    Route::resource('department', DepartmentController::class);
+    Route::post('department/status', [DepartmentController::class, 'statusUpdate'])->name('department.status');
+    Route::post('department/delete', [DepartmentController::class, 'selectDelete'])->name('department.delete');
 
     Route::controller(RoleAndPermissionController::class)->group(function () {
         Route::group(['prefix' => 'roles'], function () {

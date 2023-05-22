@@ -18,6 +18,8 @@ use App\Http\Resources\AccountResource;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\SupplierResource;
+use App\Models\Supplier;
 
 class CompanyController extends Controller
 {
@@ -132,11 +134,32 @@ class CompanyController extends Controller
     }
     public function suppliers()
     {
-        $invoices = Invoice::where('company_id', $this->companyId())->get();
-        // return InvoiceResource::collection($invoices);
-        return Inertia::render('Company/Invoices', [
-            'invoices' => InvoiceResource::collection($invoices),
+        $suppliers = Supplier::where('company_id', $this->companyId())->get();
+        // return SupplierResource::collection($suppliers);
+        return Inertia::render('Company/Suppliers', [
+            'suppliers' => SupplierResource::collection($suppliers),
         ]);
+    }
+
+    public function statusUpdate(Request $request)
+    {
+
+        $industry  = Supplier::where('id', $request->id)->update([
+            'status' => $request->status
+        ]);
+        if ($industry) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status Update successfully',
+            ]);
+        } else {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+            ]);
+        }
     }
     public function destroy($id)
     {

@@ -26,6 +26,11 @@ class Employee extends Model
         return $this->hasOne(EmployeeAddress::class, 'employee_id', 'id');
     }
 
+    public function department()
+    {
+        return $this->hasOne(Department::class, 'id', 'department_id');
+    }
+
 
     public static function boot()
     {

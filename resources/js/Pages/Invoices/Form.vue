@@ -210,7 +210,8 @@ export default defineComponent({
 
 <template>
     <Head :title="isEdit ? 'Edit Invoice' : `Add New Invoice`" />
-    <AppLayout>
+    <AppLayout title="Invoice">
+
         <div class="app-content flex-column-fluid">
             <!-- {{ invoice }} -->
             <!--begin::Content container-->

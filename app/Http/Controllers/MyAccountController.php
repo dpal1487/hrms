@@ -79,10 +79,6 @@ class MyAccountController extends Controller
     public function address()
     {
         $user = User::where('id', Auth::user()->id)->first();
-
-
-
-
         if ($user->address != null) {
             return Inertia::render('User/Address', [
                 'address' => new AddressResource($user?->address),
@@ -99,7 +95,6 @@ class MyAccountController extends Controller
     public function addressEdit()
     {
         $user = User::where('id', Auth::user()->id)->first();
-
         $countries = Country::get();
         if ($user->address != null) {
             return Inertia::render('User/UserAddress', [
@@ -119,7 +114,6 @@ class MyAccountController extends Controller
 
     public function emailUpdate(Request $request, $id)
     {
-        // dd($request);
         if ($request->ajax()) {
             if ($request->confirm_password == null) {
                 return response()->json(['success' => false, 'message' => 'Please Insert password']);
@@ -150,8 +144,6 @@ class MyAccountController extends Controller
         }
     }
 
-
-
     function overviewEdit($id)
     {
         $employee = $this->employee($id);
@@ -163,9 +155,6 @@ class MyAccountController extends Controller
         }
         return redirect()->back();
     }
-
-
-
 
     public function attendance($id)
     {
@@ -190,17 +179,4 @@ class MyAccountController extends Controller
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 
-    public function deactivate($id)
-    {
-        $employee = Employee::join('users', 'users.id', 'employees.user_id')
-            ->select('users.id as userId', 'users.active_status', 'employees.id as empId')
-            ->where('employees.id', $id)
-            ->update([
-                'active_status' => 0,
-            ]);
-        if ($employee) {
-            return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
-        }
-        return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
-    }
 }

@@ -19,7 +19,8 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Supplier Overview" />
-    <AppLayout>
+        <AppLayout title="Supplier">
+
 
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->

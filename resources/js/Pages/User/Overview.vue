@@ -19,7 +19,8 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Account Overview" />
-    <AppLayout>
+    <AppLayout title="User">
+
 
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
@@ -72,31 +73,31 @@ export default defineComponent({
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-lg-4 fw-semibold text-muted">Date Of Birth</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
-                                <div class="col-lg-8 fv-row">                                    
-                                    <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.date_of_birth }}
-                                    </span>
-                                </div>
-                                <!--end::Col-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-semibold text-muted">Date Of Birth</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.date_of_birth }}
+                                </span>
                             </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-lg-4 fw-semibold text-muted">Gender</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
-                                <div class="col-lg-8 fv-row">
-                                    <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.gender }}
-                                    </span>
-                                </div>
-                                <!--end::Col-->
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-semibold text-muted">Gender</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.gender }}
+                                </span>
                             </div>
-                            <!--end::Input group-->
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
 
 
                     </div>

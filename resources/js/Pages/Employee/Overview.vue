@@ -19,7 +19,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Employee Overview" />
-    <AppLayout>
+    <AppLayout title="Employee">
 
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
@@ -182,7 +182,7 @@ export default defineComponent({
                             <!--begin::Label-->
                             <!--begin::Label-->
                             <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.department_id }}</span>
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.employee?.data?.department?.name }}</span>
                             </div>
                             <!--begin::Label-->
                         </div>

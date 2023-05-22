@@ -108,7 +108,7 @@ export default defineComponent({
 
 <template>
     <Head />
-    <AppLayout>
+    <AppLayout title="Permission">
         <PermissionForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)"
             :permission="permission" />
         <!--begin::Card-->

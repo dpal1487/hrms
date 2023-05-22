@@ -131,7 +131,8 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Plan" />
-    <AppLayout>
+        <AppLayout title="Plan">
+
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <JetValidationErrors />

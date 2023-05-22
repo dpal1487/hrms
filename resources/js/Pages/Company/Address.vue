@@ -48,7 +48,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Company Address" />
-    <AppLayout>
+    <AppLayout title="Company">
         <formAddress :show="showModal" :isEdit="false" @hidemodal="toggleModal(false)" :countries="countries" />
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->

@@ -133,7 +133,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <app-layout>
+    <app-layout title="Employee">
 
         <Head title="Employees" />
         <div class="card card-flush">

@@ -8,7 +8,7 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
-import { required,  url, integer } from "@vuelidate/validators";
+import { required, url, integer } from "@vuelidate/validators";
 import ImageInput from '@/components/ImageInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -196,7 +196,8 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
-    <AppLayout>
+    <AppLayout title="User">
+
 
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">

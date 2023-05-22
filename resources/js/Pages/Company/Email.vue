@@ -123,7 +123,7 @@ export default defineComponent({
 <template>
     <Head title="Emails" />
 
-    <AppLayout>
+    <AppLayout title="Company">
         <FormEmail v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal" :email="email" />
         <div class="app-content flex-column-fluid ">
             <div class="app-container container-xxl">

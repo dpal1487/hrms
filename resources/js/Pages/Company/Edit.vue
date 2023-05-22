@@ -161,7 +161,7 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="Overview" />
-    <AppLayout>
+    <AppLayout title="Company">
         <Header>
             <!--begin::details View-->
             <div class="card mb-5 mb-xl-10">

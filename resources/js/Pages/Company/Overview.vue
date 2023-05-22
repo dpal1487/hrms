@@ -4,6 +4,8 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import PrimaryButton from "@/Jetstream/Button.vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
 
 
 export default defineComponent({
@@ -21,7 +23,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Overview" />
-    <AppLayout>
+    <AppLayout title="Company">
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">

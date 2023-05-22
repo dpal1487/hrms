@@ -131,7 +131,6 @@ export default defineComponent({
                     "Content-Type": "multipart/form-data",
                 }
             }).then((response) => {
-                console.log(response.data.data.id)
                 if (response.data.success) {
                     this.form.image_id = response.data.data.id;
                 } else {
@@ -156,7 +155,7 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit Industry' : `Add New Industry`" />
 
-    <AppLayout>
+    <AppLayout title="Industry">
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
 

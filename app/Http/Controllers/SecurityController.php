@@ -67,7 +67,7 @@ class SecurityController extends Controller
 
         // return $employee->user_id;
         if ($employee) {
-            User::where('id', $employee->user_id)->update(['status'=> 0]);
+            User::where('id', $employee->user_id)->update(['status' => 0]);
             return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
         }
         return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);

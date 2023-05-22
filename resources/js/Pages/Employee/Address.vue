@@ -32,7 +32,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Employee Address" />
-    <AppLayout>
+    <AppLayout title="Employee">
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
