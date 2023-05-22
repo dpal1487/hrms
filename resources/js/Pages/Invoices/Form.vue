@@ -3,13 +3,11 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
-import PrimaryButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from "@vuelidate/core";
-import { required, url, numeric, integer } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import ItemFormList from "./Components/ItemFormList.vue";
@@ -102,11 +100,9 @@ export default defineComponent({
         Link,
         Head,
         Multiselect,
-        PrimaryButton,
         JetInput,
         JetLabel,
         InputError,
-        JetValidationErrors,
         VueDatePicker,
         ItemFormList,
     },
@@ -152,8 +148,6 @@ export default defineComponent({
                 })
         },
         async getCompanyDetails(id) {
-
-
             await axios
                 // .get(`${id}/company-address/`)
                 .get(`${id}/company-address/`)
@@ -216,11 +210,8 @@ export default defineComponent({
             <!-- {{ invoice }} -->
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <JetValidationErrors />
-                <!--begin::Layout-->
+                
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-lg-row">
-                    <!-- {{ this.invoice?.data?.company?.id }} -->
-
                     <!--begin::Content-->
                     <div class="flex-lg-row-fluid mb-10 mb-lg-0 me-lg-7 me-xl-10">
                         <!--begin::Card-->
