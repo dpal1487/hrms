@@ -129,8 +129,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <AppLayout title="Supplier">
-
+    <app-layout>
 
         <Head title="Supplier" />
         <div class="card card-flush">
@@ -266,5 +265,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>

@@ -16,6 +16,7 @@ class AccountResource extends JsonResource
     {
         return [
             'id' => $this->account?->id,
+            'is_primary' => $this->account?->is_primary,
             'bank_name' => $this->account?->bank_name,
             'bank_address' => $this->account?->bank_address,
             'beneficiary_name' => $this->account?->beneficiary_name,

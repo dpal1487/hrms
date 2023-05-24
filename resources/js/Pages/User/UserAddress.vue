@@ -94,8 +94,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="User Address" />
-    <AppLayout title="User">
-
+    <AppLayout>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">

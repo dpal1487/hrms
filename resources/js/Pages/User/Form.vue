@@ -107,16 +107,9 @@ export default defineComponent({
                 date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
                 department_id: this.employee?.data?.department_id || '',
                 department: '',
-                requsetingFrom: "employees/edit",
             }),
             url: null,
             value: null,
-            options: [
-                { name: 'Vue.js', department: 'Vue.js' },
-                { name: 'Rails', department: 'Rails' },
-                { name: 'Ruby', department: 'Ruby' },
-                { name: 'Laravel', department: 'Laravel' }
-            ]
         };
     },
     components: {
@@ -196,8 +189,7 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
-    <AppLayout title="User">
-
+    <AppLayout>
 
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">

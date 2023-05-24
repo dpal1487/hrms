@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends UID
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'company_type', 'subdomain', 'company_size_id', 'corporation_type_id', 'contact_email', 'tax_number', 'company_name', 'description', 'website', 'contact_number', 'account_plan'];
+    protected $fillable = ['id', 'user_id', 'company_name', 'company_type', 'subdomain', 'company_size_id', 'corporation_type_id', 'contact_email', 'tax_number', 'company_name', 'description', 'website', 'contact_number', 'account_plan'];
 
     public function user()
     {
@@ -38,11 +38,11 @@ class Company extends UID
     {
         return $this->hasMany(CompanyAccount::class, 'company_id', 'id');
     }
-    public function company_email()
+    public function email()
     {
         return $this->hasOne(CompanyEmail::class, 'company_id', 'id');
     }
-    public function company_emails()
+    public function emails()
     {
         return $this->hasMany(CompanyEmail::class, 'company_id', 'id');
     }

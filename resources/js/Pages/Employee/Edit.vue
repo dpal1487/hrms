@@ -24,7 +24,7 @@ import { Inertia } from "@inertiajs/inertia";
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ['employee', 'user', 'departments'],
+    props: ['employee', 'user' , 'departments'],
 
     setup() {
         return { v$: useVuelidate() };
@@ -108,8 +108,16 @@ export default defineComponent({
                 offer_acceptance: this.employee?.data?.offer_acceptance || '',
                 probation_period: this.employee?.data?.probation_period || '',
                 date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
-                department_id: this.employee?.data?.department?.id || '',
+                department_id: this.employee?.data?.department_id || '',
             }),
+            value: null,
+            url: null,
+            options: [
+                { name: 'Vue.js', department: 'Vue.js' },
+                { name: 'Rails', department: 'Rails' },
+                { name: 'Ruby', department: 'Ruby' },
+                { name: 'Laravel', department: 'Laravel' }
+            ]
         };
     },
     components: {
@@ -186,7 +194,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Employee Edit" />
-    <AppLayout title="Employee">
+    <AppLayout>
 
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
@@ -275,18 +283,6 @@ export default defineComponent({
                                                 </div>
                                             </div>
                                             <div class="fv-row col-6">
-                                                    <jet-label for="emergency_number" value="Emergency Number" />
-                                                    <jet-input id="emergency_number" type="text"
-                                                        v-model="v$.form.emergency_number.$model" :class="v$.form.emergency_number.$errors.length > 0
-                                                            ? 'is-invalid'
-                                                            : ''
-                                                            " placeholder="Emergency Number" />
-                                                    <div v-for="(error, index) of v$.form.emergency_number.$errors"
-                                                        :key="index">
-                                                        <input-error :message="error.$message" />
-                                                    </div>
-                                                </div>
-                                            <div class="fv-row col-6">
                                                 <jet-label for="qualification" value="Qualification" />
                                                 <jet-input id="qualification" type="text"
                                                     v-model="v$.form.qualification.$model" :class="v$.form.qualification.$errors.length > 0
@@ -297,7 +293,18 @@ export default defineComponent({
                                                     <input-error :message="error.$message" />
                                                 </div>
                                             </div>
-                                            
+                                            <div class="fv-row col-6">
+                                                <jet-label for="emergency_number" value="Emergency Number" />
+                                                <jet-input id="emergency_number" type="text"
+                                                    v-model="v$.form.emergency_number.$model" :class="v$.form.emergency_number.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Emergency Number" />
+                                                <div v-for="(error, index) of v$.form.emergency_number.$errors"
+                                                    :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
                                             <div class="fv-row col-6">
                                                 <jet-label for="pan_number" value="Pan Number" />
                                                 <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model"
@@ -381,8 +388,20 @@ export default defineComponent({
                                             </div>
 
                                             <div class="fv-row col-6">
+
                                                 <jet-label for="department_id" value="Department" />
-                                                <Multiselect :options="departments" label="name" valueProp="id"
+                                                <jet-input id="department_id" type="text"
+                                                    v-model="v$.form.department_id.$model" :class="v$.form.department_id.$errors.length > 0
+                                                        ? 'is-invalid'
+                                                        : ''
+                                                        " placeholder="Department" />
+                                                <div v-for="(error, index) of v$.form.department_id.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <div class="fv-row col-6">
+                                                <jet-label for="department_id" value="Department" />
+                                                <Multiselect :options="departments.data" label="name" valueProp="id"
                                                     class="form-control form-control-lg form-control-solid"
                                                     placeholder="Select One" v-model="form.department_id" track-by="name" />
 

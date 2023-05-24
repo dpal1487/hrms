@@ -30,6 +30,11 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
+                    link: "/clients",
+                    title: "Client",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
                     link: "/supplier",
                     title: "Supplier",
                     icon: "bi bi-pie-chart-fill",
@@ -76,8 +81,8 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/images",
-                    title: "Images",
+                    link: "/image",
+                    title: "Image",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
@@ -205,7 +210,7 @@ export default defineComponent({
         </div>
         <!--end::sidebar menu-->
         <!--begin::Footer-->
-        <div class="app-sidebar-footer flex-column-auto pb-5 px-4">
+        <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6">
             <form method="post" @submit.prevent="logout">
                 <button type="submit"
                     class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100">

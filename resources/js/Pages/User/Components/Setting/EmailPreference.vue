@@ -22,6 +22,9 @@ export default defineComponent({
             <div class="card-title m-0">
                 <h3 class="fw-bold m-0">Email Preferences</h3>
             </div>
+            <Link class="btn btn-primary align-self-center" href="/account/setting">Edit
+            Email
+            </Link>
         </div>
         <!--begin::Card header-->
         <!--begin::Content-->

@@ -4,8 +4,6 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import PrimaryButton from "@/Jetstream/Button.vue";
-import axios from "axios";
-import { toast } from "vue3-toastify";
 
 
 export default defineComponent({
@@ -23,7 +21,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Overview" />
-    <AppLayout title="Company">
+    <AppLayout>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
@@ -38,11 +36,10 @@ export default defineComponent({
                             <!-- {{ company.data }} -->
                         </div>
                         <!--end::Card title-->
-                        <!-- <Link class="btn btn-primary align-self-center"
-                            :href="`/company/${company?.data?.id}/overview/edit`">
+                        <Link class="btn btn-primary align-self-center" :href="`/company/overview/edit`">
                         Edit
-                        Profile
-                        </Link> -->
+                        Company
+                        </Link>
                         <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
                     </div>
                     <!--begin::Card header-->
@@ -51,11 +48,11 @@ export default defineComponent({
                         <!--begin::Row-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">User Name</label>
+                            <label class="col-lg-6 fw-semibold text-muted">User Name</label>
                             <!--end::Label-->
                             <!-- {{ company?.data?.user }} -->
                             <!--begin::Col-->
-                            <div class="col-lg-8">
+                            <div class="col-lg-6">
                                 <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user?.first_name + " " +
                                     company?.data?.user.last_name }}</span>
                             </div>
@@ -65,11 +62,11 @@ export default defineComponent({
                         <!--begin::Row-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Company Name</label>
+                            <label class="col-lg-6 fw-semibold text-muted">Company Type</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.company_name }}</span>
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.company_type }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -77,11 +74,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Company Website</label>
+                            <label class="col-lg-6 fw-semibold text-muted">Company Size</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.company?.data?.website }}
+                            <div class="col-lg-6 fv-row">
+                                <span class="fw-semibold text-gray-800 fs-6">{{ this.company?.data?.size.size }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -90,28 +87,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Contact Phone
-                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
-                                    title="Phone number must be active"></i></label>
+                            <label class="col-lg-6 fw-semibold text-muted">Corporation Type</label>
                             <!--end::Label-->
                             <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.contact_number }}
-                                </span>
-                                <span class="badge badge-success">Verified</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Contact Email</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.contact_email }}
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.corporation_type_id }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -121,11 +101,39 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Company Size</label>
+                            <label class="col-lg-6 fw-semibold text-muted">Legal Registration_no</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.legal_registration_no
+                                }}
+                                </span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-6 fw-semibold text-muted">Description</label>
                             <!--begin::Label-->
                             <!--begin::Label-->
-                            <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.size?.size }}</span>
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.description }}</span>
+                            </div>
+                            <!--begin::Label-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-6 fw-semibold text-muted">Website</label>
+                            <!--begin::Label-->
+                            <!--begin::Label-->
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.website }}</span>
                             </div>
                             <!--begin::Label-->
                         </div>
@@ -133,11 +141,25 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Corporation Type</label>
+                            <label class="col-lg-6 fw-semibold text-muted">Subdomain</label>
                             <!--begin::Label-->
                             <!--begin::Label-->
-                            <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.corporationtype
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.subdomain
+                                }}</span>
+                            </div>
+                            <!--begin::Label-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-6 fw-semibold text-muted">Linkedin Profile</label>
+                            <!--begin::Label-->
+                            <!--begin::Label-->
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.linkedin_profile
                                 }}</span>
                             </div>
                             <!--begin::Label-->
@@ -146,35 +168,11 @@ export default defineComponent({
                         <!--begin::Input group-->
                         <div class="row mb-7">
                             <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Description</label>
+                            <label class="col-lg-6 fw-semibold text-muted">Skype Profile</label>
                             <!--begin::Label-->
                             <!--begin::Label-->
-                            <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.description }}</span>
-                            </div>
-                            <!--begin::Label-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Account Plan</label>
-                            <!--begin::Label-->
-                            <!--begin::Label-->
-                            <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.account_plan }}</span>
-                            </div>
-                            <!--begin::Label-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Tax Number</label>
-                            <!--begin::Label-->
-                            <!--begin::Label-->
-                            <div class="col-lg-8">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.tax_number
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.skype_profile
                                 }}</span>
                             </div>
                             <!--begin::Label-->

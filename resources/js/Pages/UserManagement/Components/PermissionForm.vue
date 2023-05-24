@@ -12,7 +12,7 @@ import axios from 'axios';
 
 export default defineComponent({
 
-    props: ['permisssion', 'isEdit', 'show',],
+    props: ['permission', 'isEdit', 'show',],
     emits: ['hidemodal'],
 
     setup() {
@@ -34,8 +34,8 @@ export default defineComponent({
             processing: false,
             showModal: false,
             form: this.$inertia.form({
-                id: this.permisssion?.id || '',
-                name: this.permisssion?.name || '',
+                id: this.permission?.id || '',
+                name: this.permission?.name || '',
 
             }),
         }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
-
+use App\Http\Resources\AddressResource;
+use App\Models\CompanyAddress;
+use App\Models\CompanyEmail;
 use App\Models\CompanyUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +16,8 @@ class HandleInertiaRequests extends Middleware
 
     protected $rootView = 'app';
     protected $company = [];
+    protected $email = [];
+    protected $address = [];
     protected $status = [
         [
             'name' => 'All',
@@ -41,11 +45,19 @@ class HandleInertiaRequests extends Middleware
         $user = Auth::user();
         if ($user) {
             $this->company = CompanyUser::where(['user_id' => $user->id])->first();
+            $this->address = CompanyAddress::where('company_id', $this->company['company']['id'])->first();
+            $this->email = CompanyEmail::where('company_id', $this->company['company']['id'])->where('is_primary', 1)->first();
+
             return array_merge(parent::share($request), [
+                'user.roles' => $request->user() ? $request->user()->roles->pluck('name') : [],
+                'user.permissions' => $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [],
                 'ziggy' => function () use ($request) {
                     return array_merge((new Ziggy())->toArray(), [
                         'status' => $this->status,
                         'company' => $this->company['company'],
+                        'email' => $this->email,
+                        'address' => $this->address['address'],
+
                         'flash' => [
                             'message' => fn () => $request->session()->get('message'),
                         ],

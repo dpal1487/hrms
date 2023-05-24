@@ -19,8 +19,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Account Overview" />
-    <AppLayout title="User">
-
+    <AppLayout>
 
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
@@ -37,9 +36,9 @@ export default defineComponent({
                             <h3 class="fw-bold m-0"> Account Overview</h3>
                         </div>
                         <!--end::Card title-->
-                        <!-- <Link class="btn btn-primary align-self-center" href="/account/overview/edit">Edit
+                        <Link class="btn btn-primary align-self-center" href="/account/overview/edit">Edit
                         Account
-                        </Link> -->
+                        </Link>
                         <!-- <a href="settings.html" class="btn btn-primary align-self-center">Edit Profile</a> -->
                     </div>
                     <!--begin::Card header-->
@@ -73,31 +72,31 @@ export default defineComponent({
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Date Of Birth</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.date_of_birth }}
-                                </span>
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="col-lg-4 fw-semibold text-muted">Date Of Birth</label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <div class="col-lg-8 fv-row">                                    
+                                    <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.date_of_birth }}
+                                    </span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 fw-semibold text-muted">Gender</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.gender }}
-                                </span>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="col-lg-4 fw-semibold text-muted">Gender</label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <div class="col-lg-8 fv-row">
+                                    <span class="fw-semibold text-gray-800 fs-6">{{ this.user?.data?.gender }}
+                                    </span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
+                            <!--end::Input group-->
 
 
                     </div>

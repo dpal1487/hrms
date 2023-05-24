@@ -109,10 +109,9 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit Decision Makers' : `Add New Decision Makers`" />
+    <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
-    <AppLayout title="Decision Makers">
-
+    <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <JetValidationErrors />

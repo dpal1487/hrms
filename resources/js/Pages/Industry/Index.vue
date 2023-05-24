@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["industries", 'message'],
     data() {
@@ -32,6 +33,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        Alert
     },
     methods: {
 
@@ -147,8 +149,7 @@ export default defineComponent({
 });
 </script>
 <template>
-        <AppLayout title="Industry">
-
+    <app-layout>
         <!-- {{ checkbox }} -->
 
         <Head title="Industry" />
@@ -293,5 +294,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-        </AppLayout>
+    </app-layout>
 </template>

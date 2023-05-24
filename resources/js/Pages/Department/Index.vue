@@ -18,7 +18,7 @@ export default defineComponent({
             q: "",
             s: "",
             tbody: [
-                "Deartment Name",
+                "Department Name",
                 "Status",
                 "Action",
             ],
@@ -113,11 +113,11 @@ export default defineComponent({
             }
             return false;
         },
-        selectConverRate(index) {
+        selectDepartment(index) {
             const x = this.checkbox.filter(this.filterFunction);
             this.checkbox.push(this.departments.data[index].id);
         },
-        selectAllConverRates() {
+        selectAllDepartments() {
             const checkboxes = document.querySelectorAll('input[type=checkbox]');
             const list = [];
             checkboxes.forEach((cb) => { cb.checked = true; });
@@ -130,7 +130,7 @@ export default defineComponent({
         deleteDepartment(index) {
 
             axios
-                .post("/department/delete", { ids: this.checkbox })
+                .post("/departments/delete", { ids: this.checkbox })
                 .then((response) => {
                     if (response.data.success == true) {
                         toast.success(response.data.message);
@@ -148,10 +148,9 @@ export default defineComponent({
 });
 </script>
 <template>
-    <AppLayout title="Department">
+    <app-layout>
 
-
-        <Head title="Department" />
+        <Head title="Conversion Rate" />
         <div class="card card-flush">
             <!--begin::Actions-->
             <div>
@@ -187,11 +186,11 @@ export default defineComponent({
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Toolbar-->
 
-                        <!--begin::Add Deparmetn-->
+                        <!--begin::Add Conversion Rate-->
                         <Link href="/department/create" class="btn btn-primary">
-                        Add Department
+                        Add Conversion Rate
                         </Link>
-                        <!--end::Add Deparmetn-->
+                        <!--end::Add Conversion Rate-->
                         <button v-if="checkbox.length > 0" @click="deleteDepartment()" class="btn btn-danger">Delete
                             Selected</button>
                         <!--end::Toolbar-->
@@ -210,7 +209,7 @@ export default defineComponent({
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
                                 <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" @change="selectAllConverRates()">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllDepartments()">
                                     </div>
                                 </th>
                                 <th v-for="(th, index) in tbody" :key="index">
@@ -222,26 +221,27 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(conversionrate, index) in departments.data" :key="index">
+                            <tr v-for="(department, index) in departments.data" :key="index">
                                 <td>
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" @input="selectConverRate(index)">
+                                        <input class="form-check-input" type="checkbox" @input="selectDepartment(index)">
                                     </div>
                                 </td>
                                 <td>
-                                    {{ conversionrate?.name }}
+                                    {{ department?.name }}
                                 </td>
+
                                 <td>
                                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
                                         <input class="form-check-input h-20px w-30px" type="checkbox"
-                                            @input="changeStatus($event.target.checked, conversionrate.id)"
-                                            :checked="conversionrate.status == 1 ? true : false" />
+                                            @input="changeStatus($event.target.checked, department.id)"
+                                            :checked="department.status == 1 ? true : false" />
                                     </div>
                                 </td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${conversionrate.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${department.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -255,17 +255,17 @@ export default defineComponent({
                                             <!--end::Svg Icon-->
                                         </a>
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${conversionrate.id}`">
+                                            :aria-labelled:by="`dropdown-${department.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/department/${conversionrate.id}/edit`">Edit
+                                                    :href="`/department/${department.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    conversionrate.id, index
+                                                    department.id, index
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
@@ -286,5 +286,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>

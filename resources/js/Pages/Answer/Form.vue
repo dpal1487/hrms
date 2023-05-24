@@ -114,10 +114,9 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit Answer' : `Add New Answer`" />
+    <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
-    <AppLayout title="Answer">
-
+    <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             {{ this.message }}
 

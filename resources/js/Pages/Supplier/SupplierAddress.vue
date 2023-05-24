@@ -100,8 +100,7 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Supplier Address" />
-    <AppLayout title="Supplier">
-
+    <AppLayout>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
@@ -257,7 +256,7 @@ export default defineComponent({
                             <!--end::Card body-->
                             <!--begin::Actions-->
                             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                <Link :href="`/supplier/${id}/address`"
+                                <Link :href="`/employees/${id}/address`"
                                     class="btn btn-light btn-active-light-primary me-2">
                                 Discard
                                 </Link>

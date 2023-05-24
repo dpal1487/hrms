@@ -50,23 +50,22 @@ export default defineComponent({
         onAvatarChange(e) {
             this.avatar = URL.createObjectURL(e.target.files[0]);
         },
+    },
+    search() {
+        Inertia.get(
+            "/invoices",
+            { q: this.q, status: this.s },
+        );
+    },
+    created() {
 
-        search() {
-            Inertia.get(
-                "/invoices",
-                { q: this.q, status: this.s },
-            );
-        },
-        created() {
-
-        },
     }
 });
 </script>
 <template>
     <Head title="Invoice" />
 
-    <AppLayout title="Company">
+    <AppLayout>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">

@@ -149,11 +149,11 @@ export default defineComponent({
 });
 </script>
 <template>
-    <AppLayout title="Conversion Rate">
-
+    <app-layout>
 
         <Head title="Conversion Rate" />
         <div class="card card-flush">
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <!--begin::Card title-->
@@ -290,5 +290,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>

@@ -39,8 +39,7 @@ export default defineComponent({
 <template>
     <Head title="Employee Security" />
 
-        <AppLayout title="User">
-
+    <AppLayout>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">

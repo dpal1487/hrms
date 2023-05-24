@@ -91,26 +91,17 @@ export default defineComponent({
 
             });
         },
-        search() {
-            Inertia.get(
-                "/permission",
-                { q: this.q, status: this.s },
-                {
-                    preserveState: true, onSuccess: (data) => {
-                        this.answers = data.props.answers;
-                    },
-                }
-            );
-        },
+
     }
 });
 </script>
 
 <template>
     <Head />
-    <AppLayout title="Permission">
+    <AppLayout>
         <PermissionForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)"
             :permission="permission" />
+
         <!--begin::Card-->
         <div class="card card-flush">
             <!--begin::Card header-->

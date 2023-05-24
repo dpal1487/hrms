@@ -32,13 +32,12 @@ export default defineComponent({
 </script>
 <template>
     <Head title="Employee Address" />
-    <AppLayout title="Supplier">
-
+    <AppLayout>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
 
-                <Header :supplier="supplier?.data" :address="address?.data" />
+                <Header :supplier="supplier?.data" :address="address?.data"/>
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->

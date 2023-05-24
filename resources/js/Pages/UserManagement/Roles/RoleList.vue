@@ -44,8 +44,7 @@ export default defineComponent({
 
 <template>
     <Head title="User Role" />
-        <AppLayout title="user Role">
-
+    <AppLayout>
         <!--begin::Row-->
         <UserRoleForm v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)"
             :permissions="permissions.data" :role="role" />

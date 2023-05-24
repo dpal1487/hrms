@@ -12,21 +12,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\EmployeeResources;
 use App\Models\Department;
 
 class EmployeeController extends Controller
 {
+
+    public $department;
+
+    public function __construct()
+    {
+        $this->department = Department::get();
+    }
     public function index(Request $request)
     {
         $employees = Employee::where('company_id', $this->companyId());
 
-        // return $employees;
-
-        // return EmployeeResources::collection($employees);
-
-        // return $this->companyId();
-        // return $employees;
         if (!empty($request->q)) {
             $employees =
                 $employees->where('first_name', 'like', "%$request->q%")
@@ -43,14 +45,14 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        $departments = Department::get();
         return Inertia::render('Employee/Form', [
-            'departments' => $departments,
+            'departments' => DepartmentResource::collection($this->department),
         ]);
     }
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
@@ -73,9 +75,12 @@ class EmployeeController extends Controller
         }
 
         $user = User::create([
+
             'email' => $request->email,
         ]);
+
         $employee =  Employee::create([
+
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'code' => 'ARS' . date('Y') . $user->id,
@@ -113,13 +118,12 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::where('company_id', $this->companyId())->find($id);
-        $departments = Department::get();
 
         if ($employee) {
             return Inertia::render('Employee/Form', [
                 'employee' => new EmployeeResources($employee),
                 'user' => $this->employeeHeader($id),
-                'departments' => $departments,
+                'departments' => DepartmentResource::collection($this->department),
 
             ]);
         }
@@ -156,8 +160,8 @@ class EmployeeController extends Controller
                     'email' => $request->email,
                 ]);
             }
-            $employee = Employee::where(['id' => $employee->id])->update([
 
+            $employee = Employee::where(['id' => $employee->id])->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'date_of_joining' => $request->date_of_joining,
@@ -284,13 +288,12 @@ class EmployeeController extends Controller
     function overviewEdit($id)
     {
         $employee = $this->employee($id);
-        $departments = Department::get();
-
         if ($employee) {
             return Inertia::render('Employee/Edit', [
                 'employee' => new EmployeeResources($employee),
                 'user' => $this->employeeHeader($id),
-                'departments' => $departments,
+                'departments' => DepartmentResource::collection($this->department),
+
             ]);
         }
         return redirect()->back();
@@ -349,5 +352,19 @@ class EmployeeController extends Controller
             return response()->json(['success' => true, 'message' => 'Employee has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+
+    public function deactivate($id)
+    {
+        $employee = Employee::join('users', 'users.id', 'employees.user_id')
+            ->select('users.id as userId', 'users.active_status', 'employees.id as empId')
+            ->where('employees.id', $id)
+            ->update([
+                'active_status' => 0,
+            ]);
+        if ($employee) {
+            return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
+        }
+        return response()->json(['success' => true, 'message' => 'Employee has been  Deactivating.']);
     }
 }

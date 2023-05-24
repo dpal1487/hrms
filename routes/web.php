@@ -17,6 +17,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\PlanController;
@@ -39,26 +40,7 @@ use App\Http\Controllers\SettingController;
 
 | Routes 
 
-    login : 60
-    employee : 66
-    account : 85
-    image : 98
-    addressController : 103
-    settingController : 112
-    securityController : 121
-    companyController : 129
-    accountController : 146
-    emailController : 154
-    invoiceController : 163
-    conversionrateController : 173 
-    IndustryController : 187
-    DecisionMakerController : 191
-    QuestionController : 194
-    AnswerController : 197
-    PlanController : 200
-    ConversionRateController : 203
-    SupplierController : 207
-    DepartmentController : 217
+            
 
 */
 
@@ -94,6 +76,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
         Route::post('employees/delete', 'selectDelete')->name('employees.delete');
     });
+
+
+
     Route::controller(MyAccountController::class)->group(function () {
         Route::group(['prefix' => 'account'], function () {
             Route::get('/', 'overview')->name('account.overview');
@@ -138,21 +123,60 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('{id}/deactivate', 'deactivate')->name('employee.deactivate');
         });
     });
+    Route::controller(ClientController::class)->group(
+        function () {
+            Route::get('clients', 'index')->name('client.index');
+            Route::get('client/create', 'create')->name('client.create');
+            Route::post('client/store', 'store')->name('client.store');
+            Route::get('client/{id}', 'show')->name('client.show');
+            Route::post('client/{id}/update', 'update')->name('client.update');
+            Route::delete('client/{id}/destroy', 'destroy')->name('client.destroy');
+            Route::get('client/{id}/projects', 'projects')->name('client.projects');
+            // Client Address
+            Route::get('client/{id}/address', 'address')->name('client.address');
+            Route::post('client/{id}/address', 'updateAddress')->name('client.updateAddress');
+            Route::post('client/{id}/address/create', 'addAddress')->name('client.addAddress');
+            Route::delete('client/{id}/address', 'delAddress')->name('client.delAddress');
+
+            // Client Contact
+            Route::get('client/{id}/contact', 'contact')->name('client.contact');
+            Route::post('client/{id}/contact', 'updateContact')->name('client.updateContact');
+            Route::post('client/{id}/contact/create', 'addContact')->name('client.addContact');
+            Route::delete('client/{id}/contact', 'delContact')->name('client.delContact');
+        }
+    );
     Route::controller(CompanyController::class)->group(function () {
         Route::group(['prefix' => 'company'], function () {
-            Route::get('/', 'show')->name('company.index');
             Route::get('add', 'create')->name('company.add');
             Route::post('store', 'store')->name('company.store');
-            Route::get('{id}/edit', 'edit')->name('company.edit');
-            Route::post('{id}/update', 'update')->name('company.update');
-            Route::get('address', 'addresses')->name('company.address');
-            Route::get('accounts', 'accounts')->name('company.accounts');
             Route::get('emails', 'emails')->name('company.emails');
-            Route::get('invoices', 'invoices')->name('company.invoices');
+            Route::get('invoice', 'invoice')->name('company.invoice');
             Route::get('projects', 'projects')->name('company.projects');
             Route::get('suppliers', 'suppliers')->name('company.suppliers');
-            Route::post('suppliers/status', 'statusUpdate')->name('company.suppliers.status');
             Route::delete('delete', 'destroy')->name('company.delete');
+
+            //Company OverView
+            Route::get('/', 'show')->name('company.index');
+            Route::get('/overview/edit', 'overviewEdit')->name('company.overview.edit');
+            Route::post('/update', 'update')->name('company.update');
+
+            // Company Address
+            Route::get('/address', 'addresses')->name('company.address');
+            Route::post('/address', 'updateAddress')->name('company.updateAddress');
+            Route::post('/address/create', 'addAddress')->name('company.addAddress');
+            Route::delete('{id}/address', 'delAddress')->name('company.delAddress');
+
+            // Company Account
+            Route::get('accounts', 'accounts')->name('company.accounts');
+            Route::post('/account', 'updateAccount')->name('company.updateAccount');
+            Route::post('/account/create', 'addAccount')->name('company.addAccount');
+            Route::delete('{id}/account', 'delAccount')->name('company.delAccount');
+
+            // Company Email
+            Route::get('emails', 'emails')->name('company.emails');
+            Route::post('/email', 'updateEmail')->name('company.updateEmail');
+            Route::post('/email/create', 'addEmail')->name('company.addEmail');
+            Route::delete('{id}/email', 'delEmail')->name('company.delEmail');
         });
     });
     Route::controller(AccountController::class)->group(function () {
@@ -169,6 +193,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{type}/{id}', 'destroy')->name('email.delete');
         });
     });
+
     Route::controller(InvoiceController::class)->group(function () {
         Route::group(['prefix' => 'invoice'], function () {
             Route::get('/', 'index')->name('invoice.index');
@@ -204,8 +229,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('conversion-rate/status', [ConversionRateController::class, 'statusUpdate'])->name('conversion-rate.status');
     Route::post('conversion-rates/delete', [ConversionRateController::class, 'selectDelete'])->name('conversion-rates.delete');
 
+    Route::resource('department', DepartmentController::class);
+    Route::post('department/status', [DepartmentController::class, 'statusUpdate'])->name('department.status');
+    Route::post('departments/delete', [DepartmentController::class, 'selectDelete'])->name('departments.delete');
+
+
     Route::resource('supplier', SupplierController::class);
     Route::post('suppliers/delete', [SupplierController::class, 'selectDelete'])->name('suppliers.delete');
+
+
     Route::controller(SupplierController::class)->group(function () {
         Route::get('supplier/{id}/overview/edit', 'supplierEdit')->name('supplier.overview.edit');
         Route::get('supplier/{id}/address', 'address')->name('supplier.address');
@@ -213,10 +245,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('supplier/{id}/account', 'account')->name('supplier.account');
         Route::get('supplier/{id}/account/edit', 'accountEdit')->name('supplier.account.edit');
     });
-
-    Route::resource('department', DepartmentController::class);
-    Route::post('department/status', [DepartmentController::class, 'statusUpdate'])->name('department.status');
-    Route::post('department/delete', [DepartmentController::class, 'selectDelete'])->name('department.delete');
 
     Route::controller(RoleAndPermissionController::class)->group(function () {
         Route::group(['prefix' => 'roles'], function () {

@@ -126,8 +126,7 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit supplier' : `Add New supplier`" />
 
-    <AppLayout title="Supplier">
-
+    <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">

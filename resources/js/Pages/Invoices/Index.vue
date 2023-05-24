@@ -10,6 +10,7 @@ import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["invoices"],
     data() {
@@ -53,6 +54,7 @@ export default defineComponent({
     Pagination,
     Multiselect,
     Loading,
+    Alert
 },
     methods: {
 
@@ -112,11 +114,11 @@ export default defineComponent({
 });
 </script>
 <template>
-        <AppLayout title="Invoice">
+    <app-layout>
 
-
-        <Head title="Invoice" />
+        <Head title="Invoice " />
         <div class="card card-flush">
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
@@ -146,7 +148,7 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add industries-->
-                        <Link href="/invoice/add" class="btn btn-primary">
+                        <Link href="/invoices/add" class="btn btn-primary">
                         Add Invoice
                         </Link>
                         <!--end::Add industries-->
@@ -245,6 +247,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-    </AppLayout>
-
+    </app-layout>
 </template>

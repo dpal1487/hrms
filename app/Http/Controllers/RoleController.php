@@ -46,6 +46,8 @@ class RoleController extends Controller
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
 
+        return $request;
+
 
         $role = Role::create([
             'name' => $request->name,

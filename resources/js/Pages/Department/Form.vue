@@ -15,7 +15,7 @@ import { Inertia } from "@inertiajs/inertia";
 
 
 export default defineComponent({
-    props: ["department"],
+    props: ['department'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -43,8 +43,8 @@ export default defineComponent({
                 status: this.department?.data?.status || '',
             }),
             status: [
-                { id: '1', name: 'Active' },
-                { id: '0', name: 'Inactive' },
+                { name: 'Active', id: '1' },
+                { name: 'Inactive', id: '0' },
             ]
         };
     },
@@ -105,8 +105,7 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="isEdit ? 'Edit Department' : `Add New Department`" />
-        <AppLayout title="Department">
-
+    <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
@@ -130,16 +129,16 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="status" value="Status" />
-                                    <!-- {{ this.industry?.data?.status }} -->
                                     <Multiselect :options="status" label="name" valueProp="id"
-                                        class="form-control form-control-lg form-control-solid" placeholder="Choose One"
-                                        v-model="v$.form.status.$model" track-by="name" :class="v$.form.status.$errors.length > 0
+                                        class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                        v-model="form.status" track-by="name" :class="v$.form.status.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
                                             " />
-                                    <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                    <div v-for="(error, index) of v$.form.status.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
+
                                 </div>
                             </div>
                         </div>

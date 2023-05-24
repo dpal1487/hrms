@@ -4,6 +4,7 @@ import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 
 export default defineComponent({
+    props: ['company', 'email'],
     components: {
         Link,
     },
@@ -18,6 +19,7 @@ export default defineComponent({
                 <!--begin: Pic-->
                 <div class="me-7 mb-4">
                 </div>
+
                 <!--end::Pic-->
                 <!--begin::Info-->
                 <div class="flex-grow-1">
@@ -28,7 +30,9 @@ export default defineComponent({
                             <!--begin::Name-->
                             <div class="d-flex align-items-center mb-2">
                                 <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">
-                                    {{ $page.props.ziggy.company.company_name }}</a>
+                                    {{ $page.props.ziggy.company.company_name }}
+
+                                </a>
                                 <a href="">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen026.svg-->
                                     <span class="svg-icon svg-icon-1 svg-icon-primary">
@@ -76,7 +80,8 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon--></a>
+                                    <!--end::Svg Icon-->{{ $page.props.ziggy?.address.city + " " +
+                                        $page.props.ziggy.address.state + " " + $page.props.ziggy.address.pincode }}</a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">
@@ -90,7 +95,7 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->{{ $page.props.ziggy.company.contact_email }}</a>
+                                    <!--end::Svg Icon-->{{ $page.props.ziggy.email?.email_address }}</a>
                             </div>
                             <!--end::Info-->
                         </div>

@@ -101,8 +101,7 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="isEdit ? 'Edit Conversion Rate' : `Add New Conversion Rate`" />
-        <AppLayout title="Conversion Rate">
-
+    <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">

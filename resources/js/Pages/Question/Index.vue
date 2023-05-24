@@ -4,14 +4,15 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Pagination from "../../Jetstream/Pagination.vue";
 import Multiselect from "@vueform/multiselect";
-import Loading from "vue-loading-overlay";
 
 import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
+import Loading from "vue-loading-overlay";
 import axios from "axios";
+import Alert from "../../Components/Alert.vue";
 export default defineComponent({
-    props: ['questions'],
+    props: ["questions"],
 
     data() {
         return {
@@ -35,7 +36,7 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
-
+        Alert
     },
     methods: {
 
@@ -83,10 +84,10 @@ export default defineComponent({
         search() {
             Inertia.get(
                 "/question",
-                { q: this.q },
+                { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
-                        this.questions = props.questions.data;
+                        this.questions = data.props.questions;
                     },
                 }
             );
@@ -135,11 +136,11 @@ export default defineComponent({
 });
 </script>
 <template>
-    <AppLayout title="Question">
-
+    <app-layout>
 
         <Head title="Question" />
         <div class="card card-flush">
+            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <div class="card-header border-0 pt-6">
@@ -206,25 +207,25 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(questions, index) in questions?.data" :key="index">
+                            <tr v-for="(questions, index) in questions.data" :key="index">
                                 <td>
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
                                         <input class="form-check-input" type="checkbox" @input="selectQuestion(index)">
                                     </div>
                                 </td>
                                 <td>
-                                    {{ questions?.industry?.name }}
+                                    {{ questions.industry?.name }}
                                 </td>
-                                <td>{{ questions?.question_key }}</td>
-                                <td>{{ questions?.text }}</td>
-                                <td>{{ questions?.language }}</td>
+                                <td>{{ questions.question_key }}</td>
+                                <td>{{ questions.text }}</td>
+                                <td>{{ questions.language }}</td>
 
-                                <td>{{ questions?.type }}</td>
+                                <td>{{ questions.type }}</td>
 
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${questions?.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${questions.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -239,17 +240,17 @@ export default defineComponent({
                                         </a>
 
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${questions?.id}`">
+                                            :aria-labelled:by="`dropdown-${questions.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/question/${questions?.id}/edit`">Edit
+                                                    :href="`/question/${questions.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    questions?.id, index
+                                                    questions.id, index
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
@@ -264,10 +265,10 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="questions?.meta">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="questions.meta">
                     <Pagination :links="questions.meta.links" />
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>

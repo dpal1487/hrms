@@ -110,8 +110,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <AppLayout title="User List">
-
+    <app-layout>
 
         <Head title="Employees" />
         <AddUser v-if="showModal" :show="showModal" :isEdit="isEdit" @hidemodal="toggleModal(false)" :roles="roles.data" />
@@ -290,5 +289,5 @@ export default defineComponent({
             <!--end::Card body-->
         </div>
         <!--end::Card-->
-    </AppLayout>
+    </app-layout>
 </template>

@@ -104,8 +104,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <AppLayout title="User">
-
+    <app-layout>
 
         <Head title="Employees" />
         <div class="card card-flush">
@@ -238,5 +237,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>

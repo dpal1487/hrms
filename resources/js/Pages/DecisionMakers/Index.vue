@@ -97,8 +97,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <AppLayout title="Decision Makers">
-
+    <app-layout>
 
         <Head title="Decision Makers" />
         <div class="card card-flush">
@@ -221,5 +220,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>

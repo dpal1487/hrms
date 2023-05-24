@@ -144,10 +144,9 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit Question' : `Add New Question`" />
+    <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
-    <AppLayout title="Question">
-
+    <AppLayout>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div v-if="$page?.props?.flash?.message"
                 class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"

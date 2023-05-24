@@ -21,7 +21,7 @@ import { Inertia } from "@inertiajs/inertia";
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ['employee', 'user', 'departments'],
+    props: ['employee' , 'user' , 'departments'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -105,7 +105,7 @@ export default defineComponent({
                 offer_acceptance: this.employee?.data?.offer_acceptance || '',
                 probation_period: this.employee?.data?.probation_period || '',
                 date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
-                department_id: this.employee?.data?.department?.id || '',
+                department_id: this.employee?.data?.department_id || '',
                 department: '',
             }),
             url: null,
@@ -195,7 +195,8 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
-    <AppLayout title="Employee">
+    <AppLayout>
+
 
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
@@ -366,7 +367,7 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="department_id" value="Department" />
-                                    <Multiselect :options="departments" label="name" valueProp="id"
+                                    <Multiselect :options="departments.data" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                         v-model="form.department_id" track-by="name" />
 
