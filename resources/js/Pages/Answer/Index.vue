@@ -135,6 +135,14 @@ export default defineComponent({
 </script>
 <template>
     <app-layout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/answers" class="text-muted text-hover-primary">Answer</Link>
+            </li>
+        </template>
 
         <Head title="Answers" />
         <div class="card card-flush">

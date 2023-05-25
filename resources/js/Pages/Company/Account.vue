@@ -110,7 +110,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item text-muted">
-                {{ company?.data.name }}
+                {{ company?.data.company_name }}
             </li>
         </template>
         <div class="app-content flex-column-fluid ">

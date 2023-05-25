@@ -149,6 +149,14 @@ export default defineComponent({
 </script>
 <template>
     <app-layout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/department" class="text-muted text-hover-primary">Department</Link>
+            </li>
+        </template>
 
         <Head title="Conversion Rate" />
         <div class="card card-flush">

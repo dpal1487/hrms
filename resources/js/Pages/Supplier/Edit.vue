@@ -14,7 +14,7 @@ import { toast } from "vue3-toastify";
 import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
-    props: ['supplier', 'company','address'],
+    props: ['supplier', 'company', 'address'],
 
     setup() {
         return { v$: useVuelidate() };
@@ -111,10 +111,18 @@ export default defineComponent({
 <template>
     <Head title="Supplier Edit" />
     <AppLayout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/supplier" class="text-muted text-hover-primary">Supplier</Link>
+            </li>
+        </template>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :company="company?.data" :supplier="supplier?.data" :address="address?.data"/>
+                <Header :company="company?.data" :supplier="supplier?.data" :address="address?.data" />
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->

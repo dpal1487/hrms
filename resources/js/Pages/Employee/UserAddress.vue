@@ -101,6 +101,14 @@ export default defineComponent({
 <template>
     <Head title="User Address" />
     <AppLayout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/employees" class="text-muted text-hover-primary">Employee</Link>
+            </li>
+        </template>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
@@ -257,8 +265,7 @@ export default defineComponent({
                             <!--end::Card body-->
                             <!--begin::Actions-->
                             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                <Link :href="`/employee/${id}/address`"
-                                    class="btn btn-light btn-active-light-primary me-2">
+                                <Link :href="`/employee/${id}/address`" class="btn btn-light btn-active-light-primary me-2">
                                 Discard
                                 </Link>
                                 <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->

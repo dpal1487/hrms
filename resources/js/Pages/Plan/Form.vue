@@ -132,6 +132,14 @@ export default defineComponent({
 <template>
     <Head title="Plan" />
     <AppLayout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/plan" class="text-muted text-hover-primary">Plan</Link>
+            </li>
+        </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <JetValidationErrors />

@@ -7,32 +7,25 @@ import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
-import 'vue3-toastify/dist/index.css';
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 import Alert from "../../Components/Alert.vue";
 export default defineComponent({
-    props: ["employees"],
+    props: ["currencies"],
+
     data() {
         return {
             q: "",
             s: "",
-            message: '',
             tbody: [
-                "Employee Name",
-                "Employee Code",
-                "Number",
-                "Salary",
-                "Created At",
+                "Currency Name",
+                "Currency Value",
+                "Symbol",
+                "Status",
                 "Action",
             ],
-            isLoading: false,
-            statusOptions: [
-                { value: "all", label: "All" },
-                { value: 1, label: "Active" },
-                { value: 0, label: "Inactive" }
-            ],
-            filteredStatus: [],
+            checkbox: [],
+
         };
     },
     components: {
@@ -49,10 +42,10 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            const first_name = this.employees.data[index].user.first_name;
-            const last_name = this.employees.data[index].user.last_name;
+            const name = this.currencies.data[index].currency_name;
+
             Swal.fire({
-                title: "Are you sure you want to delete " + first_name + " " + last_name + "?",
+                title: "Are you sure you want to delete " + name + " ?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
@@ -62,23 +55,23 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/employee/" + id)
+                        .delete("/currencies/" + id)
                         .then((response) => {
-                            toast.success(response.data.message);
+                            toast.success(response.data.message)
                             if (response.data.success) {
-                                this.employees.data.splice(index, 1);
+                                this.currencies.data.splice(index, 1);
                                 return;
                             }
                         })
 
                         .catch((error) => {
                             if (error.response.status == 400) {
-                                toastr.error(error.response.data.message);
+                                toast.error(error.response.data.message);
                             }
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: first_name + " " + last_name + " was not deleted.",
+                        text: name + " was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -92,27 +85,88 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/employee",
+                "/currencies",
                 { q: this.q, status: this.s },
+                {
+                    preserveState: true, onSuccess: (data) => {
+                        this.currencies = data.props.currencies;
+                    },
+                }
             );
         },
-    },
-    setup() {
+        changeStatus(e, id) {
+            this.isLoading = true;
+            axios
+                .post("/currencies/status", { id: id, status: e })
+                .then((response) => {
+                    if (response.data.success) {
+                        toast.success(response.data.message);
+                        return;
+                    }
+                    toast.error(response.data.message);
+                })
+                .finally(() => (this.isLoading = false));
+        },
+        filterFunction(value, index, arr) {
+            if (value === this.currencies.data[index].id) {
+                // Removes the value from the original array
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        },
+        selectcurrencie(index) {
+            const x = this.checkbox.filter(this.filterFunction);
+            this.checkbox.push(this.currencies.data[index].id);
+        },
+        selectAllcurrencies() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]');
+            const list = [];
+            checkboxes.forEach((cb) => { cb.checked = true; });
+            this.currencies.data.map(function (value, key) {
+                list.push(value.id)
+            });
+            this.checkbox = list;
+        },
 
-    },
+        deletecurrencie(index) {
 
+            axios
+                .post("/currencies/delete", { ids: this.checkbox })
+                .then((response) => {
+                    if (response.data.success == true) {
+                        toast.success(response.data.message);
+                        this.currencies.data.splice(index, this.checkbox.length);
+                        return;
+                    }
+                    else {
+                        toast.error(response.data.message);
+                    }
+                }).finally({
+                    checkbox: false,
+                })
+        }
+    },
 });
 </script>
 <template>
     <app-layout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/currencies" class="text-muted text-hover-primary">Currency</Link>
+            </li>
+        </template>
 
-        <Head title="Employees" />
+        <Head title="Conversion Rate" />
         <div class="card card-flush">
-            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
+                <!--begin::Card title-->
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
-                    <!--begin::Card title-->
+                    <!--begin::Search-->
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -137,15 +191,19 @@ export default defineComponent({
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
-                    <!--end::Search-->
-
+                    <!--begin::Card title-->
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <!--begin::Add industries-->
-                        <Link href="/employee/add" class="btn btn-primary">
-                        Add Employee
+                        <!--begin::Toolbar-->
+
+                        <!--begin::Add Conversion Rate-->
+                        <Link href="/currencies/create" class="btn btn-primary">
+                        Add Conversion Rate
                         </Link>
-                        <!--end::Add industries-->
+                        <!--end::Add Conversion Rate-->
+                        <button v-if="checkbox.length > 0" @click="deletecurrencie()" class="btn btn-danger">Delete
+                            Selected</button>
+                        <!--end::Toolbar-->
                     </div>
                     <!--end::Card toolbar-->
                 </form>
@@ -159,6 +217,11 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @change="selectAllcurrencies()">
+                                    </div>
+                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -168,25 +231,33 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(employees, index) in employees.data" :key="index">
+                            <tr v-for="(currency, index) in currencies.data" :key="index">
+                                <td>
+                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" @input="selectcurrencie(index)">
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ currency?.currency_name }}
+                                </td>
 
                                 <td>
-
-                                    <Link :href="'/employee/' + employees.id"
-                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                        employees-filter="employees_name">{{ employees.user?.first_name }} {{
-                                            employees.user?.last_name }}</Link>
+                                    {{ currency?.currency_value }}
                                 </td>
-                                <td>{{ employees.code }}</td>
-                                <td>{{ employees.number }}</td>
-                                <td>{{ employees.salary }}</td>
-
-                                <td>{{ employees.created_at }}</td>
-
+                                <td>
+                                    {{ currency?.symbols }}
+                                </td>
+                                <td>
+                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox"
+                                            @input="changeStatus($event.target.checked, currency.id)"
+                                            :checked="currency.status == 1 ? true : false" />
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${employees.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${currency.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -199,27 +270,21 @@ export default defineComponent({
                                             </span>
                                             <!--end::Svg Icon-->
                                         </a>
-
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${employees.id}`">
+                                            :aria-labelled:by="`dropdown-${currency.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employee/${employees.id}/edit`">Edit
-                                                </Link>
-                                            </li>
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/employee/${employees.id}`">View
+                                                    :href="`/currencies/${currency.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    employees.id, index
+                                                    currency.id, index
                                                 )
-                                                    " class="btn btn-sm dropdown-item">
+                                                    "
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center">
                                                     Delete
                                                 </button>
                                             </li>
@@ -227,13 +292,12 @@ export default defineComponent({
                                     </div>
                                 </td>
                             </tr>
-
                         </tbody>
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="employees.meta">
-                    <Pagination :links="employees.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="currencies.meta">
+                    <Pagination :links="currencies.meta.links" />
                 </div>
             </div>
         </div>

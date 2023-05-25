@@ -11,16 +11,15 @@ import Loading from "vue-loading-overlay";
 import axios from "axios";
 import Alert from "../../Components/Alert.vue";
 export default defineComponent({
-    props: ["conversionrates", "message"],
+    props: ["corporationtypes"],
 
     data() {
         return {
             q: "",
             s: "",
             tbody: [
-                "Currency Name",
-                "Currency Value",
-                "Status",
+                "Corporation Title",
+                "Dsescription",
                 "Action",
             ],
             checkbox: [],
@@ -41,7 +40,7 @@ export default defineComponent({
         confirmDelete(id, index) {
             this.isLoading = true;
 
-            const name = this.conversionrates.data[index].currency_name;
+            const name = this.corporationtypes.data[index].corporationtype_name;
 
             Swal.fire({
                 title: "Are you sure you want to delete " + name + " ?",
@@ -54,11 +53,11 @@ export default defineComponent({
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/conversion-rate/" + id)
+                        .delete("/corporation-type/" + id)
                         .then((response) => {
                             toast.success(response.data.message)
                             if (response.data.success) {
-                                this.conversionrates.data.splice(index, 1);
+                                this.corporationtypes.data.splice(index, 1);
                                 return;
                             }
                         })
@@ -84,11 +83,11 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/conversion-rate",
+                "/corporation-type",
                 { q: this.q, status: this.s },
                 {
                     preserveState: true, onSuccess: (data) => {
-                        this.conversionrates = data.props.conversionrates;
+                        this.corporationtypes = data.props.corporationtypes;
                     },
                 }
             );
@@ -96,7 +95,7 @@ export default defineComponent({
         changeStatus(e, id) {
             this.isLoading = true;
             axios
-                .post("/conversion-rate/status", { id: id, status: e })
+                .post("/corporation-type/status", { id: id, status: e })
                 .then((response) => {
                     if (response.data.success) {
                         toast.success(response.data.message);
@@ -107,35 +106,35 @@ export default defineComponent({
                 .finally(() => (this.isLoading = false));
         },
         filterFunction(value, index, arr) {
-            if (value === this.conversionrates.data[index].id) {
+            if (value === this.corporationtypes.data[index].id) {
                 // Removes the value from the original array
                 arr.splice(index, 1);
                 return true;
             }
             return false;
         },
-        selectConverRate(index) {
+        selectcurrencie(index) {
             const x = this.checkbox.filter(this.filterFunction);
-            this.checkbox.push(this.conversionrates.data[index].id);
+            this.checkbox.push(this.corporationtypes.data[index].id);
         },
-        selectAllConverRates() {
+        selectAllcorporationtypes() {
             const checkboxes = document.querySelectorAll('input[type=checkbox]');
             const list = [];
             checkboxes.forEach((cb) => { cb.checked = true; });
-            this.conversionrates.data.map(function (value, key) {
+            this.corporationtypes.data.map(function (value, key) {
                 list.push(value.id)
             });
             this.checkbox = list;
         },
 
-        deleteConverRate(index) {
+        deletecurrencie(index) {
 
             axios
-                .post("/decision-makers/delete", { ids: this.checkbox })
+                .post("/corporation-type/delete", { ids: this.checkbox })
                 .then((response) => {
                     if (response.data.success == true) {
                         toast.success(response.data.message);
-                        this.conversionrates.data.splice(index, this.checkbox.length);
+                        this.corporationtypes.data.splice(index, this.checkbox.length);
                         return;
                     }
                     else {
@@ -150,10 +149,17 @@ export default defineComponent({
 </script>
 <template>
     <app-layout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/corporation-type" class="text-muted text-hover-primary">Conversion Type</Link>
+            </li>
+        </template>
 
-        <Head title="Conversion Rate" />
+        <Head title="Conversion Type" />
         <div class="card card-flush">
-            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <!--begin::Card title-->
@@ -188,12 +194,12 @@ export default defineComponent({
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Toolbar-->
 
-                        <!--begin::Add Conversion Rate-->
-                        <Link href="/conversion-rate/create" class="btn btn-primary">
-                        Add Conversion Rate
+                        <!--begin::Add Conversion Type-->
+                        <Link href="/corporation-type/create" class="btn btn-primary">
+                        Add Conversion Type
                         </Link>
-                        <!--end::Add Conversion Rate-->
-                        <button v-if="checkbox.length > 0" @click="deleteConverRate()" class="btn btn-danger">Delete
+                        <!--end::Add Conversion Type-->
+                        <button v-if="checkbox.length > 0" @click="deletecurrencie()" class="btn btn-danger">Delete
                             Selected</button>
                         <!--end::Toolbar-->
                     </div>
@@ -211,7 +217,8 @@ export default defineComponent({
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
                                 <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" @change="selectAllConverRates()">
+                                        <input class="form-check-input" type="checkbox"
+                                            @change="selectAllcorporationtypes()">
                                     </div>
                                 </th>
                                 <th v-for="(th, index) in tbody" :key="index">
@@ -223,29 +230,24 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(conversionrate, index) in conversionrates.data" :key="index">
+                            <tr v-for="(corporationtype, index) in corporationtypes.data" :key="index">
                                 <td>
                                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" @input="selectConverRate(index)">
+                                        <input class="form-check-input" type="checkbox" @input="selectcurrencie(index)">
                                     </div>
                                 </td>
                                 <td>
-                                    {{ conversionrate?.currency_name }}
+                                    {{ corporationtype?.title }}
                                 </td>
+
                                 <td>
-                                    {{ conversionrate?.currency_value }}
+                                    {{ corporationtype?.description }}
                                 </td>
-                                <td>
-                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
-                                        <input class="form-check-input h-20px w-30px" type="checkbox"
-                                            @input="changeStatus($event.target.checked, conversionrate.id)"
-                                            :checked="conversionrate.status == 1 ? true : false" />
-                                    </div>
-                                </td>
+
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${conversionrate.id}`" data-bs-toggle="dropdown"
+                                            :id="`dropdown-${corporationtype.id}`" data-bs-toggle="dropdown"
                                             aria-expanded="false">Actions
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                             <span class="svg-icon svg-icon-5 m-0">
@@ -259,17 +261,17 @@ export default defineComponent({
                                             <!--end::Svg Icon-->
                                         </a>
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${conversionrate.id}`">
+                                            :aria-labelled:by="`dropdown-${corporationtype.id}`">
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/conversion-rate/${conversionrate.id}/edit`">Edit
+                                                    :href="`/corporation-type/${corporationtype.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
-                                                    conversionrate.id, index
+                                                    corporationtype.id, index
                                                 )
                                                     "
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center">
@@ -285,8 +287,8 @@ export default defineComponent({
                     </table>
                 </div>
                 <div class="d-flex align-items-center justify-content-center justify-content-md-end"
-                    v-if="conversionrates.meta">
-                    <Pagination :links="conversionrates.meta.links" />
+                    v-if="corporationtypes.meta">
+                    <Pagination :links="corporationtypes.meta.links" />
                 </div>
             </div>
         </div>

@@ -17,11 +17,13 @@ use App\Http\Resources\EmailResource;
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\CorporationTypeResource;
 use App\Http\Resources\CountryResource;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Account;
 use App\Models\Address;
 use App\Models\CompanyUser;
+use App\Models\CorporationType;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -46,7 +48,7 @@ class CompanyController extends Controller
 
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'company_name' => 'required',
             'company_type' => 'required',
             'company_size_id' => 'required',
@@ -58,9 +60,6 @@ class CompanyController extends Controller
             'linkedin_profile' => 'required',
             'skype_profile' => 'required',
         ]);
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
-        }
         $company = Company::where('id', $this->companyId())->first();
 
         if ($company) {
@@ -68,7 +67,7 @@ class CompanyController extends Controller
                 'size' => $request->company_size_id
             ]);
 
-            $companyUpdate = Company::where('id', $this->companyId())->update([
+            $company = Company::where('id', $this->companyId())->update([
                 'company_name' => $request->company_name,
                 'company_type' => $request->company_type,
                 'company_size_id' => $companySize->id,
@@ -80,21 +79,9 @@ class CompanyController extends Controller
                 'linkedin_profile' => $request->linkedin_profile,
                 'skype_profile' => $request->skype_profile,
             ]);
-            if ($companyUpdate) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Company updated successfully'
-                ]);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Company not updated'
-            ]);
+            return redirect("/company")->with('flash', ['message' => 'Company successfully updated.']);
         }
-        return response()->json([
-            'success' => false,
-            'message' => 'Some Thing went wrong'
-        ]);
+        return redirect()->back()->withErrors(['Opps something went wrong!']);
     }
 
     public function show()
@@ -102,10 +89,12 @@ class CompanyController extends Controller
         $address = CompanyAddress::where('company_id', $this->companyId())->first();
         $email = CompanyEmail::where('company_id', $this->companyId())->first();
         $company = Company::find($this->companyId());
+        $corporationtypes = CorporationType::get();
         return Inertia::render('Company/Overview', [
             'company' => new CompanyResource($company),
             'address' => new AddressResource($address),
             'email' => new EmailResource($email),
+            'corporationtypes' =>CorporationTypeResource::collection($corporationtypes),
         ]);
     }
     public function addresses()
@@ -130,11 +119,12 @@ class CompanyController extends Controller
             'country' => 'required',
             'pincode' => 'required',
         ]);
-
         if (CompanyUser::where(['user_id' => $this->uid(), 'company_id' => $this->companyId()])->first()) {
-            $address = CompanyAddress::where('company_id', $this->companyId())->get();
-            foreach ($address as $address) {
-                Address::where(['id' => $address->address_id])->update(['is_primary' => 0]);
+            $addresses = CompanyAddress::where('company_id', $this->companyId())->get();
+            foreach ($addresses as $address) {
+                if ($request->is_primary == true) {
+                    $address = Address::where(['id' => $address->address_id])->update(['is_primary' => 0]);
+                }
             }
             $address = Address::create([
                 'address_line_1' => $request->address_line_1,
@@ -144,12 +134,12 @@ class CompanyController extends Controller
                 'country_id' => $request->country,
                 'pincode' => $request->pincode,
                 'is_primary' => $request->is_primary ? 1 : 0,
-
             ]);
             $companyAddress = companyAddress::create([
                 'company_id' => $this->companyId(),
                 'address_id' => $address->id,
             ]);
+
             if ($companyAddress) {
                 return redirect("/company/address")->with('flash', ['message' => 'Address successfully created.']);
             }
@@ -169,11 +159,11 @@ class CompanyController extends Controller
         ]);
         if (Company::where(['id' => $this->companyId()])->first()) {
             if ($addresses = CompanyAddress::where(['company_id' => $this->companyId()])->get()) {
-
                 foreach ($addresses as $address) {
-                    $address = Address::where(['id' => $address->address_id])->update(['is_primary' => 0]);
+                    if ($request->is_primary == true) {
+                        $address = Address::where(['id' => $address->address_id])->update(['is_primary' => 0]);
+                    }
                 }
-
                 $address = Address::where(['id' => $request->id])->update([
                     'address_line_1' => $request->address_line_1,
                     'address_line_2' => $request->address_line_2,
@@ -233,7 +223,9 @@ class CompanyController extends Controller
             $account = CompanyAccount::where(['company_id' => $this->companyId()])->get();
 
             foreach ($account as $account) {
-                Account::where(['id' => $account->account_id])->update(['is_primary' => 0]);
+                if ($request->is_primary == true) {
+                    Account::where(['id' => $account->account_id])->update(['is_primary' => 0]);
+                }
             }
             $account = Account::create([
                 'bank_name' => $request->bank_name,
@@ -275,7 +267,9 @@ class CompanyController extends Controller
             if ($account = CompanyAccount::where(['Company_id' => $this->companyId()])->get()) {
 
                 foreach ($account as $account) {
-                    Account::where(['id' => $account->account_id])->update(['is_primary' => 0]);
+                    if ($request->is_primary == true) {
+                        Account::where(['id' => $account->account_id])->update(['is_primary' => 0]);
+                    }
                 }
                 $account = Account::where(['id' => $request->id])->update([
                     'bank_name' => $request->bank_name,
@@ -326,16 +320,21 @@ class CompanyController extends Controller
         $request->validate([
             'email_address' => 'required|unique:company_emails,email_address',
         ]);
-        if (CompanyUser::where(['user_id' => $this->uid(), 'company_id' => $this->companyId()])->first()) {
-            $email = CompanyEmail::where('company_id', $this->companyId());
-            foreach ($email as $email) {
-                CompanyEmail::where(['id' => $email->id])->update(['is_primary' => 0]);
+        if (Company::where(['id' => $this->companyId()])->first()) {
+            if ($email = CompanyEmail::where('company_id', $this->companyId())->get()) {
+                foreach ($email as $email) {
+                    if ($request->is_primary == true) {
+                        CompanyEmail::where(['id' => $email->id])->update(['is_primary' => 0]);
+                    }
+                }
+                $email =  CompanyEmail::create([
+                    'email_address' => $request->email_address,
+                    'is_primary' => $request->is_primary ? 1 : 0,
+                    'company_id' => $this->companyId(),
+                ]);
             }
-            $email =  CompanyEmail::create([
-                'email_address' => $request->email_address,
-                'is_primary' => $request->is_primary ? 1 : 0,
-                'company_id' => $this->companyId(),
-            ]);
+
+
             if ($email) {
                 return redirect("/company/emails")->with('flash', ['message' => 'Email successfully created.']);
             }
@@ -353,7 +352,10 @@ class CompanyController extends Controller
         if (Company::where(['id' => $this->companyId()])->first()) {
             if ($email = CompanyEmail::where(['company_id' => $this->companyId()])->get()) {
                 foreach ($email as $email) {
-                    CompanyEmail::where(['id' => $email->id])->update(['is_primary' => 0]);
+
+                    if ($request->is_primary == true) {
+                        CompanyEmail::where(['id' => $email->id])->update(['is_primary' => 0]);
+                    }
                 }
                 $email = CompanyEmail::where(['id' => $request->id])->update([
                     'email_address' => $request->email_address,

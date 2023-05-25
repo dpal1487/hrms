@@ -24,7 +24,7 @@ import { Inertia } from "@inertiajs/inertia";
 // import { Datetime } from 'vue-datetime';
 
 export default defineComponent({
-    props: ['employee', 'user' , 'departments'],
+    props: ['employee', 'user', 'departments'],
 
     setup() {
         return { v$: useVuelidate() };
@@ -195,7 +195,14 @@ export default defineComponent({
 <template>
     <Head title="Employee Edit" />
     <AppLayout>
-
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/employees" class="text-muted text-hover-primary">Employee</Link>
+            </li>
+        </template>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">

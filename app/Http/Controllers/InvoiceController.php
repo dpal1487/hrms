@@ -12,6 +12,10 @@ use App\Models\CompanyInvoice;
 use App\Http\Resources\InvoiceResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\CompanyResource;
+use App\Http\Resources\CurrencyResource;
+use App\Models\ClientAddress;
+use App\Models\Currency;
 use Inertia\Inertia;
 
 use Illuminate\Http\Request;
@@ -20,10 +24,7 @@ class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        // $company = Company::get();
         $company = Company::where('id', $this->companyId())->get();
-
-        // return $company;
         $invoices = new Invoice();
         if (!empty($request->q)) {
             $invoices = $invoices->where('invoice_number', 'like', '%' . $request->q . '%');
@@ -37,21 +38,56 @@ class InvoiceController extends Controller
             'invoices' => InvoiceResource::collection($invoices->paginate(10)->appends($request->all())),
         ]);
     }
+
+    public function companyAddress(Request $request, $id)
+    {
+        $company = CompanyAddress::where('company_id', $id)->first();
+
+        if ($request->ajax()) {
+            if ($company) {
+                return response()->json([
+                    'success' => true,
+                    'data' => new AddressResource($company),
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Something Went Wrong',
+            ]);
+        } else {
+            return $this->errorAjax();
+        }
+    }
+
+    public function clientAddress(Request $request, $id)
+    {
+        $client = ClientAddress::where('client_id', $id)->first();
+        if ($request->ajax()) {
+            if ($client) {
+                return response()->json([
+                    'success' => true,
+                    'data' => new AddressResource($client),
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Something Went Wrong',
+            ]);
+        } else {
+            return $this->errorAjax();
+        }
+    }
     public function create()
     {
 
         $companies = Company::where('id', $this->companyId())->get();
-        $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
         $clients = Client::where('company_id', $this->companyId())->get();
-        $conversionrates = ConversionRate::get();
-
-        // return $clients;
+        $currencies = Currency::get();
 
         return Inertia::render('Invoices/Form', [
-            'companies' => $companies,
+            'companies' => CompanyResource::collection($companies),
             'clients' => $clients,
-            'conversionrates' => $conversionrates,
-            'address' => AddressResource::collection($address),
+            'currencies' => CurrencyResource::collection($currencies),
         ]);
     }
 
@@ -111,12 +147,14 @@ class InvoiceController extends Controller
         $companies = Company::where('id', $this->companyId())->get();
         $address = CompanyAddress::where(['company_id' => $this->companyId()])->get();
         $clients = Client::where('company_id', $this->companyId())->get();
+        $currencies = Currency::get();
 
         return Inertia::render('Invoices/Form', [
             'companies' => $companies,
             'clients' => $clients,
-            'conversionrates' => $conversionrates,
             'invoice' => new InvoiceResource($invoice),
+            'currencies' => CurrencyResource::collection($currencies),
+
         ]);
     }
 

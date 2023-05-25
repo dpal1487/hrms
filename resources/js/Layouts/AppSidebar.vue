@@ -14,7 +14,7 @@ export default defineComponent({
             q: "",
             navigations: [
                 {
-                    link: "/employee",
+                    link: "/employees",
                     title: "Employee",
                     icon: "bi bi-pie-chart-fill",
                 },
@@ -65,8 +65,8 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/conversion-rate",
-                    title: "Conversion Rate",
+                    link: "/currencies",
+                    title: "Currency",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
@@ -74,7 +74,11 @@ export default defineComponent({
                     title: "Department",
                     icon: "bi bi-pie-chart-fill",
                 },
-
+                {
+                    link: "/corporation-type",
+                    title: "Corporation Type",
+                    icon: "bi bi-pie-chart-fill",
+                },
                 {
                     link: "/plan",
                     title: "Plan",

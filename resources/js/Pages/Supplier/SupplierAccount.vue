@@ -108,6 +108,14 @@ export default defineComponent({
 <template>
     <Head title="Supplier Address" />
     <AppLayout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/supplier" class="text-muted text-hover-primary">Supplier</Link>
+            </li>
+        </template>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">

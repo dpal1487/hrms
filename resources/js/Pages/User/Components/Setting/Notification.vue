@@ -1,17 +1,48 @@
 <script>
 
 import { defineComponent } from 'vue';
+import useVuelidate from '@vuelidate/core';
+
 import { Link } from '@inertiajs/inertia-vue3';
 
 export default defineComponent({
     props: [],
+
+    setup() {
+        return { v$: useVuelidate() };
+    },
+    validations() {
+        return {
+            form: {
+
+            }
+        }
+    },
     data() {
         return {
             processing: false,
+            isDisabled: true,
         }
     },
-    components: { Link }
+    components: { Link },
 
+
+    methods: {
+        enable() {
+            this.isDisabled = false
+        },
+        disabled() {
+            this.isDisabled = true
+        },
+        submit() {
+            this.v$.$touch();
+            if (!this.form.$invalid) {
+
+            }
+
+        },
+
+    },
 })
 </script>
 
@@ -24,9 +55,11 @@ export default defineComponent({
             <div class="card-title m-0">
                 <h3 class="fw-bold m-0">Notifications</h3>
             </div>
-            <Link class="btn btn-primary align-self-center" href="/account/setting">Edit
-            Notification
-            </Link>
+            <button v-if="isDisabled == true" type="button" @click="enable"
+                class="btn btn-primary align-self-center">Enable Notification</button>
+            <button v-if="isDisabled == false" type="button" @click="disabled"
+                class="btn btn-primary align-self-center">Disable Notification</button>
+
         </div>
         <!--begin::Card header-->
         <!--begin::Content-->
@@ -43,20 +76,16 @@ export default defineComponent({
                                 <td class="min-w-250px fs-4 fw-bold">Notifications</td>
                                 <td class="w-125px">
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="kt_settings_notification_email" checked="checked" data-kt-check="true"
-                                            data-kt-check-target="[data-kt-settings-notification=email]" />
-                                        <label class="form-check-label ps-2"
-                                            for="kt_settings_notification_email">Email</label>
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="notification_email" checked="checked" data-kt-check="true" />
+                                        <label class="form-check-label ps-2" for="notification_email">Email</label>
                                     </div>
                                 </td>
                                 <td class="w-125px">
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="kt_settings_notification_phone" checked="checked" data-kt-check="true"
-                                            data-kt-check-target="[data-kt-settings-notification=phone]" />
-                                        <label class="form-check-label ps-2"
-                                            for="kt_settings_notification_phone">Phone</label>
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="notification_phone" checked="checked" data-kt-check="true" />
+                                        <label class="form-check-label ps-2" for="notification_phone">Phone</label>
                                     </div>
                                 </td>
                             </tr>
@@ -66,15 +95,15 @@ export default defineComponent({
                                 <td>Billing Updates</td>
                                 <td>
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="1" id="billing1"
-                                            checked="checked" data-kt-settings-notification="email" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value="1"
+                                            id="billing1" checked="checked" />
                                         <label class="form-check-label ps-2" for="billing1"></label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" id="billing2"
-                                            checked="checked" data-kt-settings-notification="phone" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="billing2" checked="checked" />
                                         <label class="form-check-label ps-2" for="billing2"></label>
                                     </div>
                                 </td>
@@ -85,15 +114,15 @@ export default defineComponent({
                                 <td>New Team Members</td>
                                 <td>
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" id="team1"
-                                            checked="checked" data-kt-settings-notification="email" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="team1" checked="checked" />
                                         <label class="form-check-label ps-2" for="team1"></label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" id="team2"
-                                            data-kt-settings-notification="phone" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="team2" />
                                         <label class="form-check-label ps-2" for="team2"></label>
                                     </div>
                                 </td>
@@ -104,15 +133,15 @@ export default defineComponent({
                                 <td>Completed Projects</td>
                                 <td>
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" id="project1"
-                                            data-kt-settings-notification="email" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="project1" />
                                         <label class="form-check-label ps-2" for="project1"></label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" id="project2"
-                                            checked="checked" data-kt-settings-notification="phone" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="project2" checked="checked" />
                                         <label class="form-check-label ps-2" for="project2"></label>
                                     </div>
                                 </td>
@@ -123,15 +152,15 @@ export default defineComponent({
                                 <td class="border-bottom-0">Newsletters</td>
                                 <td class="border-bottom-0">
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" id="newsletter1"
-                                            data-kt-settings-notification="email" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="newsletter1" />
                                         <label class="form-check-label ps-2" for="newsletter1"></label>
                                     </div>
                                 </td>
                                 <td class="border-bottom-0">
                                     <div class="form-check form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="" id="newsletter2"
-                                            data-kt-settings-notification="phone" />
+                                        <input :disabled="isDisabled" class="form-check-input" type="checkbox" value=""
+                                            id="newsletter2" />
                                         <label class="form-check-label ps-2" for="newsletter2"></label>
                                     </div>
                                 </td>
@@ -144,11 +173,9 @@ export default defineComponent({
             </div>
             <!--end::Card body-->
             <!--begin::Card footer-->
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <Link href="/account/setting" class="btn btn-secondary align-items-center justify-content-center">
-                Discard
-                </Link>
-
+            <div :class="`card-footer d-flex justify-content-end gap-2 ${isDisabled == true ? 'd-none' : ''}`">
+                <button type="button" @click="disabled"
+                    class="btn btn-secondary align-items-center justify-content-center">Disable</button>
                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                     :data-kt-indicator="processing ? 'on' : 'off'">
                     <span class="indicator-label">

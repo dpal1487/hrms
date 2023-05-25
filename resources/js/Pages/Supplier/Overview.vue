@@ -6,7 +6,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import PrimaryButton from "@/Jetstream/Button.vue";
 
 export default defineComponent({
-    props: ['supplier' , 'address'],
+    props: ['supplier', 'address'],
     components: {
         AppLayout,
         Header,
@@ -20,12 +20,19 @@ export default defineComponent({
 <template>
     <Head title="Supplier Overview" />
     <AppLayout>
-
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/supplier" class="text-muted text-hover-primary">Supplier</Link>
+            </li>
+        </template>
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <!--begin::Navbar-->
-                <Header :supplier="supplier?.data" :address="address?.data"/>
+                <Header :supplier="supplier?.data" :address="address?.data" />
                 <!-- {{ $page }} -->
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">

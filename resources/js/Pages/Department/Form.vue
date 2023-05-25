@@ -106,6 +106,14 @@ export default defineComponent({
 <template>
     <Head :title="isEdit ? 'Edit Department' : `Add New Department`" />
     <AppLayout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/department" class="text-muted text-hover-primary">Department</Link>
+            </li>
+        </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">

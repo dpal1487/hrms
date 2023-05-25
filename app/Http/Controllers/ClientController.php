@@ -77,8 +77,7 @@ class ClientController extends Controller
             'contact_name' => 'required',
             'primary_contact' => 'required',
         ]);
-        $client = Client::create(
-            [
+        $client = Client::create(            [
                 'name' => $request->client_name,
                 'display_name' => $request->display_name,
                 'subdomain' => $request->subdomain,

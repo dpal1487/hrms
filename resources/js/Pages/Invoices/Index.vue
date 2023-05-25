@@ -48,14 +48,14 @@ export default defineComponent({
         };
     },
     components: {
-    AppLayout,
-    Link,
-    Head,
-    Pagination,
-    Multiselect,
-    Loading,
-    Alert
-},
+        AppLayout,
+        Link,
+        Head,
+        Pagination,
+        Multiselect,
+        Loading,
+        Alert
+    },
     methods: {
 
         confirmDelete(id, index) {
@@ -115,6 +115,14 @@ export default defineComponent({
 </script>
 <template>
     <app-layout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/invoice" class="text-muted text-hover-primary">Invoice</Link>
+            </li>
+        </template>
 
         <Head title="Invoice " />
         <div class="card card-flush">
@@ -148,7 +156,7 @@ export default defineComponent({
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <!--begin::Add industries-->
-                        <Link href="/invoices/add" class="btn btn-primary">
+                        <Link href="/invoice/add" class="btn btn-primary">
                         Add Invoice
                         </Link>
                         <!--end::Add industries-->
@@ -215,13 +223,13 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/invoices/${invoice.id}/edit`">Edit
+                                                    :href="`/invoice/${invoice.id}/edit`">Edit
                                                 </Link>
                                             </li>
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/invoices/${invoice.id}`">View
+                                                    :href="`/invoice/${invoice.id}`">View
                                                 </Link>
                                             </li>
 

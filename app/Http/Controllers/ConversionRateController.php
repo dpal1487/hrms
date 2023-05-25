@@ -119,21 +119,10 @@ class ConversionRateController extends Controller
                 'message' => 'Conversion Rate not updated',
             ], 400);
         }
-
-        // if ($conversionrate) {
-        //     return redirect()
-        //         ->route('conversion-rate.index')
-        //         ->with('message', 'Conversion Rate updated Successfully');
-        // }
-        // return redirect()
-        //     ->route('conversion-rate.index')
-        //     ->with('message', 'Conversion Rate not updated');
     }
 
     public function destroy($id)
     {
-        // dd($id);
-
         $conversionrate = ConversionRate::find($id);
         if ($conversionrate->delete()) {
             return response()->json(['success' => true, 'message' => 'Conversion Rate has been deleted successfully.']);

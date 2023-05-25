@@ -147,6 +147,15 @@ export default defineComponent({
     <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
 
     <AppLayout>
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/questions" class="text-muted text-hover-primary">Question</Link>
+            </li>
+        </template>
+
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div v-if="$page?.props?.flash?.message"
                 class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
