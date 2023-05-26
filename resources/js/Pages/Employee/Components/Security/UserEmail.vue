@@ -1,16 +1,15 @@
 <script>
 import { defineComponent } from 'vue';
-
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from '@vuelidate/core';
 import { required, email, sameAs } from "@vuelidate/validators";
 import { toast } from 'vue3-toastify';
-import axios from 'axios';
+
 
 export default defineComponent({
-    props: ["email"],
+    props: ["email", "employee"],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -32,7 +31,7 @@ export default defineComponent({
         return {
             isEdit: false,
             form: this.$inertia.form({
-                id: this.email?.id || '',
+                id: this.employee?.id || '',
                 email: this.email?.email || '',
                 confirm_password: ''
             }),
@@ -53,17 +52,23 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.form.$invalid) {
-                axios.post(route('employee.email.update', this.form.id), this.form).then((response) => {
-                    if (response.data.success == true) {
-                        toast.success(response.data.message)
-                        return;
-                    } else {
-                        toast.error(response.data.message)
-                    }
-                }).finally(() => {
-                    this.isEdit = false;
-                    this.form.reset()
-                });
+                this.form.transform((data) => ({
+                    ...data,
+                }))
+                    .post(route('employee.email.update', this.form.id),
+                        {
+                            onSuccess: (data) => {
+                                toast.success(this.$page.props.jetstream.flash.message);
+                                this.isEdit = false;
+                            },
+                            onError: (data) => {
+                                if (data.message) {
+                                    toast.error(data.message);
+                                    this.isEdit = false;
+
+                                }
+                            },
+                        });
             }
         },
     }
@@ -74,12 +79,10 @@ export default defineComponent({
     <div v-if="isEdit" class="flex-row-fluid">
         <form @submit.prevent="submit()" class="">
             <div class="row mb-6">
-                
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="fv-row mb-0">
                         <jet-label for="email" value="Enter New
                             Email Address" />
-
                         <jet-input id="email" type="email" v-model="v$.form.email.$model" :class="v$.form.email.$errors.length > 0
                             ? 'is-invalid'
                             : ''
@@ -98,8 +101,12 @@ export default defineComponent({
                 </div>
             </div>
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary me-2 px-6">Update
-                    Email</button>
+                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Changes Enail
+                </button>
                 <button type="button" @click="hideEditEmail"
                     class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
             </div>
@@ -112,9 +119,6 @@ export default defineComponent({
             <div class="fw-semibold text-gray-600">{{ email?.email }}</div>
         </div>
         <!--end::Label-->
-        <!--begin::Edit-->
-
-        <!--end::Edit-->
         <!--begin::Action-->
         <div class="ms-auto">
             <button type="button" @click="showEditEmail" class="btn btn-light btn-active-light-primary">Change

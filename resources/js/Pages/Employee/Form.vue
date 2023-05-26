@@ -40,6 +40,9 @@ export default defineComponent({
                 email: {
                     required,
                 },
+                password: {
+                    required,
+                },
                 date_of_joining: {
                     required,
                 },
@@ -74,7 +77,7 @@ export default defineComponent({
                 date_of_confirmation: {
                     required,
                 },
-                department_id: {
+                department: {
                     required,
                 }
             },
@@ -94,6 +97,7 @@ export default defineComponent({
                 first_name: this.employee?.data?.first_name || '',
                 last_name: this.employee?.data?.last_name || '',
                 email: this.user?.data?.email || '',
+                password: this.user?.data?.password || '',
                 date_of_joining: this.employee?.data?.date_of_joining || '',
                 number: this.employee?.data?.number || '',
                 qualification: this.employee?.data?.qualification || '',
@@ -105,17 +109,10 @@ export default defineComponent({
                 offer_acceptance: this.employee?.data?.offer_acceptance || '',
                 probation_period: this.employee?.data?.probation_period || '',
                 date_of_confirmation: this.employee?.data?.date_of_confirmation || '',
-                department_id: this.employee?.data?.department_id || '',
-                department: '',
+                department: this.employee?.data?.department?.id || '',
             }),
             url: null,
             value: null,
-            options: [
-                { name: 'Vue.js', department: 'Vue.js' },
-                { name: 'Rails', department: 'Rails' },
-                { name: 'Ruby', department: 'Ruby' },
-                { name: 'Laravel', department: 'Laravel' }
-            ]
         };
     },
     components: {
@@ -138,18 +135,21 @@ export default defineComponent({
             }
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.processing = true,
-                    axios.post(route().current() == 'employee.add' ? this.route("employee.store") : this.route('employee.update', this.form.id), this.form)
-                        .then((response) => {
-                            if (response.data.success == true) {
-                                this.processing = false,
-                                    toast.success(response.data.message)
-                                Inertia.get('/employee')
+                this.form.transform((data) => ({
+                    ...data,
+                }))
+                    .post(route().current() == 'employee.add' ? this.route("employee.store") : this.route('employee.update', this.form.id), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isEdit = false;
+                        },
+                        onError: (data) => {
+                            if (data.message) {
+                                toast.error(data.message);
                             }
-                            if (response.data.success == false) {
-                                toast.error(response.data.message)
-                            }
-                        })
+                        },
+                    })
+
             }
         },
         onFileChange(e) {
@@ -250,6 +250,16 @@ export default defineComponent({
                                         : ''
                                         " placeholder="Email" />
                                     <div v-for="(error, index) of v$.form.email.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
+                                <div class="fv-row col-6" v-if="!isEdit">
+                                    <jet-label for="password" value="Password" />
+                                    <jet-input id="password" type="password" v-model="v$.form.password.$model" :class="v$.form.password.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Password" />
+                                    <div v-for="(error, index) of v$.form.password.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
@@ -376,8 +386,10 @@ export default defineComponent({
                                     <jet-label for="department_id" value="Department" />
                                     <Multiselect :options="departments.data" label="name" valueProp="id"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        v-model="form.department_id" track-by="name" />
-
+                                        v-model="form.department" track-by="name" />
+                                    <div v-for="(error, index) of v$.form.department.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
                                 </div>
 
                             </div>
@@ -387,7 +399,7 @@ export default defineComponent({
                     <div class="row text-align-center">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <Link href="/employee" class="btn btn-secondary align-items-center justify-content-center">
+                                <Link href="/employees" class="btn btn-secondary align-items-center justify-content-center">
                                 Cancel
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"

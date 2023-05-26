@@ -8,15 +8,16 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+
 import useVuelidate from "@vuelidate/core";
-import { required, email, url } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 import Multiselect from "@vueform/multiselect";
 
 export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
     },
-    props: ['company' , 'corporationtypes'],
+    props: ['company', 'corporationtypes'],
     components: {
         AppLayout,
         Header,
@@ -82,14 +83,6 @@ export default defineComponent({
                 linkedin_profile: this.company?.data?.linkedin_profile || '',
                 skype_profile: this.company?.data?.skype_profile || '',
             }),
-            corporation_type: [
-                { id: '1', value: 'Corporation' },
-                { id: '2', value: 'Sole Proprietorship' },
-                { id: '3', value: 'Non - profit' },
-                { id: '4', value: 'Limited Liability' },
-                { id: '5', value: 'General Partnership' },
-            ],
-
             isEdit: false,
             title: "Company Overview",
         };
@@ -136,7 +129,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item text-muted">
-                {{ company.data.company_name }} 
+                {{ company.data.company_name }}
             </li>
         </template>
         <!--begin::Navbar-->
@@ -379,141 +372,141 @@ export default defineComponent({
                 <div v-else>
                     <!--begin::Input group-->
                     <div class="card-body p-9">
-                            <!--begin::Row-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">User Name</label>
-                                <!--end::Label-->
-                                <!-- {{ company?.data?.user }} -->
-                                <!--begin::Col-->
-                                <div class="col-lg-6">
-                                    <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user?.first_name + " " +
-                                        company?.data?.user.last_name }}</span>
-                                </div>
-                                <!--end::Col-->
+                        <!--begin::Row-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">User Name</label>
+                            <!--end::Label-->
+                            <!-- {{ company?.data?.user }} -->
+                            <!--begin::Col-->
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user?.first_name + " " +
+                                    company?.data?.user.last_name }}</span>
                             </div>
-                            <!--end::Row-->
-                            <!--begin::Row-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Company Type</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
-                                <div class="col-lg-6">
-                                    <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.company_type }}</span>
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Row-->
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Company Size</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
-                                <div class="col-lg-6 fv-row">
-                                    <span class="fw-semibold text-gray-800 fs-6">{{ this.company?.data?.size.size }}
-                                    </span>
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Corporation Type</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
-                                <div class="col-lg-6 d-flex align-items-center">
-                                    <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.corporation_type_id }}
-                                    </span>
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Input group-->
-
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Legal Registration_no</label>
-                                <!--end::Label-->
-                                <!--begin::Col-->
-                                <div class="col-lg-6 d-flex align-items-center">
-                                    <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.legal_registration_no
-                                    }}
-                                    </span>
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Input group-->
-
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Description</label>
-                                <!--begin::Label-->
-                                <!--begin::Label-->
-                                <div class="col-lg-6">
-                                    <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.description }}</span>
-                                </div>
-                                <!--begin::Label-->
-                            </div>
-                            <!--end::Input group-->
-
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Website</label>
-                                <!--begin::Label-->
-                                <!--begin::Label-->
-                                <div class="col-lg-6">
-                                    <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.website }}</span>
-                                </div>
-                                <!--begin::Label-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Subdomain</label>
-                                <!--begin::Label-->
-                                <!--begin::Label-->
-                                <div class="col-lg-6">
-                                    <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.subdomain
-                                    }}</span>
-                                </div>
-                                <!--begin::Label-->
-                            </div>
-                            <!--end::Input group-->
-
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Linkedin Profile</label>
-                                <!--begin::Label-->
-                                <!--begin::Label-->
-                                <div class="col-lg-6">
-                                    <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.linkedin_profile
-                                    }}</span>
-                                </div>
-                                <!--begin::Label-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="row mb-7">
-                                <!--begin::Label-->
-                                <label class="col-6 fw-bold fs-5 text-gray-800">Skype Profile</label>
-                                <!--begin::Label-->
-                                <!--begin::Label-->
-                                <div class="col-lg-6">
-                                    <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.skype_profile
-                                    }}</span>
-                                </div>
-                                <!--begin::Label-->
-                            </div>
-                            <!--end::Input group-->
-
+                            <!--end::Col-->
                         </div>
+                        <!--end::Row-->
+                        <!--begin::Row-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Company Type</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6">
+                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.company_type }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Row-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Company Size</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6 fv-row">
+                                <span class="fw-semibold text-gray-800 fs-6">{{ this.company?.data?.size.size }}
+                                </span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Corporation Type</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.corporation_type_id }}
+                                </span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Legal Registration_no</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.legal_registration_no
+                                }}
+                                </span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Description</label>
+                            <!--begin::Label-->
+                            <!--begin::Label-->
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.description }}</span>
+                            </div>
+                            <!--begin::Label-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Website</label>
+                            <!--begin::Label-->
+                            <!--begin::Label-->
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.website }}</span>
+                            </div>
+                            <!--begin::Label-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Subdomain</label>
+                            <!--begin::Label-->
+                            <!--begin::Label-->
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.subdomain
+                                }}</span>
+                            </div>
+                            <!--begin::Label-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Linkedin Profile</label>
+                            <!--begin::Label-->
+                            <!--begin::Label-->
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.linkedin_profile
+                                }}</span>
+                            </div>
+                            <!--begin::Label-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-6 fw-bold fs-5 text-gray-800">Skype Profile</label>
+                            <!--begin::Label-->
+                            <!--begin::Label-->
+                            <div class="col-lg-6">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.skype_profile
+                                }}</span>
+                            </div>
+                            <!--begin::Label-->
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
                 </div>
             </div>
             <!--end::Card body-->

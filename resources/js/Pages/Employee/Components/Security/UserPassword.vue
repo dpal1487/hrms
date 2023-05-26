@@ -4,14 +4,11 @@ import useVuelidate from '@vuelidate/core';
 import { required, } from '@vuelidate/validators';
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import { toast } from 'vue3-toastify';
-
-import axios from 'axios';
 
 export default defineComponent({
 
-    props: ["password"],
+    props: ["password", "employee"],
 
     setup() {
         return { v$: useVuelidate() };
@@ -19,7 +16,7 @@ export default defineComponent({
     validations() {
         return {
             form: {
-                password: {
+                new_password: {
                     required,
                 }
             }
@@ -29,8 +26,7 @@ export default defineComponent({
         return {
             isEdit: false,
             form: this.$inertia.form({
-                id: this.password?.id || '',
-                old_password: '',
+                id: this.employee?.id || '',
                 new_password: '',
                 confirm_password: '',
             })
@@ -39,7 +35,6 @@ export default defineComponent({
     components: {
         JetInput,
         JetLabel,
-        JetValidationErrors,
     },
     methods: {
         showChangePassword() {
@@ -50,20 +45,21 @@ export default defineComponent({
         },
         submit() {
             if (!this.form.$invalid) {
-                axios.post(route('employee.change-password', this.form.id), this.form).then((response) => {
-                    if (response.data.success) {
-                        toast(response.data.message)
-                        return;
-                    } else {
-                        toast(response.data.message)
-
-                    }
-                }).finally(() => {
-                    // toast(response.data.message)
-
-                    this.isEdit = false;
-                    this.form.reset()
-                });
+                this.form.transform((data) => ({
+                    ...data,
+                }))
+                    .post(route('employee.change-password', this.form.id), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isEdit = false;
+                        },
+                        onError: (data) => {
+                            if (data.message) {
+                                toast.error(data.message);
+                                this.isEdit = false;
+                            }
+                        },
+                    });
 
 
             }
@@ -76,7 +72,6 @@ export default defineComponent({
     <div v-if="isEdit" class="flex-row-fluid mb-10">
         <!--begin::Form-->
         <form @submit.prevent="submit()" class="">
-
             <div class="row mb-1">
                 <div class="col-lg-4">
                     <div class="fv-row mb-0">
@@ -106,8 +101,12 @@ export default defineComponent({
             <div class="form-text mb-5">Password must be at least 8 character and contain symbols
             </div>
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary me-2 px-6"
-                    :data-kt-indicator="form.processing ? 'on' : 'off'">Update Password</button>
+                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Update Password
+                </button>
                 <button id="kt_password_cancel" type="button" @click="hideChangePassword"
                     class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
 
@@ -121,7 +120,7 @@ export default defineComponent({
 
     <div v-else class="d-flex flex-wrap align-items-center mb-10">
         <!--begin::Label-->
-        <div id="kt_signin_password">
+        <div>
             <div class="fs-6 fw-bold mb-1">Password</div>
             <div class="fw-semibold text-gray-600">************</div>
         </div>
@@ -130,7 +129,7 @@ export default defineComponent({
 
         <!--end::Edit-->
         <!--begin::Action-->
-        <div id="kt_signin_password_button" class="ms-auto">
+        <div class="ms-auto">
             <button class="btn btn-light btn-active-light-primary" @click="showChangePassword">Reset Password</button>
         </div>
         <!--end::Action-->

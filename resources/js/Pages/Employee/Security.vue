@@ -3,7 +3,7 @@ import { defineComponent } from "vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import UserEmail from "./Components/security/UserEmail.vue";
+import UserEmail from "./Components/Security/UserEmail.vue";
 import TwoFactor from "./Components/Security/TwoFactor.vue";
 import UserPassword from "./Components/Security/UserPassword.vue";
 import DeactivateAccount from "./Components/Security/DeactivateAccount.vue";
@@ -66,14 +66,13 @@ export default defineComponent({
                         <!--begin::Card body-->
                         <div class="card-body border-top p-9">
                             <!--begin::Email Address-->
-                            <!-- {{ employee }} -->
-                            <UserEmail :email='this.user?.data' />
+                            <UserEmail :email='this.user?.data' :employee="employee.data" />
                             <!--end::Email Address-->
                             <!--begin::Separator-->
                             <div class="separator separator-dashed my-6"></div>
                             <!--end::Separator-->
                             <!--begin::Password-->
-                            <UserPassword :password="this.employee?.data?.user" />
+                            <UserPassword :password="this.employee?.data?.user" :employee="employee.data" />
                             <!--end::Password-->
                             <!--begin::Notice-->
                             <TwoFactor />

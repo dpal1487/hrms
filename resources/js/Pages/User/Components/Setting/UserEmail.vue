@@ -7,9 +7,9 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import useVuelidate from '@vuelidate/core';
 import { required, email, sameAs } from "@vuelidate/validators";
 import { toast } from 'vue3-toastify';
-import axios from 'axios';
 
 export default defineComponent({
+
     props: ["email"],
     setup() {
         return { v$: useVuelidate() };
@@ -53,18 +53,22 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.form.$invalid) {
-                axios.post(route('account.email.update'), this.form).then((response) => {
-                    if (response.data.success) {
-                        toast.success(response.data.message)
-                        Inertia.get('/account/setting')
-                        return;
-                    } else {
-                        toast.error(response.data.message)
-                    }
-                }).finally(() => {
-                    this.isEdit = false;
-                    this.form.reset()
-                });
+                this.form.transform((data) => ({
+                    ...data,
+                }))
+                    .post(route('account.email.update'), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isEdit = false;
+                        },
+                        onError: (data) => {
+                            if (data.message) {
+                                toast.error(data.message);
+                                this.isEdit = false;
+
+                            }
+                        },
+                    });
             }
         },
     }
@@ -99,8 +103,12 @@ export default defineComponent({
                 </div>
             </div>
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary me-2 px-6">Update
-                    Email</button>
+                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Changes Enail
+                </button>
                 <button type="button" @click="hideEditEmail"
                     class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
             </div>

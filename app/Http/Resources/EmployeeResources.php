@@ -34,7 +34,7 @@ class EmployeeResources extends JsonResource
             'notice_period' => $this->notice_period,
             'last_working_day' => $this->last_working_day,
             'full_final' => $this->full_final,
-            'department_id' => $this->department_id,
+            'department' => $this->department,
             'created_at' => $this->created_at,
             'image_id' => $this->image_id,
             'image' => $this->image,
