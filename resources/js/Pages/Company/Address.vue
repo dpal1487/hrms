@@ -4,8 +4,8 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import AddressForm from "./Components/Address/AddressForm.vue";
-import Header from "./Components/Header.vue";
 import { toast } from "vue3-toastify";
+import Header from "./Components/Header.vue";
 import AddressCard from "./Components/Address/AddressCard.vue";
 import Swal from "sweetalert2";
 export default defineComponent({

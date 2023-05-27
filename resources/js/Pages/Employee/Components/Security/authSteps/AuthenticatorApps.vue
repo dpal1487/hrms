@@ -69,8 +69,8 @@ export default defineComponent({
             </div>
             <!--end::Input group-->
             <!--begin::Actions-->
-            <div class="d-flex flex-center">
-                <button type="reset" @click="resetForm" class="btn btn-light me-3">Cancel</button>
+            <div class="d-flex flex-center gap-5">
+                <button type="reset" @click="resetForm" class="btn btn-outline-secondary">Discard</button>
                 <button type="submit" class="btn btn-primary">
                     <span class="indicator-label">Submit</span>
                     <span class="indicator-progress">Please wait...

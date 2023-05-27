@@ -118,13 +118,13 @@ export default defineComponent({
 
     <AppLayout>
         <template #breadcrumb>
-                <li class="breadcrumb-item">
-                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
-                </li>
-                <li class="breadcrumb-item">
-                    <Link href="/answers" class="text-muted text-hover-primary">Answer</Link>
-                </li>
-            </template>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/answers" class="text-muted text-hover-primary">Answer</Link>
+            </li>
+        </template>
 
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             {{ this.message }}
@@ -181,15 +181,15 @@ export default defineComponent({
                     <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
-                            <div class="d-flex justify-content-end gap-2">
+                            <div class="d-flex justify-content-end gap-5">
                                 <Link href="/answer"
-                                    class="btn btn-secondary d-flex align-items-center justify-content-center">
-                                Cancel
+                                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                                Discard
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'answer.edit'">Update</span>
+                                        <span v-if="route().current() == 'answer.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'answer.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">

@@ -87,6 +87,7 @@ export default defineComponent({
                             ? 'is-invalid'
                             : ''
                             " placeholder="Email Id" />
+                        
 
                     </div>
                 </div>
@@ -97,18 +98,19 @@ export default defineComponent({
                             ? 'is-invalid'
                             : ''
                             " placeholder="Confirm Password" />
+                       
                     </div>
                 </div>
             </div>
-            <div class="d-flex">
+            <div class="d-flex gap-5">
                 <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
                     <div v-show="form.processing" class="spinner-border spinner-border-sm">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    Changes Enail
+                    Change Enail
                 </button>
-                <button type="button" @click="hideEditEmail"
-                    class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
+            <button type="button" @click="hideEditEmail"
+                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center">Discard</button>
             </div>
         </form>
         <!--end::Form-->

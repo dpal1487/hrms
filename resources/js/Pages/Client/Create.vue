@@ -115,7 +115,8 @@ export default defineComponent({
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-8">
                 <JetValidationErrors />
-                <form @submit.prevent="submit()" autocomplete="off" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+                <form @submit.prevent="submit()" autocomplete="off"
+                    class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
@@ -136,22 +137,21 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-6 mb-3">
                                     <jet-label for="display-name" value="Display Name" />
-                                    <jet-input id="display-name" type="text" v-model="v$.form.display_name.$model" :class="
-                                        v$.form.display_name.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Enter display name" />
+                                    <jet-input id="display-name" type="text" v-model="v$.form.display_name.$model" :class="v$.form.display_name.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Enter display name" />
                                     <div v-for="(error, index) of v$.form.display_name.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="fv-row mb-3">
                                     <jet-label for="description" value="Description" />
-                                    <textarea class="form-control form-control-lg form-control-solid" id="description" type="text" v-model="v$.form.description.$model" :class="
-                                        v$.form.description.$errors.length > 0
+                                    <textarea class="form-control form-control-lg form-control-solid" id="description"
+                                        type="text" v-model="v$.form.description.$model" :class="v$.form.description.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
-                                    " placeholder="Enter description" />
+                                            " placeholder="Enter description" />
                                     <div v-for="(error, index) of v$.form.description.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -170,11 +170,10 @@ export default defineComponent({
                                 <div class="fv-row">
                                     <jet-label for="address_line_1" value="Address Line 1" />
                                     <jet-input id="address_line_1" type="text" v-model="v$.form.address_line_1.$model"
-                                        :class="
-                                            v$.form.address_line_1.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                        " placeholder="Enter address line 1" />
+                                        :class="v$.form.address_line_1.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="Enter address line 1" />
                                     <div v-for="(error, index) of v$.form.address_line_1.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -189,12 +188,11 @@ export default defineComponent({
                                         <jet-label for="country" value="Country" />
                                         <Multiselect :options="countries.data" label="label" valueProp="id"
                                             class="form-control form-control-solid" placeholder="Select country"
-                                            :searchable="true" v-model="v$.form.country.$model" :class="
-                                                v$.form.country.$errors.length >
-                                                    0
-                                                    ? 'is-invalid'
-                                                    : ''
-                                            " />
+                                            :searchable="true" v-model="v$.form.country.$model" :class="v$.form.country.$errors.length >
+                                                0
+                                                ? 'is-invalid'
+                                                : ''
+                                                " />
                                         <div v-for="(error, index) of v$.form
                                             .country.$errors" :key="index">
                                             <input-error :message="error.$message" />
@@ -203,33 +201,30 @@ export default defineComponent({
                                 </div>
                                 <div class="col-md-6 fv-row">
                                     <jet-label for="state" value="State" />
-                                    <jet-input id="state" type="text" v-model="v$.form.state.$model" :class="
-                                        v$.form.state.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Enter state name"/>
+                                    <jet-input id="state" type="text" v-model="v$.form.state.$model" :class="v$.form.state.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Enter state name" />
                                     <div v-for="(error, index) of v$.form.state.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 fv-row">
                                     <jet-label for="city" value="City" />
-                                    <jet-input id="city" type="text" v-model="v$.form.city.$model" :class="
-                                        v$.form.city.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Enter city name" />
+                                    <jet-input id="city" type="text" v-model="v$.form.city.$model" :class="v$.form.city.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Enter city name" />
                                     <div v-for="(error, index) of v$.form.city.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 fv-row">
                                     <jet-label for="post-code" value="Pincode / Postal Code" />
-                                    <jet-input id="post-code" type="text" v-model="v$.form.pincode.$model" :class="
-                                        v$.form.pincode.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Enter pincode / postal code" />
+                                    <jet-input id="post-code" type="text" v-model="v$.form.pincode.$model" :class="v$.form.pincode.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Enter pincode / postal code" />
                                     <div v-for="(error, index) of v$.form.pincode.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -261,22 +256,20 @@ export default defineComponent({
                             <div class="row g-5">
                                 <div class="fv-row col-md-6">
                                     <jet-label for="contact_name" value="Name" />
-                                    <jet-input id="contact_name" type="text" v-model="v$.form.contact_name.$model" :class="
-                                        v$.form.contact_name.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Enter contact person name" />
+                                    <jet-input id="contact_name" type="text" v-model="v$.form.contact_name.$model" :class="v$.form.contact_name.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Enter contact person name" />
                                     <div v-for="(error, index) of v$.form.contact_name.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 fv-row">
                                     <jet-label for="contact_email" value="Email" />
-                                    <jet-input id="contact_email" type="text" v-model="v$.form.contact_email.$model" :class="
-                                        v$.form.contact_email.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                    " placeholder="Enter email address" />
+                                    <jet-input id="contact_email" type="text" v-model="v$.form.contact_email.$model" :class="v$.form.contact_email.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " placeholder="Enter email address" />
                                     <div v-for="(error, index) of v$.form.contact_email.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -284,11 +277,10 @@ export default defineComponent({
                                 <div class="col-md-6 fv-row">
                                     <jet-label for="contact_mobile" value="Mobile" />
                                     <jet-input id="contact_mobile" type="text" v-model="v$.form.contact_mobile.$model"
-                                        :class="
-                                            v$.form.contact_mobile.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                        " placeholder="Enter mobile number" />
+                                        :class="v$.form.contact_mobile.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="Enter mobile number" />
                                     <div v-for="(error, index) of v$.form.contact_mobile.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
@@ -297,12 +289,11 @@ export default defineComponent({
                                     <jet-label for="contact_country" value="Country" />
                                     <Multiselect :options="countries" label="label" valueProp="id"
                                         class="form-control form-control-solid" placeholder="Select country"
-                                        :searchable="true" v-model="v$.form.contact_country.$model" :class="
-                                            v$.form.contact_country.$errors.length >
-                                                0
-                                                ? 'is-invalid'
-                                                : ''
-                                        " />
+                                        :searchable="true" v-model="v$.form.contact_country.$model" :class="v$.form.contact_country.$errors.length >
+                                            0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " />
                                     <div v-for="(error, index) of v$.form
                                         .contact_country.$errors" :key="index">
                                         <input-error :message="error.$message" />
@@ -341,10 +332,10 @@ export default defineComponent({
                     </div>
                     <!--end::Variations-->
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 gap-5">
                             <div class="d-flex justify-content-end">
-                                <Link href="/clients" class="btn btn-secondary me-3">
-                                Cancel
+                                <Link href="/clients" class="btn btn-outline-secondary">
+                                Discard
                                 </Link>
                                 <button type="submit" class="btn btn-primary">
                                     <span class="indicator-label">
@@ -362,5 +353,6 @@ export default defineComponent({
                     <!--end::Actions-->
                 </form>
             </div>
-    </div>
-</AppLayout></template>
+        </div>
+    </AppLayout>
+</template>

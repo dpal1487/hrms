@@ -80,8 +80,14 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->{{ $page.props.ziggy?.address.city + " " +
-                                        $page.props.ziggy.address.state + " " + $page.props.ziggy.address.pincode }}</a>
+                                    <!--end::Svg Icon--><span v-if="!($page.props.ziggy.address.city)">
+                                        Company Address
+                                    </span>
+                                    <span v-else>
+                                        {{ $page.props.ziggy?.address?.city + " " +
+                                            $page.props.ziggy.address?.state + " " + $page.props.ziggy.address?.pincode }}
+                                    </span>
+                                </a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">

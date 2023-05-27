@@ -131,7 +131,7 @@ class EmployeeController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
-            'emaidl' => 'required',
+            'email' => 'required',
             'date_of_joining' => 'required',
             'number' => 'required|numeric',
             'qualification' => 'required',
@@ -214,7 +214,6 @@ class EmployeeController extends Controller
     {
         $address = [];
         $validator =  Validator::make($request->all(), [
-
             'address_line_1' => 'required',
             'address_line_2' => 'required',
             'city' => 'required',
@@ -223,12 +222,10 @@ class EmployeeController extends Controller
             'pincode' => 'required',
         ]);
         if ($validator->fails()) {
-
             return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
         }
         if (Employee::where(['company_id' => $this->companyId()])->first()) {
             if ($address = EmployeeAddress::where(['employee_id' => $id])->first()) {
-
                 $address = Address::where(['id' => $address->address_id])->update([
                     'address_line_1' => $request->address_line_1,
                     'address_line_2' => $request->address_line_2,
@@ -246,9 +243,6 @@ class EmployeeController extends Controller
         }
         return redirect()->back();
     }
-
-
-
 
     public function overview($id)
     {
@@ -276,6 +270,7 @@ class EmployeeController extends Controller
     }
     public function emailUpdate(Request $request, $id)
     {
+
         if ($request->ajax()) {
             if ($request->confirm_password == null) {
                 return redirect()->back()->withErrors(['message' => "Please Insert password!"]);
@@ -288,8 +283,9 @@ class EmployeeController extends Controller
                 return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
             }
 
-            if (Hash::check($request->confirm_password, Auth::user()->password)) {
-                $employee = Employee::where('id', $id)->first();
+            $employee = Employee::with('user')->where('id', $id)->first();
+
+            if (Hash::check($request->confirm_password, $employee->user->password)) {
 
                 if ($employee) {
                     $userEmail = User::where('id', $employee->user_id)->update([
@@ -319,10 +315,10 @@ class EmployeeController extends Controller
                 return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
             }
 
-            $user = Employee::with('user')->where('id', $id)->first();
+            $employee = Employee::with('user')->where('id', $id)->first();
 
-            if ($user) {
-                User::where('id', $user->user_id)->update([
+            if ($employee) {
+                User::where('id', $employee->user_id)->update([
                     'password' => Hash::make($request->new_password),
                 ]);
                 return redirect("/employee/$id/security")->with('flash', ['message' => 'Password changed successfully!']);
@@ -335,9 +331,9 @@ class EmployeeController extends Controller
     }
     public function deactivate($id)
     {
-        $user = Employee::with('user')->where('id', $id)->first();
-        if ($user) {
-            User::where('id', $user->user_id)->update(['status' => 0]);
+        $employee = Employee::with('user')->where('id', $id)->first();
+        if ($employee) {
+            User::where('id', $employee->user_id)->update(['status' => 0]);
             return response()->json(['success' => true, 'message' => 'User has been  Deactivating.']);
         }
         return response()->json(['success' => true, 'message' => "Don't Have Autherity To Deactivate"]);

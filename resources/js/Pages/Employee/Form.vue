@@ -41,7 +41,7 @@ export default defineComponent({
                     required,
                 },
                 password: {
-                    required,
+
                 },
                 date_of_joining: {
                     required,
@@ -134,6 +134,7 @@ export default defineComponent({
                 headers: { 'content-type': 'multipart/form-data' }
             }
             this.v$.$touch();
+
             if (!this.v$.form.$invalid) {
                 this.form.transform((data) => ({
                     ...data,
@@ -398,14 +399,16 @@ export default defineComponent({
                     <!--end::Variations-->
                     <div class="row text-align-center">
                         <div class="col-12">
-                            <div class="d-flex justify-content-end gap-2">
-                                <Link href="/employees" class="btn btn-secondary align-items-center justify-content-center">
-                                Cancel
+                            <div class="d-flex justify-content-end gap-5">
+                                <Link href="/employees"
+                                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                                Discard
                                 </Link>
+
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="processing ? 'on' : 'off'">
+                                    :data-kt-indicator="form.processing ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'employee.edit'">Update</span>
+                                        <span v-if="route().current() == 'employee.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'employee.add'">Save</span>
                                     </span>
                                     <span class="indicator-progress">

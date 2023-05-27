@@ -124,14 +124,14 @@ export default defineComponent({
                     </div>
                     <!--end::Card toolbar-->
                 </form>
-        </div>
-        <div class="card-body pt-0">
-            <!--begin::Table-->
-            <div class="table-responsive">
-                <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
-                    <!--begin::Table head-->
-                    <thead>
-                        <!--begin::Table row-->
+            </div>
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+                        <!--begin::Table head-->
+                        <thead>
+                            <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
@@ -150,10 +150,10 @@ export default defineComponent({
                                 </td>
                                 <td>{{ client.display_name }}</td>
                                 <td>
-                                    <span :class="`badge bg-${client.status.value == 1
+                                    <span :class="`badge bg-${client.status == 1
                                         ? 'success'
                                         : 'danger'
-                                        }`">{{ client.status.label }}</span>
+                                        }`">{{ client.status }}</span>
                                 </td>
                                 <td>{{ client.created_at }}</td>
                                 <td>
@@ -190,7 +190,7 @@ export default defineComponent({
                                                 <button @click="confirmDelete(
                                                     client.id
                                                 )
-                                                " class="btn btn-sm dropdown-item">
+                                                    " class="btn btn-sm dropdown-item">
                                                     Delete
                                                 </button>
                                             </li>

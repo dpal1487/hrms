@@ -50,6 +50,9 @@ class AnswerController extends Controller
             'order_by' => $request->order_by,
         ]);
         if ($answer) {
+            if ($request->questionpage) {
+                return redirect("/question/$request->question")->with('flash', ['message' => 'Answer Successfully created.']);
+            }
             return response()->json(['success' => true, 'message' => 'Answer created successfully']);
         } else {
             return response()->json(['success' => true, 'message' => 'Answer not created']);

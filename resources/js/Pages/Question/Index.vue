@@ -255,6 +255,12 @@ export default defineComponent({
                                                     :href="`/question/${questions.id}/edit`">Edit
                                                 </Link>
                                             </li>
+                                            <li class="menu-item px-3">
+                                                <Link
+                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
+                                                    :href="`/question/${questions.id}`">View
+                                                </Link>
+                                            </li>
 
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(

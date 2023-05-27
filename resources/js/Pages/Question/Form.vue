@@ -249,14 +249,15 @@ export default defineComponent({
                     <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
-                            <div class="d-flex justify-content-end gap-2">
-                                <Link href="/question" class="btn btn-secondary align-items-center justify-content-center">
-                                Cancel
+                            <div class="d-flex justify-content-end gap-5">
+                                <Link href="/question"
+                                    class="btn btn-outline-secondary align-items-center justify-content-center">
+                                Discard
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'question.edit'">Update</span>
+                                        <span v-if="route().current() == 'question.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'question.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">

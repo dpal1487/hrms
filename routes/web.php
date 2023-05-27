@@ -138,7 +138,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::group(['prefix' => 'company'], function () {
             Route::get('add', 'create')->name('company.add');
             Route::post('store', 'store')->name('company.store');
-            Route::get('invoice', 'invoice')->name('company.invoice');
+            Route::get('invoices', 'invoices')->name('company.invoices');
             Route::get('projects', 'projects')->name('company.projects');
             Route::get('suppliers', 'suppliers')->name('company.suppliers');
             Route::delete('delete', 'destroy')->name('company.delete');

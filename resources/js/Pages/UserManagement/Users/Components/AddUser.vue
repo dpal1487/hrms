@@ -232,9 +232,9 @@ export default defineComponent({
                 </div>
                 <!--end::Scroll-->
                 <!--begin::Actions-->
-                <div class="text-center pt-15">
+                <div class="text-center pt-15 gap-5">
                     <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
-                    <button type="submit" class="btn btn-primary" :data-kt-indicator="processing ? 'on' : 'off'">
+                    <button type="submit" class="btn btn-primary" :data-kt-indicator="form.processing ? 'on' : 'off'">
                         <span class="indicator-label">Submit</span>
                         <span class="indicator-progress">Please wait...
                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>

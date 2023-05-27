@@ -16,7 +16,7 @@ export default defineComponent({
 
 
 <template>
-    <div class="" data-kt-element="sms">
+    <div class="">
         <!--begin::Heading-->
 
         <!--end::Heading-->
@@ -25,7 +25,7 @@ export default defineComponent({
             will send you a verification code upon request.</div>
         <!--end::Notice-->
         <!--begin::Form-->
-        <form data-kt-element="sms-form" class="form" action="#">
+        <form class="form" action="#">
             <!--begin::Input group-->
             <div class="mb-10 fv-row">
                 <input type="text" class="form-control form-control-lg form-control-solid"
@@ -33,10 +33,9 @@ export default defineComponent({
             </div>
             <!--end::Input group-->
             <!--begin::Actions-->
-            <div class="d-flex flex-center">
-                <button type="reset" data-kt-element="sms-cancel" class="btn btn-light me-3"
-                    @click="resetForm">Cancel</button>
-                <button type="submit" data-kt-element="sms-submit" class="btn btn-primary">
+            <div class="d-flex flex-center gap-5">
+                <button type="reset" class="btn btn-outline-secondary" @click="resetForm">Discard</button>
+                <button type="submit" class="btn btn-primary">
                     <span class="indicator-label">Submit</span>
                     <span class="indicator-progress">Please wait...
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>

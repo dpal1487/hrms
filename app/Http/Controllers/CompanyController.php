@@ -94,7 +94,7 @@ class CompanyController extends Controller
             'company' => new CompanyResource($company),
             'address' => new AddressResource($address),
             'email' => new EmailResource($email),
-            'corporationtypes' =>CorporationTypeResource::collection($corporationtypes),
+            'corporationtypes' => CorporationTypeResource::collection($corporationtypes),
         ]);
     }
     public function addresses()

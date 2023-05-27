@@ -278,10 +278,11 @@ export default defineComponent({
             <!--end::Card body-->
             <!--begin::Actions-->
             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                <div class="col-12">
+                <div class="col-12 gap-5">
                     <div class="d-flex justify-content-end gap-2">
-                        <Link href="/account/setting" class="btn btn-secondary align-items-center justify-content-center">
-                        Cancel
+                        <Link href="/account/setting"
+                            class="btn btn-outline-secondary align-items-center justify-content-center">
+                        Discard
                         </Link>
                         <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                             :data-kt-indicator="processing ? 'on' : 'off'">

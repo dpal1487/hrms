@@ -102,15 +102,14 @@ export default defineComponent({
             </div>
             <div class="form-text mb-5">Password must be at least 8 character and contain symbols
             </div>
-            <div class="d-flex">
+            <div class="d-flex gap-5">
                 <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
                     <div v-show="form.processing" class="spinner-border spinner-border-sm">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                     Update Password
                 </button>
-                <button id="kt_password_cancel" type="button" @click="hideChangePassword"
-                    class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
+                <button type="button" @click="hideChangePassword" class="btn btn-outline-secondary">Discard </button>
 
                 <span class="indicator-progress">
                     Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>

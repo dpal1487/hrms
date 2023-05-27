@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AnswerResources;
 use Inertia\Inertia;
 use App\Models\Industry;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Resources\QuestionResources;
+use App\Models\Answer;
 use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
@@ -86,7 +88,11 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        $answers = Answer::where('question_id', $question->id)->get();
+        return Inertia::render('Question/Overview', [
+            'question' => new QuestionResources($question),
+            'answers' => AnswerResources::collection($answers),
+        ]);
     }
 
     /**

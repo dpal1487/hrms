@@ -56,7 +56,7 @@ class HandleInertiaRequests extends Middleware
                         'status' => $this->status,
                         'company' => $this->company['company'],
                         'email' => $this->email,
-                        'address' => $this->address['address'],
+                        'address' => !empty($this->address['address']) ? $this->address['address'] : [],
 
                         'flash' => [
                             'message' => fn () => $request->session()->get('message'),

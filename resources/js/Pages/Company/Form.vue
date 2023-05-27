@@ -137,7 +137,7 @@ export default defineComponent({
                             <!--end::Step 5-->
                             <!--begin::Actions-->
                             <div class="d-flex flex-stack pt-15">
-                                <div class="mr-2">
+                                <div class="mr-2 gap-5">
                                     <button @click="onPrev" type="button" v-if="currStep > 0"
                                         class="btn btn-lg btn-light-primary me-3">
                                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr063.svg-->
@@ -153,8 +153,8 @@ export default defineComponent({
                                         </span>
                                         <!--end::Svg Icon-->Previous</button>
                                     <Link v-if="currStep === 0" href="/company"
-                                        class="btn btn-secondary align-items-center justify-content-center">
-                                    Cancel
+                                        class="btn btn-outline-secondary align-items-center justify-content-center">
+                                    Discard
                                     </Link>
                                 </div>
                                 <div>

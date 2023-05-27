@@ -239,16 +239,16 @@ export default defineComponent({
                     <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
-                            <div class="d-flex justify-content-end gap-2">
+                            <div class="d-flex justify-content-end gap-5">
                                 <Link href="/plan"
-                                    class="btn btn-secondary d-flex align-items-center justify-content-center">
-                                Cancel
+                                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                                Discard
                                 </Link>
 
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'plan.edit'">Update</span>
+                                        <span v-if="route().current() == 'plan.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'plan.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">

@@ -189,15 +189,15 @@ export default defineComponent({
                     <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
-                            <div class="d-flex justify-content-end gap-2">
+                            <div class="d-flex justify-content-end gap-5">
                                 <Link href="/currencies"
-                                    class="btn btn-secondary d-flex align-items-center justify-content-center">
-                                Cancel
+                                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                                Discard
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="requesting ? 'on' : 'off'">
                                     <span class="indicator-label">
-                                        <span v-if="route().current() == 'currencies.edit'">Update</span>
+                                        <span v-if="route().current() == 'currencies.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'currencies.create'">Save</span>
                                     </span>
                                     <span class="indicator-progress">

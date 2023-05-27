@@ -85,7 +85,7 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/employee",
+                "/employees",
                 { q: this.q, status: this.s },
             );
         },

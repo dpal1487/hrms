@@ -250,10 +250,10 @@ export default defineComponent({
                                 <div class="row text-align-center p-3">
                                     <div class="col-12">
 
-                                        <div class="d-flex justify-content-end gap-2">
+                                        <div class="d-flex justify-content-end gap-5">
                                             <Link :href="`/supplier/${form.id}`"
-                                                class="btn btn-secondary align-items-center justify-content-center">
-                                            Cancel
+                                                class="btn btn-outline-secondary align-items-center justify-content-center">
+                                            Discard
                                             </Link>
                                             <button type="submit"
                                                 class="btn btn-primary align-items-center justify-content-center"

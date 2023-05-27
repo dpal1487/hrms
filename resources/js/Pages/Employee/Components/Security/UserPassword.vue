@@ -18,6 +18,9 @@ export default defineComponent({
             form: {
                 new_password: {
                     required,
+                },
+                confirm_password: {
+                    required,
                 }
             }
         }
@@ -75,41 +78,38 @@ export default defineComponent({
             <div class="row mb-1">
                 <div class="col-lg-4">
                     <div class="fv-row mb-0">
-                        <label for="currentpassword" class="form-label fs-6 fw-bold mb-3">Current
-                            Password</label>
-                        <input type="password" class="form-control form-control-lg form-control-solid"
-                            v-model="form.old_password" />
+                        <jet-label for="new_password" value="New Password" />
+                        <jet-input id="new_password" type="password" v-model="v$.form.new_password.$model" :class="v$.form.new_password.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="New Password" />
+
+
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="fv-row mb-0">
-                        <label for="newpassword" class="form-label fs-6 fw-bold mb-3">New
-                            Password</label>
-                        <input type="password" class="form-control form-control-lg form-control-solid"
-                            v-model="form.new_password" />
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="fv-row mb-0">
-                        <label for="confirmpassword" class="form-label fs-6 fw-bold mb-3">Confirm
-                            New Password</label>
-                        <input type="password" class="form-control form-control-lg form-control-solid"
-                            v-model="form.confirm_password" />
+                        <jet-label for="confirm_password" value="Confirm Password" />
+                        <jet-input id="confirm_password" type="password" v-model="v$.form.confirm_password.$model" :class="v$.form.confirm_password.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Confirm Password" />
+
+
                     </div>
                 </div>
             </div>
             <div class="form-text mb-5">Password must be at least 8 character and contain symbols
             </div>
-            <div class="d-flex">
+            <div class="d-flex gap-5">
                 <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
                     <div v-show="form.processing" class="spinner-border spinner-border-sm">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    Update Password
+                    Change Password
                 </button>
-                <button id="kt_password_cancel" type="button" @click="hideChangePassword"
-                    class="btn btn-color-gray-400 btn-active-light-primary px-6">Cancel</button>
-
+                <button type="button" @click="hideChangePassword"
+                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center">Discard</button>
                 <span class="indicator-progress">
                     Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                 </span>

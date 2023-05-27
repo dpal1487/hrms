@@ -58,6 +58,7 @@
         "vue-socket.io": "^3.0.10",
         "vue-spinner": "^1.0.4",
         "vue-status-indicator": "^1.2.1",
+        "vue3-autocounter": "^1.0.6",
         "vue3-clipboard": "^1.0.0",
         "vue3-google-login": "^2.0.14",
         "vue3-google-oauth2": "^1.0.7",

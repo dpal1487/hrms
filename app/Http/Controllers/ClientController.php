@@ -77,7 +77,8 @@ class ClientController extends Controller
             'contact_name' => 'required',
             'primary_contact' => 'required',
         ]);
-        $client = Client::create(            [
+        $client = Client::create(
+            [
                 'name' => $request->client_name,
                 'display_name' => $request->display_name,
                 'subdomain' => $request->subdomain,
@@ -116,6 +117,7 @@ class ClientController extends Controller
      */
     public function show($id)
     {
+        return $this->getClient($id);
         return Inertia::render('Client/Overview', [
             'client' => new ClientResource($this->getClient($id)),
             'countries' => CountryResource::collection($this->countries)

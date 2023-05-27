@@ -245,10 +245,11 @@ export default defineComponent({
                     </div>
                     <!--end::Variations-->
                     <div class="row text-align-center">
-                        <div class="col-12">
+                        <div class="col-12 gap-5">
                             <div class="d-flex justify-content-end gap-2">
-                                <Link href="/supplier" class="btn btn-secondary align-items-center justify-content-center">
-                                Cancel
+                                <Link href="/supplier"
+                                    class="btn btn-outline-secondary align-items-center justify-content-center">
+                                Discard
                                 </Link>
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="processing ? 'on' : 'off'">
