@@ -38,7 +38,7 @@ export default defineComponent({
                         <div class="d-flex flex-column">
                             <!--begin::Name-->
                             <div class="d-flex align-items-center mb-2">
-                                <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
+                                <a href="" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1 text-uppercase">{{
                                     employee?.first_name }}
                                     {{ employee?.last_name }}</a>
                                 <a href="">
@@ -74,7 +74,7 @@ export default defineComponent({
                                             <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon--><span> Devloper </span></a>
+                                    <!--end::Svg Icon--><span v-if="employee">{{ employee?.department?.name }}</span></a>
 
                                 <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->

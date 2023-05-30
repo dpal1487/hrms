@@ -37,9 +37,10 @@ class CompanyController extends Controller
 
     public function overviewEdit()
     {
+        return "sd";
         $company = Company::where('id', $this->companyId())->first();
 
-        // return new CompanyResource($company);
+        return new CompanyResource($company);
 
         return Inertia::render('Company/Edit', [
             'company' => new CompanyResource($company),
@@ -93,7 +94,7 @@ class CompanyController extends Controller
         return Inertia::render('Company/Overview', [
             'company' => new CompanyResource($company),
             'address' => new AddressResource($address),
-            'email' => new EmailResource($email),
+            'email' => new EmailResource($email) || '',
             'corporationtypes' => CorporationTypeResource::collection($corporationtypes),
         ]);
     }
@@ -196,6 +197,7 @@ class CompanyController extends Controller
     public function accounts()
     {
         $company = Company::where('id', $this->companyId())->first();
+        // return AccountResource::collection($company->accounts);
 
         if ($company) {
             return Inertia::render('Company/Account', [
@@ -265,7 +267,6 @@ class CompanyController extends Controller
         ]);
         if (Company::where(['id' => $this->companyId()])->first()) {
             if ($account = CompanyAccount::where(['Company_id' => $this->companyId()])->get()) {
-
                 foreach ($account as $account) {
                     if ($request->is_primary == true) {
                         Account::where(['id' => $account->account_id])->update(['is_primary' => 0]);

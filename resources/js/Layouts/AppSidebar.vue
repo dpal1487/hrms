@@ -40,6 +40,11 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
+                    link: "/support",
+                    title: "Support",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
                     link: "/industry",
                     title: "Industry",
                     icon: "bi bi-pie-chart-fill",

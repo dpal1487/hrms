@@ -232,8 +232,8 @@ export default defineComponent({
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.settings') && 'active'}`"
-                        href="/account/settings">Settings
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.setting') && 'active'}`"
+                        href="/account/setting">Setting
                     </Link>
                 </li>
                 <!--end::Nav item-->

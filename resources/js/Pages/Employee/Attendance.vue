@@ -5,7 +5,7 @@ import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 
 export default defineComponent({
-    props: ["user", 'employee'],
+    props: ["user", 'employee', 'address'],
     setup() {
     },
 
@@ -38,7 +38,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :user="user.data" :employee="employee.data" />
+                <Header :user="user.data" :employee="employee.data" :address="address.data" />
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->

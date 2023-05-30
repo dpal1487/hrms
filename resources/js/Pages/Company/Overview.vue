@@ -158,7 +158,7 @@ export default defineComponent({
                                 <div class="row mb-6">
                                     <!--begin::Label-->
                                     <label for="company-name"
-                                        class="col-lg-4 col-form-label required fw-semibold fs-6">Company Name</label>
+                                        class="col-lg-4 col-form-label required fw-bold fs-6">Company Name</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -179,7 +179,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Company Type</label>
+                                    <label class="col-lg-4 col-form-label required fw-bold fs-6">Company Type</label>
                                     <!--end::Label-->
                                     <input type="hidden" v-model="form.company_type">
                                     <!--begin::Col-->
@@ -201,7 +201,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Company Size</label>
+                                    <label class="col-lg-4 col-form-label required fw-bold fs-6">Company Size</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -221,7 +221,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">
                                         <span class="required">Corporation Type</span>
                                     </label>
                                     <!--end::Label-->
@@ -244,7 +244,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Legal Registration No</label>
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Legal Registration No</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -263,7 +263,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Description</label>
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Description</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -282,7 +282,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Website</label>
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Website</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -300,7 +300,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Subdomain</label>
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Subdomain</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -318,7 +318,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Linkedin Profile</label>
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Linkedin Profile</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -337,7 +337,7 @@ export default defineComponent({
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">Skype Profile</label>
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Skype Profile</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
@@ -380,7 +380,7 @@ export default defineComponent({
                             <!-- {{ company?.data?.user }} -->
                             <!--begin::Col-->
                             <div class="col-lg-6">
-                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.user?.first_name + " " +
+                                <span class="fw-bold fs-6 text-gray-700"> {{ company?.data?.user?.first_name + " " +
                                     company?.data?.user.last_name }}</span>
                             </div>
                             <!--end::Col-->
@@ -393,7 +393,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6">
-                                <span class="fw-bold fs-6 text-gray-800"> {{ company?.data?.company_type }}</span>
+                                <span class="fw-bold fs-6 text-gray-700"> {{ company?.data?.company_type }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -405,7 +405,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 fv-row">
-                                <span class="fw-semibold text-gray-800 fs-6">{{ this.company?.data?.size.size }}
+                                <span class="fw-bold text-gray-700 fs-6">{{ this.company?.data?.size.size }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -418,7 +418,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.corporation_type_id }}
+                                <span class="fw-bold fs-6 text-gray-700 me-2">{{ this.company?.data?.corporation_type_id }}
                                 </span>
                             </div>
                             <!--end::Col-->
@@ -432,7 +432,7 @@ export default defineComponent({
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-800 me-2">{{ this.company?.data?.legal_registration_no
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.company?.data?.legal_registration_no
                                 }}
                                 </span>
                             </div>
@@ -447,7 +447,7 @@ export default defineComponent({
                             <!--begin::Label-->
                             <!--begin::Label-->
                             <div class="col-lg-6">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.description }}</span>
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.company?.data?.description }}</span>
                             </div>
                             <!--begin::Label-->
                         </div>
@@ -460,7 +460,7 @@ export default defineComponent({
                             <!--begin::Label-->
                             <!--begin::Label-->
                             <div class="col-lg-6">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.website }}</span>
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.company?.data?.website }}</span>
                             </div>
                             <!--begin::Label-->
                         </div>
@@ -472,7 +472,7 @@ export default defineComponent({
                             <!--begin::Label-->
                             <!--begin::Label-->
                             <div class="col-lg-6">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.subdomain
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.company?.data?.subdomain
                                 }}</span>
                             </div>
                             <!--begin::Label-->
@@ -486,7 +486,7 @@ export default defineComponent({
                             <!--begin::Label-->
                             <!--begin::Label-->
                             <div class="col-lg-6">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.linkedin_profile
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.company?.data?.linkedin_profile
                                 }}</span>
                             </div>
                             <!--begin::Label-->
@@ -499,7 +499,7 @@ export default defineComponent({
                             <!--begin::Label-->
                             <!--begin::Label-->
                             <div class="col-lg-6">
-                                <span class="fw-semibold fs-6 text-gray-800">{{ this.company?.data?.skype_profile
+                                <span class="fw-bold fs-6 text-gray-700">{{ this.company?.data?.skype_profile
                                 }}</span>
                             </div>
                             <!--begin::Label-->

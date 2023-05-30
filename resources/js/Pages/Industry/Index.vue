@@ -58,10 +58,7 @@ export default defineComponent({
                                 this.industries.data.splice(index, 1);
                                 return;
                             }
-
-
                         })
-
                         .catch((error) => {
                             if (error.response.status == 400) {
                                 toast.error(error.response.data.message);
@@ -69,7 +66,7 @@ export default defineComponent({
                         });
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
-                        text: + name + " was not deleted.",
+                        text: + name + "was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",

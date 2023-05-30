@@ -224,6 +224,7 @@ class EmployeeController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
         }
+
         if (Employee::where(['company_id' => $this->companyId()])->first()) {
             if ($address = EmployeeAddress::where(['employee_id' => $id])->first()) {
                 $address = Address::where(['id' => $address->address_id])->update([
@@ -233,10 +234,26 @@ class EmployeeController extends Controller
                     'state' => $request->state,
                     'country_id' => $request->country,
                     'pincode' => $request->pincode,
-                    'is_primary' => $request->is_primary ? 1 : 0,
                 ]);
                 if ($address) {
                     return redirect("/employee/$id/address")->with('flash', ['message' => 'Address successfully updated.']);
+                }
+            } else {
+                $address = Address::create([
+                    'address_line_1' => $request->address_line_1,
+                    'address_line_2' => $request->address_line_2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+
+                $empAddress = EmployeeAddress::create([
+                    'employee_id' => $id,
+                    'address_id' => $address->id,
+                ]);
+                if ($empAddress) {
+                    return redirect("/employee/$id/address")->with('flash', ['message' => 'Address successfully created.']);
                 }
             }
             return redirect()->back()->withErrors(['message' => 'Opps something went wrong!']);
@@ -252,6 +269,8 @@ class EmployeeController extends Controller
                 'employee' => new EmployeeResources($employee),
                 'user' => $this->employeeHeader($id),
                 'departments' => DepartmentResource::collection($this->department),
+                'address' => new AddressResource($employee?->address),
+
             ]);
         }
         return redirect()->back();
@@ -264,6 +283,8 @@ class EmployeeController extends Controller
             return Inertia::render('Employee/Security', [
                 'employee' => new EmployeeResources($employee),
                 'user' => $this->employeeHeader($id),
+                'address' => new AddressResource($employee?->address),
+
             ]);
         }
         return redirect()->back();
@@ -275,18 +296,17 @@ class EmployeeController extends Controller
             if ($request->confirm_password == null) {
                 return redirect()->back()->withErrors(['message' => "Please Insert password!"]);
             }
-            $validator =  Validator::make($request->all(), [
-                'email' => 'required|unique:users,email',
-            ]);
-            if ($validator->fails()) {
-
-                return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
-            }
 
             $employee = Employee::with('user')->where('id', $id)->first();
 
             if (Hash::check($request->confirm_password, $employee->user->password)) {
+                $validator =  Validator::make($request->all(), [
+                    'email' => 'required|unique:users,email',
+                ]);
+                if ($validator->fails()) {
 
+                    return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
+                }
                 if ($employee) {
                     $userEmail = User::where('id', $employee->user_id)->update([
                         'email' => $request->email,
@@ -304,7 +324,6 @@ class EmployeeController extends Controller
 
     public function changePassword(Request $request, $id)
     {
-
         if ($request->ajax()) {
             $validator =  Validator::make($request->all(), [
                 'new_password' => 'required',
@@ -314,9 +333,7 @@ class EmployeeController extends Controller
 
                 return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
             }
-
             $employee = Employee::with('user')->where('id', $id)->first();
-
             if ($employee) {
                 User::where('id', $employee->user_id)->update([
                     'password' => Hash::make($request->new_password),
@@ -345,6 +362,8 @@ class EmployeeController extends Controller
             return Inertia::render('Employee/Setting', [
                 'employee' => new EmployeeResources($employee),
                 'user' => $this->employeeHeader($id),
+                'address' => new AddressResource($employee?->address),
+
             ]);
         }
         return redirect()->back();
@@ -357,6 +376,8 @@ class EmployeeController extends Controller
             return Inertia::render('Employee/Attendance', [
                 'employee' => new EmployeeResources($employee),
                 'user' => $this->employeeHeader($id),
+                'address' => new AddressResource($employee?->address),
+
 
             ]);
         }
@@ -366,7 +387,6 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         $employee = Employee::where('company_id', $this->companyId())->find($id);
-
         if ($employee->delete()) {
             return response()->json(['success' => true, 'message' => 'Employee has been deleted successfully.']);
         }

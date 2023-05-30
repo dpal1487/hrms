@@ -4,7 +4,7 @@ import AuthenticationModal from './AuthenticationModal.vue';
 
 export default defineComponent({
     props: [],
-    emits:['Onhide'],
+    emits: ['Onhide'],
     data() {
         return {
             isModalOpen: false,
@@ -54,7 +54,7 @@ export default defineComponent({
             <!--end::Content-->
             <!--begin::Action-->
             <button type="button" @click="showAuthenticationModal"
-                class="btn btn-primary px-6 align-self-center text-nowrap" >Enable</button>
+                class="btn btn-primary px-6 align-self-center text-nowrap">Enable</button>
             <!--end::Action-->
         </div>
         <!--end::Wrapper-->

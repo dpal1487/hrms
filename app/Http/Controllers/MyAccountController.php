@@ -137,14 +137,15 @@ class MyAccountController extends Controller
             if ($request->confirm_password == null) {
                 return redirect()->back()->withErrors(['message' => "Please Insert password!"]);
             }
-            $validator =  Validator::make($request->all(), [
-                'email' => 'required|unique:users,email',
-            ]);
-            if ($validator->fails()) {
 
-                return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
-            }
             if (Hash::check($request->confirm_password, Auth::user()->password)) {
+                $validator =  Validator::make($request->all(), [
+                    'email' => 'required|unique:users,email',
+                ]);
+                if ($validator->fails()) {
+
+                    return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
+                }
                 $userEmail = User::where('id', Auth::user()->id)->update([
                     'email' => $request->email,
                 ]);

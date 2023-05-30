@@ -9,7 +9,7 @@ import UserPassword from "./Components/Security/UserPassword.vue";
 import DeactivateAccount from "./Components/Security/DeactivateAccount.vue";
 
 export default defineComponent({
-    props: ['employee', 'user'],
+    props: ['employee', 'user' , 'address'],
 
     data() {
         return {
@@ -51,7 +51,7 @@ export default defineComponent({
         <div class="app-content flex-column-fluid ">
             <!--begin::Content container-->
             <div class="app-container container-xxl">
-                <Header :employee="employee.data" :user="user.data" />
+                <Header :employee="employee.data" :user="user.data" :address="address.data"/>
                 <!--begin::Sign-in Method-->
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->

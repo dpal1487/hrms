@@ -29,6 +29,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleAndPermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SupportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,7 +105,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('account/address', 'address')->name('account.address');
         Route::post('account/address/update', 'updateAddress')->name('account.address.update');
         // User Settings
-        Route::get('account/settings', 'setting')->name('account.setting');
+        Route::get('account/setting', 'setting')->name('account.setting');
         Route::post('account/email/update', 'emailUpdate')->name('account.email.update');
         Route::post('account/change-password', 'changePassword')->name('account.change-password');
         Route::post('account/deactivate', 'deactivate')->name('account.deactivate');
@@ -165,6 +166,45 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/email', 'updateEmail')->name('company.updateEmail');
             Route::post('/email/create', 'addEmail')->name('company.addEmail');
             Route::delete('{id}/email', 'delEmail')->name('company.delEmail');
+        });
+    });
+
+    Route::controller(SupportController::class)->group(function () {
+        Route::group(['prefix' => 'support'], function () {
+
+            Route::get('/create', 'create')->name('support.create');
+            Route::post('/store', 'store')->name('support.store');
+            Route::get('/edit', 'edit')->name('support.edit');
+            Route::put('/update', 'update')->name('support.update');
+            Route::delete('/delete', 'destroy')->name('support.delete');
+
+            // Support  overview
+            Route::get('/', 'show')->name('support.show');
+
+            // Support tickets 
+            Route::get('tickets', 'tickets')->name('support.tickets');
+            Route::get('view-tickets', 'viewTickets')->name('support.view-tickets');
+
+
+
+            // Support  tutorials
+
+            Route::get('tutorials', 'tutorials')->name('support.tutorials');
+            Route::get('view-tutorials', 'viewTutorials')->name('support.view-tutorials');
+
+
+            // Support faq
+
+            Route::get('/faq', 'faq')->name('support.faq');
+
+            // Support licenses
+
+            Route::get('/licenses', 'licenses')->name('support.licenses');
+
+            // Support contact-us
+
+            Route::get('/contact-us', 'contactUs')->name('support.contact-us');
+            Route::post('/store/contact-us', 'contactUsStore')->name('support.store.contact-us');
         });
     });
 
