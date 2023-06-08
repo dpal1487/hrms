@@ -82,53 +82,45 @@ class SupplierController extends Controller
 
     public function show(Supplier $supplier)
     {
+        $company = Company::get();
+
         $supplier = Supplier::where(['company_id' => $this->companyId(), 'id' => $supplier->id])->first();
         if ($supplier->address) {
             return Inertia::render('Supplier/Overview', [
                 'supplier' => new SupplierResource($supplier),
                 'address' => new AddressResource($supplier->address),
+                'company' => $company,
+
             ]);
         } else {
             if ($supplier) {
                 return Inertia::render('Supplier/Overview', [
                     'supplier' => new SupplierResource($supplier),
+                    'company' => $company,
+
                 ]);
             }
         }
     }
-    public function supplierEdit($id)
-    {
-        $company = Company::get();
 
-        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
-        if ($supplier->address) {
-            return Inertia::render('Supplier/Edit', [
-                'supplier' => new SupplierResource($supplier),
-                'address' => $this->supplierAddress($id),
-                'company' => $company,
-
-            ]);
-        } else {
-            return Inertia::render('Supplier/Edit', [
-                'supplier' => new SupplierResource($supplier),
-                'company' => $company,
-
-            ]);
-        }
-    }
     public function address($id)
     {
         $supplier = Supplier::where('company_id', $this->companyId())->find($id);
+        $countries = Country::get();
 
         if ($supplier->address) {
             return Inertia::render('Supplier/Address', [
                 'address' => new AddressResource($supplier->address),
                 'supplier' => $this->supplierHeader($id),
+                'countries' => $countries,
+
             ]);
         }
         return Inertia::render('Supplier/Address', [
             'address' => new AddressResource($supplier),
             'supplier' => $this->supplierHeader($id),
+            'countries' => $countries,
+
         ]);
     }
     public function addressEdit($id)

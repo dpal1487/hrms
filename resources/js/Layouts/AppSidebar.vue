@@ -90,8 +90,8 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/image",
-                    title: "Image",
+                    link: "/images",
+                    title: "Images",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
@@ -109,8 +109,6 @@ export default defineComponent({
                     title: "Permission",
                     icon: "bi bi-pie-chart-fill",
                 },
-
-
             ],
         };
     },
@@ -134,7 +132,7 @@ export default defineComponent({
         <!--begin::Logo-->
         <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
             <!--begin::Logo image-->
-            <a href="/">
+            <a href="/dashboard">
                 <img alt="Logo" src="https://suppliers.alrestion.com/assets/media/logos/logo.png"
                     class="h-25px app-sidebar-logo-default" />
                 <img alt="Logo" src="https://suppliers.alrestion.com/assets/media/logos/logo.png"
@@ -193,7 +191,7 @@ export default defineComponent({
                                 </span>
                                 <!--end::Svg Icon-->
                             </span>
-                            <a class="menu-link" href="/">
+                            <a class="menu-link" href="/dashboard">
                                 <span class="menu-title">Dashboard</span>
                             </a>
                             <span class="menu-arrow"></span>

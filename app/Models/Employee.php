@@ -10,7 +10,7 @@ class Employee extends Model
     use HasFactory;
 
     protected $fillable = ['first_name', 'last_name', 'email', 'code', 'date_of_joining', 'number', 'qualification', 'emergency_number', 'pan_number', 'father_name', 'formalities', 'salary', 'offer_acceptance', 'probation_period', 'date_of_confirmation', 'notice_period', 'last_working_day', 'full_final', 'department_id', 'user_id', 'company_id', 'image_id'];
-
+    
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');

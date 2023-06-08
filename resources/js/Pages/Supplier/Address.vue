@@ -4,14 +4,16 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
+import SupplierAddress from "./SupplierAddress.vue"
 
 export default defineComponent({
-    props: ['supplier', 'address'],
+    props: ['supplier', 'address', 'countries'],
     setup() {
         return { v$: useVuelidate() };
     },
     data() {
         return {
+            isEdit: false,
             id: route().params.id
         }
     },
@@ -21,6 +23,7 @@ export default defineComponent({
         Header,
         Link,
         Head,
+        SupplierAddress
     },
     methods: {
 
@@ -55,98 +58,100 @@ export default defineComponent({
                             <h3 class="fw-bold m-0">Address</h3>
                         </div>
                         <!--end::Card title-->
-                        <Link class="btn btn-primary align-self-center" :href="`/supplier/${id}/address/edit`">
-                        Edit
-                        Address
-                        </Link>
+
+                        <button class="btn btn-primary align-self-center"
+                            @click="this.isEdit = this.isEdit ? false : true"><i class="bi bi-pencil me-2"></i>Edit Address
+                        </button>
                     </div>
                     <!--begin::Card header-->
                     <!--begin::Card body-->
                     <div class="card-body p-9">
-                        <!-- {{ address.data }} -->
+                        <SupplierAddress v-if="isEdit" :address="address" :countries="countries" />
                         <!--begin::Row-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
+                        <div v-else>
+                            <div class="row mb-7">
+                                <!--begin::Label-->
 
-                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Address Line 1</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
+                                <label class="col-lg-6 fw-bold fs-5 text-gray-800">Address Line 1</label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
 
-                            <div class="col-lg-6">
-                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.address_line_1
-                                }}</span>
+                                <div class="col-lg-6">
+                                    <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.address_line_1
+                                    }}</span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Address Line 2</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-6 fv-row">
-                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.address_line_2
-                                }}</span>
+                            <!--end::Row-->
+                            <!--begin::Input group-->
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="col-lg-6 fw-bold fs-5 text-gray-800">Address Line 2</label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <div class="col-lg-6 fv-row">
+                                    <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.address_line_2
+                                    }}</span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">City</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.city
-                                }}</span>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="col-lg-6 fw-bold fs-5 text-gray-800">City</label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <div class="col-lg-6 d-flex align-items-center">
+                                    <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.city
+                                    }}</span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">State</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.state
-                                }}</span>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="col-lg-6 fw-bold fs-5 text-gray-800">State</label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <div class="col-lg-6 d-flex align-items-center">
+                                    <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.state
+                                    }}</span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Country
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-700">{{
-                                    this.address?.data?.country?.name
-                                }}</span>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="col-lg-6 fw-bold fs-5 text-gray-800">Country
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <div class="col-lg-6 d-flex align-items-center">
+                                    <span class="fw-bold fs-6 text-gray-700">{{
+                                        this.address?.data?.country?.name
+                                    }}</span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row mb-7">
-                            <!--begin::Label-->
-                            <label class="col-lg-6 fw-bold fs-5 text-gray-800">Pincode
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-6 d-flex align-items-center">
-                                <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.pincode
-                                }}</span>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="col-lg-6 fw-bold fs-5 text-gray-800">Pincode
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Col-->
+                                <div class="col-lg-6 d-flex align-items-center">
+                                    <span class="fw-bold fs-6 text-gray-700">{{ this.address?.data?.pincode
+                                    }}</span>
+                                </div>
+                                <!--end::Col-->
                             </div>
-                            <!--end::Col-->
+                            <!--end::Input group-->
                         </div>
-                        <!--end::Input group-->
                     </div>
                     <!--end::Card body-->
                 </div>

@@ -16,7 +16,6 @@ export default defineComponent({
     data() {
         return {
             q: "",
-            s: "",
             tbody: [
                 "Corporation Title",
                 "Dsescription",
@@ -84,7 +83,7 @@ export default defineComponent({
         search() {
             Inertia.get(
                 "/corporation-type",
-                { q: this.q, status: this.s },
+                { q: this.q },
                 {
                     preserveState: true, onSuccess: (data) => {
                         this.corporationtypes = data.props.corporationtypes;
@@ -92,19 +91,7 @@ export default defineComponent({
                 }
             );
         },
-        changeStatus(e, id) {
-            this.isLoading = true;
-            axios
-                .post("/corporation-type/status", { id: id, status: e })
-                .then((response) => {
-                    if (response.data.success) {
-                        toast.success(response.data.message);
-                        return;
-                    }
-                    toast.error(response.data.message);
-                })
-                .finally(() => (this.isLoading = false));
-        },
+       
         filterFunction(value, index, arr) {
             if (value === this.corporationtypes.data[index].id) {
                 // Removes the value from the original array
@@ -181,11 +168,7 @@ export default defineComponent({
                         <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search " />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <!-- {{ $page.props.ziggy.status }} -->
-                        <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="s" />
-                    </div>
+                  
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>

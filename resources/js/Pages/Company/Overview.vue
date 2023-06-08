@@ -147,7 +147,7 @@ export default defineComponent({
                         class="bi bi-pencil me-2"></i>Edit Company
                 </button>
             </div>
-            <!--begin::Card header-->
+            <!--begin::Card body-->
             <div class="card-body p-9">
                 <div class="row" v-if="isEdit">
                     <div class="col-12">

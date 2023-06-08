@@ -20,10 +20,14 @@ use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CorporationTypeResource;
 use App\Http\Resources\CountryResource;
 use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\ProjectsResource;
+use App\Http\Resources\SupplierResource;
 use App\Models\Account;
 use App\Models\Address;
 use App\Models\CompanyUser;
 use App\Models\CorporationType;
+use App\Models\Project;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -392,18 +396,18 @@ class CompanyController extends Controller
 
     public function projects()
     {
-        $invoices = Invoice::where('company_id', $this->companyId())->get();
-        // return InvoiceResource::collection($invoices);
-        return Inertia::render('Company/Invoices', [
-            'invoices' => InvoiceResource::collection($invoices),
+        $projects = Invoice::where('company_id', $this->companyId())->get();
+        // return InvoiceResource::collection($projects);
+        return Inertia::render('Company/Projects', [
+            'projects' => ProjectsResource::collection($projects),
         ]);
     }
     public function suppliers()
     {
-        $invoices = Invoice::where('company_id', $this->companyId())->get();
-        // return InvoiceResource::collection($invoices);
-        return Inertia::render('Company/Invoices', [
-            'invoices' => InvoiceResource::collection($invoices),
+        $suppliers = Supplier::where('company_id', $this->companyId())->get();
+        // return InvoiceResource::collection($suppliers);
+        return Inertia::render('Company/Suppliers', [
+            'suppliers' => SupplierResource::collection($suppliers),
         ]);
     }
     public function destroy($id)

@@ -4,7 +4,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
-import { Inertia } from "@inertiajs/inertia";
+import { Inertia } from "@inertiajs/inertia";   
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';

@@ -83,7 +83,7 @@ export default defineComponent({
                                     <!--end::Svg Icon--><span v-if="!($page.props.ziggy.address.city)">
                                         Company Address
                                     </span>
-                                    <span v-else>
+                                    <span v-else class="text-capitalize">
                                         {{ $page.props.ziggy?.address?.city + " " +
                                             $page.props.ziggy.address?.state + " " + $page.props.ziggy.address?.pincode }}
                                     </span>

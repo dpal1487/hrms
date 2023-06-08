@@ -13,6 +13,7 @@ class CorporationTypeController extends Controller
     {
         $corporationtypes = new CorporationType();
         if (!empty($request->q)) {
+
             $corporationtypes = $corporationtypes
                 ->where('title', 'like', "%$request->q")
                 ->orWhere('description', 'like', "%$request->q%");

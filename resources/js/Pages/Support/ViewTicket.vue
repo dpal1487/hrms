@@ -6,7 +6,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 
 
 export default defineComponent({
-    props: ['employees'],
+    props: ['employees' , 'ticket'],
     components: {
         AppLayout,
         Header,
@@ -30,6 +30,7 @@ export default defineComponent({
 
         </template>
         <!--begin::Card-->
+        {{ ticket }}
         <div class="card">
             <!--begin::Card body-->
             <div class="card-body">
@@ -70,7 +71,7 @@ export default defineComponent({
                                         <!--end::Label-->
                                         <!--begin::Label-->
                                         <span class="fw-semibold text-muted me-6">By:
-                                            <a href="#" class="text-muted text-hover-primary">Jerry Johns</a></span>
+                                            <a href="#" class="text-muted text-hover-primary">{{ ticket.data.user.first_name +" " + ticket.data.user.last_name }}</a></span>
                                         <!--end::Label-->
                                         <!--begin::Label-->
                                         <span class="fw-semibold text-muted">Created:

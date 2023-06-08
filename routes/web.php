@@ -21,6 +21,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CorporationTypeController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\FaqCategoryController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SupplierController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\RoleAndPermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupportController;
+use App\Models\Support;
 
 /*
 |--------------------------------------------------------------------------
@@ -177,35 +179,27 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/edit', 'edit')->name('support.edit');
             Route::put('/update', 'update')->name('support.update');
             Route::delete('/delete', 'destroy')->name('support.delete');
-
             // Support  overview
             Route::get('/', 'show')->name('support.show');
-
             // Support tickets 
             Route::get('tickets', 'tickets')->name('support.tickets');
-            Route::get('view-tickets', 'viewTickets')->name('support.view-tickets');
-
-
-
+            Route::get('{id}/view-tickets', 'viewTickets')->name('support.view-tickets');
             // Support  tutorials
-
             Route::get('tutorials', 'tutorials')->name('support.tutorials');
             Route::get('view-tutorials', 'viewTutorials')->name('support.view-tutorials');
-
-
             // Support faq
-
             Route::get('/faq', 'faq')->name('support.faq');
-
             // Support licenses
-
             Route::get('/licenses', 'licenses')->name('support.licenses');
-
             // Support contact-us
-
             Route::get('/contact-us', 'contactUs')->name('support.contact-us');
             Route::post('/store/contact-us', 'contactUsStore')->name('support.store.contact-us');
         });
+    });
+
+    Route::controller(FaqCategoryController::class)->group(function () {
+        Route::post('support/faq/create', 'store')->name('support.faq.create');
+        Route::post('support/faq/update', 'update')->name('support.faq.update');
     });
 
     Route::controller(ImageController::class)->group(function () {

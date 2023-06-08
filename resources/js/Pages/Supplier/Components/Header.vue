@@ -79,7 +79,7 @@ export default defineComponent({
                                         </svg>
 
                                     </span>
-                                    <!--end::Svg Icon--><span>{{ address?.city }} {{ address?.state }} {{ address?.country?.name }}</span> </a>
+                                    <!--end::Svg Icon--><span class="text-capitalize">{{ address?.city }} {{ address?.state }} {{ address?.country?.name }}</span> </a>
                                 <a href="" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">

@@ -1,3 +1,4 @@
+
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -106,242 +107,202 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head title="Supplier Address" />
-    <AppLayout>
-        <template #breadcrumb>
-            <li class="breadcrumb-item">
-                <span class="bullet bg-gray-400 w-5px h-2px"></span>
-            </li>
-            <li class="breadcrumb-item">
-                <Link href="/supplier" class="text-muted text-hover-primary">Supplier</Link>
-            </li>
-        </template>
-        <div class="app-content flex-column-fluid ">
-            <!--begin::Content container-->
-            <div class="app-container container-xxl">
-                <Header :supplier="supplier.data" />
-                <!--begin::details View-->
-                <div class="card mb-5 mb-xl-10">
-                    <!--begin::Card header-->
-                    <div class="card-header cursor-pointer">
-                        <!--begin::Card title-->
-                        <div class="card-title m-0">
-                            <h3 class="fw-bold m-0">Edit Account</h3>
+    <div class="card mb-5 mb-xl-10">
+        <!--begin::Form-->
+        <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+            <!--begin::Card body-->
+            <div class="card-body border-top p-9">
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Bank Name</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <!--begin::Row-->
+                        <jet-input id="bank_name" type="text" v-model="v$.form.bank_name.$model" :class="v$.form.bank_name.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Bank Name" />
+                        <div v-for="(error, index) of v$.form.bank_name.$errors" :key="index">
+                            <input-error :message="error.$message" />
                         </div>
-                        <!--end::Card title-->
+                        <!--end::Row-->
                     </div>
-                    <!--begin::Card header-->
-                    <!--begin::Card body-->
-                    <!--begin::Content-->
-                    <div>
-                        <!--begin::Form-->
-                        <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                            <!--begin::Card body-->
-                            <div class="card-body border-top p-9">
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Bank Name</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <!--begin::Row-->
-                                        <jet-input id="bank_name" type="text" v-model="v$.form.bank_name.$model" :class="v$.form.bank_name.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="Bank Name" />
-                                        <div v-for="(error, index) of v$.form.bank_name.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                        <!--end::Row-->
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Bank Address</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="bank_address" type="text" v-model="v$.form.bank_address.$model"
-                                            :class="v$.form.bank_address.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                                " placeholder="Bank Address" />
-                                        <div v-for="(error, index) of v$.form.bank_address.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
-                                        <span class="required">Benificiary Name</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="beneficiary_name" type="text"
-                                            v-model="v$.form.beneficiary_name.$model" :class="v$.form.beneficiary_name.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                                " placeholder="Benificiary Name" />
-                                        <div v-for="(error, index) of v$.form.beneficiary_name.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Account Number</label>
-                                    <!--end::Label-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="account_number" type="text" v-model="v$.form.account_number.$model"
-                                            :class="v$.form.account_number.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                                " placeholder="Account Number" />
-                                        <div v-for="(error, index) of v$.form.account_number.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-
-
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
-                                        <span class="required">Routing Number</span>
-
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="routing_number" type="text" v-model="v$.form.routing_number.$model"
-                                            :class="v$.form.routing_number.$errors.length > 0
-                                                ? 'is-invalid'
-                                                : ''
-                                                " placeholder="Routing Number" />
-                                        <div v-for="(error, index) of v$.form.routing_number.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">SWIFT Code</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="swift_code" type="text" v-model="v$.form.swift_code.$model" :class="v$.form.swift_code.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="SWIFT Code" />
-                                        <div v-for="(error, index) of v$.form.swift_code.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">IFSC Code</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="ifsc_code" type="text" v-model="v$.form.ifsc_code.$model" :class="v$.form.ifsc_code.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="IFSC Code" />
-                                        <div v-for="(error, index) of v$.form.ifsc_code.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Short Code</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="sort_code" type="text" v-model="v$.form.sort_code.$model" :class="v$.form.sort_code.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="Short Code" />
-                                        <div v-for="(error, index) of v$.form.sort_code.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Pan Card</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="v$.form.pan_number.$errors.length > 0
-                                            ? 'is-invalid'
-                                            : ''
-                                            " placeholder="Pan Nnmber" />
-                                        <div v-for="(error, index) of v$.form.pan_number.$errors" :key="index">
-                                            <input-error :message="error.$message" />
-                                        </div>
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--end::Card body-->
-                            <!--begin::Actions-->
-                            <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                <Link :href="`/supplier/${id}/account`" class="btn btn-light btn-active-light-primary me-2">
-                                Discard
-                                </Link>
-                                <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->
-                                <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="processing ? 'on' : 'off'">
-                                    <span class="indicator-label">
-                                        <span>Account</span>
-                                    </span>
-                                    <span class="indicator-progress">
-                                        Please wait... <span
-                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
-                                </button>
-
-                            </div>
-                            <!--end::Actions-->
-                        </form>
-                        <!--end::Form-->
-                    </div>
-                    <!--end::Content-->
-                    <!--end::Card body-->
+                    <!--end::Col-->
                 </div>
-                <!--end::details View-->
-            </div>
-        </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Bank Address</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <jet-input id="bank_address" type="text" v-model="v$.form.bank_address.$model" :class="v$.form.bank_address.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Bank Address" />
+                        <div v-for="(error, index) of v$.form.bank_address.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
 
-    </AppLayout>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
+                        <span class="required">Benificiary Name</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <jet-input id="beneficiary_name" type="text" v-model="v$.form.beneficiary_name.$model" :class="v$.form.beneficiary_name.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Benificiary Name" />
+                        <div v-for="(error, index) of v$.form.beneficiary_name.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Account Number</label>
+                    <!--end::Label-->
+                    <div class="col-lg-8">
+                        <jet-input id="account_number" type="text" v-model="v$.form.account_number.$model" :class="v$.form.account_number.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Account Number" />
+                        <div v-for="(error, index) of v$.form.account_number.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+
+
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
+                        <span class="required">Routing Number</span>
+
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <jet-input id="routing_number" type="text" v-model="v$.form.routing_number.$model" :class="v$.form.routing_number.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Routing Number" />
+                        <div v-for="(error, index) of v$.form.routing_number.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">SWIFT Code</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <jet-input id="swift_code" type="text" v-model="v$.form.swift_code.$model" :class="v$.form.swift_code.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="SWIFT Code" />
+                        <div v-for="(error, index) of v$.form.swift_code.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">IFSC Code</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <jet-input id="ifsc_code" type="text" v-model="v$.form.ifsc_code.$model" :class="v$.form.ifsc_code.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="IFSC Code" />
+                        <div v-for="(error, index) of v$.form.ifsc_code.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Short Code</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <jet-input id="sort_code" type="text" v-model="v$.form.sort_code.$model" :class="v$.form.sort_code.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Short Code" />
+                        <div v-for="(error, index) of v$.form.sort_code.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-semibold fs-6">Pan Card</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <jet-input id="pan_number" type="text" v-model="v$.form.pan_number.$model" :class="v$.form.pan_number.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Pan Nnmber" />
+                        <div v-for="(error, index) of v$.form.pan_number.$errors" :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+            </div>
+            <!--end::Card body-->
+            <!--begin::Actions-->
+            <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <Link :href="`/supplier/${id}/account`" class="btn btn-light btn-active-light-primary me-2">
+                Discard
+                </Link>
+                <!-- <button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button> -->
+                <button type="submit" class="btn btn-primary align-items-center justify-content-center"
+                    :data-kt-indicator="processing ? 'on' : 'off'">
+                    <span class="indicator-label">
+                        <span>Account</span>
+                    </span>
+                    <span class="indicator-progress">
+                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+
+            </div>
+            <!--end::Actions-->
+        </form>
+        <!--end::Form-->
+    </div>
 </template>

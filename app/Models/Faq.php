@@ -15,4 +15,8 @@ class Faq extends Model
     {
         return $this->hasOne(FaqCategory::class, 'id', 'category_id');
     }
+    public function categories()
+    {
+        return $this->hasMany(FaqCategory::class, 'id', 'category_id');
+    }
 }

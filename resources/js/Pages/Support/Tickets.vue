@@ -4,14 +4,28 @@ import AppLayout from '../../Layouts/AppLayout.vue';
 import Header from './Components/Header.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import Pagination from '../../Jetstream/Pagination.vue';
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
     props: ['employees', 'tickets'],
+    data() {
+        return {
+            q: '',
+        }
+    },
     components: {
         AppLayout,
         Header,
         Link,
         Pagination
+    },
+    methods: {
+        search() {
+            Inertia.get(
+                "/support/tickets",
+                { q: this.q, status: this.s },
+            );
+        },
     }
 })
 </script>
@@ -47,7 +61,8 @@ export default defineComponent({
                         <!--begin::Tickets-->
                         <div class="mb-0">
                             <!--begin::Search form-->
-                            <form method="post" action="#" class="form mb-15">
+                            <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
+
                                 <!--begin::Input wrapper-->
                                 <div class="position-relative">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -63,9 +78,13 @@ export default defineComponent({
                                         </svg>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <input type="text" class="form-control form-control-lg form-control-solid ps-14"
-                                        name="search" value="" placeholder="Search" />
+                                    <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
+                                        placeholder="Search " />
+
                                 </div>
+                                <button type="submit" class="btn btn-primary">
+                                    Search
+                                </button>
                                 <!--end::Input wrapper-->
                             </form>
                             <!--end::Search form-->
@@ -97,9 +116,9 @@ export default defineComponent({
                                         <!--begin::Content-->
                                         <div class="d-flex align-items-center mb-2">
                                             <!--begin::Title-->
-                                            <a href="/support/view-tickets"
+                                            <Link :href="`/support/${ticket.id}/view-tickets`"
                                                 class="text-dark text-hover-primary fs-4 me-3 fw-semibold">{{ ticket.subject
-                                                }}</a>
+                                                }}</Link>
                                             <!--end::Title-->
                                             <!--begin::Label-->
                                             <span class="badge badge-light my-1">{{ ticket.project }}</span>
@@ -223,187 +242,7 @@ export default defineComponent({
                             <!--end::Item-->
                         </div>
                         <!--end::More channels-->
-                        <!--begin::Documentations-->
-                        <div class="card-rounded bg-primary bg-opacity-5 p-10 mb-15">
-                            <!--begin::Title-->
-                            <h1 class="fw-bold text-dark mb-9">Documentation</h1>
-                            <!--end::Title-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">Angular Admin</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">React Admin</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">Vue Dashboard</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">Niche Theme</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">Dashboard
-                                    Admin</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">Dorsey
-                                    Front-end</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">CRM Admin</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center mb-6">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">Admin
-                                    Dashbaord</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Icon-->
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr071.svg-->
-                                <span class="svg-icon svg-icon-2 ms-n1 me-3">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12.6343 12.5657L8.45001 16.75C8.0358 17.1642 8.0358 17.8358 8.45001 18.25C8.86423 18.6642 9.5358 18.6642 9.95001 18.25L15.4929 12.7071C15.8834 12.3166 15.8834 11.6834 15.4929 11.2929L9.95001 5.75C9.5358 5.33579 8.86423 5.33579 8.45001 5.75C8.0358 6.16421 8.0358 6.83579 8.45001 7.25L12.6343 11.4343C12.9467 11.7467 12.9467 12.2533 12.6343 12.5657Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <!--end::Icon-->
-                                <!--begin::Subtitle-->
-                                <a href="#" class="fw-semibold text-gray-800 text-hover-primary fs-5 m-0">Intranet Admin</a>
-                                <!--end::Subtitle-->
-                            </div>
-                            <!--end::Item-->
-                        </div>
-                        <!--end::Documentations-->
+
                     </div>
                     <!--end::Sidebar-->
                 </div>

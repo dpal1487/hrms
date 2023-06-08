@@ -10,4 +10,9 @@ class Support extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'subject', 'priority', 'project', 'due_date', 'description', 'status'];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

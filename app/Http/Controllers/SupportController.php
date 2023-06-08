@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\EmployeeResources;
+use App\Http\Resources\FaqCategoryResource;
 use App\Http\Resources\FaqResource;
 use App\Http\Resources\SupportResource;
 use App\Models\Contact;
 use App\Models\Employee;
 use App\Models\Faq;
+use App\Models\FaqCategory;
 use App\Models\Support;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,7 +28,6 @@ class SupportController extends Controller
 
     public function create()
     {
-        //
     }
     public function store(Request $request)
     {
@@ -100,12 +101,15 @@ class SupportController extends Controller
             'tickets' => SupportResource::collection($tickets->paginate(5)),
         ]);
     }
-    public function viewTickets()
+    public function viewTickets($id)
     {
         $employees = Employee::where('company_id', $this->companyId())->get();
 
+        $ticket = Support::find($id);
+
         return Inertia::render('Support/ViewTicket', [
             'employees' => EmployeeResources::collection($employees),
+            'ticket' => new SupportResource($ticket),
         ]);
     }
     public function tutorials()
@@ -128,11 +132,10 @@ class SupportController extends Controller
     {
         $employees = Employee::where('company_id', $this->companyId())->get();
 
-        $faqs = Faq::get();
-
+        $faqs = FaqCategory::get();
         return Inertia::render('Support/Faq', [
             'employees' => EmployeeResources::collection($employees),
-            'faqs' => FaqResource::collection($faqs),
+            'faqs' => FaqCategoryResource::collection($faqs),
         ]);
     }
     public function licenses()
