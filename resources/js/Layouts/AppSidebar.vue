@@ -44,6 +44,7 @@ export default defineComponent({
                     title: "Support",
                     icon: "bi bi-pie-chart-fill",
                 },
+              
                 {
                     link: "/industry",
                     title: "Industry",

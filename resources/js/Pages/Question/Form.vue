@@ -144,7 +144,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
+    <Head :title="isEdit ? 'Edit Question' : `Add New Question`" />
 
     <AppLayout>
         <template #breadcrumb>
@@ -171,7 +171,7 @@ export default defineComponent({
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <h2>General</h2>
+                                <h2>Qustion Form</h2>
                             </div>
                         </div>
                         <div class="card-body">

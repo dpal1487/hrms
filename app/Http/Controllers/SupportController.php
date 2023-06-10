@@ -32,11 +32,10 @@ class SupportController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
             'subject' => 'required',
-            'project' => 'required',
-            'due_date' => 'required',
             'description' => 'required',
-            'status' => 'required',
             'priority' => 'required',
 
         ]);
@@ -44,13 +43,11 @@ class SupportController extends Controller
             return response()->json(['message' => $validate->errors()->first(), 'success' => false], 400);
         }
         $supplier = Support::create([
+            'name' => $request->name,
+            'email' => $request->email,
             'subject' => $request->subject,
-            'project' => $request->project,
-            'user_id' => $request->assign,
-            'due_date' => $request->due_date,
             'description' => $request->description,
             'priority' => $request->priority,
-            'status' => $request->status,
         ]);
         if ($supplier) {
             return response()->json([

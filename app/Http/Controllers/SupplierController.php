@@ -10,6 +10,12 @@ use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\SupplierResource;
+use App\Models\Account;
+use App\Models\Address;
+use App\Models\CompanyUser;
+use App\Models\SupplierAccount;
+use App\Models\SupplierAddress;
+use App\Models\Support;
 use Illuminate\Support\Facades\Validator;
 
 class SupplierController extends Controller
@@ -123,6 +129,57 @@ class SupplierController extends Controller
 
         ]);
     }
+
+    public function updateAddress(Request $request, $id)
+    {
+        $address = [];
+        $validator =  Validator::make($request->all(), [
+            'address_line_1' => 'required',
+            'address_line_2' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            'pincode' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
+        }
+
+        if (Supplier::where(['company_id' => $this->companyId()])->first()) {
+            if ($address = SupplierAddress::where(['supplier_id' => $id])->first()) {
+                $address = Address::where(['id' => $address->address_id])->update([
+                    'address_line_1' => $request->address_line_1,
+                    'address_line_2' => $request->address_line_2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+                if ($address) {
+                    return redirect("/supplier/$id/address")->with('flash', ['message' => 'Address successfully updated.']);
+                }
+            } else {
+                $address = Address::create([
+                    'address_line_1' => $request->address_line_1,
+                    'address_line_2' => $request->address_line_2,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country_id' => $request->country,
+                    'pincode' => $request->pincode,
+                ]);
+
+                $empAddress = SupplierAddress::create([
+                    'employee_id' => $id,
+                    'address_id' => $address->id,
+                ]);
+                if ($empAddress) {
+                    return redirect("/supplier/$id/address")->with('flash', ['message' => 'Address successfully created.']);
+                }
+            }
+            return redirect()->back()->withErrors(['message' => 'Opps something went wrong!']);
+        }
+        return redirect()->back();
+    }
     public function addressEdit($id)
     {
         $supplier = Supplier::where('company_id', $this->companyId())->find($id);
@@ -176,6 +233,66 @@ class SupplierController extends Controller
                 'supplier' => $this->supplierHeader($id),
             ]);
         }
+    }
+    public function updatAccount(Request $request, $id)
+    {
+        $account = [];
+        $validator =  Validator::make($request->all(), [
+            'bank_name' => 'required',
+            'bank_address' => 'required',
+            'beneficiary_name' => 'required',
+            'account_number' => 'required',
+            'routing_number' => 'required',
+            'swift_code' => 'required',
+            'ifsc_code' => 'required',
+            'sort_code' => 'required',
+            'pan_number' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
+        }
+
+        if (Supplier::where(['company_id' => $this->companyId()])->first()) {
+            
+            if ($account = SupplierAccount::where(['supplier_id' => $id])->first()) {
+                Account::where(['id' => $id])->update([
+                    'bank_name' => $request->bank_name,
+                    'bank_address' => $request->bank_address,
+                    'beneficiary_name' => $request->beneficiary_name,
+                    'account_number' => $request->account_number,
+                    'routing_number' => $request->routing_number,
+                    'swift_code' => $request->swift_code,
+                    'ifsc_code' => $request->ifsc_code,
+                    'sort_code' => $request->sort_code,
+                    'pan_number' => $request->pan_number,
+                ]);
+                if ($account) {
+                    return redirect("/supplier/$id/account")->with('flash', ['message' => 'Address successfully updated.']);
+                }
+            } else {
+                $account = Account::create([
+                    'bank_name' => $request->bank_name,
+                    'bank_address' => $request->bank_address,
+                    'beneficiary_name' => $request->beneficiary_name,
+                    'account_number' => $request->account_number,
+                    'routing_number' => $request->routing_number,
+                    'swift_code' => $request->swift_code,
+                    'ifsc_code' => $request->ifsc_code,
+                    'sort_code' => $request->sort_code,
+                    'pan_number' => $request->pan_number,
+                ]);
+
+                $supAccount = SupplierAccount::create([
+                    'supplier_id' => $id,
+                    'account_id' => $account->id,
+                ]);
+                if ($supAccount) {
+                    return redirect("/supplier/$id/account")->with('flash', ['message' => 'Address successfully created.']);
+                }
+            }
+            return redirect()->back()->withErrors(['message' => 'Opps something went wrong!']);
+        }
+        return redirect()->back();
     }
 
     public function edit(Supplier $supplier)

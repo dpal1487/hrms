@@ -145,7 +145,7 @@ export default defineComponent({
 
                             <!--begin::Add customer-->
                             <Link href="/decision-maker/create" class="btn btn-primary">
-                            Add Decision Makers
+                            Add Decision Maker
                             </Link>
                             <!--end::Add customer-->
                         </div>

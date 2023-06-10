@@ -10,20 +10,28 @@ export default defineComponent({
         Vue3autocounter
     },
     data() {
+        return {
+            value: this.answers.data.length,
+            result: '',
+
+        }
+
 
     },
     methods: {
+
         // result: this.?answers.lenght
+
+    },
+    created() {
+        // console.log(value)
+
 
     }
 });
 </script>
 <template>
-    <div v-for="(answer, index) in answers.data">
-
-    </div>
-
-
+    
     <div class="card mb-5 mb-xl-5">
         <div class="card-body pt-9 pb-0">
             <!--begin::Details-->
@@ -43,8 +51,7 @@ export default defineComponent({
                                     <!--begin::Number-->
                                     <div class="d-flex align-items-center">
                                         <div class="fs-2 fw-bold">
-                                            <Vue3autocounter ref='counter' :startAmount='0' :endAmount='2021' :duration='3'
-                                                separator=',' :autoinit='true' />
+                                            <Vue3autocounter ref='counter' :startAmount='0' :endAmount= value   :duration=' 1 ' separator=',' :autoinit=' true ' />
                                         </div>
                                     </div>
                                     <!--end::Number-->

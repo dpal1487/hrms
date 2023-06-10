@@ -160,7 +160,7 @@ export default defineComponent({
             </li>
         </template>
 
-        <Head title="Conversion Rate" />
+        <Head title="Currency" />
         <div class="card card-flush">
             <!--begin::Actions-->
             <div>

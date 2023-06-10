@@ -16,6 +16,9 @@ class SupportResource extends JsonResource
     {
         return [
             'user' => $this->user,
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
             'subject' => $this->subject,
             'priority' => $this->priority,
             'project' => $this->project,

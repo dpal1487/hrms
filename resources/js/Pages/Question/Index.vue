@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
-import Alert from "../../Components/Alert.vue";
 export default defineComponent({
     props: ["questions"],
 
@@ -36,7 +35,6 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
-        Alert
     },
     methods: {
 
@@ -113,16 +111,13 @@ export default defineComponent({
             });
             this.checkbox = list;
         },
-
         deleteQuestion(index) {
-
             axios
                 .post("/questions/delete", { ids: this.checkbox })
                 .then((response) => {
                     if (response.data.success == true) {
                         toast.success(response.data.message);
                         this.questions.data.splice(index, this.checkbox.length);
-
                         return;
                     }
                     else {
@@ -148,51 +143,48 @@ export default defineComponent({
 
         <Head title="Question" />
         <div class="card card-flush">
-            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
-            <div>
-                <div class="card-header border-0 pt-6">
-                    <!--begin::Card title-->
-                    <form class="card-title" @submit.prevent="search()">
-                        <!--begin::Search-->
-                        <div class="d-flex align-items-center position-relative me-4">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                            <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                        transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
-                                    <path
-                                        d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                        fill="currentColor"></path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
-                                placeholder="Search " />
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">
-                            Search
-                        </button>
-                        <!--end::Search-->
-                    </form>
-                    <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
-                    <div class="card-toolbar">
-                        <!--begin::Toolbar-->
-                        <div class="d-flex justify-content-end gap-5" data-kt-customer-table-toolbar="base">
-                            <Link href="/question/create" class="btn btn-primary">
-                            Add Question
-                            </Link>
-                            <button v-if="checkbox.length > 0" @click="deleteQuestion()" class="btn btn-danger">Delete
-                                Selected</button>
-                        </div>
-                        <!--end::Toolbar-->
+            <div class="card-header border-0 pt-6">
+                <!--begin::Card title-->
+                <form class="card-title" @submit.prevent="search()">
+                    <!--begin::Search-->
+                    <div class="d-flex align-items-center position-relative me-4">
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                        <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                                    transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                                <path
+                                    d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                    fill="currentColor"></path>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <input type="text" v-model="q" class="form-control form-control-solid w-250px ps-14"
+                            placeholder="Search " />
                     </div>
-                    <!--end::Card toolbar-->
-                </div>
 
+                    <button type="submit" class="btn btn-primary">
+                        Search
+                    </button>
+                    <!--end::Search-->
+                </form>
+                <!--begin::Card title-->
+                <!--begin::Card toolbar-->
+                <div class="card-toolbar">
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end gap-5" data-kt-customer-table-toolbar="base">
+                        <Link href="/question/create" class="btn btn-primary">
+                        Add Question
+                        </Link>
+                        <button v-if="checkbox.length > 0" @click="deleteQuestion()" class="btn btn-danger">Delete
+                            Selected</button>
+                    </div>
+                    <!--end::Toolbar-->
+                </div>
+                <!--end::Card toolbar-->
             </div>
+
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
@@ -227,9 +219,7 @@ export default defineComponent({
                                 <td>{{ questions.question_key }}</td>
                                 <td>{{ questions.text }}</td>
                                 <td>{{ questions.language }}</td>
-
                                 <td>{{ questions.type }}</td>
-
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
@@ -246,7 +236,6 @@ export default defineComponent({
                                             </span>
                                             <!--end::Svg Icon-->
                                         </a>
-
                                         <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
                                             :aria-labelled:by="`dropdown-${questions.id}`">
                                             <li class="menu-item px-3">
@@ -261,7 +250,6 @@ export default defineComponent({
                                                     :href="`/question/${questions.id}`">View
                                                 </Link>
                                             </li>
-
                                             <li class="menu-item px-3">
                                                 <button @click="confirmDelete(
                                                     questions.id, index

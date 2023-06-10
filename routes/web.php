@@ -31,6 +31,7 @@ use App\Http\Controllers\RoleAndPermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\SupportProjectController;
 use App\Models\Support;
 
 /*
@@ -43,9 +44,7 @@ use App\Models\Support;
 | contains the "web" middleware group. Now create something great!
 |
 
-| Routes 
-
-            
+| Routes             
 
 */
 
@@ -79,18 +78,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         // Employee Address
         Route::get('employee/{id}/address', 'address')->name('employee.address');
-        Route::post('{id}//address/update', 'updateAddress')->name('employee.address.update');
+        Route::post('{id}/address/update', 'updateAddress')->name('employee.address.update');
 
         // Empoyee Security
         Route::get('employee/{id}/security', 'security')->name('employee.security');
         Route::post('employee/{id}/email/update', 'emailUpdate')->name('employee.email.update');
         Route::post('employee/{id}/change-password', 'changePassword')->name('employee.change-password');
         Route::post('employee/{id}/deactivate', 'deactivate')->name('employee.deactivate');
-
-
         // Employee Settings
         Route::get('employee/{id}/settings', 'setting')->name('employee.settings');
-
 
         // Employee Attendance
 
@@ -99,6 +95,22 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         //User Image
         Route::post('/avatar-upload', 'avatarImage');
     });
+
+    Route::controller(SupplierController::class)->group(function () {
+        Route::get('supplier/{id}/overview/edit', 'supplierEdit')->name('supplier.overview.edit');
+        Route::get('supplier/{id}/address/edit', 'addressEdit')->name('supplier.address.edit');
+
+        Route::get('supplier/{id}/account/edit', 'accountEdit')->name('supplier.account.edit');
+
+        //Supplier Address
+        Route::get('supplier/{id}/address', 'address')->name('supplier.address');
+        Route::post('{id}/address/update', 'updateAddress')->name('supplier.address.update');
+
+        //Supplier Account
+        Route::get('supplier/{id}/account', 'account')->name('supplier.account');
+        Route::post('{id}/account/update', 'updatAccount')->name('supplier.account.update');
+    });
+
     Route::controller(MyAccountController::class)->group(function () {
         //User OverView
         Route::get('account', 'overview')->name('account.overview');
@@ -170,6 +182,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/email', 'delEmail')->name('company.delEmail');
         });
     });
+
 
     Route::controller(SupportController::class)->group(function () {
         Route::group(['prefix' => 'support'], function () {
@@ -282,13 +295,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('supplier', SupplierController::class);
     Route::post('suppliers/delete', [SupplierController::class, 'selectDelete'])->name('suppliers.delete');
 
-    Route::controller(SupplierController::class)->group(function () {
-        Route::get('supplier/{id}/overview/edit', 'supplierEdit')->name('supplier.overview.edit');
-        Route::get('supplier/{id}/address', 'address')->name('supplier.address');
-        Route::get('supplier/{id}/address/edit', 'addressEdit')->name('supplier.address.edit');
-        Route::get('supplier/{id}/account', 'account')->name('supplier.account');
-        Route::get('supplier/{id}/account/edit', 'accountEdit')->name('supplier.account.edit');
-    });
+
 
     Route::controller(RoleAndPermissionController::class)->group(function () {
         Route::group(['prefix' => 'roles'], function () {

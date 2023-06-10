@@ -158,7 +158,7 @@ export default defineComponent({
             </li>
         </template>
 
-        <Head title="Conversion Rate" />
+        <Head title="Department" />
         <div class="card card-flush">
             <!--begin::Actions-->
             <div>
@@ -196,7 +196,7 @@ export default defineComponent({
 
                         <!--begin::Add Conversion Rate-->
                         <Link href="/department/create" class="btn btn-primary">
-                        Add Conversion Rate
+                        Add Department
                         </Link>
                         <!--end::Add Conversion Rate-->
                         <button v-if="checkbox.length > 0" @click="deleteDepartment()" class="btn btn-danger">Delete

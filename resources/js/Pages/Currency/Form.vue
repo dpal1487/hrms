@@ -116,7 +116,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit currencies' : `Add New currencies`" />
+    <Head :title="isEdit ? 'Edit Currencies' : `Add New Currencies`" />
     <AppLayout>
         <template #breadcrumb>
             <li class="breadcrumb-item">
@@ -134,7 +134,7 @@ export default defineComponent({
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <h2>currencies</h2>
+                                <h2>Currencies</h2>
                             </div>
                         </div>
                         <div class="card-body">

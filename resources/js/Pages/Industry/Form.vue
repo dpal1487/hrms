@@ -173,7 +173,7 @@ export default defineComponent({
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <h2>General</h2>
+                                <h2>Industry Form</h2>
                             </div>
                         </div>
                     </div>

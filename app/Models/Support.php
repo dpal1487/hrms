@@ -9,7 +9,7 @@ class Support extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'subject', 'priority', 'project', 'due_date', 'description', 'status'];
+    protected $fillable = ['name', 'email', 'subject', 'priority', 'description'];
 
     public function user()
     {

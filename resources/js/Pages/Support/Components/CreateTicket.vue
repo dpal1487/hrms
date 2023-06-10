@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue';
 import Multiselect from '@vueform/multiselect';
 import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import { email, required } from '@vuelidate/validators';
 import Modal from '@/Components/Modal.vue'
 
 import JetInput from "@/Jetstream/Input.vue";
@@ -22,27 +22,22 @@ export default defineComponent({
     validations() {
         return {
             form: {
+                name: {
+                    required
+                },
+                email: {
+                    required, email
+                },
                 subject: {
-                    required
-                },
-                project: {
-                    required
-                },
-                assign: {
-                    required
-                },
-                due_date: {
-                    required
-                },
-                description: {
                     required
                 },
                 priority: {
                     required
                 },
-                status: {
+                description: {
                     required
                 },
+
 
             }
         }
@@ -51,30 +46,15 @@ export default defineComponent({
         return {
             processing: false,
             form: this.$inertia.form({
-                assign: '',
+                name:'',
+                email:'',
                 subject: '',
                 project: '',
-                due_date: '',
                 description: '',
-                status: '',
                 priority: '',
+                notificationemail:'',
+                phone:'',
             }),
-            projects: [
-                { name: 'HTML Theme', id: "1" },
-                { name: 'Angular App', id: "2" },
-                { name: 'Vue App', id: "3" },
-                { name: 'React Theme', id: "4" },
-                { name: 'Figma UI Kit', id: "5" },
-                { name: 'Laravel App', id: "6" },
-                { name: 'Blazor App', id: "7" },
-                { name: 'Django App', id: "8" },
-            ],
-            status: [
-                { name: 'Open', id: "1" },
-                { name: 'Pending', id: "2" },
-                { name: 'Resolved', id: "3" },
-                { name: 'Closed', id: "4" },
-            ],
             priority: [
                 { name: 'Low', id: "1" },
                 { name: 'Medium', id: "2" },
@@ -142,6 +122,44 @@ export default defineComponent({
                 </div>
                 <!--end::Heading-->
                 <!--begin::Input group-->
+                <div class="row g-9 mb-3">
+
+                    <div class="col-md-6">
+
+                        <!--begin::Label-->
+                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                            <span class="required">Name</span>
+
+                        </label>
+                        <!--end::Label-->
+                        <jet-input type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Enter your name" />
+                        <div v-for="(    error, index    ) of     v$.form.name.$errors    " :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!--begin::Label-->
+                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                            <span class="required">Email</span>
+
+                        </label>
+                        <!--end::Label-->
+                        <jet-input type="text" v-model="v$.form.email.$model" :class="v$.form.email.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " placeholder="Enter your email" />
+                        <div v-for="(error, index) of     v$.form.email.$errors    " :key="index">
+                            <input-error :message="error.$message" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
                 <div class="d-flex flex-column mb-8 fv-row">
                     <!--begin::Label-->
                     <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -157,60 +175,13 @@ export default defineComponent({
                     <div v-for="(    error, index    ) of     v$.form.subject.$errors    " :key="index">
                         <input-error :message="error.$message" />
                     </div>
-
-
                 </div>
                 <!--end::Input group-->
+
                 <!--begin::Input group-->
                 <div class="row g-9 mb-8">
                     <!--begin::Col-->
-                    <div class="col-md-6 fv-row">
-                        <label class="required fs-6 fw-semibold mb-2">Project</label>
-                        <Multiselect :options="projects" label="name" valueProp="id"
-                            class="form-control form-control-lg form-control-solid" placeholder="Select Project"
-                            v-model="form.project" track-by="name" :class="v$.form.project.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
-                                " />
-                        <div v-for="(    error, index    ) of     v$.form.project.$errors    " :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
-                    </div>
-                    <!--end::Col-->
-                    <!--begin::Col-->
-                    <div class="col-md-6 fv-row">
-                        <label class="required fs-6 fw-semibold mb-2">Assign</label>
-                        <Multiselect :options="employees" label="first_name" valueProp="id"
-                            class="form-control form-control-lg form-control-solid" placeholder="Select Employee"
-                            v-model="form.assign" track-by="name" :class="v$.form.assign.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
-                                " />
-                        <div v-for="(    error, index    ) of     v$.form.assign.$errors    " :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-                <!--begin::Input group-->
-                <div class="row g-9 mb-8">
-                    <!--begin::Col-->
-                    <div class="col-md-4 fv-row">
-                        <label class="required fs-6 fw-semibold mb-2">Status</label>
-                        <Multiselect :options="status" label="name" valueProp="id"
-                            class="form-control form-control-lg form-control-solid" placeholder="Status"
-                            v-model="form.status" track-by="name" :class="v$.form.status.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
-                                " />
-                        <div v-for="(    error, index    ) of     v$.form.status.$errors    " :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
-                    </div>
-                    <!--end::Col-->
-                    <!--begin::Col-->
-                    <div class="col-md-4 fv-row">
+                    <div class="col-md-6">
                         <label class="required fs-6 fw-semibold mb-2">Priority</label>
                         <Multiselect :options="priority" label="name" valueProp="id"
                             class="form-control form-control-lg form-control-solid" placeholder="Select"
@@ -219,19 +190,6 @@ export default defineComponent({
                                 : ''
                                 " />
                         <div v-for="(    error, index    ) of     v$.form.priority.$errors    " :key="index">
-                            <input-error :message="error.$message" />
-                        </div>
-                    </div>
-                    <!--end::Col-->
-                    <!--begin::Col-->
-                    <div class="col-md-4 fv-row">
-                        <jet-label for="due_date" value="Due Date" />
-                        <VueDatePicker v-model="v$.form.due_date.$model" :enable-time-picker="false" auto-apply
-                            input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.due_date.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
-                                " placeholder="Due Date"></VueDatePicker>
-                        <div v-for="(    error, index    ) of     v$.form.due_date.$errors    " :key="index">
                             <input-error :message="error.$message" />
                         </div>
                     </div>
@@ -266,14 +224,14 @@ export default defineComponent({
                         <div class="d-flex align-items-center">
                             <!--begin::Checkbox-->
                             <label class="form-check form-check-custom form-check-solid me-10">
-                                <input class="form-check-input h-20px w-20px" type="checkbox" name="notifications[]"
+                                <input class="form-check-input h-20px w-20px" type="checkbox" v-model="form.notificationemail" name="notifications[]"
                                     value="email" checked="checked" />
                                 <span class="form-check-label fw-semibold">Email</span>
                             </label>
                             <!--end::Checkbox-->
                             <!--begin::Checkbox-->
                             <label class="form-check form-check-custom form-check-solid">
-                                <input class="form-check-input h-20px w-20px" type="checkbox" name="notifications[]"
+                                <input class="form-check-input h-20px w-20px" type="checkbox" v-model="form.phone" name="notifications[]"
                                     value="phone" />
                                 <span class="form-check-label fw-semibold">Phone</span>
                             </label>

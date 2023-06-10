@@ -194,7 +194,7 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit Employee' : `Add New Employee`" />
+    <Head :title="isEdit ? 'Edit Employee' : 'Add New Employee'" />
 
     <AppLayout>
 
@@ -208,12 +208,11 @@ export default defineComponent({
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
-                <!-- {{ form }} -->
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <h2>General</h2>
+                                <h2>Employee Form</h2>
                             </div>
                         </div>
                         <div class="card-body">

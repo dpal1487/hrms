@@ -52,7 +52,6 @@ export default defineComponent({
         Link,
         Head,
         Multiselect,
-        PrimaryButton,
         JetInput,
         JetLabel,
         InputError,
@@ -161,6 +160,7 @@ export default defineComponent({
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="requesting ? 'on' : 'off'">
                                     <span class="indicator-label">
+                                        
                                         <span v-if="route().current() == 'department.edit'">Save Changes</span>
                                         <span v-if="route().current() == 'department.create'">Save</span>
                                     </span>
