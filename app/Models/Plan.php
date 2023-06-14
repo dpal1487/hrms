@@ -11,7 +11,12 @@ class Plan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['slug', 'name', 'description', 'is_active', 'price', 'stripe_id', 'currency', 'sort_order'];
+    protected $fillable = ['slug', 'name', 'sort_description', 'description', 'is_active', 'price', 'interval', 'stripe_plan', 'currency_id', 'sort_order', 'start_date', 'end_date'];
+
+    public function currency()
+    {
+        return $this->hasOne(Currency::class, 'id', 'currency_id');
+    }
 
     protected static function boot()
     {

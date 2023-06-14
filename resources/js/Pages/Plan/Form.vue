@@ -3,21 +3,20 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
-import PrimaryButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-
-
+import { required, numeric } from "@vuelidate/validators";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import { Inertia } from "@inertiajs/inertia";
+import ItemFormList from "./Components/ItemFormList.vue";
 
 export default defineComponent({
-    props: ['plan', 'message'],
+    props: ['plan', 'currencies'],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -27,9 +26,16 @@ export default defineComponent({
                 name: {
                     required,
                 },
-                description: {
+                sort_description: {
                     required,
                 },
+                start_date: {
+                    required,
+                },
+                end_date: {
+                    required,
+                },
+
                 status: {
                     required,
                 },
@@ -37,9 +43,9 @@ export default defineComponent({
                     required,
                 },
                 sort_order: {
-                    required,
+                    required, numeric,
                 },
-                stripe_id: {
+                stripe_plan: {
                     required,
                 },
                 currency: {
@@ -51,17 +57,25 @@ export default defineComponent({
     data() {
         return {
 
+            rowCount: 1,
+            items: 1,
             isEdit: false,
             processing: false,
             form: this.$inertia.form({
                 id: this.plan?.data?.id || '',
                 name: this.plan?.data?.name || '',
-                description: this.plan?.data?.description || '',
-                status: this.plan?.data?.status || '',
+                sort_description: this.plan?.data?.sort_description || '',
+                start_date: this.plan?.data?.start_date || '',
+                end_date: this.plan?.data?.end_date || '',
+                status: this.plan?.data?.is_active || '',
                 price: this.plan?.data?.price || '',
-                stripe_id: this.plan?.data?.stripe_id || '',
-                currency: this.plan?.data?.currency || '',
+                stripe_plan: this.plan?.data?.stripe_plan || '',
+                currency: this.plan?.data?.currency?.id || '',
                 sort_order: this.plan?.data?.sort_order || '',
+                items: [{
+                    meta: '',
+                    description: '',
+                }],
             }),
             status: [
                 { id: '1', name: 'Active' },
@@ -74,11 +88,11 @@ export default defineComponent({
         Link,
         Head,
         Multiselect,
-        PrimaryButton,
         JetInput,
         JetLabel,
         InputError,
-        JetValidationErrors
+        VueDatePicker,
+        ItemFormList
     },
     methods: {
 
@@ -93,12 +107,8 @@ export default defineComponent({
                                 toast.success(response.data.message)
                                 this.processing = false
                                 Inertia.get('/plan')
-
                             } else {
-                                toast.warning(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
+                                toast.error(response.data.message)
                             }
                         })
                 } else {
@@ -121,12 +131,31 @@ export default defineComponent({
             }
         },
 
+        addItemForm(rowCount) {
+            for (var i = 0; i < rowCount; i++) {
+                this.form.items.push({
+                    meta: '',
+                    description: '',
+                });
+            }
+        },
+        removeItemForm(index) {
+            if (this.form.items.length > 0) {
+
+                console.log(index)
+                this.form.items.splice(index, 1)
+            }
+        },
+
+
     },
+
     created() {
         if (route().current() == 'plan.edit') {
             this.isEdit = true;
         }
-    }
+    },
+
 });
 </script>
 <template>
@@ -142,7 +171,7 @@ export default defineComponent({
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
-                <JetValidationErrors />
+
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
                         <div class="card-header">
@@ -162,6 +191,17 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
+                                <div class="w-100 w-sm-50">
+                                    <jet-label for="sort_description" value="Sort Description" />
+                                    <jet-input id="sort_description" type="text" v-model="v$.form.sort_description.$model"
+                                        :class="v$.form.sort_description.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="Sort Description" />
+                                    <div v-for="(error, index) of v$.form.sort_description.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
 
                                 <div class="w-100 w-sm-50">
                                     <jet-label for="price" value="Price" />
@@ -177,12 +217,54 @@ export default defineComponent({
                             </div>
                             <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
                                 <div class="w-100 w-sm-50">
-                                    <jet-label for="currency" value="Currency" />
-                                    <jet-input id="currency" type="text" v-model="v$.form.currency.$model" :class="v$.form.currency.$errors.length > 0
+                                    <jet-label for="start_date" value="Start Date" />
+                                    <VueDatePicker v-model="v$.form.start_date.$model" :enable-time-picker="false"
+                                        auto-apply
+                                        input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.start_date.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="Start Date"></VueDatePicker>
+                                    <div v-for="(error, index) of v$.form.start_date.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+
+                                </div>
+                                <div class="w-100 w-sm-50">
+                                    <jet-label for="end_date" value="End Date" />
+                                    <VueDatePicker v-model="v$.form.end_date.$model" :enable-time-picker="false" auto-apply
+                                        input-class-name="form-control form-control-lg form-control-solid fw-normal" :class="v$.form.end_date.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="End Date"></VueDatePicker>
+                                    <div v-for="(error, index) of v$.form.end_date.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+
+                                </div>
+
+                                <div class="w-100 w-sm-50">
+                                    <jet-label for="status" value="Currency" />
+                                    <Multiselect :options="currencies.data" label="currency_name" valueProp="id"
+                                        class="form-control form-control-lg form-control-solid" placeholder="Choose One"
+                                        v-model="v$.form.currency.$model" track-by="currency_name" :class="v$.form.currency.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " />
+                                    <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                        <input-error :message="error.$message" />
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
+                                <div class="w-100 w-sm-50">
+                                    <jet-label for="stripe_plan" value="Strip Plan" />
+                                    <jet-input id="strip_plan" type="text" v-model="v$.form.stripe_plan.$model" :class="v$.form.stripe_plan.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        " placeholder="Currency" />
-                                    <div v-for="(error, index) of v$.form.currency.$errors" :key="index">
+                                        " placeholder="Strip Plan" />
+                                    <div v-for="(error, index) of v$.form.stripe_plan.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
@@ -193,18 +275,6 @@ export default defineComponent({
                                         : ''
                                         " placeholder="Sort Order" />
                                     <div v-for="(error, index) of v$.form.sort_order.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
-                                <div class="w-100 w-sm-50">
-                                    <jet-label for="description" value="Strip ID" />
-                                    <jet-input id="strip_id" type="text" v-model="v$.form.stripe_id.$model" :class="v$.form.stripe_id.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Strip ID" />
-                                    <div v-for="(error, index) of v$.form.stripe_id.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
@@ -222,17 +292,38 @@ export default defineComponent({
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex gap-5 flex-column flex-sm-row mb-5 col-12">
-                                <div class="w-100">
-                                    <jet-label for="description" value="Description" />
-                                    <jet-input id="description" type="text" v-model="v$.form.description.$model" :class="v$.form.description.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Description" />
-                                    <div v-for="(error, index) of v$.form.description.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                </div>
+
+                            <div class="table-responsive mb-10">
+                                <!--begin::Table-->
+                                <h4>Descriptions</h4>
+                                <table class="table g-5 gs-0 mb-0 fw-bold text-gray-700" data-kt-element="items">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="border-bottom fs-7 fw-bold text-gray-700 text-uppercase text-center">
+                                            <th>Meta</th>
+                                            <th>Description</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody>
+                                        <ItemFormList :form="form" @removeSingle="removeItemForm" :plan="plan"
+                                            :items="items" :isEdit="isEdit" />
+                                    </tbody>
+                                    <!--end::Table body-->
+                                    <!--begin::Table foot-->
+                                    <tfoot>
+                                        <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
+                                            <th class="text-primary">
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                    @click="addItemForm(this.rowCount)">Add
+                                                    more</button>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                    <!--end::Table foot-->
+                                </table>
                             </div>
                         </div>
                     </div>

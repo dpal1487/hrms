@@ -91,9 +91,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         // Employee Attendance
 
         Route::get('employee/{id}/attendance', 'attendance')->name('employee.attendance');
-
-        //User Image
-        Route::post('/avatar-upload', 'avatarImage');
     });
 
     Route::controller(SupplierController::class)->group(function () {
@@ -183,6 +180,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
+
+    Route::resource('supplier', SupplierController::class);
+    Route::post('suppliers/delete', [SupplierController::class, 'selectDelete'])->name('suppliers.delete');
 
     Route::controller(SupportController::class)->group(function () {
         Route::group(['prefix' => 'support'], function () {
@@ -292,8 +292,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('corporation-type/status', [CorporationTypeController::class, 'statusUpdate'])->name('corporation-type.status');
     Route::post('corporation-types/delete', [CorporationTypeController::class, 'selectDelete'])->name('corporation-types.delete');
 
-    Route::resource('supplier', SupplierController::class);
-    Route::post('suppliers/delete', [SupplierController::class, 'selectDelete'])->name('suppliers.delete');
 
 
 
@@ -304,6 +302,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
         Route::group(['prefix' => 'users'], function () {
             Route::get('/', 'userList')->name('user.list');
+            Route::get('/{id}/edit', 'userEdit')->name('users.edit');
+            Route::post('/avatar-upload', 'avatarImage');
+            Route::post('/{id}/update', 'update')->name('users.update');
         });
     });
 

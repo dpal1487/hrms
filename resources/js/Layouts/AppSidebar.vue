@@ -44,7 +44,7 @@ export default defineComponent({
                     title: "Support",
                     icon: "bi bi-pie-chart-fill",
                 },
-              
+
                 {
                     link: "/industry",
                     title: "Industry",
@@ -91,11 +91,6 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/images",
-                    title: "Images",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
                     link: "/users",
                     title: "Users List",
                     icon: "bi bi-pie-chart-fill",
@@ -110,6 +105,12 @@ export default defineComponent({
                     title: "Permission",
                     icon: "bi bi-pie-chart-fill",
                 },
+                {
+                    link: "/images",
+                    title: "Images",
+                    icon: "bi bi-pie-chart-fill",
+                },
+
             ],
         };
     },

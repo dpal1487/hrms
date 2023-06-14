@@ -264,7 +264,8 @@ class EmployeeController extends Controller
     public function overview($id)
     {
         $employee = $this->employee($id);
-        if ($employee) {
+
+        if ($employee->addresss) {
             return Inertia::render('Employee/Overview', [
                 'employee' => new EmployeeResources($employee),
                 'user' => $this->employeeHeader($id),
@@ -273,6 +274,12 @@ class EmployeeController extends Controller
 
             ]);
         }
+        return Inertia::render('Employee/Overview', [
+            'employee' => new EmployeeResources($employee),
+            'user' => $this->employeeHeader($id),
+            'departments' => DepartmentResource::collection($this->department),
+
+        ]);
         return redirect()->back();
     }
 

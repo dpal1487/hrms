@@ -22,6 +22,7 @@ export default defineComponent({
                 "Name",
                 "Description",
                 "Currency",
+                "Interval",
                 "Price",
                 "Stripe ID",
                 "Status",
@@ -98,7 +99,7 @@ export default defineComponent({
         changeStatus(e, id) {
             this.isLoading = true;
             axios
-                .post("/plan/status", { id: id, status: e })
+                .post("plan/status", { id: id, status: e })
                 .then((response) => {
                     if (response.data.success) {
                         toast.success(response.data.message);
@@ -149,22 +150,25 @@ export default defineComponent({
                                     {{ plan?.name }}
                                 </td>
                                 <td>
-                                    {{ plan?.description }}
+                                    {{ plan?.sort_description }}
                                 </td>
                                 <td>
-                                    {{ plan?.currency }}
+                                    {{ plan?.currency?.currency_name }}
+                                </td>
+                                <td>
+                                    {{ plan?.interval }}
                                 </td>
                                 <td>
                                     {{ plan?.price }}
                                 </td>
                                 <td>
-                                    {{ plan?.stripe_id }}
+                                    {{ plan?.stripe_plan }}
                                 </td>
                                 <td>
                                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
                                         <input class="form-check-input h-20px w-30px" type="checkbox"
                                             @input="changeStatus($event.target.checked, plan.id)"
-                                            :checked="plan.status == 1 ? true : false" />
+                                            :checked="plan.is_active == 1 ? true : false" />
                                     </div>
                                 </td>
                                 <td>

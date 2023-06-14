@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CurrencyResource;
 use App\Models\Plan;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Resources\PlanResource;
+use App\Models\Currency;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -33,8 +36,9 @@ class PlanController extends Controller
     public function statusUpdate(Request  $request)
     {
 
+
         $plan  = Plan::where('id', $request->id)->update([
-            'status' => $request->status
+            'is_active' => $request->status
         ]);
         if ($plan) {
 
@@ -53,7 +57,10 @@ class PlanController extends Controller
 
     public function create()
     {
-        return Inertia::render('Plan/Form');
+        $currencies = Currency::get();
+        return Inertia::render('Plan/Form', [
+            'currencies' => CurrencyResource::collection($currencies),
+        ]);
     }
 
     public function store(Request $request)
@@ -62,27 +69,37 @@ class PlanController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'slug' => 'unique:plans,slug',
-            'description' => 'required',
+            'sort_description' => 'required',
             'status' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
             'price' => 'required',
             'sort_order' => 'required',
-            'stripe_id' => 'required',
+            'stripe_plan' => 'required',
             'currency' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
 
+        $toDate = Carbon::parse($request->start_date);
+        $fromDate = Carbon::parse($request->end_date);
+
+        $interval = $toDate->diffInDays($fromDate);
 
         $plan = Plan::create([
             'name' => $request->name,
             'slug' => $request->slug,
-            'description' => $request->description,
-            'status' => $request->status,
+            'sort_description' => $request->sort_description,
+            'description' => json_encode($request->items),
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'interval' => $interval,
+            'is_active' => $request->status,
             'price' => $request->price,
             'sort_order' => $request->sort_order,
-            'stripe_id' => $request->stripe_id,
-            'currency' => $request->currency,
+            'stripe_plan' => $request->stripe_plan,
+            'currency_id' => $request->currency,
         ]);
         if ($plan) {
             return response()->json([
@@ -98,8 +115,12 @@ class PlanController extends Controller
 
     public function edit(Plan $plan)
     {
+        $currencies = Currency::get();
+
         return Inertia::render('Plan/Form', [
             'plan' => new PlanResource($plan),
+            'currencies' => CurrencyResource::collection($currencies),
+
         ]);
     }
 
@@ -107,25 +128,37 @@ class PlanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'description' => 'required',
+            'sort_description' => 'required',
             'status' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
             'price' => 'required',
-            'sort_order' => 'required',
-            'stripe_id' => 'required',
+            'sort_order' => 'required|numeric',
+            'stripe_plan' => 'required',
             'currency' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
         }
+
+        $toDate = Carbon::parse($request->start_date);
+        $fromDate = Carbon::parse($request->end_date);
+
+        $interval = $toDate->diffInDays($fromDate);
+
         $plan = Plan::where(['id' => $plan->id])->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-            'description' => $request->description,
-            'status' => $request->status,
+            'sort_description' => $request->sort_description,
+            'description' => json_encode($request->items),
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'interval' => $interval,
+            'is_active' => $request->status,
             'price' => $request->price,
             'sort_order' => $request->sort_order,
-            'stripe_id' => $request->stripe_id,
-            'currency' => $request->currency,
+            'stripe_plan' => $request->stripe_plan,
+            'currency_id' => $request->currency,
         ]);
 
         if ($plan) {

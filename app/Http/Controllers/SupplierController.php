@@ -253,7 +253,7 @@ class SupplierController extends Controller
         }
 
         if (Supplier::where(['company_id' => $this->companyId()])->first()) {
-            
+
             if ($account = SupplierAccount::where(['supplier_id' => $id])->first()) {
                 Account::where(['id' => $id])->update([
                     'bank_name' => $request->bank_name,
@@ -308,6 +308,8 @@ class SupplierController extends Controller
 
     public function update(Request $request, Supplier $supplier)
     {
+
+        $id = $supplier->id;
         $validate = Validator::make($request->all(), [
             'company_id' => 'required',
             'supplier_name' => 'required',
@@ -319,10 +321,10 @@ class SupplierController extends Controller
             'status' => 'required',
         ]);
         if ($validate->fails()) {
-            return response()->json(['message' => $validate->errors()->first(), 'success' => false], 400);
+            return redirect()->back()->withErrors(['message' => $validate->errors()->first(), 'success' => false], 400);
         }
 
-        $supplier = Supplier::where('id', $supplier->id)->update([
+        $supplier = Supplier::where('id', $id)->update([
             'company_id' => $request->company_id,
             'supplier_name' => $request->supplier_name,
             'display_name' => $request->display_name,
@@ -333,12 +335,12 @@ class SupplierController extends Controller
             'status' => $request->status,
         ]);
         if ($supplier) {
-            return response()->json([
+            return redirect("/supplier/$id")->with('flash', [
                 'success' => true,
                 'message' => 'Supplier updated successfully',
             ], 200);
         }
-        return response()->json([
+        return redirect("/supplier/$id")->with('flash', [
             'success' => false,
             'message' => 'Supplier Not updated',
         ], 400);

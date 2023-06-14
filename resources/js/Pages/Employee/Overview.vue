@@ -15,7 +15,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { toast } from 'vue3-toastify';
 
 export default defineComponent({
-    props: ['employee', 'user', 'departments','address'],
+    props: ['employee', 'user', 'departments', 'address'],
     setup() {
 
         return { v$: useVuelidate() }
@@ -203,7 +203,7 @@ export default defineComponent({
             <!--begin::Content container-->
             <div class="app-container container-xxl">
                 <!--begin::Navbar-->
-                <Header :user="user.data" :employee="employee.data" :address="address.data"/>
+                <Header :user="user.data" :employee="employee.data" :address="address?.data" />
                 <!-- {{ $page }} -->
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10">

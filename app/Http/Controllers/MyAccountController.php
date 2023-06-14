@@ -7,7 +7,6 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Address;
 use App\Models\Country;
-use App\Models\Employee;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,6 +23,7 @@ class MyAccountController extends Controller
 
     public function avatarImage(Request $request)
     {
+
         if ($request->ajax()) {
 
             if (Auth::user()) {

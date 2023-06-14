@@ -116,7 +116,7 @@ export default defineComponent({
             formdata.append("image", file)
 
             this.isUploading = true;
-            axios.post("/account/avatar-upload", formdata, {
+            axios.post("/avatar-upload", formdata, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 }

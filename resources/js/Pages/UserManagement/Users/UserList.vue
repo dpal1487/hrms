@@ -172,8 +172,6 @@ export default defineComponent({
                             <!--end::Add user-->
                         </div>
                         <!--end::Toolbar-->
-                        <!--begin::Modal - Add task-->
-                        <!--end::Modal - Add task-->
                     </div>
                     <!--end::Card toolbar-->
                 </div>
@@ -226,7 +224,7 @@ export default defineComponent({
                                 </td>
                                 <!--end::User=-->
                                 <!--begin::Role=-->
-                                <td>Analyst</td>
+                                <td>Analyst </td>
                                 <!--end::Role=-->
                                 <!--begin::Last login=-->
                                 <td>
@@ -258,7 +256,7 @@ export default defineComponent({
                                             <li class="menu-item px-3">
                                                 <Link
                                                     class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/user/${user?.id}/edit`">Edit
+                                                    :href="`/users/${user?.id}/edit`">Edit
                                                 </Link>
                                             </li>
 
