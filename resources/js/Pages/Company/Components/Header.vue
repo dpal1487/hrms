@@ -80,9 +80,10 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon--><span v-if="!($page.props.ziggy.address.city)">
+                                    <span v-if="!($page.props.ziggy.address.city)">
                                         Company Address
                                     </span>
+
                                     <span v-else class="text-capitalize">
                                         {{ $page.props.ziggy?.address?.city + " " +
                                             $page.props.ziggy.address?.state + " " + $page.props.ziggy.address?.pincode }}

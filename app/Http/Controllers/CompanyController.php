@@ -92,12 +92,13 @@ class CompanyController extends Controller
     public function show()
     {
         $address = CompanyAddress::where('company_id', $this->companyId())->first();
+
         $email = CompanyEmail::where('company_id', $this->companyId())->first();
         $company = Company::find($this->companyId());
         $corporationtypes = CorporationType::get();
         return Inertia::render('Company/Overview', [
             'company' => new CompanyResource($company),
-            'address' => new AddressResource($address),
+            'address' => new AddressResource($address) || '',
             'email' => new EmailResource($email) || '',
             'corporationtypes' => CorporationTypeResource::collection($corporationtypes),
         ]);
@@ -144,7 +145,6 @@ class CompanyController extends Controller
                 'company_id' => $this->companyId(),
                 'address_id' => $address->id,
             ]);
-
             if ($companyAddress) {
                 return redirect("/company/address")->with('flash', ['message' => 'Address successfully created.']);
             }

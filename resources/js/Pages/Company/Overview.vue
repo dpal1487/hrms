@@ -17,7 +17,7 @@ export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
     },
-    props: ['company', 'corporationtypes'],
+    props: ['company', 'corporationtypes' , 'address'],
     components: {
         AppLayout,
         Header,

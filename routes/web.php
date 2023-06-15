@@ -278,7 +278,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('answers/delete', [AnswerController::class, 'selectDelete'])->name('answers.delete');
 
     Route::resource('plan', PlanController::class);
-    Route::post('plans/status', [PlanController::class, 'statusUpdate'])->name('plans.status');
+    Route::post('plan/status', [PlanController::class, 'statusUpdate'])->name('plan.status');
 
     Route::resource('currencies', CurrencyController::class);
     Route::post('currencies/status', [CurrencyController::class, 'statusUpdate'])->name('currencies.status');

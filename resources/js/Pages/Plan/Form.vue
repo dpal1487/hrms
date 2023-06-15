@@ -56,11 +56,11 @@ export default defineComponent({
     },
     data() {
         return {
-
             rowCount: 1,
             items: 1,
             isEdit: false,
             processing: false,
+            description: this.plan?.data?.description,
             form: this.$inertia.form({
                 id: this.plan?.data?.id || '',
                 name: this.plan?.data?.name || '',
@@ -72,7 +72,7 @@ export default defineComponent({
                 stripe_plan: this.plan?.data?.stripe_plan || '',
                 currency: this.plan?.data?.currency?.id || '',
                 sort_order: this.plan?.data?.sort_order || '',
-                items: [{
+                items: this.plan?.data ? JSON.parse(this.plan?.data.description) : [{
                     meta: '',
                     description: '',
                 }],
@@ -100,37 +100,47 @@ export default defineComponent({
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
                 this.processing = true
-                if (route().current() == 'plan.create') {
-                    axios.post(this.route("plan.store"), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                toast.success(response.data.message)
-                                this.processing = false
-                                Inertia.get('/plan')
-                            } else {
-                                toast.error(response.data.message)
-                            }
-                        })
-                } else {
-                    axios.put(this.route('plan.update', this.form.id), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                toast.success(response.data.message)
-                                this.processing = false;
-                                Inertia.get('/plan')
-                            } else {
-                                toast.error(response.data.message)
-                            }
 
-                        }).catch((error) => {
-                            if (error.response.status == 400) {
-                                toast.error(error.response.data.message);
-                            }
-                        });
+                if (route().current() == 'plan.create') {
+                    this.form.transform((data) => ({
+                        ...data
+                    }))
+                        .post(this.route("plan.store"),
+                            {
+                                onSuccess: (data) => {
+                                    toast.success(this.$page.props.jetstream.flash.message);
+                                    this.isEdit = false;
+                                    this.isAdd = false;
+                                },
+                                onError: (data) => {
+
+                                    toast.error(data);
+
+                                },
+                            })
+                    
+                } else {
+                    this.form.transform((data) => ({
+                        ...data
+                    }))
+                        .put(this.route('plan.update', this.form.id),
+                            {
+                                onSuccess: (data) => {
+                                    toast.success(this.$page.props.jetstream.flash.message);
+                                    this.isEdit = false;
+                                    this.isAdd = false;
+                                },
+                                onError: (data) => {
+                                    console.log(data)
+
+                                    toast.error(data.message);
+
+                                },
+                            })
+
                 }
             }
         },
-
         addItemForm(rowCount) {
             for (var i = 0; i < rowCount; i++) {
                 this.form.items.push({
@@ -146,8 +156,6 @@ export default defineComponent({
                 this.form.items.splice(index, 1)
             }
         },
-
-
     },
 
     created() {
@@ -155,7 +163,6 @@ export default defineComponent({
             this.isEdit = true;
         }
     },
-
 });
 </script>
 <template>
@@ -171,7 +178,6 @@ export default defineComponent({
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
-
                 <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                     <div class="card">
                         <div class="card-header">
@@ -335,7 +341,6 @@ export default defineComponent({
                                     class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                                 Discard
                                 </Link>
-
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="processing ? 'on' : 'off'">
                                     <span class="indicator-label">

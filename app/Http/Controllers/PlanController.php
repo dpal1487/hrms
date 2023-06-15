@@ -21,13 +21,12 @@ class PlanController extends Controller
         if (!empty($request->q)) {
             $plans = $plans
                 ->where('name', 'like', "%$request->q")
-                ->orWhere('description', 'like', "%$request->q%")
-                ->orWhere('currency', 'like', "%$request->q%")
+                ->orWhere('sort_description', 'like', "%$request->q%")
                 ->orWhere('price', 'like', "%$request->q%")
-                ->orWhere('stripe_id', 'like', "%$request->q%");
+                ->orWhere('stripe_plan', 'like', "%$request->q%");
         }
         if (!empty($request->status) || $request->status != '') {
-            $plans = $plans->where('status', '=', $request->status);
+            $plans = $plans->where('is_active', '=', $request->status);
         }
         return Inertia::render('Plan/Index', [
             'plans' => PlanResource::collection($plans->paginate(10)->appends($request->all())),
@@ -65,10 +64,8 @@ class PlanController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'slug' => 'unique:plans,slug',
+            'name' => 'required|unique:plans,name',
             'sort_description' => 'required',
             'status' => 'required',
             'start_date' => 'required',
@@ -120,10 +117,8 @@ class PlanController extends Controller
         return Inertia::render('Plan/Form', [
             'plan' => new PlanResource($plan),
             'currencies' => CurrencyResource::collection($currencies),
-
         ]);
     }
-
     public function update(Request $request, Plan $plan)
     {
         $validator = Validator::make($request->all(), [
@@ -138,7 +133,7 @@ class PlanController extends Controller
             'currency' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
         }
 
         $toDate = Carbon::parse($request->start_date);
@@ -162,12 +157,12 @@ class PlanController extends Controller
         ]);
 
         if ($plan) {
-            return response()->json([
+            return redirect('/plan')->with('flash', [
                 'success' => true,
                 'message' => 'Plan updated Successfully',
             ]);
         }
-        return response()->json([
+        return redirect('/plan')->with('flash', [
             'success' => false,
             'message', 'Plan not updated',
         ]);

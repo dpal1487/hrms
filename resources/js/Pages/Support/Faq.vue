@@ -158,17 +158,18 @@ export default defineComponent({
                                     </span>
                                     <!--end::Svg Icon-->
                                 </div>
+                                <h4 class="text-gray-700 fw-bold cursor-pointer mb-0">{{ faq?.category[0]?.title }}</h4>
                                 <!--end::Icon-->
                                 <!--begin::Title-->
-                                <h4 class="text-gray-700 fw-bold cursor-pointer mb-0">{{ faq?.category[0]?.title }}</h4>
                                 <!--end::Title-->
                             </div>
                             <!--end::Heading-->
                             <!--begin::Body-->
-                            <div :id="`faq${faq.id}`" class="collapse fs-6 ms-1">
+                            <div class=" fs-6 ms-1">
                                 <!--begin::Text-->
-                                <div class="mb-4 text-gray-600 fw-semibold fs-6 ps-10" v-for="(category) in faq.category">{{
-                                    category.artical }}.</div>
+                                <div :id="`faq${faq.id}`" class="mb-4 collapse text-gray-600 fw-semibold fs-6 ps-10"
+                                    v-for="(category) in faq.category">{{
+                                        category.artical }}.</div>
                                 <!--end::Text-->
                             </div>
                             <!--end::Content-->

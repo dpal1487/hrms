@@ -214,7 +214,9 @@ export default defineComponent({
                                     </div>
                                 </td>
                                 <td>
-                                    {{ questions.industry?.name }}
+                                    <Link :href="'/question/' + questions.id"
+                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1 text-capitalize">{{
+                                            questions?.industry?.name }} </Link>
                                 </td>
                                 <td>{{ questions.question_key }}</td>
                                 <td>{{ questions.text }}</td>
