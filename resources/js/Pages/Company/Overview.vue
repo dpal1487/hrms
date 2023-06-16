@@ -7,7 +7,6 @@ import { toast } from "vue3-toastify";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
@@ -17,7 +16,7 @@ export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
     },
-    props: ['company', 'corporationtypes' , 'address'],
+    props: ['company', 'corporationtypes', 'address'],
     components: {
         AppLayout,
         Header,
@@ -25,7 +24,6 @@ export default defineComponent({
         Head,
         JetInput,
         JetLabel,
-        JetValidationErrors,
         InputError,
         Multiselect
     },
@@ -151,14 +149,13 @@ export default defineComponent({
             <div class="card-body p-9">
                 <div class="row" v-if="isEdit">
                     <div class="col-12">
-                        <JetValidationErrors />
                         <form @submit.prevent="submit">
                             <div class="card-body border-top p-9">
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label for="company-name"
-                                        class="col-lg-4 col-form-label required fw-bold fs-6">Company Name</label>
+                                    <label for="company-name" class="col-lg-4 col-form-label required fw-bold fs-6">Company
+                                        Name</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">

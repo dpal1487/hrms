@@ -28,7 +28,7 @@ class PlanController extends Controller
         if (!empty($request->status) || $request->status != '') {
             $plans = $plans->where('is_active', '=', $request->status);
         }
-        return Inertia::render('Plan/Index', [
+        return Inertia::render('Plan/View', [
             'plans' => PlanResource::collection($plans->paginate(10)->appends($request->all())),
         ]);
     }
@@ -183,5 +183,15 @@ class PlanController extends Controller
             return response()->json(['success' => true, 'message' => 'Plan has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+    }
+    public function show()
+    {
+        return Inertia::render('Plan/Page/Success');
+    }
+
+    public function errorPage()
+    {
+
+        return Inertia::render('Plan/Page/Error');
     }
 }

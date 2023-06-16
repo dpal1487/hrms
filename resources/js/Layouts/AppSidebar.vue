@@ -18,7 +18,6 @@ export default defineComponent({
                     title: "Employee",
                     icon: "bi bi-pie-chart-fill",
                 },
-
                 {
                     link: "/account",
                     title: "User",
@@ -88,6 +87,11 @@ export default defineComponent({
                 {
                     link: "/plan",
                     title: "Plan",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/transaction",
+                    title: "Transaction",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
