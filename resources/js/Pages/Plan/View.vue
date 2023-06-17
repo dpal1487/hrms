@@ -15,22 +15,6 @@ export default defineComponent({
     data() {
         return {
 
-            stripeAPIToken: 'pk_test_51LprceSJxuPNyrb7PFICoE9gKbZLWNuLIVk8jx9mShL4w5hGzJOQCgwK4cnFBo9hLWcnVC0AQn7viBywJhbPEt7h00NKSZiSIG',
-
-            stripe: '',
-            elements: '',
-            card: '',
-
-            intentToken: '',
-
-            name: '',
-            addPaymentStatus: 0,
-            addPaymentStatusError: '',
-
-            paymentMethods: [],
-            paymentMethodsLoadStatus: 0,
-            paymentMethodSelected: {},
-
             selectedPlan: '',
 
             form: ({
@@ -47,94 +31,7 @@ export default defineComponent({
         Multiselect,
         Loading,
     },
-    mounted() {
-        this.includeStripe('js.stripe.com/v3/', function () {
-            this.configureStripe();
-        }.bind(this));
 
-        this.loadIntent();
-
-        this.loadPaymentMethods();
-    },
-    methods: {
-
-        includeStripe(URL, callback) {
-            var documentTag = document, tag = 'script',
-                object = documentTag.createElement(tag),
-                scriptTag = documentTag.getElementsByTagName(tag)[0];
-            object.src = '//' + URL;
-            if (callback) { object.addEventListener('load', function (e) { callback(null, e); }, false); }
-            scriptTag.parentNode.insertBefore(object, scriptTag);
-        },
-
-        configureStripe() {
-            this.stripe = Stripe(this.stripeAPIToken);
-
-            this.elements = this.stripe.elements();
-            this.card = this.elements.create('card');
-
-            this.card.mount('#card-element');
-        },
-
-        loadIntent() {
-            axios.get('/plan/setup-intent')
-                .then(function (response) {
-                    this.intentToken = response.data;
-                }.bind(this));
-        },
-
-        submitPaymentMethod() {
-            this.addPaymentStatus = 1;
-
-            this.stripe.confirmCardSetup(
-                this.intentToken.client_secret, {
-                payment_method: {
-                    card: this.card,
-                    billing_details: {
-                        name: this.name
-                    }
-                }
-            }
-            ).then(function (result) {
-                if (result.error) {
-                    this.addPaymentStatus = 3;
-                    this.addPaymentStatusError = result.error.message;
-                } else {
-                    this.savePaymentMethod(result.setupIntent.payment_method);
-                    this.addPaymentStatus = 2;
-                    this.card.clear();
-                    this.name = '';
-                }
-            }.bind(this));
-        },
-
-        savePaymentMethod(method) {
-            axios.post('/plan/payments', {
-                payment_method: method
-            }).then(function () {
-                this.loadPaymentMethods();
-            }.bind(this));
-        },
-        loadPaymentMethods() {
-            this.paymentMethodsLoadStatus = 1;
-
-            axios.get('/plan/payment-methods')
-                .then(function (response) {
-                    this.paymentMethods = response.data;
-
-                    this.paymentMethodsLoadStatus = 2;
-                    // this.setDefaultPaymentMethod();
-                }.bind(this));
-        },
-
-        updateSubscription(id) {
-            // console.log(id)
-            axios.post('plan/subscription', { id: id })
-                .then(function (response) {
-                    console.log(response);
-                }.bind(this));
-        },
-    },
 });
 </script>
 <template>
@@ -151,39 +48,15 @@ export default defineComponent({
         <Head title="Plan" />
         <!--begin::Content-->
 
-        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+        <div class="card-toolbar text-right">
             <!--begin::Toolbar-->
             <!--begin::Add customer-->
-            <Link href="/plan/create" class="btn btn-primary">
+            <Link href="/plan/create" class="btn btn-primary pull-right">
             Add New Plan
             </Link>
             <!--end::Add customer-->
             <!--end::Toolbar-->
         </div>
-
-        <Link href="/plan/error" class="btn btn-primary m-4">
-        Error Page
-        </Link>
-        <Link href="/plan/success" class="btn btn-primary">
-        Success Page
-        </Link>
-
-        <div>
-            <h3>Manage Your Subscription</h3>
-
-            <label>Card Holder Name</label>
-            <input id="card-holder-name" type="text" v-model="name" class="form-control mb-2">
-
-            <label>Card</label>
-            <div id="card-element" class="mt-5">
-
-            </div>
-
-            <button class="btn btn-sm btn-primary mt-10" id="add-card-button" v-on:click="submitPaymentMethod()">
-                Save Payment Method
-            </button>
-        </div>
-
         <div class="card card-flush">
             <!--begin::Card toolbar-->
 
@@ -236,10 +109,9 @@ export default defineComponent({
                                             </span>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary mt-3" id="add-card-button"
-                                        @click="updateSubscription(plan.id)">
-                                        Subscribe
-                                    </button>
+                                    <Link class="btn btn-primary mt-3" :href="`/plan/${plan.slug}/payment`">
+                                    Choose
+                                    </Link>
                                 </div>
                             </div>
                         </div>

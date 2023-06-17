@@ -114,11 +114,12 @@ export default defineComponent({
                                 },
                                 onError: (data) => {
 
-                                    toast.error(data);
+
+                                    toast.error(data.message);
 
                                 },
                             })
-                    
+
                 } else {
                     this.form.transform((data) => ({
                         ...data
@@ -131,7 +132,6 @@ export default defineComponent({
                                     this.isAdd = false;
                                 },
                                 onError: (data) => {
-                                    console.log(data)
 
                                     toast.error(data.message);
 

@@ -76,7 +76,7 @@ class PlanController extends Controller
             'currency' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
         }
 
         $toDate = Carbon::parse($request->start_date);
@@ -99,12 +99,12 @@ class PlanController extends Controller
             'currency_id' => $request->currency,
         ]);
         if ($plan) {
-            return response()->json([
+            return redirect('/plan')->with('flash', [
                 'success' => true,
                 'message' => 'Plan created Successfully',
             ]);
         }
-        return response()->json([
+        return redirect('/plan')->with('flash', [
             'success' => false,
             'message' => 'Plan not created'
         ]);
@@ -119,6 +119,29 @@ class PlanController extends Controller
             'currencies' => CurrencyResource::collection($currencies),
         ]);
     }
+
+    public function subscriptionPlan($plan)
+    {
+        $plan = Plan::where('slug', $plan)->first();
+        return Inertia::render(
+            'Plan/Subscription',
+            [
+                'plan' => new PlanResource($plan),
+            ]
+        );
+    }
+
+    public function paymentPlan($plan)
+    {
+        $plan = Plan::where('slug', $plan)->first();
+        return Inertia::render(
+            'Plan/ItemFormList',
+            [
+                'plan' => new PlanResource($plan),
+            ]
+        );
+    }
+
     public function update(Request $request, Plan $plan)
     {
         $validator = Validator::make($request->all(), [
@@ -184,13 +207,22 @@ class PlanController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
-    public function show()
+
+
+    public function show(Request $request)
     {
+        return $request->user()->createSetupIntent();
+    }
+
+    public function successPage()
+    {
+        return "sdsffd";
         return Inertia::render('Plan/Page/Success');
     }
 
     public function errorPage()
     {
+        return "sdsffd";
 
         return Inertia::render('Plan/Page/Error');
     }

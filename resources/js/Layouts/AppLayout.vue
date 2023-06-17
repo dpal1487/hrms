@@ -53,7 +53,7 @@ export default {
 <template>
     <div>
 
-        <Head title="Title" />
+        <Head :title="title" />
         <AppHeader />
         <AppSidebar v-if="true" />
         <!-- Page Content -->

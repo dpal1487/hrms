@@ -280,13 +280,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('answers/delete', [AnswerController::class, 'selectDelete'])->name('answers.delete');
 
     Route::resource('plan', PlanController::class);
+
+    Route::get('plan/{plan}/payment', [PlanController::class, 'subscriptionPlan'])->name('plan.payment');
+    Route::get('plan/{plan}/subscription', [PlanController::class, 'paymentPlan'])->name('plan.payment.subscription');
     Route::get('plan/error', [PlanController::class, 'errorPage'])->name('plan.error');
     Route::get('plan/success', [PlanController::class, 'successPage'])->name('plan.success');
     Route::post('plan/status', [PlanController::class, 'statusUpdate'])->name('plan.status');
 
     Route::post('plan/subscription', [SubscriptionController::class, 'updateSubscription'])->name('plan.subscription');
 
-    Route::get('plan/setup-intent', [SubscriptionController::class, 'getSetupIntent'])->name('plan.setup-intent');
+    Route::get('plan/setup-intent', [PlanController::class, 'show'])->name('plan.setup-intent');
     Route::post('plan/payments', [SubscriptionController::class, 'postPaymentMethods'])->name('plan.payments');
     Route::get('plan/payment-methods', [SubscriptionController::class, 'getPaymentMethods'])->name('plan.payment-methods');
     Route::post('plan/remove-payment', [SubscriptionController::class, 'removePaymentMethod'])->name('plan.remove-payment');

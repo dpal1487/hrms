@@ -54,28 +54,7 @@ class RoleAndPermissionController extends Controller
     {
         return Inertia::render(('UserManagement/Roles/RoleView'));
     }
-    public function create()
-    {
-        //
-    }
 
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-
-    public function show($id)
-    {
-        //
-    }
-
-
-    public function edit($id)
-    {
-        //
-    }
 
 
     public function avatarImage(Request $request)
@@ -149,14 +128,5 @@ class RoleAndPermissionController extends Controller
         return redirect()->back()->withErrors(['Opps something went wrong!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }
