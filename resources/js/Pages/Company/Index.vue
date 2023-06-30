@@ -4,7 +4,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
-import { Inertia } from "@inertiajs/inertia";   
+import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
 import { toast } from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
@@ -110,7 +110,6 @@ export default defineComponent({
 
         <Head title="Company" />
         <div class="card card-flush">
-            <Alert v-if="$page.props.ziggy.flash.message" />
             <!--begin::Actions-->
             <div>
                 <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">

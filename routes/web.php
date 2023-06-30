@@ -17,6 +17,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\DecisionMakerController;
 use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CorporationTypeController;
 use App\Http\Controllers\CurrencyController;
@@ -29,10 +30,12 @@ use App\Http\Controllers\MyAccountController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleAndPermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SupportProjectController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TransactionController;
 use App\Models\Support;
 
@@ -221,6 +224,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('images', 'show')->name('images');
         Route::post('/employee/image-upload', 'empImage')->name('employee.image-upload');
         Route::post('/industry/image-upload', 'indImage')->name('industry.image-upload');
+        Route::post('/blog/image-upload', 'blogImage')->name('blog.image-upload');
+        Route::post('/service/image-upload', 'serviceImage')->name('service.image-upload');
     });
     Route::controller(AddressController::class)->group(function () {
         Route::group(['prefix' => 'address'], function () {
@@ -279,19 +284,27 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('answer', AnswerController::class);
     Route::post('answers/delete', [AnswerController::class, 'selectDelete'])->name('answers.delete');
 
-    Route::resource('plan', PlanController::class);
+    Route::get('/plan/page/error', [PlanController::class, 'errorPage'])->name('plan.error');
+    Route::get('plan/page/success', [PlanController::class, 'successPage'])->name('plan.success');
+    Route::get('plan/page/success1', [PlanController::class, 'successPage1'])->name('plan.success1');
 
-    Route::get('plan/{plan}/payment', [PlanController::class, 'subscriptionPlan'])->name('plan.payment');
-    Route::get('plan/{plan}/subscription', [PlanController::class, 'paymentPlan'])->name('plan.payment.subscription');
-    Route::get('plan/error', [PlanController::class, 'errorPage'])->name('plan.error');
-    Route::get('plan/success', [PlanController::class, 'successPage'])->name('plan.success');
+
+    Route::resource('plan', PlanController::class);
+    Route::resource('blog', BlogController::class);
+    Route::post('blog/status', [BlogController::class, 'statusUpdate'])->name('blog.status');
+
+    Route::resource('service', ServiceController::class);
+
+    Route::resource('testimonial', TestimonialController::class);
+    Route::post('testimonial/status', [TestimonialController::class, 'statusUpdate'])->name('testimonial.status');
+
+    Route::get('plan/{plan}/payment', [PlanController::class, 'paymentPlan'])->name('plan.payment');
+    Route::get('plan/{plan}/subscription', [PlanController::class, 'subscriptionPlan'])->name('plan.payment.subscription');
     Route::post('plan/status', [PlanController::class, 'statusUpdate'])->name('plan.status');
 
-    Route::post('plan/subscription', [SubscriptionController::class, 'updateSubscription'])->name('plan.subscription');
-
     Route::get('plan/setup-intent', [PlanController::class, 'show'])->name('plan.setup-intent');
+    Route::get('/plan/payment-methods', [SubscriptionController::class, 'getPaymentMethods'])->name('plan.payment-methods');
     Route::post('plan/payments', [SubscriptionController::class, 'postPaymentMethods'])->name('plan.payments');
-    Route::get('plan/payment-methods', [SubscriptionController::class, 'getPaymentMethods'])->name('plan.payment-methods');
     Route::post('plan/remove-payment', [SubscriptionController::class, 'removePaymentMethod'])->name('plan.remove-payment');
 
     Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');

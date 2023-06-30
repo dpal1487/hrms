@@ -28,7 +28,7 @@ class PlanController extends Controller
         if (!empty($request->status) || $request->status != '') {
             $plans = $plans->where('is_active', '=', $request->status);
         }
-        return Inertia::render('Plan/View', [
+        return Inertia::render('Plan/PlanView', [
             'plans' => PlanResource::collection($plans->paginate(10)->appends($request->all())),
         ]);
     }
@@ -135,7 +135,7 @@ class PlanController extends Controller
     {
         $plan = Plan::where('slug', $plan)->first();
         return Inertia::render(
-            'Plan/ItemFormList',
+            'Plan/PaymentForm',
             [
                 'plan' => new PlanResource($plan),
             ]
@@ -216,13 +216,20 @@ class PlanController extends Controller
 
     public function successPage()
     {
-        return "sdsffd";
+
         return Inertia::render('Plan/Page/Success');
     }
 
+
+    public function successPage1()
+    {
+        return Inertia::render('Plan/Page/Success1');
+    }
+
+
     public function errorPage()
     {
-        return "sdsffd";
+
 
         return Inertia::render('Plan/Page/Error');
     }

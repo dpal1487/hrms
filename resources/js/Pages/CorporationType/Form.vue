@@ -159,6 +159,7 @@ export default defineComponent({
                                     class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                                 Discard
                                 </Link>
+                                
                                 <button type="submit" class="btn btn-primary align-items-center justify-content-center"
                                     :data-kt-indicator="requesting ? 'on' : 'off'">
                                     <span class="indicator-label">

@@ -41,7 +41,6 @@ class CompanyController extends Controller
 
     public function overviewEdit()
     {
-        return "sd";
         $company = Company::where('id', $this->companyId())->first();
 
         return new CompanyResource($company);

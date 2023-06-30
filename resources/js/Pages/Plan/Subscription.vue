@@ -2,7 +2,7 @@
 import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Customer from "./Components/Customer.vue";
-import PaymentMethod from "./Components/Model/PaymentMethod.vue";
+import PaymentForm from "./Components/Model/PaymentForm.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
@@ -21,6 +21,25 @@ export default defineComponent({
 
             isModalOpen: false,
 
+            stripeAPIToken: 'pk_test_51LprceSJxuPNyrb7PFICoE9gKbZLWNuLIVk8jx9mShL4w5hGzJOQCgwK4cnFBo9hLWcnVC0AQn7viBywJhbPEt7h00NKSZiSIG',
+
+            stripe: '',
+            elements: '',
+            card: '',
+
+            intentToken: '',
+
+            name: '',
+            addPaymentStatus: 0,
+            addPaymentStatusError: '',
+
+            paymentMethods: [],
+            paymentMethodsLoadStatus: 0,
+            paymentMethodSelected: {},
+
+            selectedPlan: '',
+
+
             form: this.$inertia.form({
                 id: this.plan?.id,
                 name: '',
@@ -31,16 +50,68 @@ export default defineComponent({
     },
     components: {
         AppLayout,
+
+
         Customer,
-        PaymentMethod,
+        PaymentForm,
         Link,
         Head,
         Pagination,
         Multiselect,
         Loading,
     },
+    mounted() {
+        this.includeStripe('js.stripe.com/v3/', function () {
+            this.configureStripe();
+        }.bind(this));
+
+        this.loadIntent();
+
+        this.loadPaymentMethods();
+    },
 
     methods: {
+
+
+        includeStripe(URL, callback) {
+            var documentTag = document, tag = 'script',
+                object = documentTag.createElement(tag),
+                scriptTag = documentTag.getElementsByTagName(tag)[0];
+            object.src = '//' + URL;
+            if (callback) { object.addEventListener('load', function (e) { callback(null, e); }, false); }
+            scriptTag.parentNode.insertBefore(object, scriptTag);
+        },
+
+        configureStripe() {
+            this.stripe = Stripe(this.stripeAPIToken);
+
+            this.elements = this.stripe.elements();
+            this.card = this.elements.create('card');
+
+            console.log("card details", this.card)
+
+
+            this.card.mount('#card-element');
+        },
+
+        loadIntent() {
+            axios.get('/plan/setup-intent', this.form.id)
+                .then(function (response) {
+                    console.log("plan setup data", response.data)
+                    this.intentToken = response.data;
+                }.bind(this));
+        },
+        loadPaymentMethods() {
+            this.paymentMethodsLoadStatus = 1;
+
+            axios.get('/plan/payment-methods')
+                .then(function (response) {
+                    this.paymentMethods = response.data;
+
+                    this.paymentMethodsLoadStatus = 2;
+                }.bind(this));
+        },
+
 
         showCreateTicketModal() {
             this.isModalOpen = true;
@@ -123,14 +194,14 @@ export default defineComponent({
                             <!--begin::Card title-->
                             <!--begin::Card toolbar-->
                             <div class="card-toolbar">
-                                <!-- 
-                                <PaymentMethod :show="isModalOpen" @hidemodal="hideCreateTicketModal" :plan="plan.data" />
+
+                                <PaymentForm :show="isModalOpen" @hidemodal="hideCreateTicketModal" :plan="plan.data" />
 
                                 <button type="submit" @click="showCreateTicketModal" class="btn btn-light-primary">New
-                                    Method</button> -->
-                                <Link class="btn btn-light-primary" :href="`/plan/${plan.data.slug}/subscription`">New
+                                    Method</button>
+                                <!-- <Link class="btn btn-light-primary" :href="`/plan/${plan.data.slug}/payment`">New
                                 Method
-                                </Link>
+                                </Link> -->
                             </div>
                             <!--end::Card toolbar-->
                         </div>

@@ -97,44 +97,43 @@ class IndustryController extends Controller
 
     public function update(Request $request, Industry $industry)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'status' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
-        }
-
-        $industry = new IndustryResource($industry);
-
-        if ($request->image_id) {
-            $industry = Industry::where(['id' => $industry->id])->update([
-                'name' => $request->name,
-                'image_id' => $request->image_id,
-                'status' => $request->status,
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'status' => 'required',
             ]);
-        } else {
-            $industry = Industry::where(['id' => $industry->id])->update([
-                'name' => $request->name,
-                'status' => $request->status,
-            ]);
-        }
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
+            }
 
-        if ($industry) {
+            $industry = new IndustryResource($industry);
+
+            if ($request->image_id) {
+                $industry = Industry::where(['id' => $industry->id])->update([
+                    'name' => $request->name,
+                    'image_id' => $request->image_id,
+                    'status' => $request->status,
+                ]);
+            } else {
+                $industry = Industry::where(['id' => $industry->id])->update([
+                    'name' => $request->name,
+                    'status' => $request->status,
+                ]);
+            }
+
+            if ($industry) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Industries updated successfully',
+                ], 200);
+            }
             return response()->json([
                 'success' => true,
-                'message' => 'Industries updated successfully',
-            ], 200);
-        }
-        return response()->json([
-            'success' => true,
-            'message' => 'Industries not updated',
-        ], 400);
+                'message' => 'Industries not updated',
+            ], 400);
     }
 
     public function destroy(Industry $industry)
     {
-
         if ($industry->delete()) {
             return response()->json(['success' => true, 'message' => 'Industry has been deleted successfully.']);
         }

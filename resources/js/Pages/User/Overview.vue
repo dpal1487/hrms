@@ -93,7 +93,7 @@ export default defineComponent({
                         });
             }
         },
-       
+
         onFileChange(e) {
             const file = e.target.files[0];
             this.$data.form.image = file;

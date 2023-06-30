@@ -34,6 +34,7 @@ class SubscriptionController extends Controller
 
     public function postPaymentMethods(Request $request)
     {
+
         $user = $request->user();
         $paymentMethodID = $request->get('payment_method');
 
@@ -47,8 +48,9 @@ class SubscriptionController extends Controller
         return response()->json(null, 204);
     }
 
-    public function getPaymentMethods(Request $request)
+    public function getPaymentMethods(Request $request, $plan)
     {
+
         $user = $request->user();
 
         $methods = array();

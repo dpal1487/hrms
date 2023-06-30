@@ -90,6 +90,21 @@ export default defineComponent({
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
+                    link: "/service",
+                    title: "Services",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/testimonial",
+                    title: "Testimonials",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/blog",
+                    title: "Blog",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
                     link: "/transaction",
                     title: "Transaction",
                     icon: "bi bi-pie-chart-fill",

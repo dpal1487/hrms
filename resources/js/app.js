@@ -6,7 +6,7 @@ import { Multiselect } from 'vue-multiselect'
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
-
+import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3Toastify from 'vue3-toastify';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -24,7 +24,7 @@ createInertiaApp({
             autoSetContainer: true,
             appendToBody: true,
             })
-            .use(plugin).use(Vue3Toastify, {autoClose: 3000, theme: "colored"})
+            .use(plugin).use( CKEditor ).use(Vue3Toastify, {autoClose: 3000, theme: "colored"})
             .mixin({ methods: { route } })
             .mount(el);
     },
