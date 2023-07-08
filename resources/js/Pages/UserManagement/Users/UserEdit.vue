@@ -16,8 +16,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 
 export default defineComponent({
-    props: ['user', 'isEdit', 'show', 'roles'],
-    emits: ['hidemodal'],
+    props: ['user', 'roles'],
     setup() {
         return { v$: useVuelidate() };
     },

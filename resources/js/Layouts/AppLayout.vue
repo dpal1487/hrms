@@ -56,6 +56,7 @@ export default {
         <Head :title="title" />
         <AppHeader />
         <AppSidebar v-if="true" />
+
         <!-- Page Content -->
         <main class="app-wrapper flex-column flex-row-fluid">
             <div class="app-main flex-column flex-row-fluid">
@@ -69,6 +70,7 @@ export default {
                                 <h1
                                     class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
                                     {{ title }}
+                                    <!-- {{ $page.props.user.first_name }} -->
                                 </h1>
                                 <!--end::Title-->
                                 <!--begin::Breadcrumb-->
@@ -90,7 +92,7 @@ export default {
                     <div class="app-content flex-column-fluid">
                         <!--begin::Content container-->
                         <div class="app-container container-fluid">
-                            <slot></slot>
+                            <slot />
                         </div>
                     </div>
                 </div>

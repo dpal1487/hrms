@@ -9,7 +9,6 @@ import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, url } from "@vuelidate/validators";
 import ImageInput from '@/components/ImageInput.vue';
-
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import axios from "axios";

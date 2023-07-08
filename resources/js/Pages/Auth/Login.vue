@@ -48,9 +48,8 @@
             <div class="fv-row mb-8 fv-plugins-icon-container">
                 <!--begin::Email-->
                 <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" v-model="v$.form.email.$model" autofocus :class="
-                    v$.form.email.$errors.length > 0 ? 'is-invalid' : ''
-                " />
+                <jet-input id="email" type="email" v-model="v$.form.email.$model" autofocus :class="v$.form.email.$errors.length > 0 ? 'is-invalid' : ''
+                    " />
                 <div v-for="(error, index) of v$.form.email.$errors" :key="index">
                     <input-error :message="error.$message" />
                 </div>
@@ -59,9 +58,8 @@
             <div class="fv-row mb-3 fv-plugins-icon-container">
                 <!--begin::Password-->
                 <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" v-model="v$.form.password.$model" :class="
-                    v$.form.password.$errors.length > 0 ? 'is-invalid' : ''
-                " />
+                <jet-input id="password" type="password" v-model="v$.form.password.$model" :class="v$.form.password.$errors.length > 0 ? 'is-invalid' : ''
+                    " />
                 <div v-for="(error, index) of v$.form.password.$errors" :key="index">
                     <input-error :message="error.$message" />
                 </div>
@@ -69,7 +67,7 @@
             <!--end::Input group--->
 
             <!--begin::Wrapper-->
-           
+
             <!--end::Wrapper-->
             <!--begin::Submit button-->
             <div class="d-grid mb-10">
@@ -104,6 +102,9 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
+import { toast } from "vue3-toastify";
+import Swal from "sweetalert2";
+
 export default defineComponent({
     setup() {
         return { v$: useVuelidate() };
@@ -154,6 +155,30 @@ export default defineComponent({
                         remember: this.form.remember ? "on" : "",
                     }))
                     .post(this.route("login"), {
+
+                        onSuccess: (data) => {
+                            Swal.fire({
+                                title: "Login success",
+                                text: "",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            // toast.success(this.$page.props.jetstream.flash.message);
+                        },
+                        onError: (data) => {
+                            console.log(data)
+                            Swal.fire({
+                                title: "Login Failed",
+                                text: "Please try with a valid credentials",
+                                icon: "warning",
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            // if (data.message) {
+                            //     toast.error(data.message)
+                            // }
+                        },
                         onFinish: () => this.form.reset("password"),
                     });
             }

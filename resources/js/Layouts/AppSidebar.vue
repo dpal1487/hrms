@@ -16,12 +16,12 @@ export default defineComponent({
                 {
                     link: "/employees",
                     title: "Employee",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-person-lines-fill",
                 },
                 {
                     link: "/account",
                     title: "User",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-person-lines-fill",
                 },
                 {
                     link: "/company",
@@ -195,7 +195,7 @@ export default defineComponent({
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <span class="menu-link">
+                        <span class="menu-link fs-2">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                 <span class="svg-icon svg-icon-2">
@@ -221,11 +221,11 @@ export default defineComponent({
                     </div>
                     <!--end:Menu item-->
                     <!--begin:Menu item-->
-                    <div class="menu-item">
+                    <div class="menu-item fs-4 m-0">
                         <!--begin:Menu link-->
-                        <Link v-for="(navigation, index) in navigations" :key="index" class="menu-link"
+                        <Link v-for="(navigation, index) in navigations" :key="index" class="menu-link m-0"
                             :href="navigation.link">
-                        <i :class="navigation.icon"></i>
+                        <i :class="`${navigation.icon} mx-3 fs-2`"></i>
                         {{ navigation.title }}
                         </Link>
                         <!--end:Menu link-->

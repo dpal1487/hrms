@@ -8,6 +8,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\EmployeeController;
@@ -15,15 +16,14 @@ use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\DecisionMakerController;
-use App\Http\Controllers\ConversionRateController;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CorporationTypeController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FaqCategoryController;
-use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\MyAccountController;
@@ -31,13 +31,10 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleAndPermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SupportController;
-use App\Http\Controllers\SupportProjectController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TransactionController;
-use App\Models\Support;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,14 +59,16 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('login/{provider}', [SocialLoginController::class, 'redirectToGoogle']);
+Route::post('login', [LoginController::class, 'login'])->name('user.login');
+Route::post('login/{provider}', [SocialLoginController::class, 'redirectToGoogle']);
 Route::get('login/{provider}/callback', [SocialLoginController::class, 'handleCallback']);
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
+    Route::get('chat', [ChatController::class, 'index'])->name('chat');
+    Route::post('chat/store', [ChatController::class, 'userChat'])->name('chat.store');
     Route::controller(EmployeeController::class)->group(function () {
-
         Route::get('/employees', 'index')->name('employee.index');
         Route::get('employee/add', 'create')->name('employee.add');
         Route::post('employee/store', 'store')->name('employee.store');
@@ -77,10 +76,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('employee/{id}/update', 'update')->name('employee.update');
         Route::delete('employee/{id}', 'destroy')->name('employee.delete');
         Route::post('employees/delete', 'selectDelete')->name('employees.delete');
-
         //Employee OverView
         Route::get('employee/{id}', 'overview')->name('employee.view');
-
         // Employee Address
         Route::get('employee/{id}/address', 'address')->name('employee.address');
         Route::post('{id}/address/update', 'updateAddress')->name('employee.address.update');
@@ -336,6 +333,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/{id}/update', 'update')->name('users.update');
         });
     });
+
 
     Route::resource('permission', PermissionController::class);
     Route::resource('roles', RoleController::class);

@@ -7,8 +7,10 @@ use Exception;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Hash;
-Use \Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+
+use \Carbon\Carbon;
+
 class SocialLoginController extends Controller
 {
     /**
@@ -41,7 +43,7 @@ class SocialLoginController extends Controller
                     'last_name' => $user->user['family_name'],
                     'email' => $user->email,
                     'social_id' => $user->id,
-                    'email_verified_at'=>$user->user['email_verified']==true ? Carbon::now() : NULL,
+                    'email_verified_at' => $user->user['email_verified'] == true ? Carbon::now() : NULL,
                     'social_type' => 'google',
                     'password' => Hash::make('my-google')
                 ]);

@@ -185,6 +185,7 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        \Chatify\ChatifyServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -216,6 +217,7 @@ return [
             'Socialite' => Laravel\Socialite\Facades\Socialite::class,
             'Chatify' => Chatify\Facades\ChatifyMessenger::class,
             'Image' => Intervention\Image\Facades\Image::class,
+            'Chatify' => Chatify\Facades\ChatifyMessenger::class,
         ])
         ->toArray(),
 ];

@@ -49,15 +49,13 @@ class HandleInertiaRequests extends Middleware
             $this->address = CompanyAddress::where('company_id', $this->company['company']['id'])->first();
             $this->email = CompanyEmail::where('company_id', $this->company['company']['id'])->where('is_primary', 1)->first();
             return array_merge(parent::share($request), [
-                'user.roles' => $request->user() ? $request->user()->roles->pluck('name') : [],
-                'user.permissions' => $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [],
                 'ziggy' => function () use ($request) {
                     return array_merge((new Ziggy())->toArray(), [
                         'status' => $this->status,
                         'company' => $this->company['company'],
                         'email' => $this->email,
                         'address' => !empty($this->address['address']) ? $this->address['address'] : [],
-                        
+
                         'flash' => [
                             'message' => fn () => $request->session()->get('message'),
                         ],
