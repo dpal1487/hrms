@@ -8,15 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class UserAddress extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'address_id'];
+    protected $fillable=['user_id','address_id'];
 
-    public function user()
-    {
-        return $this->hasOne(User::class, 'id', 'user_id');
+    public function address(){
+        return $this->hasOne(Address::class,'id','address_id');
     }
-
-    public function address()
-    {
-        return $this->hasOne(Address::class, 'id', 'address_id');
+    public function user(){
+        return $this->hasOne(User::class,'id','user_id');
     }
 }

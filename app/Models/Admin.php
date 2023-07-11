@@ -2,36 +2,52 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Admin extends Authenticatable
 {
-    use HasFactory;
-    use Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    protected $guard = 'admin';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
 
-    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'social_id', 'social_type', 'email_verified_at', 'status'];
+    // protected $guard = 'admin';
+    protected $table = 'admins';
+    protected $fillable = [
+        'role_id',
+        'first_name',
+        'last_name',
+        'email',
+        'mobile',
+        'gender',
+        'dob',
+        'password',
 
-    public function image()
-    {
-        return $this->hasOne(Image::class, 'id', 'image_id');
-    }
-    public function address()
-    {
-        return $this->hasOne(UserAddress::class, 'user_id', 'id');
-    }
-    public function employee()
-    {
-        return $this->hasOne(Employee::class, 'user_id', 'id');
-    }
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $hidden = ['remember_token', 'two_factor_recovery_codes', 'two_factor_secret'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

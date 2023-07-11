@@ -2,235 +2,199 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CurrencyResource;
 use App\Models\Plan;
-use Inertia\Inertia;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Resources\PlanResource;
-use App\Models\Currency;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-
 
 class PlanController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        $plans = new Plan();
-        if (!empty($request->q)) {
-            $plans = $plans
-                ->where('name', 'like', "%$request->q")
-                ->orWhere('sort_description', 'like', "%$request->q%")
-                ->orWhere('price', 'like', "%$request->q%")
-                ->orWhere('stripe_plan', 'like', "%$request->q%");
-        }
-        if (!empty($request->status) || $request->status != '') {
-            $plans = $plans->where('is_active', '=', $request->status);
-        }
-        return Inertia::render('Plan/PlanView', [
-            'plans' => PlanResource::collection($plans->paginate(10)->appends($request->all())),
-        ]);
+        // $plans = new Plan();
+        // if ($request->q) {
+        //     $plans = $plans->where('name', 'like', "%{$request->q}%");
+        // }
+        // $plans = $plans->paginate(10)->onEachSide(1)->appends(request()->query());
+        // $plans = PlanResource::collection($plans);
+        // // return $plans;
+        // return view('pages.plan.index', compact('plans'));
+        return view('pages.plan.index');
     }
-    public function statusUpdate(Request  $request)
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
     {
+        $segments = $request->segments();
 
-
-        $plan  = Plan::where('id', $request->id)->update([
-            'is_active' => $request->status
-        ]);
-        if ($plan) {
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Status Update successfully',
-            ]);
-        } else {
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Something went wrong',
-            ]);
-        }
+        $category = Category::get();
+        return view('pages.plan.add', ['category' => $category , 'segments' =>$segments]);
     }
 
-    public function create()
-    {
-        $currencies = Currency::get();
-        return Inertia::render('Plan/Form', [
-            'currencies' => CurrencyResource::collection($currencies),
-        ]);
-    }
-
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:plans,name',
+            'name' => ['required','unique:'.Plan::class],
+            'price' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'category' => 'required',
+            'no_of_ads' => 'required|integer',
+            'currency' => 'required|integer',
+            'sign_up_fee' => 'required|integer',
+            'trial_period' => 'required|integer',
+            'trial_interval' => 'required',
+            'invoice_period' => 'required|integer',
+            'invoice_interval' => 'required',
+            'grace_period' => 'required|integer',
+            'grace_interval' => 'required',
+            'sort_order' => 'required|integer',
+            'status' => 'required|integer',
             'sort_description' => 'required',
-            'status' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'price' => 'required',
-            'sort_order' => 'required',
-            'stripe_plan' => 'required',
-            'currency' => 'required',
+            'prorate_day' => 'nullable|integer',
+            'prorate_period' => 'nullable|integer',
+            'prorate_extend_due' => 'nullable|integer',
+            'active_subscribers_limit' => 'nullable|integer',
         ]);
+
+        // return $request->plan_conditions;
+
         if ($validator->fails()) {
-            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ],
+                400,
+            );
         }
-
-        $toDate = Carbon::parse($request->start_date);
-        $fromDate = Carbon::parse($request->end_date);
-
-        $interval = $toDate->diffInDays($fromDate);
-
         $plan = Plan::create([
             'name' => $request->name,
-            'slug' => $request->slug,
-            'sort_description' => $request->sort_description,
-            'description' => json_encode($request->items),
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'interval' => $interval,
-            'is_active' => $request->status,
             'price' => $request->price,
+            'category_id' => $request->category,
+            'no_of_ads' => $request->no_of_ads,
+            'currency' => $request->currency,
+            'signup_fee' => $request->sign_up_fee,
+            'trial_period' => $request->trial_period,
+            'trial_interval' => $request->trial_interval,
+            'invoice_period' => $request->invoice_period,
+            'invoice_interval' => $request->invoice_interval,
+            'grace_period' => $request->grace_period,
+            'grace_interval' => $request->grace_interval,
+            'prorate_day' => $request->prorate_day,
+            'prorate_period' => $request->prorate_period,
+            'prorate_extend_due' => $request->prorate_extend_due,
+            'active_subscribers_limit' => $request->active_subscribers_limit,
             'sort_order' => $request->sort_order,
-            'stripe_plan' => $request->stripe_plan,
-            'currency_id' => $request->currency,
+            'is_active' => $request->status,
+            'sort_description' => $request->sort_description,
+            'description' => json_encode($request->plan_conditions),
         ]);
-        if ($plan) {
-            return redirect('/plan')->with('flash', [
-                'success' => true,
-                'message' => 'Plan created Successfully',
-            ]);
-        }
-        return redirect('/plan')->with('flash', [
-            'success' => false,
-            'message' => 'Plan not created'
-        ]);
+
+        return response()->json(['success' => true, 'message' => 'Plan created successfully']);
     }
 
-    public function edit(Plan $plan)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Plan $plan)
     {
-        $currencies = Currency::get();
-
-        return Inertia::render('Plan/Form', [
-            'plan' => new PlanResource($plan),
-            'currencies' => CurrencyResource::collection($currencies),
-        ]);
+        //
     }
 
-    public function subscriptionPlan($plan)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request, Plan $plan, $id)
     {
-        $plan = Plan::where('slug', $plan)->first();
-        return Inertia::render(
-            'Plan/Subscription',
-            [
-                'plan' => new PlanResource($plan),
-            ]
-        );
+        $segments = $request->segments();
+
+        $category = Category::get();
+        $plan = Plan::find($id);
+        $plan = new PlanResource($plan);
+        // return $category;
+        return view('pages.plan.edit', ['plan' => $plan, 'category' => $category ,'segments' => $segments]);
     }
 
-    public function paymentPlan($plan)
-    {
-        $plan = Plan::where('slug', $plan)->first();
-        return Inertia::render(
-            'Plan/PaymentForm',
-            [
-                'plan' => new PlanResource($plan),
-            ]
-        );
-    }
-
-    public function update(Request $request, Plan $plan)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Plan $plan, $id)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'price' => 'required|regex:/^\d*(\.\d{1,2})?$/',
+            'category' => 'required',
+            'no_of_ads' => 'required|integer',
+            'currency' => 'required|integer',
+            'sign_up_fee' => 'required|integer',
+            'trial_period' => 'required|integer',
+            'trial_interval' => 'required',
+            'invoice_period' => 'required|integer',
+            'invoice_interval' => 'required',
+            'grace_period' => 'required|integer',
+            'grace_interval' => 'required',
+            'sort_order' => 'required|integer',
+            'status' => 'required|integer',
             'sort_description' => 'required',
-            'status' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'price' => 'required',
-            'sort_order' => 'required|numeric',
-            'stripe_plan' => 'required',
-            'currency' => 'required',
+            'prorate_day' => 'nullable|integer',
+            'prorate_period' => 'nullable|integer',
+            'prorate_extend_due' => 'nullable|integer',
+            'active_subscribers_limit' => 'nullable|integer',
         ]);
+
         if ($validator->fails()) {
-            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
-        }
-
-        $toDate = Carbon::parse($request->start_date);
-        $fromDate = Carbon::parse($request->end_date);
-
-        $interval = $toDate->diffInDays($fromDate);
-
-        $plan = Plan::where(['id' => $plan->id])->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'sort_description' => $request->sort_description,
-            'description' => json_encode($request->items),
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'interval' => $interval,
-            'is_active' => $request->status,
-            'price' => $request->price,
-            'sort_order' => $request->sort_order,
-            'stripe_plan' => $request->stripe_plan,
-            'currency_id' => $request->currency,
-        ]);
-
-        if ($plan) {
-            return redirect('/plan')->with('flash', [
-                'success' => true,
-                'message' => 'Plan updated Successfully',
+            return response()->json([
+                'error' => $validator->errors()->all(),
             ]);
         }
-        return redirect('/plan')->with('flash', [
-            'success' => false,
-            'message', 'Plan not updated',
-        ]);
+
+        $plan = Plan::find($id);
+        if ($plan) {
+            $plan = Plan::where(['id' => $id])->update([
+                'name' => $request->name,
+                'price' => $request->price,
+                'category_id' => $request->category,
+                'no_of_ads' => $request->no_of_ads,
+                'currency' => $request->currency,
+                'signup_fee' => $request->sign_up_fee,
+                'trial_period' => $request->trial_period,
+                'trial_interval' => $request->trial_interval,
+                'invoice_period' => $request->invoice_period,
+                'invoice_interval' => $request->invoice_interval,
+                'grace_period' => $request->grace_period,
+                'grace_interval' => $request->grace_interval,
+                'prorate_day' => $request->prorate_day,
+                'prorate_period' => $request->prorate_period,
+                'prorate_extend_due' => $request->prorate_extend_due,
+                'active_subscribers_limit' => $request->active_subscribers_limit,
+                'sort_order' => $request->sort_order,
+                'is_active' => $request->status,
+                'sort_description' => $request->sort_description,
+                'description' => json_encode($request->plan_conditions),
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Plan Updated successfully']);
+        }
     }
 
-    public function destroy(Plan $plan)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Plan $plan, $id)
     {
+        $plan = Plan::find($id);
+        $plan = new PlanResource($plan);
         if ($plan->delete()) {
             return response()->json(['success' => true, 'message' => 'Plan has been deleted successfully.']);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
-    }
-    public function selectDelete(Request $request)
-    {
-        $plan = Plan::whereIn('id', $request->ids)->delete();
-
-        if ($plan) {
-            return response()->json(['success' => true, 'message' => 'Plan has been deleted successfully.']);
-        }
-        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
-    }
-
-
-    public function show(Request $request)
-    {
-        return $request->user()->createSetupIntent();
-    }
-
-    public function successPage()
-    {
-
-        return Inertia::render('Plan/Page/Success');
-    }
-
-
-    public function successPage1()
-    {
-        return Inertia::render('Plan/Page/Success1');
-    }
-
-
-    public function errorPage()
-    {
-
-
-        return Inertia::render('Plan/Page/Error');
     }
 }

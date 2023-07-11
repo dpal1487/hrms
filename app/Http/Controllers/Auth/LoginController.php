@@ -18,20 +18,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if ($admin = Auth::guard('admin')->attempt($credentials)) {
-            if ($admin == 1) {
-                return Auth::guard('admin')->user();
-                return redirect('/dashboard')->with('flash', ['message' => 'Admin Successfully login']);
-            }
-            return back()->withErrors(['message' => 'Invalid credentials.']);
-        } else if ($user = Auth::guard('web')->attempt($credentials)) {
-            if ($user == 1) {
-                // return Auth::guard('admin')->user();
-                return redirect('/dashboard')->with('flash', ['message' => 'User Successfully login']);
-            }
-            return redirect()->back()->with('flash', ['message' => 'Project link successfully added.']);
-            return back()->withErrors(['message' => 'Invalid credentials.']);
-            // return Auth::user();
+        if ($user = Auth::guard('web')->attempt($credentials)) {
+            return redirect('/dashboard')->with('flash', ['message' => 'Successfully login']);
         }
         return back()->withErrors(['message' => 'Invalid credentials.']);
     }

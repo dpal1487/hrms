@@ -14,74 +14,28 @@ export default defineComponent({
             q: "",
             navigations: [
                 {
-                    link: "/employees",
-                    title: "Employee",
-                    icon: "bi bi-person-lines-fill",
+                    link: "/user",
+                    title: "User View",
+                    icon: "bi bi-person-badge-fill",
                 },
                 {
-                    link: "/account",
-                    title: "User",
-                    icon: "bi bi-person-lines-fill",
+                    link: "/item",
+                    title: "Item View",
+                    icon: "bi bi-diagram-2-fill",
                 },
                 {
-                    link: "/company",
-                    title: "Company",
-                    icon: "bi bi-pie-chart-fill",
+                    link: "/category",
+                    title: "Category",
+                    icon: "bi bi-bookmark-fill",
                 },
                 {
-                    link: "/clients",
-                    title: "Client",
-                    icon: "bi bi-pie-chart-fill",
+                    link: "/banner",
+                    title: "Banners",
+                    icon: "bi bi-file-earmark-richtext-fill",
                 },
                 {
-                    link: "/supplier",
-                    title: "Supplier",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/support",
-                    title: "Support",
-                    icon: "bi bi-pie-chart-fill",
-                },
-
-                {
-                    link: "/industry",
-                    title: "Industry",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/question",
-                    title: "Question",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/answer",
-                    title: "Answer",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/decision-maker",
-                    title: "Decision Maker",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/invoice",
-                    title: "Invoice",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/currencies",
-                    title: "Currency",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/department",
-                    title: "Department",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/corporation-type",
-                    title: "Corporation Type",
+                    link: "/attribute",
+                    title: "Attribute List",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
@@ -89,46 +43,67 @@ export default defineComponent({
                     title: "Plan",
                     icon: "bi bi-pie-chart-fill",
                 },
+
                 {
-                    link: "/service",
-                    title: "Services",
+                    link: "/brand",
+                    title: "Brand",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/testimonial",
-                    title: "Testimonials",
+                    link: "/coupon",
+                    title: "Coupon",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/blog",
-                    title: "Blog",
+                    link: "/faqs",
+                    title: "FAQs",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/transaction",
-                    title: "Transaction",
+                    link: "/customer-review",
+                    title: "Customer Review",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/users",
-                    title: "Users List",
+                    link: "/page",
+                    title: "Page",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/roles/user",
-                    title: "Role List",
+                    link: "/enquire",
+                    title: "Enquire",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/permission",
-                    title: "Permission",
+                    link: "/report-types",
+                    title: "Report-Types",
                     icon: "bi bi-pie-chart-fill",
                 },
                 {
-                    link: "/images",
-                    title: "Images",
+                    link: "/notification-type",
+                    title: "Notification Type",
                     icon: "bi bi-pie-chart-fill",
                 },
+                {
+                    link: "/item-status",
+                    title: "Item Status",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/time",
+                    title: "Time",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/time-periods",
+                    title: "Time Periods",
+                    icon: "bi bi-pie-chart-fill",
+                },
+                {
+                    link: "/subscriptions",
+                    title: "Subscriptions",
+                    icon: "bi bi-pie-chart-fill",
+                }
 
             ],
         };

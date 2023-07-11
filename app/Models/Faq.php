@@ -9,14 +9,8 @@ class Faq extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'title', 'artical'];
+    protected $fillable = [
+        'category_id' , 'title' , 'artical',
+];
 
-    public function category()
-    {
-        return $this->hasOne(FaqCategory::class, 'id', 'category_id');
-    }
-    public function categories()
-    {
-        return $this->hasMany(FaqCategory::class, 'id', 'category_id');
-    }
 }

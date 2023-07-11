@@ -21,7 +21,7 @@ export default defineComponent({
                 <!--begin: Pic-->
                 <div class="me-7 mb-4">
                     <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                        <img v-if="user?.full_path" :src="user?.full_path" alt="image" />
+                        <img v-if="user?.full_path" :src="user?.image?.small_path" alt="image" />
                         <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image">
                         <div
                             class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px">
@@ -224,43 +224,53 @@ export default defineComponent({
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.overview') && 'active'}`"
-                        href="/account"> Overview
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('user.show') && 'active'}`"
+                        :href="`/user/${user?.id}`"> Overview
                     </Link>
                 </li>
                 <!--end::Nav item-->
                 <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.setting') && 'active'}`"
-                        href="/account/setting">Setting
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('user.address') && 'active'}`"
+                        :href="`/user/${user?.id}/address`">Address
                     </Link>
                 </li>
                 <!--end::Nav item-->
                 <!--begin::Nav item-->
-                <!-- <li class="nav-item mt-2">
-                    <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.security') && 'active'}`"
-                        href="/account/security">Security
-                    </Link>
-                </li> -->
-                <!--end::Nav item-->
-                <!--begin::Nav item-->
                 <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.address') && 'active'}`"
-                        href="/account/address">Address
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('user.items') && 'active'}`"
+                        :href="`/user/${user?.id}/items`">Items
                     </Link>
                 </li>
                 <!--end::Nav item-->
 
                 <!--begin::Nav item-->
-                <!-- <li class="nav-item mt-2">
+                <li class="nav-item mt-2">
                     <Link
-                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('account.attendance') && 'active'}`"
-                        href="/account/attendance">Attendance
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('user.attendance') && 'active'}`"
+                        :href="`/user/${user?.id}/reviews`">Reviews
                     </Link>
-                </li> -->
+                </li>
+                <!--end::Nav item-->
+                <!--begin::Nav item-->
+                <li class="nav-item mt-2">
+                    <Link
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('user.security') && 'active'}`"
+                        :href="`/user/${user?.id}/packages`">Packages
+                    </Link>
+                </li>
+                <!--end::Nav item-->
+
+
+                <!--begin::Nav item-->
+                <li class="nav-item mt-2">
+                    <Link
+                        :class="`nav-link text-active-primary ms-0 me-10 py-5 ${route().current('user.attendance') && 'active'}`"
+                        :href="`/user/${user?.id}/reports`">Reports
+                    </Link>
+                </li>
                 <!--end::Nav item-->
             </ul>
 

@@ -85,6 +85,8 @@ export default {
                                 <!--end::Breadcrumb-->
                             </div>
                             <!--end::Page title-->
+                            <slot name="toolbar" />
+
                         </div>
                         <!--end::Toolbar container-->
                     </div>

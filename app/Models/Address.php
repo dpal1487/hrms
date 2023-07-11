@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    use HasFactory;
+  use HasFactory;
+  protected $fillable = ['address','country', 'state', 'city','locality', 'pincode','latitude', 'longitude'];
 
-    protected $fillable = ['is_primary' , 'address_line_1', 'address_line_2', 'city', 'state', 'country_id', 'pincode'];
+  public function address(){
+    return $this->hasOne(UserAddress::class,'address_id','id');
+  }
 
-    public function country()
-    {
-        return $this->hasOne(Country::class, 'id', 'country_id');
-    }
+  public function location()
+  {
+    return $this->hasOne(ItemLocation::class , 'address_id' , 'id');
+  }
+
 }

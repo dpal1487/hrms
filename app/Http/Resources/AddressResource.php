@@ -2,23 +2,27 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AddressResource extends JsonResource
 {
-
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
     public function toArray($request)
     {
-
         return [
-            'id' => $this->address?->id,
-            'is_primary' => $this->address?->is_primary,
-            'address_line_1' => $this->address?->address_line_1,
-            'address_line_2' => $this->address?->address_line_2,
-            'city' => $this->address?->city,
-            'state' => $this->address?->state,
-            'pincode' => $this->address?->pincode,
-            'country' => $this->address?->country,
+            'address'=>$this->address,
+            'user'=>$this->user,
+            'state'=>$this->state,
+            'city'=>$this->city,
+            'locality'=>$this->locality,
+            'pincode'=>$this->pincode,
+            'latitude'=>$this->latitude,
+            'longitude'=>$this->longitude
         ];
     }
 }

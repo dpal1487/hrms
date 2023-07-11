@@ -186,6 +186,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         \Chatify\ChatifyServiceProvider::class,
+        browner12\helpers\HelperServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -198,7 +199,6 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
-        Chatify\ChatifyServiceProvider::class,
     ],
 
     /*
@@ -217,7 +217,6 @@ return [
             'Socialite' => Laravel\Socialite\Facades\Socialite::class,
             'Chatify' => Chatify\Facades\ChatifyMessenger::class,
             'Image' => Intervention\Image\Facades\Image::class,
-            'Chatify' => Chatify\Facades\ChatifyMessenger::class,
         ])
         ->toArray(),
 ];
