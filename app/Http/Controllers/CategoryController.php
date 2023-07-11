@@ -145,14 +145,11 @@ class CategoryController extends Controller
 
     public function statusUdate(Request $request)
     {
-        $category = Category::where('id', $request->id)->update([
-            'status' => $request->status,
-        ]);
-        if ($category) {
-            return response()->json(['message' =>  'Category ' . StatusMessage(), 'success' => true]);
+        if (Category::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => "Your Category has been " . $status, 'success' => true]);
         }
-
-        return $category;
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }
 
     public function destroy($id)

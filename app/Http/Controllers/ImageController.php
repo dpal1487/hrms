@@ -64,8 +64,7 @@ class ImageController extends Controller
             }
         }
     }
-
-    public function categoryBanner(Request $request)
+    public function bannerImage(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'image' => 'required|mimes:jpeg,png,jpg'
@@ -118,7 +117,6 @@ class ImageController extends Controller
             }
         }
     }
-
     public function uploadBrand(Request $request)
     {
         $validator = Validator::make($request->all(), [

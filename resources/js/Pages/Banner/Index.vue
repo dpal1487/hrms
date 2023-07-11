@@ -18,7 +18,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "banner",
+            title: "Banner",
             isLoading: false,
             tbody: [
                 "Title",
@@ -92,7 +92,8 @@ export default defineComponent({
                 })
         },
         async changeStatus(status, id) {
-            console.log(status);
+
+            console.log(id)
             this.isLoading = true;
             await utils.changeStatus(route('banner.status'), { id: id, status: status });
             this.isLoading = false;

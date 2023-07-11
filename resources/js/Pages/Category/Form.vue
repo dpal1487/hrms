@@ -127,7 +127,7 @@ export default defineComponent({
 
         async onBannerChange(e) {
             this.banner.isLoading = true;
-            const data = await utils.imageUpload(route('category.banner'), e)
+            const data = await utils.imageUpload(route('upload.banner'), e)
             if (data.response.success) {
 
                 this.form.banner_image = data.response.data.id;

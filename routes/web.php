@@ -96,7 +96,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('category.view');
             Route::get('{id}/edit', 'edit')->name('category.edit');
             Route::post('{id}/update', 'update')->name('category.update');
-            Route::post('category/status', 'statusUdate')->name('category.status');
+            Route::post('status', 'statusUdate')->name('category.status');
             Route::delete('{id}/destroy', 'destroy')->name('category.destroy');
         });
     });
@@ -109,7 +109,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('banner.view');
             Route::get('{id}/edit', 'edit')->name('banner.edit');
             Route::post('{id}/update', 'update')->name('banner.update');
-            Route::delete('{id}/delete', 'destroy')->name('banner.delete');
+            Route::post('status', 'statusUdate')->name('banner.status');
+            Route::delete('{id}/destroy', 'destroy')->name('banner.destroy');
         });
     });
 
@@ -195,7 +196,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     Route::controller(ImageController::class)->group(function () {
         Route::post('category/thumbnail', 'categoryThumbnail')->name('category.thumbnail');
-        Route::post('/upload/banner', 'categoryBanner')->name('category.banner');
+        Route::post('/upload/banner', 'bannerImage')->name('upload.banner');
         Route::post('/upload/brand', 'uploadBrand');
         Route::post('/upload/faq', 'uploadFaq');
     });
