@@ -20,7 +20,7 @@ class LoginController extends Controller
 
         if ($admin = Auth::guard('admin')->attempt($credentials)) {
             if ($admin == 1) {
-                return Auth::guard('admin')->user();
+                // return Auth::guard('admin')->user();
                 return redirect('/dashboard')->with('flash', ['message' => 'Admin Successfully login']);
             }
             return back()->withErrors(['message' => 'Invalid credentials.']);
