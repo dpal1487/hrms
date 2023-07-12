@@ -41,18 +41,18 @@ export default defineComponent({
                 {
                     link: "/plan",
                     title: "Plan",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-wallet-fill",
                 },
 
                 {
                     link: "/brand",
                     title: "Brand",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-ticket-fill",
                 },
                 {
                     link: "/coupon",
                     title: "Coupon",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-gift-fill",
                 },
                 {
                     link: "/faqs",
@@ -62,27 +62,27 @@ export default defineComponent({
                 {
                     link: "/customer-review",
                     title: "Customer Review",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-hand-thumbs-up-fill",
                 },
                 {
                     link: "/page",
                     title: "Page",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-layers-fill",
                 },
                 {
                     link: "/enquire",
                     title: "Enquire",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-person-lines-fill",
                 },
                 {
                     link: "/report-types",
                     title: "Report-Types",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-tags-fill",
                 },
                 {
                     link: "/notification-type",
                     title: "Notification Type",
-                    icon: "bi bi-pie-chart-fill",
+                    icon: "bi bi-phone-vibrate-fill",
                 },
                 {
                     link: "/item-status",

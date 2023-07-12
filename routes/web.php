@@ -43,7 +43,7 @@ use App\Http\Controllers\SubscriptionsController;;
 | contains the "web" middleware group. Now create something great!
 |
 
-| Routes             
+| Routes
 
 */
 
@@ -135,7 +135,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/store', 'store')->name('attribute-value.store');
             Route::get('{id}/edit', 'edit')->name('attribute-value.edit');
             Route::post('{id}/update', 'update')->name('attribute-value.update');
-            Route::delete('{id}/delete', 'destroy')->name('attribute-value.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('attribute-value.destroy');
         });
     });
 

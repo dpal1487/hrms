@@ -11,7 +11,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 export default defineComponent({
     emits: ["submitted"],
-    props: ["attribute"],
+    props: ["attribute" , "id"],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -32,7 +32,8 @@ export default defineComponent({
             form: this.$inertia.form({
                 value: this.attribute?.attribute_value,
                 status: this.attribute?.status,
-                attribute: this.attribute?.id,
+                attribute: this?.id,
+                id:this.attribute?.id
             }),
             status: [
                 { id: 1, label: "Active" },
@@ -61,7 +62,6 @@ export default defineComponent({
 });
 </script>
 <template>
-    {{ attribute}}
     <form @submit.prevent="submit" class="my-auto pb-5">
 
         <div class="row g-9 mb-5">

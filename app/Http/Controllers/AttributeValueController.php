@@ -89,6 +89,7 @@ class AttributeValueController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $validator = Validator::make($request->all(), [
             'value' => 'required',
             'status' => 'required',
@@ -102,10 +103,9 @@ class AttributeValueController extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
-
-        $attrebutevalue = AttributeValue::where(['id' => $id])->update([
+        $attrebutevalue = AttributeValue::where(['id' => $request->id])->update([
             'attribute_value' => $request->value,
-            'attribute_id' => $request->attribute_id,
+            'attribute_id' => $request->attribute,
             'status' => $request->status,
         ]);
 
@@ -126,11 +126,10 @@ class AttributeValueController extends Controller
      */
     public function destroy(string $id)
     {
-
-        $attributeValue = AttributeValue::find($id);
+                $attributeValue = AttributeValue::find($id);
 
         if ($attributeValue->delete()) {
-            return response()->json(['success' => true, 'message' => 'Attribute Value has been deleted successfully.']);
+            return response()->json(['success' => true, 'message' => 'Attribute Value has been ' .DeleteMessage()]);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

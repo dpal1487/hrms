@@ -3,7 +3,6 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import TopCard from "./Components/TopCard.vue";
-// import AttributeValueList from "./Components/AttributeValueList.vue";
 import AttributeValueList from "./Components/Attribute/AttributeValueList.vue";
 import AttributeValueForm from "./Components/Attribute/AttributeValueForm.vue";
 import Multiselect from "@vueform/multiselect";
@@ -13,9 +12,10 @@ import JetLabel from "@/Jetstream/Label.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
+import utils from "../utils";
 
 export default defineComponent({
-    props: ["attribute", "attr"],
+    props: ["attribute"],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -66,7 +66,7 @@ export default defineComponent({
                 .transform((data) => ({
                     ...data,
                 }))
-                .post(this.isAdd ? this.route("attribute-value.store", this.attribute?.data?.id) : this.route('attribute-value.update', this.attribute?.data?.id), {
+                .post(this.isAdd ? this.route("attribute-value.store") : this.route('attribute-value.update', this.attribute?.data?.id), {
                     onSuccess: (data) => {
                         toast.success(this.$page.props.jetstream.flash.message);
                         this.isEdit = false;
@@ -80,6 +80,11 @@ export default defineComponent({
         toggleModal(isEdit, attribute) {
             this.isEdit = isEdit;
             this.form = attribute;
+        },
+        async confirmDelete(id, index) {
+            this.isLoading = true;
+            await utils.deleteIndexDialog(route('attribute-value.destroy', id), this.attribute?.data?.values, index);
+            this.isLoading = false;
         },
     },
 });
@@ -110,6 +115,7 @@ export default defineComponent({
             </div>
         </template>
         <div class="mb-5">
+
             <TopCard :attribute="attribute?.data" />
             <div class="card">
                 <div class="card-header align-items-center">
@@ -117,16 +123,19 @@ export default defineComponent({
                         <h2>Attribute List</h2>
                     </div>
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <button class="btn btn-primary m-1 btn-sm" @click="this.isAdd = this.isAdd ? false : true"><i
+
+                        <button class="btn btn-primary m-1 btn-sm" v-if="!isEdit" @click="this.isAdd = this.isAdd ? false : true , this.form = {}"><i
                                 class="bi bi-plus-circle"></i>Add New
                         </button>
                     </div>
                 </div>
                 <div class="card-body">
                     <!--begin::Form-->
+
                     <div class="row" v-if="isEdit || isAdd">
+
                         <div class="col-12">
-                            <attribute-value-form @submitted="submit" :attribute="form">
+                            <attribute-value-form @submitted="submit" :attribute="form" :id="attribute?.data?.id">
                                 <template #action>
                                     <div class="d-flex justify-content-end">
                                         <!--begin::Button-->
