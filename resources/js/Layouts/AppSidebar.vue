@@ -26,7 +26,7 @@ export default defineComponent({
                 {
                     link: "/category",
                     title: "Category",
-                    icon: "bi bi-bookmark-fill",
+                    icon: "bi bi-stack",
                 },
                 {
                     link: "/banner",
@@ -35,8 +35,8 @@ export default defineComponent({
                 },
                 {
                     link: "/attribute",
-                    title: "Attribute List",
-                    icon: "bi bi-pie-chart-fill",
+                    title: "Attributes",
+                    icon: "bi bi-kanban-fill",
                 },
                 {
                     link: "/plan",

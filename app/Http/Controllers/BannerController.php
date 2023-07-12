@@ -51,23 +51,22 @@ class BannerController extends Controller
             'image_id' => $request->banner_image,
             'status' => 1,
         ]);
-        if($banner){
+        if ($banner) {
             return response()->json([
-              'success' => true,
-              'message' => 'Banner' . CreateMessage(),
+                'success' => true,
+                'message' => 'Banner' . CreateMessage(),
             ], 200);
-        }
-        else{
+        } else {
             return response()->json([
-             'success' => false,
-             'message' => ErrorMessage(),
+                'success' => false,
+                'message' => ErrorMessage(),
             ], 400);
         }
     }
     public function edit(banner $banner, $id)
     {
         $banner = Banner::find($id);
-        return Inertia::render('Banner/Form',[
+        return Inertia::render('Banner/Form', [
             'banner' => new BannerResource($banner)
         ]);
     }
@@ -77,7 +76,7 @@ class BannerController extends Controller
         $validator = Validator::make($request->all(), [
             'description' => 'required',
             'title' => 'required',
-            'url' => 'required'
+            'url' => 'required|url'
         ]);
 
         if ($validator->fails()) {
@@ -102,10 +101,9 @@ class BannerController extends Controller
 
         if (Banner::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
-            return response()->json(['message' => "Your Banner has been " . $status, 'success' => true]);
+            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
         }
         return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-        
     }
     public function destroy($id)
     {

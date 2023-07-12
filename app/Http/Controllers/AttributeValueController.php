@@ -24,32 +24,45 @@ class AttributeValueController extends Controller
     {
         //
     }
+    public function statusUdate(Request $request)
+    {
 
-    /**
-     * Store a newly created resource in storage.
-     */
+        if (AttributeValue::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'attribute_value' => 'required',
-            'status' => 'required|integer'
+            'value' => 'required',
+            'status' => 'required',
+            'attribute' => 'required',
 
         ]);
-
         if ($validator->fails()) {
-            return response()->json([
-                'success'=>false,
+            return redirect()->back()->withErrors([
+                'success' => false,
                 'message' => $validator->errors()->first()
-                    ],400);
+            ]);
         }
 
         $attrebutevalue = AttributeValue::create([
-            'attribute_value' => $request->attribute_value,
-            'attribute_id' =>$request->attribute_id,
+            'attribute_value' => $request->value,
+            'attribute_id' => $request->attribute,
             'status' => $request->status,
         ]);
-
-        return response()->json(['success'=>true,'message'=>'Attribute Value created successfully']);
+        if ($attrebutevalue) {
+            return redirect("/attribute/$request->attribute")->with('flash', [
+                'success' => true,
+                'message' => 'Attribute Value ' . CreateMessage()
+            ]);
+        }
+        return redirect("/attribute/$request->attribute")->with('flash', [
+            'success' => false,
+            'message' => ErrorMessage()
+        ]);
     }
 
     /**
@@ -65,8 +78,8 @@ class AttributeValueController extends Controller
      */
     public function edit(string $id)
     {
-        $attributeValue= AttributeValue::find($id);
-        if($attributeValue){
+        $attributeValue = AttributeValue::find($id);
+        if ($attributeValue) {
             return response()->json($attributeValue);
         }
     }
@@ -77,25 +90,35 @@ class AttributeValueController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'attribute_value' => 'required',
-            'status' => 'required|integer'
+            'value' => 'required',
+            'status' => 'required',
+            'attribute' => 'required',
 
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success'=>false,
+                'success' => false,
                 'message' => $validator->errors()->first()
-                    ],400);
+            ], 400);
         }
 
-        $attrebutevalue = AttributeValue::where(['id'=>$id])->update([
-            'attribute_value' => $request->attribute_value,
-            'attribute_id' =>$request->attribute_id,
+        $attrebutevalue = AttributeValue::where(['id' => $id])->update([
+            'attribute_value' => $request->value,
+            'attribute_id' => $request->attribute_id,
             'status' => $request->status,
         ]);
 
-        return response()->json(['success'=>true,'message'=>'Attribute Value updated successfully']);
+        if ($attrebutevalue) {
+            return redirect("/attribute/$id")->with('flash', [
+                'success' => true,
+                'message' => 'Attribute Value ' . UpdateMessage()
+            ]);
+        }
+        return redirect("/attribute/$id")->with('flash', [
+            'success' => false,
+            'message' => ErrorMessage()
+        ]);
     }
 
     /**
@@ -106,9 +129,9 @@ class AttributeValueController extends Controller
 
         $attributeValue = AttributeValue::find($id);
 
-        if($attributeValue->delete()){
-            return response()->json(['success'=>true,'message'=>'Attribute Value has been deleted successfully.']);
+        if ($attributeValue->delete()) {
+            return response()->json(['success' => true, 'message' => 'Attribute Value has been deleted successfully.']);
         }
-        return response()->json(['success'=>false,'message'=>'Opps something went wrong!'],400);
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 }

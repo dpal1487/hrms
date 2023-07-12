@@ -7,7 +7,7 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, url } from "@vuelidate/validators";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import { Inertia } from "@inertiajs/inertia";
@@ -25,14 +25,14 @@ export default defineComponent({
             form: {
                 image: {},
                 title: { required },
-                url: { required },
+                url: { required, url },
                 description: { required },
             },
         };
     },
     data() {
         return {
-            title:'Banner',
+            title: 'Banner',
             isEdit: false,
             banner_upload: {
                 isLoading: false,
@@ -45,7 +45,7 @@ export default defineComponent({
                 title: this.banner?.data?.title || '',
                 description: this.banner?.data?.description || '',
                 url: this.banner?.data?.url || '',
-                banner_image: this.form?.banner_image || '',                
+                banner_image: this.form?.banner_image || '',
             }),
         };
     },

@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
 use App\Http\Resources\AttributeResource;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\RuleResource;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\Rule;
 use App\Models\AttributeRule;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Inertia\Inertia;
 
 class AttributeController extends Controller
 {
@@ -19,85 +22,91 @@ class AttributeController extends Controller
     {
 
         $attributes = new Attribute();
-        if($request->q){
-            $attributes = $attributes->where('name','like',"%{$request->q}%");
+        if (!empty($request->q)) {
+            $attributes = $attributes->where('name', 'like', "%{$request->q}%");
         }
-        $attributes = $attributes->paginate(10)->onEachSide(1)->appends(request()->query());
-        $attributes = AttributeResource::collection($attributes);
+        if (!empty($request->s) || $request->s != '') {
+            $attributes = $attributes->where('status', $request->s);
+        }
+        return Inertia::render('Attributes/Index', [
+            'attributes' => AttributeResource::collection($attributes->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
+    }
+    public function statusUdate(Request $request)
+    {
 
-        // return $attributes;
-
-        return view('pages.attribute.index' , compact('attributes' ));
+        if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $segments = $request->segments();
-        $category = Category::get();
-
+        $categories = Category::get();
         $rules = Rule::get();
-        return view('pages.attribute.add', ['category' =>$category , 'rules' => $rules , 'segments' =>$segments]);
+        return Inertia::render('Attributes/Form', [
+            'categories' => CategoryResource::collection($categories),
+            'rules' => RuleResource::collection($rules),
+        ]);
     }
 
     public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => ['required','unique:'.Attribute::class],
+            'name' => ['required', 'unique:' . Attribute::class],
             'category' => 'required',
             'field' => 'required',
-            'type' => 'required',
+            'input_type' => 'required',
+            'data_type' => 'required',
             'display_order' => 'required|integer',
             'status' => 'required|integer',
-            'add_rule_conditions.*.rule' => 'required'
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success'=>false,
-                'message' => $validator->errors()->first()
-                    ],400);
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
         }
-
         $attribute = Attribute::create([
             'name' => $request->name,
-            'field' =>$request->field,
-            'category_id' =>$request->category,
-            'type' => $request->type,
-            'data_type' =>$request->data_type,
+            'field' => $request->field,
+            'category_id' => $request->category,
+            'type' => $request->input_type,
+            'data_type' => $request->data_type,
             'description' => $request->description,
-            'display_order' =>$request->display_order,
+            'display_order' => $request->display_order,
             'status' => $request->status,
         ]);
-        foreach ($request->add_rule_conditions as $key => $value) {
-            AttributeRule::create([
-                'attribute_id' =>$attribute->id,
-                'rule_id' => $value['rule'],
-            ]);
+        if ($attribute) {
+            foreach ($request->finalAttrbutes as $key => $value) {
+                $attributeRule =  AttributeRule::create([
+                    'attribute_id' => $attribute->id,
+                    'rule_id' => $value['id'],
+                ]);
+            }
+            if (!empty($attributeRule)) {
+                return redirect()->route('attribute.index')->with('message', ErrorMessage());
+            }
+            return redirect()->route('attribute.index')->with('flash', ['message' => 'Attribute ' . CreateMessage()]);
         }
-        return response()->json(['success'=>true,'message'=>'Attribute created successfully']);
+        return redirect()->route('attribute.index')->with('message', ErrorMessage());
     }
 
     public function show($id)
     {
-        $attribute = Attribute::find($id);
-        $attribute = new AttributeResource($attribute);
-
-
-        // return $attribute;
-        return view('pages.attribute.view' , [ 'attribute' => $attribute  ] );
+        return Inertia::render('Attributes/Show', [
+            'attribute' => new AttributeResource(Attribute::find($id)),
+        ]);
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
-        $segments = $request->segments();
-        $category = Category::get();
-        $rules = Rule::get();
-        $attribute = Attribute::find($id);
-        $attribute = new AttributeResource($attribute);
-        // return $attribute;
-
-        return view('pages.attribute.edit' , [ 'attribute' => $attribute , 'category' =>$category , 'rules' => $rules , 'segments' =>$segments ]);
+        return Inertia::render('Attributes/Form', [
+            'categories' => CategoryResource::collection(Category::get()),
+            'rules' => RuleResource::collection(Rule::get()),
+            'attribute' => new AttributeResource(Attribute::find($id)),
+        ]);
     }
     public function attributevalue($id)
     {
@@ -108,54 +117,49 @@ class AttributeController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => ['required'],
             'category' => 'required',
             'field' => 'required',
-            'type' => 'required',
-            'display_order' => 'required',
-            'status' => 'required'
+            'input_type' => 'required',
+            'data_type' => 'required',
+            'display_order' => 'required|integer',
+            'status' => 'required',
+            'finalAttrbutes.*.id' => 'required'
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                        'error' => $validator->errors()->all()
-                    ]);
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
         }
         $attribute = Attribute::find($id);
-        if($attribute){
-            $attribute = Attribute::where(['id'=>$attribute->id])->update([
-                'name' => $request->name,
-                'field' =>$request->field,
-                'category_id' =>$request->category,
-                'type' => $request->type,
-                'data_type' =>$request->data_type,
+        if ($attribute) {
+            $attribute = Attribute::where(['id' => $attribute->id])->update([
+                'name' => $request->name == $attribute->name ? $attribute->name :   $request->name,
+                'field' => $request->field,
+                'category_id' => $request->category,
+                'type' => $request->input_type,
+                'data_type' => $request->data_type,
                 'description' => $request->description,
-                'display_order' =>$request->display_order,
+                'display_order' => $request->display_order,
                 'status' => $request->status,
             ]);
-
-            $attributeRule = DB::table('attribute_rules')
-            ->where('attribute_id', '=', $id)
-            ->delete();
-
-
-            foreach ($request->add_rule_conditions as $key => $value) {
-            AttributeRule::create([
-                'attribute_id' =>$id,
-                'rule_id' => $value['rule'],
-            ]);
+            $attributeRule = AttributeRule::where('attribute_id', '=', $id)->delete();
+            if ($attribute) {
+                foreach ($request->finalAttrbutes as $key => $value) {
+                    AttributeRule::create([
+                        'attribute_id' => $id,
+                        'rule_id' => $value['id'],
+                    ]);
+                }
+            }
+            return redirect()->route('attribute.index')->with('flash', ['message' => 'Attribute ' . UpdateMessage()]);
         }
-
-            return response()->json(['success'=>true,'message'=>'Attribute Updated successfully']);
-
-        }
+        return redirect()->route('attribute.index')->with('message', ErrorMessage());
     }
     public function destroy($id)
     {
         $attribute = Attribute::find($id);
-        if($attribute->delete()){
-            return response()->json(['success'=>true,'message'=>'Attribute has been deleted successfully.']);
+        if ($attribute->delete()) {
+            return response()->json(['success' => true, 'message' => 'Attribute has been ' . DeleteMessage()]);
         }
-        return response()->json(['success'=>false,'message'=>'Opps something went wrong!'],400);
+        return response()->json(['success' => false, 'message' => ErrorMessage()]);
     }
-
 }
