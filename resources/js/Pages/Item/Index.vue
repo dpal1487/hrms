@@ -139,11 +139,8 @@ export default defineComponent({
                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                 </div>
             </form>
-
-            <div v-for="item in items" class="mb-5">
-                <div v-for="item in item">
-                    <ItemCard :item="item" />
-                </div>
+            <div v-for="item in items.data" class="mb-5">
+                <ItemCard :item="item" />
             </div>
             <div class="d-flex align-items-center justify-content-center" v-if="items?.meta">
                 <Pagination :links="items?.meta.links" />

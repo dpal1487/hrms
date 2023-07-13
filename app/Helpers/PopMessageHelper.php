@@ -12,9 +12,9 @@ if (!function_exists('SuccessMessage')) {
     {
         return "Successfully created.";
     }
-    function UpdateMessage()
+    function UpdateMessage($message)
     {
-        return "Successfully updated.";
+        return "$message Successfully updated.";
     }
     function DeleteMessage()
     {
@@ -25,8 +25,8 @@ if (!function_exists('SuccessMessage')) {
     {
         return "Opps! something went wrong.";
     }
-    function StatusMessage()
+    function StatusMessage($message, $status)
     {
-        return "Status Update Successfully.";
+        return "$message status update was successful $status";
     }
 };

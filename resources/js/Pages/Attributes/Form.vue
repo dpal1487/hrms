@@ -12,9 +12,8 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import { Inertia } from "@inertiajs/inertia";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
-
 import AttributeList from "./components/AttributeList.vue";
+
 export default defineComponent({
     props: ['attribute', 'categories', 'rules'],
     setup() {

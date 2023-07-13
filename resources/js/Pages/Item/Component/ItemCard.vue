@@ -1,68 +1,30 @@
 <script>
 import { defineComponent } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
-import ItemStatusCard from './ItemStatusCard.vue';
+import StatusDropdown from './StatusDropdown.vue';
 export default defineComponent({
-    props: ["item", "itemStatus"],
+    props: ["item",],
 
     data() {
         return {
-            status: this.itemStatus,
-            statusToggle: false,
+            
         }
     },
-    components: { Link, ItemStatusCard },
-
-    methods: {
-        toggleStatus() {
-            this.statusToggle = !this.statusToggle;
-        }
-    }
-
-
+    components: { Link, StatusDropdown },
 });
 
 </script>
 
 <template>
     <div class="card-body  position-relative shadow-sm mt-4 rounded-2 bg-white">
-        {{ item?.id }}
         <!--begin::Toolbar-->
-        <div class="card-toolbar position-absolute w-fit top-0 end-0 p-5">
-            <!--begin::Menu-->
-            <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end"
-                @click="toggleStatus">
-                <span class="svg-icon svg-icon-1 svg-icon-gray-300 me-n1">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="4" fill="currentColor" />
-                        <rect x="11" y="11" width="2.6" height="2.6" rx="1.3" fill="currentColor" />
-                        <rect x="15" y="11" width="2.6" height="2.6" rx="1.3" fill="currentColor" />
-                        <rect x="7" y="11" width="2.6" height="2.6" rx="1.3" fill="currentColor" />
-                    </svg>
-                </span>
-            </button>
-            <!--begin::Menu 2-->
-
-
-
-            <div v-if="statusToggle"
-                class="toggle menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px show"
-                data-kt-menu="true">
-                <!--begin::Menu item-->
-                <ItemStatusCard :item="item?.id" />
-                <!-- <x-item-cart-status :itemid="item?.id" /> -->
-                <!--end::Menu item-->
-            </div>
-            <!--end::Menu 2-->
-            <!--end::Menu-->
-        </div>
-
+        <StatusDropdown :id="item.id"/>
         <!--end::Toolbar-->
         <!--begin::Details-->
         <div class="d-flex flex-wrap flex-sm-nowrap">
             <!--begin: Pic-->
             <div class="me-5 mb-4">
-                <Link :href="this.route('item.details', ['id', item?.id])"
+                <Link :href="this.route('item.show', item.id)"
                     class="d-block symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
                 <!-- <img v-if="user" :src="user?.image?.small_path" alt="image" class="rounded" /> -->
                 <img src="/assets/media/svg/avatars/blank.svg" alt="image" class="rounded">
@@ -80,7 +42,7 @@ export default defineComponent({
                         <div class="col-md-6">
                             <div class="d-flex flex-column">
                                 <!--begin::Name-->
-                                <Link :href="`item.details/${item?.id}`" class="text-gray-900  fs-2 fw-bold">{{ item?.title
+                                <Link :href="route('item.show',item.id)" class="text-gray-900  fs-2 fw-bold">{{ item?.title
                                 }}</Link>
                                 <!--end::Name-->
                                 <!--begin::Info-->

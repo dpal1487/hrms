@@ -22,7 +22,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div data-repeater-list="add_rule_conditions" class="fv-row">
+    <div class="fv-row">
         <div v-for='attr in attributes' class="d-flex align-items-center mb-6">
             <div class="w-100 position-relative">
                 <Multiselect :options="options" label="rule" valueProp="id"

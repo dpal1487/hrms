@@ -6,7 +6,6 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AttributeValueController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
@@ -29,6 +28,8 @@ use App\Http\Controllers\EnquirieController;
 use App\Http\Controllers\ReportTypeController;
 use App\Http\Controllers\NotificationTypeController;
 use App\Http\Controllers\ItemStatusController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\TimePeriodController;
 use App\Http\Controllers\SubscriptionsController;;
@@ -57,15 +58,13 @@ Route::get('/', function () {
 });
 
 Route::post('login', [LoginController::class, 'login'])->name('user.login');
-Route::post('login/{provider}', [SocialLoginController::class, 'redirectToGoogle']);
-Route::get('login/{provider}/callback', [SocialLoginController::class, 'handleCallback']);
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     Route::controller(UserController::class)->group(function () {
+        Route::get('/users', 'index')->name('users.index');
         Route::group(['prefix' => 'user'], function () {
-            Route::get('/', 'index')->name('user.index');
             Route::get('/{id}', 'show')->name('user.show');
             Route::get('/{id}/items', 'items')->name('user.items');
             Route::get('/{id}/createress', 'createress')->name('user.createress');
@@ -77,10 +76,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     // item page
 
     Route::controller(ItemController::class)->group(function () {
+        Route::get('/items', 'index')->name('items.index');
         Route::group(['prefix' => 'item'], function () {
-            Route::get('/', 'index')->name('item');
-            Route::get('/details/{id}', 'details')->name('item.details');
+            Route::get('/{id}', 'show')->name('item.show');
             Route::get('/customers', 'details')->name('item.customers');
+            Route::get('/reviews', 'reviews')->name('item.reviews');
             Route::post('/status', 'updateStatus')->name('item.status');
         });
     });
@@ -89,8 +89,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     // category
 
     Route::controller(CategoryController::class)->group(function () {
+        Route::get('/categories', 'index')->name('categories.index');
         Route::group(['prefix' => 'category'], function () {
-            Route::get('/', 'index')->name('category.index');
             Route::get('/create', 'create')->name('category.create');
             Route::post('/store', 'store')->name('category.store');
             Route::get('{id}', 'show')->name('category.show');
@@ -102,8 +102,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(BannerController::class)->group(function () {
+        Route::get('/banners', 'index')->name('banners.index');
         Route::group(['prefix' => 'banner'], function () {
-            Route::get('/', 'index')->name('banner.index');
             Route::get('/create', 'create')->name('banner.create');
             Route::post('/store', 'store')->name('banner.store');
             Route::get('{id}', 'show')->name('banner.show');
@@ -115,8 +115,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(AttributeController::class)->group(function () {
+        Route::get('/attributes', 'index')->name('attributes.index');
         Route::group(['prefix' => 'attribute'], function () {
-            Route::get('/', 'index')->name('attribute.index');
             Route::post('status', 'statusUdate')->name('attribute.status');
             Route::get('/create', 'create')->name('attribute.create');
             Route::post('/store', 'store')->name('attribute.store');
@@ -138,39 +138,43 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('attribute-value.destroy');
         });
     });
-
-    Route::controller(RuleController::class)->group(function () {
-        Route::group(['prefix' => 'rule'], function () {
-            Route::get('/', 'index')->name('rule.index');
-            Route::get('/create', 'create')->name('rule.create');
-            Route::post('/store', 'store')->name('rule.store');
-            Route::get('{id}/edit', 'edit')->name('rule.edit');
-            Route::post('{id}/update', 'update')->name('rule.update');
-            Route::delete('{id}/delete', 'destroy')->name('rule.delete');
-        });
-    });
-
     Route::controller(PlanController::class)->group(function () {
+        Route::get('/plans', 'index')->name('plans.index');
         Route::group(['prefix' => 'plan'], function () {
-            Route::get('/', 'index')->name('plan.index');
+            Route::post('status', 'statusUdate')->name('plan.status');
             Route::get('/create', 'create')->name('plan.create');
             Route::post('/store', 'store')->name('plan.store');
             Route::get('{id}', 'show')->name('plan.show');
             Route::get('{id}/edit', 'edit')->name('plan.edit');
             Route::post('{id}/update', 'update')->name('plan.update');
-            Route::delete('{id}/delete', 'destroy')->name('plan.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('plan.destroy');
         });
     });
+
+    Route::controller(RuleController::class)->group(function () {
+        Route::group(['prefix' => 'rule'], function () {
+            Route::get('/', 'index')->name('rule.index');
+            Route::post('status', 'statusUdate')->name('rule.status');
+            Route::get('/create', 'create')->name('rule.create');
+            Route::post('/store', 'store')->name('rule.store');
+            Route::get('{id}/edit', 'edit')->name('rule.edit');
+            Route::post('{id}/update', 'update')->name('rule.update');
+            Route::delete('{id}/destroy', 'destroy')->name('rule.destroy');
+        });
+    });
+
+
 
     Route::controller(BrandController::class)->group(function () {
         Route::group(['prefix' => 'brand'], function () {
             Route::get('/', 'index')->name('brand.index');
+            Route::post('status', 'statusUdate')->name('brand.status');
             Route::get('/create', 'create')->name('brand.create');
             Route::post('/store', 'store')->name('brand.store');
             Route::get('{id}', 'show')->name('brand.show');
             Route::get('{id}/edit', 'edit')->name('brand.edit');
             Route::post('{id}/update', 'update')->name('brand.update');
-            Route::delete('{id}/delete', 'destroy')->name('brand.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('brand.destroy');
         });
     });
 
@@ -181,7 +185,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/store', 'store')->name('brand-model.store');
             Route::get('{id}/edit', 'edit')->name('brand-model.edit');
             Route::post('{id}/update', 'update')->name('brand-model.update');
-            Route::delete('{id}/delete', 'destroy')->name('brand-model.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('brand-model.destroy');
         });
     });
 
@@ -193,7 +197,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}', 'show')->name('coupon.show');
             Route::get('{id}/edit', 'edit')->name('coupon.edit');
             Route::post('{id}/update', 'update')->name('coupon.update');
-            Route::delete('{id}/delete', 'destroy')->name('coupon.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('coupon.destroy');
         });
     });
 
@@ -212,7 +216,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}', 'show')->name('faqs.show');
             Route::get('{id}/edit', 'edit')->name('faqs.edit');
             Route::post('{id}/update', 'update')->name('faqs.update');
-            Route::delete('{id}/delete', 'destroy')->name('faqs.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('faqs.destroy');
         });
     });
 
@@ -223,7 +227,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/store', 'store')->name('faqs-model.store');
             Route::get('{id}/edit', 'edit')->name('faqs-model.edit');
             Route::post('{id}/update', 'update')->name('faqs-model.update');
-            Route::delete('{id}/delete', 'destroy')->name('faqs-model.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('faqs-model.destroy');
         });
     });
 
@@ -235,7 +239,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('customer-review.view');
             Route::get('{id}/edit', 'edit')->name('customer-review.edit');
             Route::post('{id}/update', 'update')->name('customer-review.update');
-            Route::delete('{id}/delete', 'destroy')->name('customer-review.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('customer-review.destroy');
         });
     });
 
@@ -247,7 +251,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('page.view');
             Route::get('{id}/edit', 'edit')->name('page.edit');
             Route::post('{id}/update', 'update')->name('page.update');
-            Route::delete('{id}/delete', 'destroy')->name('page.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('page.destroy');
         });
     });
 
@@ -266,7 +270,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('report-types.view');
             Route::get('{id}/edit', 'edit')->name('report-types.edit');
             Route::post('{id}/update', 'update')->name('report-types.update');
-            Route::delete('{id}/delete', 'destroy')->name('report-types.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('report-types.destroy');
         });
     });
     Route::controller(NotificationTypeController::class)->group(function () {
@@ -277,7 +281,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('notification-types.view');
             Route::get('{id}/edit', 'edit')->name('notification-types.edit');
             Route::post('{id}/update', 'update')->name('notification-types.update');
-            Route::delete('{id}/delete', 'destroy')->name('notification-types.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('notification-types.destroy');
         });
     });
 
@@ -289,7 +293,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('item-status.view');
             Route::get('{id}/edit', 'edit')->name('item-status.edit');
             Route::post('{id}/update', 'update')->name('item-status.update');
-            Route::delete('{id}/delete', 'destroy')->name('item-status.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('item-status.destroy');
         });
     });
 
@@ -301,7 +305,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('time.view');
             Route::get('{id}/edit', 'edit')->name('time.edit');
             Route::post('{id}/update', 'update')->name('time.update');
-            Route::delete('{id}/delete', 'destroy')->name('time.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('time.destroy');
         });
     });
 
@@ -313,7 +317,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/view', 'show')->name('time-periods.view');
             Route::get('{id}/edit', 'edit')->name('time-periods.edit');
             Route::any('{id}/update', 'update')->name('time-periods.update');
-            Route::delete('{id}/delete', 'destroy')->name('time-periods.delete');
+            Route::delete('{id}/destroy', 'destroy')->name('time-periods.destroy');
         });
     });
 
@@ -324,6 +328,27 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
+    Route::controller(MenuController::class)->group(function () {
+        Route::get('/menus', 'index')->name('menu.index');
+        Route::group(['prefix' => 'menu'], function () {
+            Route::get('/create', 'create')->name('menu.create');
+            Route::post('/store', 'store')->name('menu.store');
+            Route::get('{id}/edit', 'edit')->name('menu.edit');
+            Route::post('{id}/update', 'update')->name('menu.update');
+            Route::delete('delete/{id}', 'destroy')->name('menu.destroy');
+        });
+    });
+
+    Route::controller(MenuItemController::class)->group(function () {
+        Route::get('/menu-items', 'index')->name('menuItem.index');
+        Route::group(['prefix' => 'menu-item'], function () {
+            Route::get('/create', 'create')->name('menuItem.create');
+            Route::post('/store', 'store')->name('menuItem.store');
+            Route::get('{id}/edit', 'edit')->name('menuItem.edit');
+            Route::post('{id}/update', 'update')->name('menuItem.update');
+            Route::delete('delete/{id}', 'destroy')->name('menuItem.destroy');
+        });
+    });
     // admin profile page
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

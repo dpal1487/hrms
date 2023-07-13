@@ -23,6 +23,15 @@ class BannerController extends Controller
             'banners' => BannerResource::collection($banners->paginate(10)->onEachSide(1)->appends(request()->query()))
         ]);
     }
+    // public function statusUdate(Request $request)
+    // {
+
+    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+    //         $status = $request->status == 0  ? "Inactive" : "Active";
+    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+    //     }
+    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    // }
     public function create()
     {
         return Inertia::render('Banner/Form');

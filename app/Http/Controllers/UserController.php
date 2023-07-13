@@ -90,6 +90,16 @@ class UserController extends Controller
         return response()->json(['success' => 'Status change successfully.']);
     }
 
+    // public function statusUdate(Request $request)
+    // {
+
+    //     if (Item::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+    //         $status = $request->status == 0  ? "Inactive" : "Active";
+    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+    //     }
+    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    // }
+
 
 
     public function packages($id)

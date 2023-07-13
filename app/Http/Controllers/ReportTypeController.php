@@ -19,6 +19,16 @@ class ReportTypeController extends Controller
         $reporttypes = ReportTypeResource::collection($reporttypes);
         return view('pages.report-type.index', compact('reporttypes'));
     }
+
+    // public function statusUdate(Request $request)
+    // {
+
+    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+    //         $status = $request->status == 0  ? "Inactive" : "Active";
+    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+    //     }
+    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    // }
     /**
      * Show the form for creating a new resource.
      */

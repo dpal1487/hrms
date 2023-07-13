@@ -54,48 +54,7 @@ export default defineComponent({
                 this.form,
             );
         },
-
-        filterFunction(value, index, arr) {
-            if (value === this.categories.data[index].id) {
-                // Removes the value from the original array
-                arr.splice(index, 1);
-                return true;
-            }
-            return false;
-        },
-        selectcategory(index) {
-            const x = this.checkbox.filter(this.filterFunction);
-            this.checkbox.push(this.categories.data[index].id);
-        },
-        selectAllcategories() {
-            const checkboxes = document.querySelectorAll('input[type=checkbox]');
-            const list = [];
-            checkboxes.forEach((cb) => { cb.checked = true; });
-            this.categories.data.map(function (value, key) {
-                list.push(value.id)
-            });
-            this.checkbox = list;
-        },
-
-        deletecategory(index) {
-
-            axios
-                .post("/categories/delete", { ids: this.checkbox })
-                .then((response) => {
-                    if (response.data.success == true) {
-                        toast.success(response.data.message);
-                        this.categories.data.splice(index, this.checkbox.length);
-                        return;
-                    }
-                    else {
-                        toast.error(response.data.message);
-                    }
-                }).finally({
-                    checkbox: false,
-                })
-        },
         async changeStatus(status, id) {
-            console.log(status);
             this.isLoading = true;
             await utils.changeStatus(route('category.status'), { id: id, status: status });
             this.isLoading = false;

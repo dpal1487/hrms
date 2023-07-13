@@ -136,10 +136,10 @@ class CategoryController extends Controller
                     CategoryBanner::where(['category_id' => $id])->update([
                         'image_id' => $request->banner_image,
                     ]);
-                    return response()->json(['success' => true, 'message' => 'Category ' . UpdateMessage()]);
+                    return response()->json(['success' => true, 'message' => UpdateMessage('Category')]);
                 }
             }
-            return response()->json(['success' => true, 'message' => 'Category ' . ErrorMessage()]);
+            return response()->json(['success' => true, 'message' => ErrorMessage('Category')]);
         }
     }
 
@@ -147,7 +147,7 @@ class CategoryController extends Controller
     {
         if (Category::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
-            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+            return response()->json(['message' => StatusMessage('Category', $status), 'success' => true]);
         }
         return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }

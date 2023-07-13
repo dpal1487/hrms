@@ -196,14 +196,27 @@ export default defineComponent({
                     </div>
                     <!--end:Menu item-->
                     <!--begin:Menu item-->
-                    <div class="menu-item fs-4 m-0">
-                        <!--begin:Menu link-->
-                        <Link v-for="(navigation, index) in navigations" :key="index" class="menu-link m-0"
-                            :href="navigation.link">
-                        <i :class="`${navigation.icon} mx-3 fs-2`"></i>
-                        {{ navigation.title }}
-                        </Link>
-                        <!--end:Menu link-->
+                   <div class="menu menu-column menu-rounded menu-sub-indention px-3"
+                        v-for="(menu, index) in $page.props.ziggy.menus.data" :key="index">
+                        <!--begin:Menu item-->
+                        <div class="menu-item pt-5">
+                            <!--begin:Menu content-->
+                            <div class="menu-content">
+                                <span class="menu-heading fw-bold text-uppercase fs-7">{{ menu.name }}</span>
+                            </div>
+                            <!--end:Menu content-->
+                        </div>
+                        <!--end:Menu item-->
+                        <!--begin:Menu item-->
+                        <div class="menu-item" v-for="(item, index) in menu.items" :key="index">
+                            <!--begin:Menu link-->
+                            <Link class="menu-link" :href="item.url">
+                            <i :class="item.icon_class"></i>
+                            <span class="ms-2">{{ item.title }}</span>
+                            </Link>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
                     </div>
                     <!--end:Menu item-->
                 </div>

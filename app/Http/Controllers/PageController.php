@@ -24,6 +24,15 @@ class PageController extends Controller
         // return $pages;
         return view('pages.pages.index', compact('pages'));
     }
+    // public function statusUdate(Request $request)
+    // {
+
+    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+    //         $status = $request->status == 0  ? "Inactive" : "Active";
+    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+    //     }
+    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    // }
 
     /**
      * Show the form for creating a new resource.

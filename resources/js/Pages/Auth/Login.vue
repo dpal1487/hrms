@@ -7,39 +7,6 @@
                 <!--begin::Title-->
                 <h1 class="text-dark fw-bolder mb-3">Sign In</h1>
                 <!--end::Title-->
-                <!--begin::Subtitle-->
-                <div class="text-gray-500 fw-semibold fs-6">
-                    Your Social Campaigns
-                </div>
-                <!--end::Subtitle--->
-            </div>
-            <div class="row g-3 mb-9">
-                <!--begin::Col-->
-                <div class="col-md-6">
-                    <!--begin::Google link--->
-                    <a href="/login/google"
-                        class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-                        <img alt="Logo" src="/assets/media/svg/social-logos/google.svg" class="h-15px me-3">
-                        Sign in with Google
-                    </a>
-                    <!--end::Google link--->
-                </div>
-                <!--end::Col-->
-
-                <!--begin::Col-->
-                <div class="col-md-6">
-                    <!--begin::Google link--->
-                    <a href="/login/facebook"
-                        class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-                        <img alt="Logo" src="/assets/media/svg/social-logos/facebook.svg"
-                            class="theme-light-show h-15px me-3">
-                        <img alt="Logo" src="/assets/media/svg/social-logos/facebook.svg"
-                            class="theme-dark-show h-15px me-3">
-                        Sign in with Facebook
-                    </a>
-                    <!--end::Google link--->
-                </div>
-                <!--end::Col-->
             </div>
             <!--begin::Heading-->
             <!--begin::Input group--->
