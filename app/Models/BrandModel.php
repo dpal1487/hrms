@@ -11,7 +11,6 @@ class BrandModel extends Model
     protected $fillable = [
         'name' , 'slug' , 'status', 'brand_id'
 ];
-
 public function brand()
 {
     return $this->belongTo(Brand::class , 'id' , 'brand_id');

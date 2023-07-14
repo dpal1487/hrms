@@ -7,14 +7,18 @@ use App\Models\Plan;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Resources\PlanResource;
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Razorpay\Api\Api;
 
 class PlanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private $api;
+    function __construct()
+    {
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+    }
     public function index(Request $request)
     {
         $plans = new Plan();
@@ -75,10 +79,16 @@ class PlanController extends Controller
                 'message' => $validator->errors()->first(),
             ]);
         }
+        $response = $this->api->plan->create(
+            array(
+                'period' => 'weekly', 'interval' => 1,
+                'item' => array('name' => $request->nam, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
+            )
+        );
         $plan = Plan::create([
             'name' => $request->name,
             'price' => $request->price,
-            'plan_id' => $request->plan_id,
+            'plan_id' => $response->id,
             'category_id' => $request->category,
             'no_of_ads' => $request->no_of_ads,
             'currency' => $request->currency,
@@ -87,6 +97,7 @@ class PlanController extends Controller
             'sort_description' => $request->sort_description,
             'description' => json_encode($request->plan_descriptions),
         ]);
+       
 
         if ($plan) {
             return redirect()->route('plans.index')->with('flash', ['success' => true, 'message' => CreateMessage('Plan')]);

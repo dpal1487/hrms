@@ -5,7 +5,6 @@
         Dashboard
       </h2>
     </template>
-
     <welcome />
   </app-layout>
 </template>

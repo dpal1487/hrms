@@ -196,7 +196,7 @@ export default defineComponent({
                     </div>
                     <!--end:Menu item-->
                     <!--begin:Menu item-->
-                   <div class="menu menu-column menu-rounded menu-sub-indention px-3"
+                    <div class="menu menu-column menu-rounded menu-sub-indention px-3"
                         v-for="(menu, index) in $page.props.ziggy.menus.data" :key="index">
                         <!--begin:Menu item-->
                         <div class="menu-item pt-5">

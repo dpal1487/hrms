@@ -2,23 +2,17 @@
 
 if (!function_exists('SuccessMessage')) {
 
-    /**
-     * description
-     *
-     * @param
-     * @return
-     */
-    function CreateMessage()
+    function CreateMessage($message)
     {
-        return "Successfully created.";
+        return "$message Successfully created.";
     }
     function UpdateMessage($message)
     {
         return "$message Successfully updated.";
     }
-    function DeleteMessage()
+    function DeleteMessage($message)
     {
-        return "Successfully deleted.";
+        return "$message Successfully deleted.";
     }
 
     function ErrorMessage()
@@ -27,6 +21,6 @@ if (!function_exists('SuccessMessage')) {
     }
     function StatusMessage($message, $status)
     {
-        return "$message status update was successful $status";
+        return " Your $message status update was successfully $status";
     }
 };

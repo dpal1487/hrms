@@ -62,6 +62,14 @@ Route::post('login', [LoginController::class, 'login'])->name('user.login');
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
+    Route::controller(ImageController::class)->group(function () {
+        Route::post('category/thumbnail', 'categoryThumbnail')->name('category.thumbnail');
+        Route::post('/upload/banner', 'bannerImage')->name('upload.banner');
+        Route::post('/upload/brand', 'uploadBrand')->name('upload.brand');
+        Route::post('/upload/faqs_category', 'uploadFAQsImage')->name('upload.faqs_category');
+        Route::post('/upload/faq', 'uploadFaq');
+    });
+
     Route::controller(UserController::class)->group(function () {
         Route::get('/users', 'index')->name('users.index');
         Route::group(['prefix' => 'user'], function () {
@@ -151,23 +159,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
-    Route::controller(RuleController::class)->group(function () {
-        Route::group(['prefix' => 'rule'], function () {
-            Route::get('/', 'index')->name('rule.index');
-            Route::post('status', 'statusUdate')->name('rule.status');
-            Route::get('/create', 'create')->name('rule.create');
-            Route::post('/store', 'store')->name('rule.store');
-            Route::get('{id}/edit', 'edit')->name('rule.edit');
-            Route::post('{id}/update', 'update')->name('rule.update');
-            Route::delete('{id}/destroy', 'destroy')->name('rule.destroy');
-        });
-    });
-
-
-
     Route::controller(BrandController::class)->group(function () {
+        Route::get('brands', 'index')->name('brands.index');
         Route::group(['prefix' => 'brand'], function () {
-            Route::get('/', 'index')->name('brand.index');
             Route::post('status', 'statusUdate')->name('brand.status');
             Route::get('/create', 'create')->name('brand.create');
             Route::post('/store', 'store')->name('brand.store');
@@ -180,18 +174,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     Route::controller(BrandModelController::class)->group(function () {
         Route::group(['prefix' => 'brand-model'], function () {
-            Route::get('/', 'index')->name('brand-model.index');
-            Route::get('/create', 'create')->name('brand-model.create');
+            Route::post('status', 'statusUdate')->name('brand-model.status');
             Route::post('/store', 'store')->name('brand-model.store');
-            Route::get('{id}/edit', 'edit')->name('brand-model.edit');
             Route::post('{id}/update', 'update')->name('brand-model.update');
             Route::delete('{id}/destroy', 'destroy')->name('brand-model.destroy');
         });
     });
 
     Route::controller(CouponController::class)->group(function () {
+        Route::get('coupons', 'index')->name('coupons.index');
         Route::group(['prefix' => 'coupon'], function () {
-            Route::get('/', 'index')->name('coupon.index');
             Route::get('/create', 'create')->name('coupon.create');
             Route::post('/store', 'store')->name('coupon.store');
             Route::get('{id}', 'show')->name('coupon.show');
@@ -201,33 +193,29 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
-    Route::controller(ImageController::class)->group(function () {
-        Route::post('category/thumbnail', 'categoryThumbnail')->name('category.thumbnail');
-        Route::post('/upload/banner', 'bannerImage')->name('upload.banner');
-        Route::post('/upload/brand', 'uploadBrand');
-        Route::post('/upload/faq', 'uploadFaq');
-    });
+
 
     Route::controller(FaqsCategoryController::class)->group(function () {
-        Route::group(['prefix' => 'faqs'], function () {
-            Route::get('/', 'index')->name('faqs.index');
-            Route::get('/create', 'create')->name('faqs.create');
-            Route::post('/store', 'store')->name('faqs.store');
-            Route::get('{id}', 'show')->name('faqs.show');
-            Route::get('{id}/edit', 'edit')->name('faqs.edit');
-            Route::post('{id}/update', 'update')->name('faqs.update');
-            Route::delete('{id}/destroy', 'destroy')->name('faqs.destroy');
+        Route::get('faqs-categories', 'index')->name('faqs-categories.index');
+        Route::group(['prefix' => 'faqs-category'], function () {
+            Route::post('status', 'statusUdate')->name('faqs-category.status');
+            Route::get('/create', 'create')->name('faqs-category.create');
+            Route::post('/store', 'store')->name('faqs-category.store');
+            Route::get('{id}', 'show')->name('faqs-category.show');
+            Route::get('{id}/edit', 'edit')->name('faqs-category.edit');
+            Route::post('{id}/update', 'update')->name('faqs-category.update');
+            Route::delete('{id}/destroy', 'destroy')->name('faqs-category.destroy');
         });
     });
 
     Route::controller(FaqController::class)->group(function () {
-        Route::group(['prefix' => 'faqs-model'], function () {
-            Route::get('/', 'index')->name('faqs-model.index');
-            Route::get('/create', 'create')->name('faqs-model.create');
-            Route::post('/store', 'store')->name('faqs-model.store');
-            Route::get('{id}/edit', 'edit')->name('faqs-model.edit');
-            Route::post('{id}/update', 'update')->name('faqs-model.update');
-            Route::delete('{id}/destroy', 'destroy')->name('faqs-model.destroy');
+        Route::group(['prefix' => 'faqs'], function () {
+            Route::get('/', 'index')->name('faqs.index');
+            Route::get('create', 'create')->name('faqs.create');
+            Route::post('store', 'store')->name('faqs.store');
+            Route::get('{id}/edit', 'edit')->name('faqs.edit');
+            Route::post('{id}/update', 'update')->name('faqs.update');
+            Route::delete('{id}/destroy', 'destroy')->name('faqs.destroy');
         });
     });
 
@@ -244,8 +232,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(PageController::class)->group(function () {
+        Route::get('pages', 'index')->name('pages.index');
         Route::group(['prefix' => 'page'], function () {
-            Route::get('/', 'index')->name('page.index');
+            Route::post('status', 'statusUdate')->name('page.status');
             Route::get('/create', 'create')->name('page.create');
             Route::post('/store', 'store')->name('page.store');
             Route::get('{id}/view', 'show')->name('page.view');
@@ -263,14 +252,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(ReportTypeController::class)->group(function () {
-        Route::group(['prefix' => 'report-types'], function () {
-            Route::get('/', 'index')->name('report-types.index');
-            Route::get('/create', 'create')->name('report-types.create');
-            Route::post('/store', 'store')->name('report-types.store');
-            Route::get('{id}/view', 'show')->name('report-types.view');
-            Route::get('{id}/edit', 'edit')->name('report-types.edit');
-            Route::post('{id}/update', 'update')->name('report-types.update');
-            Route::delete('{id}/destroy', 'destroy')->name('report-types.destroy');
+        Route::get('report-types', 'index')->name('report-types.index');
+        Route::group(['prefix' => 'report-type'], function () {
+            Route::get('/create', 'create')->name('report-type.create');
+            Route::post('/store', 'store')->name('report-type.store');
+            Route::get('{id}/view', 'show')->name('report-type.view');
+            Route::get('{id}/edit', 'edit')->name('report-type.edit');
+            Route::post('{id}/update', 'update')->name('report-type.update');
+            Route::delete('{id}/destroy', 'destroy')->name('report-type.destroy');
         });
     });
     Route::controller(NotificationTypeController::class)->group(function () {
@@ -347,6 +336,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('{id}/edit', 'edit')->name('menuItem.edit');
             Route::post('{id}/update', 'update')->name('menuItem.update');
             Route::delete('delete/{id}', 'destroy')->name('menuItem.destroy');
+        });
+    });
+
+    Route::controller(RuleController::class)->group(function () {
+        Route::group(['prefix' => 'rule'], function () {
+            Route::get('/', 'index')->name('rule.index');
+            Route::post('status', 'statusUdate')->name('rule.status');
+            Route::get('/create', 'create')->name('rule.create');
+            Route::post('/store', 'store')->name('rule.store');
+            Route::get('{id}/edit', 'edit')->name('rule.edit');
+            Route::post('{id}/update', 'update')->name('rule.update');
+            Route::delete('{id}/destroy', 'destroy')->name('rule.destroy');
         });
     });
     // admin profile page

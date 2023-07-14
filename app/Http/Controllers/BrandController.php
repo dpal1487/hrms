@@ -8,8 +8,9 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Image as CategoryImage;
 use App\Http\Resources\BrandResource;
+use App\Http\Resources\CategoryResource;
 use Illuminate\Support\Str;
-
+use Inertia\Inertia;
 
 class BrandController extends Controller
 {
@@ -19,32 +20,37 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         $brands = new Brand();
-        if($request->q){
-            $brands = $brands->where('name','like',"%{$request->q}%");
+        if (!empty($request->q)) {
+            $brands = $brands->where('name', 'like', "%{$request->q}%")->where('description', 'like', "%{$request->q}%")->orWhereHas('category', function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->q}%");
+            });
         }
-        $brands = $brands->paginate(10)->onEachSide(1)->appends(request()->query());
-        $brands = BrandResource::collection($brands);
+        if (!empty($request->s) || ($request->s != '')) {
+            $brands = $brands->where('status', $request->s);
+        }
         // return $brands;
-        return view('pages.brand.index' ,compact('brands'));
+        return Inertia::render('Brands/Index', [
+            'brands' => BrandResource::collection($brands->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
     }
-    // public function statusUdate(Request $request)
-    // {
+    public function statusUdate(Request $request)
+    {
 
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
+        if (Brand::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => StatusMessage('Brand', $status), 'success' => true]);
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $categories = Category::get();
-        // return $categories;
-        return view('pages.brand.add' , [ 'categories' => $categories ]);
+        return Inertia::render('Brands/Form', [
+            'categories' => CategoryResource::collection(Category::get())
+        ]);
     }
 
     /**
@@ -61,40 +67,46 @@ class BrandController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success'=>false,
+
+            return redirect()->back()->withErrors([
+                'success' => false,
                 'message' => $validator->errors()->first()
-                    ],400);
+            ]);
         }
-        // dd($request);
-        $bran = Brand::create([
+        $brand = Brand::create([
             'name' => $request->name,
             'description' => $request->description,
             'category_id' => $request->category,
-            'status' =>$request->status,
-            'image_id' =>$request->brand_image,
+            'status' => $request->status,
+            'image_id' => $request->brand_image,
         ]);
 
-        return response()->json(['success'=>true,'message'=>'Brand created successfully']);
+        if ($brand) {
+            return redirect('brands')->with('flash', [
+                'success' => true,
+                'message' => CreateMessage('Brand')
+            ]);
+        }
+        return redirect('brands')->with('flash', [
+            'success' => false,
+            'message' => ErrorMessage()
+        ]);
     }
 
 
     public function show($id)
     {
-        $brand = Brand::find($id);
-        $brand = new BrandResource($brand);
-
-        // return $brand;
-        return view('pages.brand.view' , [ 'brand' => $brand ] );
+        return Inertia::render('Brands/Show', [
+            'brand' => new BrandResource(Brand::find($id)),
+        ]);
     }
 
-    public function edit( $id)
+    public function edit($id)
     {
-        $categories = Category::get();
-        $brand = Brand::find($id);
-        $brand =new BrandResource($brand);
-        // return $brand;
-        return view('pages.brand.edit' , [ 'brand' => $brand,'categories'=>$categories ]);
+        return Inertia::render('Brands/Form', [
+            'categories' => CategoryResource::collection(Category::get()),
+            'brand' => new BrandResource(Brand::find($id)),
+        ]);
     }
 
     /**
@@ -105,29 +117,47 @@ class BrandController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'category' => 'required',
-            'brand_image' => 'required',
             'description' => 'required',
             'status' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                        'error' => $validator->errors()->all()
-                    ]);
-        }
-
-        $brand = Brand::find($id);
-        if($brand){
-            $brand = Brand::where(['id'=>$id])->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'description' => $request->description,
-            'category_id' => $request->category,
-            'status' =>$request->status,
-            'image_id' =>$request->brand_image,
+                'error' => $validator->errors()->all()
             ]);
+        }
+        $brand = Brand::find($id);
+        if ($brand) {
+            if ($request->brand_image != '') {
+                $brand = Brand::where(['id' => $id])->update([
+                    'name' => $request->name,
+                    'slug' => Str::slug($request->name),
+                    'description' => $request->description,
+                    'category_id' => $request->category,
+                    'status' => $request->status,
+                    'image_id' => $request->brand_image,
+                ]);
+            } else {
+                $brand = Brand::where(['id' => $id])->update([
+                    'name' => $request->name,
+                    'slug' => Str::slug($request->name),
+                    'description' => $request->description,
+                    'category_id' => $request->category,
+                    'status' => $request->status,
+                    'image_id' => $brand->image_id,
+                ]);
+            }
 
-            return response()->json(['success'=>true,'message'=>'Brand Updated successfully']);
+            if ($brand) {
+                return redirect('brands')->with('flash', [
+                    'success' => true,
+                    'message' => UpdateMessage('Brand')
+                ]);
+            }
+            return redirect('brands')->with('flash', [
+                'success' => false,
+                'message' => ErrorMessage()
+            ]);
         }
     }
 
@@ -137,11 +167,11 @@ class BrandController extends Controller
     public function destroy($id)
     {
         $brand = Brand::find($id);
-        $brand =new BrandResource($brand);
+        $brand = new BrandResource($brand);
         // dd($category->image);
-        if($brand->delete()){
-            return response()->json(['success'=>true,'message'=>'Brand has been deleted successfully.']);
+        if ($brand->delete()) {
+            return response()->json(['success' => true, 'message' => 'Brand has been deleted successfully.']);
         }
-        return response()->json(['success'=>false,'message'=>'Opps something went wrong!'],400);
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Coupon;
 use Illuminate\Http\Request;
 use App\Http\Resources\CouponResource;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class CouponController extends Controller
 {
@@ -15,38 +16,25 @@ class CouponController extends Controller
     public function index(Request $request)
     {
         $coupons = new Coupon();
-        if ($request->q) {
-            $coupons = $coupons->where('code', 'like', "%{$request->q}%");
+        if (!empty($request->q)) {
+            $coupons = $coupons->where('code', 'like', "%{$request->q}%")
+                ->orWhere('descriptions', 'like', "%{$request->q}%")
+                ->orWhere('type', 'like', "%{$request->q}%")
+                ->orWhere('discount', 'like', "%{$request->q}%");
         }
-        $coupons = $coupons->paginate(10)->onEachSide(1)->appends(request()->query());
-        $coupons = CouponResource::collection($coupons);
-        return view('pages.coupons.index', compact('coupons'));
+        return Inertia::render('Coupons/Index', [
+            'coupons' => CouponResource::collection($coupons->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
     }
-    // public function statusUdate(Request $request)
-    // {
-
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('pages.coupons.add');
+        return Inertia::render('Coupons/Form');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required',
-            'expires_in_days' => 'required',
+            'expires' => 'required',
             'type' => 'required',
             'discount' => 'required',
             'description' => 'required',
@@ -64,40 +52,34 @@ class CouponController extends Controller
 
         $coupon = Coupon::create([
             'code' => $request->code,
-            'expires_at' => $request->expires_in_days,
+            'expires_at' => $request->expires,
             'type' => $request->type,
             'discount' => $request->discount,
             'descriptions' => $request->description,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Coupon created successfully']);
+        if ($coupon) {
+
+            return redirect()->route('coupons.index')->with('flash', ['success' => true, 'message' => CreateMessage('Coupon')]);
+        }
+        return redirect()->route('coupons')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Coupon $coupon)
+    public function edit($id)
     {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Coupon $coupon, $id)
-    {
-        $coupon = Coupon::find($id);
-        $coupon = new CouponResource($coupon);
-        return view('pages.coupons.edit', ['coupon' => $coupon]);
+        return Inertia::render('Coupons/Form', [
+            'coupon' => new CouponResource(Coupon::find($id))
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Coupon $coupon , $id)
+    public function update(Request $request, Coupon $coupon, $id)
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required',
-            'expires_in_days' => 'required',
+            'expires' => 'required',
             'type' => 'required',
             'discount' => 'required',
             'description' => 'required',
@@ -112,20 +94,22 @@ class CouponController extends Controller
         if ($coupon) {
             $coupon = Coupon::where(['id' => $id])->update([
                 'code' => $request->code,
-                'expires_at' => $request->expires_in_days,
+                'expires_at' => $request->expires,
                 'type' => $request->type,
                 'discount' => $request->discount,
                 'descriptions' => $request->description,
             ]);
-
-            return response()->json(['success' => true, 'message' => 'Coupon Updated successfully']);
+            if ($coupon) {
+                return redirect()->route('coupons.index')->with('flash', ['success' => true, 'message' => UpdateMessage('Coupon')]);
+            }
+            return redirect()->route('coupons.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Coupon $coupon , $id)
+    public function destroy(Coupon $coupon, $id)
     {
         $coupon = Coupon::find($id);
         $coupon = new CouponResource($coupon);

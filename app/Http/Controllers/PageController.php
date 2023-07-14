@@ -2,50 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MetaResource;
 use App\Models\Page;
 use App\Models\Meta;
 use Illuminate\Http\Request;
 use App\Http\Resources\PageResource;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class PageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-     public function index(Request $request)
+    public function index(Request $request)
     {
         $pages = new Page();
-        if ($request->q) {
-            $pages = $pages->where('title', 'like', "%{$request->q}%");
+        if (!empty($request->q)) {
+            $pages = $pages->where('title', 'like', "%{$request->q}%")
+                ->orWhere('heading', 'like', "%{$request->q}%")
+                ->orWhereHas('meta', function ($query) use ($request) {
+                    $query->where('tag', 'like', "%{$request->q}%");
+                });
         }
-        $pages = $pages->paginate(10)->onEachSide(1)->appends(request()->query());
-        $pages = PageResource::collection($pages);
-        // return $pages;
-        return view('pages.pages.index', compact('pages'));
-    }
-    // public function statusUdate(Request $request)
-    // {
+        if (!empty($request->s) || ($request->s != '')) {
+            $pages = $pages->where('status', $request->s);
+        }
 
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
+        return Inertia::render('Pages/Index', [
+            'pages' => PageResource::collection($pages->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
+    }
+    public function statusUdate(Request $request)
+    {
+        if (Page::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $metas = Meta::get();
-        return view('pages.pages.add',['metas' => $metas]);
+        return Inertia::render('Pages/Form', [
+            'metas' => MetaResource::collection(Meta::get())
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -56,12 +62,11 @@ class PageController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(
+            return redirect()->back()->withErrors(
                 [
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ],
-                400,
             );
         }
 
@@ -72,34 +77,30 @@ class PageController extends Controller
             'status' => $request->status,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Page created successfully']);
+        if ($page) {
+            return redirect()->route('pages.index')->with('flash', [
+                'success' => true,
+                'message' =>  CreateMessage('Page')
+            ]);
+        } else {
+            return redirect()->back()->with('flash', [
+                'success' => false,
+                'message' => ErrorMessage()
+            ]);
+        }
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Page $page , $id)
+    public function edit($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Page $page , $id)
-    {
-        $metas = Meta::get();
-
-        $page = Page::find($id);
-        $page = new PageResource($page);
-        // return $page;
-        return view('pages.pages.edit', ['page' => $page , 'metas' => $metas]);
+        return Inertia::render('Pages/Form', [
+            'page' => new PageResource(Page::find($id)),
+            'metas' => MetaResource::collection(Meta::get())
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Page $page ,$id)
+    public function update(Request $request, Page $page, $id)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -114,27 +115,33 @@ class PageController extends Controller
             ]);
         }
         $page = Page::find($id);
-        if ($page) {
-            $page = Page::where(['id' => $id])->update([
-                'title' => $request->title,
+
+        $page = Page::where(['id' => $id])->update([
+            'title' => $request->title,
             'heading' => $request->heading,
             'meta_id' => $request->meta,
             'status' => $request->status,
-            ]);
+        ]);
 
-            return response()->json(['success' => true, 'message' => 'Page Updated successfully']);
+        if ($page) {
+            return redirect()->route('pages.index')->with('flash', [
+                'success' => true,
+                'message' =>  UpdateMessage('Page')
+            ]);
+        } else {
+            return redirect()->back()->with('flash', [
+                'success' => false,
+                'message' => ErrorMessage()
+            ]);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Page $page , $id)
+
+    public function destroy(Page $page, $id)
     {
         $page = Page::find($id);
-        $page = new PageResource($page);
         if ($page->delete()) {
-            return response()->json(['success' => true, 'message' => 'Page has been deleted successfully.']);
+            return response()->json(['success' => true, 'message' => DeleteMessage('Page')]);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

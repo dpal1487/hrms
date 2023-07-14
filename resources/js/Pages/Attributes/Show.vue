@@ -124,7 +124,8 @@ export default defineComponent({
                     </div>
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
 
-                        <button class="btn btn-primary m-1 btn-sm" v-if="!isEdit" @click="this.isAdd = this.isAdd ? false : true , this.form = {}"><i
+                        <button class="btn btn-primary m-1 btn-sm" v-if="!isEdit"
+                            @click="this.isAdd = this.isAdd ? false : true, this.form = {}"><i
                                 class="bi bi-plus-circle"></i>Add New
                         </button>
                     </div>

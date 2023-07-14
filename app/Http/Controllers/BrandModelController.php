@@ -10,6 +10,15 @@ use Illuminate\Support\Str;
 
 class BrandModelController extends Controller
 {
+    public function statusUdate(Request $request)
+    {
+        if (BrandModel::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => StatusMessage('Brand Model', $status), 'success' => true]);
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -18,12 +27,11 @@ class BrandModelController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(
+            return redirect()->back()->withErrors(
                 [
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ],
-                400,
             );
         }
 
@@ -31,23 +39,14 @@ class BrandModelController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'status' => $request->status,
-            'brand_id' =>$request->brand_id,
+            'brand_id' => $request->brand_id,
         ]);
-
-        return response()->json(['success' => true, 'message' => 'Brand Model created successfully']);
-    }
-
-    public function edit(string $id)
-    {
-        $brandmodel = BrandModel::find($id);
         if ($brandmodel) {
-            return response()->json($brandmodel);
+            return redirect()->route('brand.show', $request->brand_id)->with('flash', ['success' => true, 'message' => CreateMessage('Brand Model')]);
         }
+        return redirect()->route('brand.show')->with('flash', ['success' => true, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
@@ -65,14 +64,16 @@ class BrandModelController extends Controller
             );
         }
 
-        $brandmodel = BrandModel::where(['id' => $id])->update([
+        $brandmodel = BrandModel::where(['id' => $request->id])->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'status' => $request->status,
-            'brand_id' =>$request->brand_id,
+            'brand_id' => $request->brand_id,
         ]);
-
-        return response()->json(['success' => true, 'message' => 'Brand Model updated successfully']);
+        if ($brandmodel) {
+            return redirect()->route('brand.show', $request->brand_id)->with('flash', ['success' => true, 'message' => UpdateMessage('Brand Model')]);
+        }
+        return redirect()->route('brand.show')->with('flash', ['success' => true, 'message' => ErrorMessage()]);
     }
 
     /**

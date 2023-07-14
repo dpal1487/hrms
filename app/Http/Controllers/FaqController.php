@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Image as CategoryImage;
 use App\Http\Resources\FAQsResource;
 use Illuminate\Support\Str;
+
 class FaqController extends Controller
 {
     /**
@@ -19,106 +20,82 @@ class FaqController extends Controller
     {
 
         $faqs = new Faq();
-        if($request->q){
-            $faqs = $faqs->where('title','like',"%{$request->q}%");
+        if ($request->q) {
+            $faqs = $faqs->where('title', 'like', "%{$request->q}%");
         }
         $faqs = $faqs->paginate(10)->onEachSide(1)->appends(request()->query());
         $faqs = FAQsResource::collection($faqs);
         // return $faqs;
-        return view('pages.faqs.index' ,compact('faqs'));
+        return view('pages.faqs.index', compact('faqs'));
     }
-    // public function statusUdate(Request $request)
-    // {
-
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
-
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'actical' => 'required',
-            'faq_category' =>'required',
+            'artical' => 'required',
+            'faq_category' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success'=>false,
-                'message' => $validator->errors()->first()
-                    ],400);
+            return redirect()->route('faqs-category.show', $request->faq_category)->withErrors([
+                'success' => false,
+                'message' => $validator->errors()->all()
+            ]);
         }
         // dd($request);
-        $bran = Faq::create([
+        $faq = Faq::create([
             'title' => $request->title,
-            'artical' => $request->actical,
+            'artical' => $request->artical,
             'category_id' => $request->faq_category,
         ]);
 
-        return response()->json(['success'=>true,'message'=>'FAQs created successfully']);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Faq $faq , $id)
-    {
-
-        $faq = Faq::find($id);
-        if($faq){
-            return response()->json($faq);
+        if ($faq) {
+            return redirect()->route('faqs-category.show', $request->faq_category)->with('flash', ['success' => true, 'message' => CreateMessage('FAQs')]);
         }
-
+        return redirect()->route('faqs-category.show', $request->faq_category)->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Faq $faq , $id)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'actical' => 'required',
-            'faq_category' =>'required',
+            'artical' => 'required',
+            'faq_category' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                        'error' => $validator->errors()->all()
-                    ]);
+            return redirect()->route('faqs-category.show', $request->faq_category)->withErrors([
+                'success' => false,
+                'message' => $validator->errors()->all()
+            ]);
         }
 
         $faq = Faq::find($id);
-        if($faq){
-            $faq = Faq::where(['id'=>$id])->update([
+        if ($faq) {
+            $faq = Faq::where(['id' => $id])->update([
                 'title' => $request->title,
-            'artical' => $request->actical,
-            'category_id' => $request->faq_category,
+                'artical' => $request->artical,
+                'category_id' => $request->faq_category,
             ]);
-
-            return response()->json(['success'=>true,'message'=>'FAQs Updated successfully']);
+            if ($faq) {
+                return redirect()->route('faqs-category.show', $request->faq_category)->with('flash', ['success' => true, 'message' => UpdateMessage('FAQs')]);
+            }
+            return redirect()->route('faqs-category.show', $request->faq_category)->with('flash', ['success' => false, 'message' => ErrorMessage()]);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Faq $faq ,$id)
+    public function destroy(Faq $faq, $id)
     {
         $faq = Faq::find($id);
         // $brand =new BrandResource($brand);
         // dd($category->image);
-        if($faq->delete()){
-            return response()->json(['success'=>true,'message'=>'FAQs has been deleted successfully.']);
+        if ($faq->delete()) {
+            return response()->json(['success' => true, 'message' => 'FAQs has been deleted successfully.']);
         }
-        return response()->json(['success'=>false,'message'=>'Opps something went wrong!'],400);
+        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }
 }
