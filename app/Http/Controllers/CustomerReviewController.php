@@ -6,7 +6,7 @@ use App\Models\CustomerReview;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomerReviewResource;
-
+use Inertia\Inertia;
 
 class CustomerReviewController extends Controller
 {
@@ -16,23 +16,29 @@ class CustomerReviewController extends Controller
     public function index(Request $request)
     {
         $reviews = new CustomerReview();
-        if($request->q){
-            $reviews = $reviews->where('name','like',"%{$request->q}%");
+        if (!empty($request->q)) {
+            $reviews = $reviews->whereHas('user', function ($user) use ($request) {
+                $user->where('first_name', 'like', "%{$request->q}%")->orWhere('first_name', 'like', "%{$request->q}%");
+            })
+                ->orWhereHas('review', function ($review) use ($request) {
+                    $review->where('title', 'like', "%{$request->q}%")->orWhere('content', 'like', "%{$request->q}%");
+                });
         }
-        $reviews = $reviews->paginate(10)->onEachSide(1)->appends(request()->query());
-        $reviews = CustomerReviewResource::collection($reviews);
-        // return $customer_reviews;
-        return view('pages.customer-review.index' ,compact('reviews'));
+        return Inertia::render('CustomerReviews/Index', [
+            'customer_reviews' => CustomerReviewResource::collection($reviews->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
     }
-    // public function statusUdate(Request $request)
-    // {
 
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
+    public function statusUdate(Request $request)
+    {
+
+        if (CustomerReview::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => StatusMessage('Customer Review', $status), 'success' => true]);
+
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -40,7 +46,6 @@ class CustomerReviewController extends Controller
     public function create()
     {
         return view('pages.customer-review.add');
-
     }
 
     /**

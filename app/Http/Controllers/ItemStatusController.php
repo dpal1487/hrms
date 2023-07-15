@@ -5,44 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\ItemStatus;
 use App\Http\Resources\ItemStatusesResource;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ItemStatusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $ItemStatuss = new ItemStatus();
-        if ($request->q) {
-            $ItemStatuss = $ItemStatuss->where('label', 'like', "%{$request->q}%");
+        $itemstatuss = new ItemStatus();
+        if (!empty($request->q)) {
+            $itemstatuss = $itemstatuss->where('label', 'like', "%{$request->q}%")->orWhere('text', 'like', "%{$request->q}%")->orWhere('description', 'like', "%{$request->q}%");
         }
-        $ItemStatuss = $ItemStatuss->paginate(10)->onEachSide(1)->appends(request()->query());
-        $ItemStatuss = ItemStatusesResource::collection($ItemStatuss);
-        return view('pages.item-status.index', compact('ItemStatuss'));
+        return Inertia::render('ItemStatus/Index', [
+            'itemstatuss' => ItemStatusesResource::collection($itemstatuss->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
     }
-    // public function statusUdate(Request $request)
-    // {
 
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('pages.item-status.add');
+        return Inertia::render('ItemStatus/Form');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -52,12 +34,12 @@ class ItemStatusController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(
+
+            return redirect()->back()->withErrors(
                 [
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ],
-                400,
             );
         }
 
@@ -66,31 +48,19 @@ class ItemStatusController extends Controller
             'label' => $request->label,
             'description' => $request->description,
         ]);
-
-        return response()->json(['success' => true, 'message' => 'Item Status created successfully']);
+        if ($ItemStatus) {
+            return redirect()->route('item-status.index')->with('flash', ['success' => true, 'message' => CreateMessage('Notification Type')]);
+        }
+        return redirect()->route('item-status.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ItemStatus $itemStatus)
+    public function edit($id)
     {
-        //
+        return Inertia::render('ItemStatus/Form', [
+            'item_status' => new ItemStatusesResource(ItemStatus::find($id))
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ItemStatus $itemStatus, $id)
-    {
-        $ItemStatus = ItemStatus::find($id);
-        $ItemStatus = new ItemStatusesResource($ItemStatus);
-        return view('pages.item-status.edit', ['ItemStatus' => $ItemStatus]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, ItemStatus $itemStatus, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -100,9 +70,12 @@ class ItemStatusController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->all(),
-            ]);
+            return redirect()->back()->withErrors(
+                [
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ],
+            );
         }
         $ItemStatus = ItemStatus::find($id);
         if ($ItemStatus) {
@@ -112,19 +85,16 @@ class ItemStatusController extends Controller
                 'description' => $request->description,
             ]);
 
-            return response()->json(['success' => true, 'message' => 'Item Status Updated successfully']);
+            return redirect()->route('item-status.index')->with('flash', ['success' => true, 'message' => CreateMessage('Notification Type')]);
         }
+        return redirect()->route('item-status.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ItemStatus $itemStatus, $id)
+    public function destroy($id)
     {
         $ItemStatus = ItemStatus::find($id);
-        $ItemStatus = new ItemStatusesResource($ItemStatus);
         if ($ItemStatus->delete()) {
-            return response()->json(['success' => true, 'message' => 'Item Status has been deleted successfully.']);
+            return response()->json(['success' => true, 'message' => DeleteMessage('Notification Type')]);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

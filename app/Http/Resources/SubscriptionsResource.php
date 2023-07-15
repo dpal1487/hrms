@@ -15,14 +15,15 @@ class SubscriptionsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' =>$this->id,
+            'id' => $this->id,
             'payment_id' => $this->payment_id,
             'quantity' => $this->quantity,
             'status' => $this->status,
-            'user' =>$this->user,
-            'plan' =>$this->plan,
-            'order' =>$this->order,
-            // 'payment' =>$this->payment,
+            'user' => $this->user,
+            'plan' => $this->plan,
+            'order_id' => $this->order_id,
+            'start_at' => date("Y-m-d H:i:s", $this->start_at),
+            'end_at' => date("Y-m-d H:i:s", $this->end_at),
         ];
     }
 }

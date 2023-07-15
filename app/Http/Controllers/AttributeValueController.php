@@ -29,9 +29,10 @@ class AttributeValueController extends Controller
 
         if (AttributeValue::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
-            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+            return response()->json(['message' => StatusMessage('Attribute Value', $status), 'success' => true]);
+
         }
-        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+        return response()->json(['message' => ErrorMessage(), 'success' => false]);
     }
     public function store(Request $request)
     {
@@ -56,7 +57,7 @@ class AttributeValueController extends Controller
         if ($attrebutevalue) {
             return redirect("/attribute/$request->attribute")->with('flash', [
                 'success' => true,
-                'message' => 'Attribute Value ' . CreateMessage()
+                'message' =>   CreateMessage('Attribute Value ')
             ]);
         }
         return redirect("/attribute/$request->attribute")->with('flash', [
@@ -65,17 +66,7 @@ class AttributeValueController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $attributeValue = AttributeValue::find($id);
@@ -112,7 +103,7 @@ class AttributeValueController extends Controller
         if ($attrebutevalue) {
             return redirect("/attribute/$id")->with('flash', [
                 'success' => true,
-                'message' => 'Attribute Value ' . UpdateMessage()
+                'message' => UpdateMessage('Attribute Value')
             ]);
         }
         return redirect("/attribute/$id")->with('flash', [
@@ -126,11 +117,11 @@ class AttributeValueController extends Controller
      */
     public function destroy(string $id)
     {
-                $attributeValue = AttributeValue::find($id);
+        $attributeValue = AttributeValue::find($id);
 
         if ($attributeValue->delete()) {
-            return response()->json(['success' => true, 'message' => 'Attribute Value has been ' .DeleteMessage()]);
+            return response()->json(['success' => true, 'message' =>  DeleteMessage('Attribute Value ')]);
         }
-        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+        return response()->json(['success' => false, 'message' => ErrorMessage()], 400);
     }
 }

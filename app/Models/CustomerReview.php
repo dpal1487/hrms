@@ -10,19 +10,19 @@ class CustomerReview extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','content','seen','rating','ip_address'
-];
+        'user_id', 'content', 'seen', 'rating', 'ip_address', 'review_id'
+    ];
 
     public function user()
     {
-        return $this->hasOne(User::class , 'id' , 'user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
     public function reviews()
     {
-        return $this->hasMany(Review::class , 'id' , 'review_id');
+        return $this->hasMany(Review::class, 'id', 'review_id');
     }
     public function review()
     {
-        return $this->hasOne(Review::class , 'id' , 'review_id');
+        return $this->hasOne(Review::class, 'id', 'review_id');
     }
 }

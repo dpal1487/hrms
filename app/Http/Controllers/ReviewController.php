@@ -8,6 +8,7 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Http\Resources\ItemResource;
 use App\Http\Resources\ItemReviewsResource;
+use Inertia\Inertia;
 
 class ReviewController extends Controller
 {
@@ -16,14 +17,19 @@ class ReviewController extends Controller
      */
 
     public function reviews($id)
-     {
-         $title = "Item Reviews";
-         $item = Item::where(['id' => $id])->first();
+    {
+        $title = "Item Reviews";
+        $item = Item::where(['id' => $id])->first();
 
         //  return new ItemReviewsResource($item);
 
-         return view('pages.item.reviews' , ['title' => $title ,'itemreview' =>new ItemReviewsResource($item)]);
-     }
+        return view('pages.item.reviews', ['title' => $title, 'itemreview' => new ItemReviewsResource($item)]);
+
+        $item = Item::find($id);
+        return Inertia::render('CustomerReviews', [
+            'itemreview' => new ItemReviewsResource($item)
+        ]);
+    }
     public function index()
     {
         //

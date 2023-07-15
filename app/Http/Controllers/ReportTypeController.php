@@ -6,35 +6,24 @@ use App\Models\ReportType;
 use Illuminate\Http\Request;
 use App\Http\Resources\ReportTypeResource;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class ReportTypeController extends Controller
 {
     public function index(Request $request)
     {
         $reporttypes = new ReportType();
-        if ($request->q) {
-            $reporttypes = $reporttypes->where('title', 'like', "%{$request->q}%");
+        if (!empty($request->q)) {
+            $reporttypes = $reporttypes->where('title', 'like', "%{$request->q}%")->orWhere('description', 'like', "%{$request->q}%");
         }
-        $reporttypes = $reporttypes->paginate(10)->onEachSide(1)->appends(request()->query());
-        $reporttypes = ReportTypeResource::collection($reporttypes);
-        return view('pages.report-type.index', compact('reporttypes'));
+        return Inertia::render('ReportTypes/Index', [
+            'reporttypes' => ReportTypeResource::collection($reporttypes->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
     }
 
-    // public function statusUdate(Request $request)
-    // {
-
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('pages.report-type.add');
+        return Inertia::render('ReportTypes/Form');
     }
 
     /**
@@ -48,43 +37,33 @@ class ReportTypeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(
+
+            return redirect()->back()->withErrors(
                 [
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ],
-                400,
             );
         }
-
         $reporttype = ReportType::create([
             'title' => $request->title,
             'description' => $request->description,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Report Type created successfully']);
+        if ($reporttype) {
+            return redirect()->route('report-types.index')->with('flash', ['success' => true, 'message' => CreateMessage('Report Type')]);
+        }
+        return redirect()->route('report-types.index')->with('flash', ['success' => true, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
-    {
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $reporttype = ReportType::find($id);
-        $reporttype = new ReportTypeResource($reporttype);
-        return view('pages.report-type.edit', ['reporttype' => $reporttype]);
+        return Inertia::render('ReportTypes/Form', [
+            'report_type' => new ReportTypeResource(ReportType::find($id))
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -105,14 +84,15 @@ class ReportTypeController extends Controller
                 'description' => $request->description,
             ]);
 
-            return response()->json(['success' => true, 'message' => 'Report Type Updated successfully']);
+            return redirect()->route('report-types.index')->with('flash', ['success' => true, 'message' => UpdateMessage('Report Type')]);
         }
+        return redirect()->route('report-types.index')->with('flash', ['success' => true, 'message' => ErrorMessage()]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
         $reporttype = ReportType::find($id);
         $reporttype = new ReportTypeResource($reporttype);

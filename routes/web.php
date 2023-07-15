@@ -15,7 +15,6 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BrandModelController;
@@ -24,7 +23,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FaqsCategoryController;
 use App\Http\Controllers\CustomerReviewController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\EnquirieController;
+use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\ReportTypeController;
 use App\Http\Controllers\NotificationTypeController;
 use App\Http\Controllers\ItemStatusController;
@@ -220,8 +219,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(CustomerReviewController::class)->group(function () {
+        Route::get('customer-reviews', 'index')->name('customer-reviews.index');
         Route::group(['prefix' => 'customer-review'], function () {
-            Route::get('/', 'index')->name('customer-review.index');
+            Route::post('status', 'statusUdate')->name('customer-review.status');
             Route::get('/create', 'create')->name('customer-review.create');
             Route::post('/store', 'store')->name('customer-review.store');
             Route::get('{id}/view', 'show')->name('customer-review.view');
@@ -244,10 +244,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
 
-    Route::controller(EnquirieController::class)->group(function () {
+    Route::controller(EnquiryController::class)->group(function () {
+        Route::get('enquires', 'index')->name('enquires.index');
         Route::group(['prefix' => 'enquire'], function () {
-            Route::get('/', 'index')->name('enquire.index');
-            Route::post('/status', 'status')->name('enquire.status');
+            Route::post('/status', 'statusUdate')->name('enquire.status');
         });
     });
 
@@ -263,14 +263,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         });
     });
     Route::controller(NotificationTypeController::class)->group(function () {
-        Route::group(['prefix' => 'notification-types'], function () {
-            Route::get('/', 'index')->name('notification-types.index');
-            Route::get('/create', 'create')->name('notification-types.create');
-            Route::post('/store', 'store')->name('notification-types.store');
-            Route::get('{id}/view', 'show')->name('notification-types.view');
-            Route::get('{id}/edit', 'edit')->name('notification-types.edit');
-            Route::post('{id}/update', 'update')->name('notification-types.update');
-            Route::delete('{id}/destroy', 'destroy')->name('notification-types.destroy');
+        Route::get('notification-types', 'index')->name('notification-types.index');
+        Route::group(['prefix' => 'notification-type'], function () {
+            Route::post('status', 'statusUdate')->name('notification-type.status');
+            Route::get('/create', 'create')->name('notification-type.create');
+            Route::post('/store', 'store')->name('notification-type.store');
+            Route::get('{id}/view', 'show')->name('notification-type.view');
+            Route::get('{id}/edit', 'edit')->name('notification-type.edit');
+            Route::post('{id}/update', 'update')->name('notification-type.update');
+            Route::delete('{id}/destroy', 'destroy')->name('notification-type.destroy');
         });
     });
 
@@ -287,8 +288,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(TimeController::class)->group(function () {
+        Route::get('times', 'index')->name('times.index');
         Route::group(['prefix' => 'time'], function () {
-            Route::get('/', 'index')->name('time.index');
+            Route::post('status', 'statusUdate')->name('time.status');
             Route::get('/create', 'create')->name('time.create');
             Route::post('/store', 'store')->name('time.store');
             Route::get('{id}/view', 'show')->name('time.view');
@@ -311,9 +313,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(SubscriptionsController::class)->group(function () {
-        Route::group(['prefix' => 'subscriptions'], function () {
-            Route::get('/', 'index')->name('subscriptions.index');
-            Route::post('/status', 'status')->name('subscriptions.status');
+        Route::get('subscriptions', 'index')->name('subscriptions.index');
+        Route::group(['prefix' => 'subscription'], function () {
+            Route::post('/status', 'status')->name('subscription.status');
         });
     });
 

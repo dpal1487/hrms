@@ -12,7 +12,6 @@ use App\Models\Category;
 use App\Models\Rule;
 use App\Models\AttributeRule;
 use Illuminate\Support\Facades\Validator;
-use DB;
 use Inertia\Inertia;
 
 class AttributeController extends Controller
@@ -20,10 +19,14 @@ class AttributeController extends Controller
 
     public function index(Request $request)
     {
-
         $attributes = new Attribute();
         if (!empty($request->q)) {
-            $attributes = $attributes->where('name', 'like', "%{$request->q}%");
+            $attributes = $attributes->where('name', 'like', "%{$request->q}%")
+                ->orWhere('data_type', 'like', "%{$request->q}%")
+                ->orWhere('field', 'like', "%{$request->q}%")
+                ->orWhereHas('category', function ($category) use ($request) {
+                    $category->where('name', 'like', "%{$request->q}%");
+                });
         }
         if (!empty($request->s) || $request->s != '') {
             $attributes = $attributes->where('status', $request->s);
@@ -37,7 +40,8 @@ class AttributeController extends Controller
 
         if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
-            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+            return response()->json(['message' => StatusMessage('Attribute', $status), 'success' => true]);
+
         }
         return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }
@@ -88,7 +92,7 @@ class AttributeController extends Controller
             if (!empty($attributeRule)) {
                 return redirect()->route('attribute.index')->with('message', ErrorMessage());
             }
-            return redirect()->route('attribute.index')->with('flash', ['message' => 'Attribute ' . CreateMessage()]);
+            return redirect()->route('attribute.index')->with('flash', ['message' =>  CreateMessage('Attribute')]);
         }
         return redirect()->route('attribute.index')->with('message', ErrorMessage());
     }
@@ -150,7 +154,7 @@ class AttributeController extends Controller
                     ]);
                 }
             }
-            return redirect()->route('attribute.index')->with('flash', ['message' => 'Attribute ' . UpdateMessage()]);
+            return redirect()->route('attribute.index')->with('flash', ['message' =>  UpdateMessage('Attribute')]);
         }
         return redirect()->route('attribute.index')->with('message', ErrorMessage());
     }
@@ -158,7 +162,7 @@ class AttributeController extends Controller
     {
         $attribute = Attribute::find($id);
         if ($attribute->delete()) {
-            return response()->json(['success' => true, 'message' => 'Attribute has been ' . DeleteMessage()]);
+            return response()->json(['success' => true, 'message' =>  DeleteMessage('Attribute')]);
         }
         return response()->json(['success' => false, 'message' => ErrorMessage()]);
     }

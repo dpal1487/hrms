@@ -5,10 +5,8 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
-import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
-import axios from "axios";
 import utils from "../utils.js";
 
 export default defineComponent({
@@ -26,7 +24,6 @@ export default defineComponent({
                 "Status",
                 "Action",
             ],
-            checkbox: [],
         };
     },
     components: {
@@ -45,46 +42,9 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/attribute",
+                "/attributes",
                 this.form,
             );
-        },
-        filterFunction(value, index, arr) {
-            if (value === this.attributes.data[index].id) {
-                // Removes the value from the original array
-                arr.splice(index, 1);
-                return true;
-            }
-            return false;
-        },
-        selectAttribute(index) {
-            const x = this.checkbox.filter(this.filterFunction);
-            this.checkbox.push(this.attributes.data[index].id);
-        },
-        selectAllAttributes() {
-            const checkboxes = document.querySelectorAll('input[type=checkbox]');
-            const list = [];
-            checkboxes.forEach((cb) => { cb.checked = true; });
-            this.attributes.data.map(function (value, key) {
-                list.push(value.id)
-            });
-            this.checkbox = list;
-        },
-        deleteattribute(index) {
-            axios
-                .post("/attribute/delete", { ids: this.checkbox })
-                .then((response) => {
-                    if (response.data.success == true) {
-                        toast.success(response.data.message);
-                        this.attributes.data.splice(index, this.checkbox.length);
-                        return;
-                    }
-                    else {
-                        toast.error(response.data.message);
-                    }
-                }).finally({
-                    checkbox: false,
-                })
         },
         async changeStatus(status, id) {
             this.isLoading = true;
@@ -119,8 +79,7 @@ export default defineComponent({
             <!--begin::Actions-->
             <div>
                 <!--begin::Card title-->
-                <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
-                    <!--begin::Search-->
+                <form class="card-header justify-content-start py-5 gap-2" @submit.prevent="search()">
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -146,15 +105,6 @@ export default defineComponent({
                         Search
                     </button>
                     <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
-                    <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <!--begin::Toolbar-->
-                        <!--end::Add Conversion Rate-->
-                        <button v-if="checkbox.length > 0" @click="deleteattribute()" class="btn btn-danger">Delete
-                            Selected</button>
-                        <!--end::Toolbar-->
-                    </div>
-                    <!--end::Card toolbar-->
                 </form>
 
             </div>
@@ -167,11 +117,6 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
-                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" @change="selectAllattributes()">
-                                    </div>
-                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -182,11 +127,6 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(attribute, index) in attributes.data" :key="index">
-                                <td>
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="1" />
-                                    </div>
-                                </td>
                                 <td>
                                     <div class="ms-5">
                                         <Link class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
@@ -213,40 +153,21 @@ export default defineComponent({
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${attribute.id}`" data-bs-toggle="dropdown"
-                                            aria-expanded="false">Actions <i class="bi bi-chevron-down"></i>
-                                        </a>
-                                        <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${attribute.id}`">
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/attribute/${attribute.id}/edit`"><i
-                                                    class="bi bi-pencil me-2"></i>Edit
-                                                </Link>
-                                            </li>
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/attribute/${attribute.id}`"><i
-                                                    class="bi bi-view-list me-2"></i>View
-                                                </Link>
-                                            </li>
-
-                                            <li class="menu-item px-3">
-                                                <button @click="confirmDelete(
-                                                    attribute.id, index
-                                                )
-                                                    "
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                    <i class="bi bi-trash3 me-2"></i>Delete
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                        :href="`/attribute/${attribute.id}/edit`">
+                                    <i class="bi bi-pencil"></i>
+                                    </Link>
+                                    <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                        :href="`/attribute/${attribute.id}`"><i class="bi bi-view-list me-2"></i>
+                                    </Link>
+                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
+                                        attribute.id, index
+                                    )
+                                        ">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
                                 </td>
+
                                 <!--end::Action=-->
                             </tr>
                         </tbody>

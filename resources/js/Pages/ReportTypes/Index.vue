@@ -2,7 +2,6 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
@@ -10,18 +9,16 @@ import 'vue-loading-overlay/dist/css/index.css';
 import utils from "../utils.js";
 
 export default defineComponent({
-    props: ["pages"],
+    props: ["reporttypes"],
 
     data() {
         return {
             form: {},
-            title: "Page",
+            title: "Report Types",
             isLoading: false,
             tbody: [
                 "Title",
-                "Headings",
-                "Meta",
-                "Status",
+                "DESCRIPTION",
                 "Action",
             ],
         };
@@ -31,27 +28,20 @@ export default defineComponent({
         Link,
         Head,
         Pagination,
-        Multiselect,
         Loading,
     },
     methods: {
         async confirmDelete(id, index) {
             this.isLoading = true;
-            await utils.deleteIndexDialog(route('page.destroy', id), this.pages.data, index);
+            await utils.deleteIndexDialog(route('report-type.destroy', id), this.reporttypes.data, index);
             this.isLoading = false;
         },
 
         search() {
             Inertia.get(
-                "/pages",
+                "/report-types",
                 this.form,
             );
-        },
-        async changeStatus(status, id) {
-            console.log(id)
-            this.isLoading = true;
-            await utils.changeStatus(route('page.status'), { id: id, status: status });
-            this.isLoading = false;
         },
 
     },
@@ -65,14 +55,14 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/pages" class="text-muted text-hover-primary">page</Link>
+                <Link href="/report-types" class="text-muted text-hover-primary">Report Types</Link>
             </li>
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <!--begin::Primary button-->
-                <Link href="/page/create" class="btn btn-sm fw-bold btn-primary">
-                <i class="bi bi-plus-circle"></i>Add New page</Link>
+                <Link href="/report-type/create" class="btn btn-sm fw-bold btn-primary">
+                <i class="bi bi-plus-circle"></i>Add New Report</Link>
                 <!--end::Primary button-->
             </div>
         </template>
@@ -100,16 +90,14 @@ export default defineComponent({
                         <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search " />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="form.s" />
-                    </div>
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
                     <!--begin::Card title-->
                 </form>
+
             </div>
+
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
@@ -127,40 +115,33 @@ export default defineComponent({
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(page, index) in pages.data" :key="index">
+                            <tr v-for="(reporttype, index) in reporttypes.data" :key="index">
+
                                 <td>
                                     <div class="d-flex">
                                         <!--begin::Thumbnail-->
                                         <!--end::Thumbnail-->
                                         <div class="ms-5">
                                             <!--begin::Title-->
-                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{ page?.title
+                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
+                                                reporttype?.title
                                             }}</span>
                                             <!--end::Title-->
                                         </div>
                                     </div>
                                 </td>
+
                                 <td>
-                                    {{ page?.heading }}
-                                </td>
-                                <td>
-                                    <span v-html="page?.meta?.tag"></span>
+                                    <span v-html="reporttype?.description"></span>
                                 </td>
 
                                 <td>
-                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
-                                        <input class="form-check-input h-20px w-30px" type="checkbox"
-                                            @input="changeStatus($event.target.checked, page?.id)"
-                                            :checked="page?.status == 1 ? true : false" />
-                                    </div>
-                                </td>
-                                <td>
                                     <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                        :href="`/page/${page.id}/edit`">
+                                        :href="`/report-type/${reporttype.id}/edit`">
                                     <i class="bi bi-pencil"></i>
                                     </Link>
                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
-                                        page.id, index
+                                        reporttype.id, index
                                     )
                                         ">
                                         <i class="bi bi-trash3"></i>
@@ -173,8 +154,9 @@ export default defineComponent({
                         <!--end::Table body-->
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="pages.meta">
-                    <Pagination :links="pages.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end"
+                    v-if="reporttypes.meta">
+                    <Pagination :links="reporttypes.meta.links" />
                 </div>
             </div>
         </div>

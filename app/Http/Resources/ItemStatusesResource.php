@@ -17,7 +17,8 @@ class ItemStatusesResource extends JsonResource
         return [
             'id' => $this->id,
             'text' => $this->text,
-            'label' => $this->label
+            'label' => $this->label,
+            'description' => $this->description
         ];
     }
 }

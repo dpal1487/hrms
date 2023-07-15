@@ -5,11 +5,8 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
-import Swal from "sweetalert2";
-import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
-import axios from "axios";
 import utils from "../utils.js";
 
 export default defineComponent({
@@ -26,8 +23,6 @@ export default defineComponent({
                 "Status",
                 "Action",
             ],
-            checkbox: [],
-
         };
     },
     components: {
@@ -47,52 +42,12 @@ export default defineComponent({
 
         search() {
             Inertia.get(
-                "/banner",
+                "/banners",
                 this.form,
             );
         },
 
-        filterFunction(value, index, arr) {
-            if (value === this.banners.data[index].id) {
-                // Removes the value from the original array
-                arr.splice(index, 1);
-                return true;
-            }
-            return false;
-        },
-        selectbanner(index) {
-            const x = this.checkbox.filter(this.filterFunction);
-            this.checkbox.push(this.banners.data[index].id);
-        },
-        selectAllbanners() {
-            const checkboxes = document.querySelectorAll('input[type=checkbox]');
-            const list = [];
-            checkboxes.forEach((cb) => { cb.checked = true; });
-            this.banners.data.map(function (value, key) {
-                list.push(value.id)
-            });
-            this.checkbox = list;
-        },
-
-        deletebanner(index) {
-
-            axios
-                .post("/banners/delete", { ids: this.checkbox })
-                .then((response) => {
-                    if (response.data.success == true) {
-                        toast.success(response.data.message);
-                        this.banners.data.splice(index, this.checkbox.length);
-                        return;
-                    }
-                    else {
-                        toast.error(response.data.message);
-                    }
-                }).finally({
-                    checkbox: false,
-                })
-        },
         async changeStatus(status, id) {
-
             console.log(id)
             this.isLoading = true;
             await utils.changeStatus(route('banner.status'), { id: id, status: status });
@@ -109,7 +64,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/banner" class="text-muted text-hover-primary">banner</Link>
+                <span class="text-muted text-hover-primary">Banners</span>
             </li>
         </template>
         <template #toolbar>
@@ -126,7 +81,8 @@ export default defineComponent({
             <!--begin::Actions-->
             <div>
                 <!--begin::Card title-->
-                <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
+                <form class="card-header justify-content-start py-5 gap-2" @submit.prevent="search()">
+
                     <!--begin::Search-->
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative">
@@ -153,15 +109,7 @@ export default defineComponent({
                         Search
                     </button>
                     <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
-                    <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <!--begin::Toolbar-->
-                        <!--end::Add Conversion Rate-->
-                        <button v-if="checkbox.length > 0" @click="deletebanner()" class="btn btn-danger">Delete
-                            Selected</button>
-                        <!--end::Toolbar-->
-                    </div>
-                    <!--end::Card toolbar-->
+
                 </form>
 
             </div>
@@ -174,11 +122,6 @@ export default defineComponent({
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
-                                <th class="w-5px pe-0" rowspan="1" colspan="1" aria-label="">
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" @change="selectAllbanners()">
-                                    </div>
-                                </th>
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -189,11 +132,6 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(banner, index) in banners.data" :key="index">
-                                <td>
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="1" />
-                                    </div>
-                                </td>
                                 <td>
                                     <div class="d-flex">
                                         <!--begin::Thumbnail-->
@@ -217,13 +155,6 @@ export default defineComponent({
                                         </div>
                                     </div>
                                 </td>
-                                <!--end::banner=-->
-
-
-
-
-
-
                                 <td>
                                     <span v-html="banner?.description"></span>
                                 </td>
@@ -235,32 +166,17 @@ export default defineComponent({
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                            :id="`dropdown-${banner.id}`" data-bs-toggle="dropdown"
-                                            aria-expanded="false">Actions <i class="bi bi-chevron-down"></i>
-                                        </a>
-                                        <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                            :aria-labelled:by="`dropdown-${banner.id}`">
-                                            <li class="menu-item px-3">
-                                                <Link
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                    :href="`/banner/${banner.id}/edit`"><i
-                                                    class="bi bi-pencil me-2"></i>Edit
-                                                </Link>
-                                            </li>
+                                    <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                        :href="`/banner/${banner.id}/edit`">
+                                    <i class="bi bi-pencil"></i>
+                                    </Link>
 
-                                            <li class="menu-item px-3">
-                                                <button @click="confirmDelete(
-                                                    banner.id, index
-                                                )
-                                                    "
-                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                    <i class="bi bi-trash3 me-2"></i>Delete
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
+                                        banner.id, index
+                                    )
+                                        ">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
                                 </td>
                                 <!--end::Action=-->
                             </tr>

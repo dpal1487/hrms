@@ -3,18 +3,23 @@ import { defineComponent } from 'vue';
 import Multiselect from '@vueform/multiselect';
 import { Link } from '@inertiajs/inertia-vue3';
 import utils from '../../../utils.js';
+import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
     props: ['attribute'],
     data: () => {
         return {
-           
+
         }
     },
     methods: {
         async changeStatus(status, id) {
             this.isLoading = true;
             await utils.changeStatus(route('attribute-value.status'), { id: id, status: status });
+            Inertia.get(
+                "/attribute/" + this.attribute.attribute_id,
+                this.form,
+            );
             this.isLoading = false;
         },
     },
@@ -26,7 +31,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <td>
+    <td class="fs-6 fw-bold text-gray-700">
         {{ attribute?.attribute_value }}
     </td>
     <td>

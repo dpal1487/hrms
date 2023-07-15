@@ -47,10 +47,10 @@ class BannerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
+            return redirect()->back()->withErrors([
                 'success' => false,
                 'message' => $validator->errors()->first()
-            ], 400);
+            ]);
         }
 
         $banner = Banner::create([
@@ -61,15 +61,15 @@ class BannerController extends Controller
             'status' => 1,
         ]);
         if ($banner) {
-            return response()->json([
+            return redirect('banners')->with('flash', [
                 'success' => true,
-                'message' => 'Banner' . CreateMessage(),
-            ], 200);
+                'message' => CreateMessage('Banner'),
+            ]);
         } else {
-            return response()->json([
+            return redirect('banners')->with('flash', [
                 'success' => false,
                 'message' => ErrorMessage(),
-            ], 400);
+            ]);
         }
     }
     public function edit(banner $banner, $id)
@@ -85,12 +85,14 @@ class BannerController extends Controller
         $validator = Validator::make($request->all(), [
             'description' => 'required',
             'title' => 'required',
-            'url' => 'required|url'
+            'url' => 'required|url',
+            'banner_image' => 'required'
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->all()
+            return redirect()->back()->withErrors([
+                'success' => false,
+                'message' => $validator->errors()->first()
             ]);
         }
         $banner = Banner::find($id);
@@ -99,10 +101,17 @@ class BannerController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'url' => $request->url,
-                'image_id' =>  $request->banner_image ? $request->banner_image : $banner->image_id,
+                'image_id' =>  $request->banner_image,
             ]);
-            return response()->json(['success' => true, 'message' => 'Banner Updated successfully']);
+            return redirect('banners')->with('flash', [
+                'success' => true,
+                'message' => UpdateMessage('Banner'),
+            ]);
         }
+        return redirect('banners')->with('flash', [
+            'success' => false,
+            'message' => ErrorMessage(),
+        ]);
     }
 
     public function statusUdate(Request $request)
@@ -110,7 +119,7 @@ class BannerController extends Controller
 
         if (Banner::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
-            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+            return response()->json(['message' => StatusMessage('Banner', $status), 'success' => true]);
         }
         return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }
@@ -120,7 +129,7 @@ class BannerController extends Controller
         $banner = new BannerResource($banner);
 
         if ($banner->delete()) {
-            return response()->json(['success' => true, 'message' => 'Banner '  . DeleteMessage()]);
+            return response()->json(['success' => true, 'message' =>    DeleteMessage('Banner')]);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

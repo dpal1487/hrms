@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class NotificationTypeController extends Controller
 {
@@ -17,29 +18,32 @@ class NotificationTypeController extends Controller
     public function index(Request $request)
     {
         $notificationtypes = new NotificationType();
-        if ($request->q) {
-            $notificationtypes = $notificationtypes->where('label', 'like', "%{$request->q}%");
+        if (!empty($request->q)) {
+            $notificationtypes = $notificationtypes->where('label', 'like', "%{$request->q}%")->orWhere('description', 'like', "%{$request->q}%");
         }
-        $notificationtypes = $notificationtypes->paginate(10)->onEachSide(1)->appends(request()->query());
-        $notificationtypes = NotificationTypeResource::collection($notificationtypes);
-        return view('pages.notification-type.index', compact('notificationtypes'));
+        if (!empty($request->s) || $request->s != '') {
+            $notificationtypes = $notificationtypes->where('status', $request->s);
+        }
+        return Inertia::render('NotificationTypes/Index', [
+            'notificationtypes' => NotificationTypeResource::collection($notificationtypes->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
     }
-    // public function statusUdate(Request $request)
-    // {
+    public function statusUdate(Request $request)
+    {
+        if (NotificationType::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => StatusMessage('Notification Type', $status), 'success' => true]);
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
 
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('pages.notification-type.add');
+        return Inertia::render('NotificationTypes/Form');
     }
 
     /**
@@ -69,31 +73,21 @@ class NotificationTypeController extends Controller
             'description' => $request->description,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Notification Type created successfully']);
+        if ($notificationtype) {
+            return redirect()->route('notification-types.index')->with('flash', ['success' => true, 'message' => CreateMessage('Notification Type')]);
+        }
+        return redirect()->route('notification-types.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(NotificationType $notificationType)
+
+    public function edit($id)
     {
-        //
+        return Inertia::render('NotificationTypes/Form', [
+            'notification_type' => new NotificationTypeResource(NotificationType::find($id))
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(NotificationType $notificationType, $id)
-    {
-        $notificationType = NotificationType::find($id);
-        $notificationType = new NotificationTypeResource($notificationType);
-        return view('pages.notification-type.edit', ['notificationType' => $notificationType]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, NotificationType $notificationType , $id)
+    public function update(Request $request, NotificationType $notificationType, $id)
     {
         $validator = Validator::make($request->all(), [
             'label' => 'required',
@@ -114,20 +108,16 @@ class NotificationTypeController extends Controller
                 'status' => $request->status,
                 'description' => $request->description,
             ]);
-
-            return response()->json(['success' => true, 'message' => 'Notification Type Updated successfully']);
+            return redirect()->route('notification-types.index')->with('flash', ['success' => true, 'message' => CreateMessage('Notification Type')]);
         }
+        return redirect()->route('notification-types.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(NotificationType $notificationType , $id)
+    public function destroy($id)
     {
         $notificationType = NotificationType::find($id);
-        $notificationType = new NotificationTypeResource($notificationType);
         if ($notificationType->delete()) {
-            return response()->json(['success' => true, 'message' => 'Notification Type has been deleted successfully.']);
+            return response()->json(['success' => true, 'message' => DeleteMessage('Notification Type')]);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

@@ -97,7 +97,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item text-muted">
-                <Link class="text-muted text-hover-primary" href="/attribute">Attribute</Link>
+                <Link href="/attributes" class="text-muted text-hover-primary">Attributes</Link>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -177,32 +177,18 @@ export default defineComponent({
                                         <tr v-for="(attribute, index) in attribute?.data?.values" :key="index">
                                             <attribute-value-list :attribute="attribute">
                                                 <template #action>
-                                                    <div class="dropdown">
-                                                        <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                                            :id="`dropdown-${attribute?.id}`" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">Actions <i class="bi bi-chevron-down"></i>
-                                                        </a>
-                                                        <ul class="dropdown-menu text-small menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                                            :aria-labelled:by="`dropdown-${attribute?.id}`">
-                                                            <li class="menu-item px-3">
+                                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                                        @click="toggleModal(true, attribute)"><i
+                                                            class="bi bi-pencil me-2"></i>
+                                                    </button>
 
-                                                                <button
-                                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center"
-                                                                    @click="toggleModal(true, attribute)"><i
-                                                                        class="bi bi-pencil me-2"></i>Edit
-                                                                </button>
-                                                            </li>
-                                                            <li class="menu-item px-3">
-                                                                <button @click="confirmDelete(
-                                                                    attribute?.id, index
-                                                                )
-                                                                    "
-                                                                    class="btn btn-sm dropdown-item align-items-center justify-content-center">
-                                                                    <i class="bi bi-trash3 me-2"></i>Delete
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px"
+                                                        @click="confirmDelete(
+                                                            attribute.id, index
+                                                        )
+                                                            ">
+                                                        <i class="bi bi-trash3"></i>
+                                                    </button>
                                                 </template>
                                             </attribute-value-list>
                                         </tr>

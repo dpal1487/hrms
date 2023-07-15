@@ -22,36 +22,10 @@ class Controller extends BaseController
     {
         $user = Auth::user();
         return $user->id;
-    }
-    public function companyId()
-    {
-        $company = CompanyUser::where(['user_id' => $this->uid()])->first();
-        return $company->company_id;
-    }
+    }   
     public function errorAjax()
     {
         return response()->json(['success' => false, 'message' => 'Unauthrize Access.']);
-    }
-    public function employee($id)
-    {
-        return Employee::where('company_id', $this->companyId())->find($id);
-    }
-
-    public function employeeHeader($id)
-    {
-        $employee = Employee::where('company_id', $this->companyId())->find($id);
-        return new UserResource($employee->user);
-    }
-    public function supplierHeader($id)
-    {
-        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
-
-        return new SupplierResource($supplier);
-    }
-    public function supplierAddress($id)
-    {
-        $supplier = Supplier::where('company_id', $this->companyId())->find($id);
-
-        return new AddressResource($supplier->address);
-    }
+    }  
+  
 }

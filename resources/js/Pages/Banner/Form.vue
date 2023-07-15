@@ -8,11 +8,11 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, url } from "@vuelidate/validators";
-import axios from "axios";
 import { toast } from "vue3-toastify";
-import { Inertia } from "@inertiajs/inertia";
 import ImageInput from '@/components/ImageInput.vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Loading from "vue-loading-overlay";
+import 'vue-loading-overlay/dist/css/index.css';
 import utils from "../utils.js";
 
 export default defineComponent({
@@ -39,13 +39,12 @@ export default defineComponent({
                 url: null,
             },
             editor: ClassicEditor,
-            requesting: false,
             form: this.$inertia.form({
                 id: this.banner?.data?.id || '',
                 title: this.banner?.data?.title || '',
                 description: this.banner?.data?.description || '',
                 url: this.banner?.data?.url || '',
-                banner_image: this.form?.banner_image || '',
+                banner_image: this.banner?.data?.image?.id ? this.banner?.data?.image?.id : this.form?.banner_image,
             }),
         };
     },
@@ -59,43 +58,29 @@ export default defineComponent({
         InputError,
         ImageInput,
         ClassicEditor,
+        Loading
     },
     methods: {
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.requesting = true;
-                if (route().current() == 'banner.create') {
-                    axios.post(this.route("banner.store"), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                this.requesting = false;
-                                toast.success(response.data.message)
-                                Inertia.get('/banner')
-                            } else {
-                                toast.error(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        })
-                } else {
-                    axios.post(this.route('banner.update', this.form.id), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                this.requesting = false;
-                                toast.success(response.data.message)
-                                Inertia.get('/banner')
-                            } else {
-                                toast.error(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        })
-                }
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(route().current() == 'banner.create' ? this.route("banner.store") : this.route('banner.update', this.form.id),
+                        {
+                            onSuccess: (data) => {
+                                toast.success(this.$page.props.jetstream.flash.message);
+                                this.isEdit = false;
+                            },
+                            onError: (data) => {
+                                toast.error(data.message);
+                            },
+                        });
             }
         },
+
         async onBannerChange(e) {
             this.banner_upload.isLoading = true;
             const data = await utils.imageUpload(route('upload.banner'), e)
@@ -121,6 +106,7 @@ export default defineComponent({
         }
     }
 });
+
 </script>
 <template>
     <Head :title="isEdit ? 'Edit Banner' : `Add New Banner`" />
@@ -130,13 +116,13 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/banner" class="text-muted text-hover-primary">Banner</Link>
+                <Link href="/banners" class="text-muted text-hover-primary">Banners</Link>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Banner</span>
+                <span class="text-muted text-hover-primary">Banner Form</span>
             </li>
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
@@ -223,12 +209,12 @@ export default defineComponent({
                         </div>
                         <!--end::Meta options-->
                         <div class="d-flex justify-content-end gap-5">
-                            <Link href="/banner"
+                            <Link href="/banners"
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                             Discard
                             </Link>
                             <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                :data-kt-indicator="requesting ? 'on' : 'off'">
+                                :data-kt-indicator="form.processing ? 'on' : 'off'">
                                 <span class="indicator-label">
 
                                     <span v-if="route().current() == 'banner.edit'">Save Changes</span>

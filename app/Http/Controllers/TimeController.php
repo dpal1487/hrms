@@ -6,6 +6,7 @@ use App\Models\Time;
 use App\Http\Resources\TimeResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TimeController extends Controller
 {
@@ -15,30 +16,32 @@ class TimeController extends Controller
     public function index(Request $request)
     {
         $times = new Time();
-        if ($request->q) {
-            $times = $times->where('title', 'like', "%{$request->q}%");
+        if (!empty($request->q)) {
+            $times = $times->where('title', 'like', "%{$request->q}%")->orWhere('description', 'like', "%{$request->q}%");
         }
-        $times = $times->paginate(10)->onEachSide(1)->appends(request()->query());
-        $times = TimeResource::collection($times);
-        return view('pages.time.index', compact('times'));
+        if (!empty($request->s) || $request->s != '') {
+            $times = $times->where('status', $request->s);
+        }
+        return Inertia::render('Times/Index', [
+            'times' => TimeResource::collection($times->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
     }
 
-    // public function statusUdate(Request $request)
-    // {
-
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
+    public function statusUdate(Request $request)
+    {
+        if (Time::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => StatusMessage('Time', $status), 'success' => true]);
+        }
+        return response()->json(['message' => ErrorMessage(), 'success' => false]);
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('pages.time.add');
+        return Inertia::render('Times/Form');
     }
 
     /**
@@ -47,85 +50,78 @@ class TimeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => ['required','unique:'.Time::class],
+            'title' => ['required', 'unique:' . Time::class],
             'status' => 'required',
             'description' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(
+            return redirect()->back()->withErrors(
                 [
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ],
-                400,
             );
         }
-
         $time = Time::create([
             'title' => $request->title,
             'status' => $request->status,
             'description' => $request->description,
         ]);
-
-        return response()->json(['success' => true, 'message' => 'Time created successfully']);
+        if ($time) {
+            return redirect()->route('times.index')->with('flash', ['success' => true, 'message' => CreateMessage('Notification Type')]);
+        }
+        return redirect()->route('times.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Time $time)
+    public function edit($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Time $time, $id)
-    {
-        $time = Time::find($id);
-        $time = new TimeResource($time);
-        return view('pages.time.edit', ['time' => $time]);
+        return Inertia::render('Times/Form', [
+            'time' => new TimeResource(Time::find($id))
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Time $time, $id)
+    public function update(Request $request, $id)
     {
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'status' => 'required',
             'description' => 'required',
         ]);
-
         if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->all(),
-            ]);
+            return redirect()->back()->withErrors(
+                [
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ],
+            );
         }
+
         $time = Time::find($id);
+
         if ($time) {
             $time = Time::where(['id' => $id])->update([
                 'title' => $request->title,
                 'status' => $request->status,
                 'description' => $request->description,
             ]);
-
-            return response()->json(['success' => true, 'message' => 'Time Updated successfully']);
+            return redirect()->route('times.index')->with('flash', ['success' => true, 'message' => UpdateMessage('Time')]);
         }
+
+        return "sdasd";
+        return redirect()->back()->withErrors(['success' => false, 'message' => "sdasd" . ErrorMessage()]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Time $time , $id)
+
+    public function destroy(Time $time, $id)
     {
         $time = Time::find($id);
-        $time = new TimeResource($time);
         if ($time->delete()) {
-            return response()->json(['success' => true, 'message' => 'Time has been deleted successfully.']);
+            return response()->json(['success' => true, 'message' => DeleteMessage('Time')]);
         }
         return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
     }

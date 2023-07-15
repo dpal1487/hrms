@@ -20,7 +20,7 @@ class MenuController extends Controller
             'name' => $request->name,
         ]);
         if ($menu) {
-            return redirect()->back()->with('flash', ['message' => 'Menu added successfully.']);
+            return redirect()->back()->with('flash', ['message' => CreateMessage('Menu ')]);
         }
         return redirect()->back()->withErrors(['Opps something went wrong!']);
     }

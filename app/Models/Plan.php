@@ -24,7 +24,7 @@ class Plan extends Model
         'description',
         'status',
         'price',
-        
+        'period',
         'currency',
         'plan_id',
         'sort_order',

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CurrencyResource;
 use App\Models\Plan;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Resources\PlanResource;
+use App\Http\Resources\TimeResource;
+use App\Models\Currency;
+use App\Models\Time;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -17,13 +21,15 @@ class PlanController extends Controller
     private $api;
     function __construct()
     {
-        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+        $this->api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
     }
     public function index(Request $request)
     {
         $plans = new Plan();
         if (!empty($request->q)) {
-            $plans = $plans->where('name', 'like', "%{$request->q}%")->orWhere('sort_description', 'like', "%{$request->q}%")
+            $plans = $plans->where('name', 'like', "%{$request->q}%")
+                ->orWhere('sort_description', 'like', "%{$request->q}%")
+                ->orWhere('price', 'like', "%{$request->q}%")
                 ->orWhereHas('category', function ($q) use ($request) {
                     $q->where('name', 'like', "%{$request->q}%");
                 });
@@ -39,20 +45,18 @@ class PlanController extends Controller
 
     public function statusUdate(Request $request)
     {
-
         if (Plan::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
-            return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+            return response()->json(['message' => StatusMessage('Plan', $status), 'success' => true]);
+
         }
-        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+        return response()->json(['message' => ErrorMessage(), 'success' => false]);
     }
     public function create()
     {
-        // return Inertia::render('Plan2/Create', [
-        //     'categories' => CategoryResource::collection(Category::get())
-        // ]);
-
         return Inertia::render('Plan/Form', [
+            'times' =>  TimeResource::collection(Time::get()),
+            'currencies' => CurrencyResource::collection(Currency::get()),
             'categories' => CategoryResource::collection(Category::get())
         ]);
     }
@@ -67,7 +71,7 @@ class PlanController extends Controller
             'price' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'category' => 'required',
             'no_of_ads' => 'required|integer',
-            'currency' => 'required|integer',
+            'currency' => 'required',
             'status' => 'required|integer',
             'sort_description' => '',
 
@@ -79,14 +83,18 @@ class PlanController extends Controller
                 'message' => $validator->errors()->first(),
             ]);
         }
+
+
         $response = $this->api->plan->create(
             array(
-                'period' => 'weekly', 'interval' => 1,
-                'item' => array('name' => $request->nam, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
+                'period' => $request->period, 'interval' => 1,
+                'item' => array('name' => $request->name, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
             )
         );
+
         $plan = Plan::create([
             'name' => $request->name,
+            'period' => $request->period,
             'price' => $request->price,
             'plan_id' => $response->id,
             'category_id' => $request->category,
@@ -97,7 +105,7 @@ class PlanController extends Controller
             'sort_description' => $request->sort_description,
             'description' => json_encode($request->plan_descriptions),
         ]);
-       
+
 
         if ($plan) {
             return redirect()->route('plans.index')->with('flash', ['success' => true, 'message' => CreateMessage('Plan')]);
@@ -106,20 +114,12 @@ class PlanController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Plan $plan)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         return Inertia::render('Plan/Form', [
+            'times' =>  TimeResource::collection(Time::get()),
+            'currencies' => CurrencyResource::collection(Currency::get()),
             'categories' => CategoryResource::collection(Category::get()),
             'plan' => new PlanResource(Plan::find($id)),
         ]);
@@ -136,18 +136,11 @@ class PlanController extends Controller
             'category' => 'required',
             'no_of_ads' => 'required|integer',
             'currency' => 'required|integer',
-            'sign_up_fee' => 'required|integer',
-            'trial_period' => 'required|integer',
-            'trial_interval' => 'required',
-            'invoice_period' => 'required|integer',
-            'invoice_interval' => 'required',
-            'grace_period' => 'required|integer',
-            'grace_interval' => 'required',
+            'period' => 'required',
             'sort_order' => 'required|integer',
             'status' => 'required|integer',
             'sort_description' => 'required',
             'prorate_day' => 'nullable|integer',
-            'prorate_period' => 'nullable|integer',
             'prorate_extend_due' => 'nullable|integer',
             'active_subscribers_limit' => 'nullable|integer',
         ]);
@@ -166,19 +159,9 @@ class PlanController extends Controller
                 'category_id' => $request->category,
                 'no_of_ads' => $request->no_of_ads,
                 'currency' => $request->currency,
-                'signup_fee' => $request->sign_up_fee,
-                'trial_period' => $request->trial_period,
-                'trial_interval' => $request->trial_interval,
-                'invoice_period' => $request->invoice_period,
-                'invoice_interval' => $request->invoice_interval,
-                'grace_period' => $request->grace_period,
-                'grace_interval' => $request->grace_interval,
-                'prorate_day' => $request->prorate_day,
-                'prorate_period' => $request->prorate_period,
-                'prorate_extend_due' => $request->prorate_extend_due,
-                'active_subscribers_limit' => $request->active_subscribers_limit,
+                'period' => $request->period,
                 'sort_order' => $request->sort_order,
-                'is_active' => $request->status,
+                'status' => $request->status,
                 'sort_description' => $request->sort_description,
                 'description' => json_encode($request->plan_conditions),
             ]);

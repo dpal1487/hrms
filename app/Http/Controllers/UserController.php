@@ -11,13 +11,8 @@ use App\Models\Item;
 use App\Models\ItemStatus;
 use App\Models\User;
 use App\Models\UserReview;
-
-
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
-use DataTables;
-use DB;
-use Illuminate\Contracts\Pagination\Paginator;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -95,7 +90,8 @@ class UserController extends Controller
 
     //     if (Item::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
     //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //         return response()->json(['message' => "Your Status has been " . $status, 'success' => true]);
+    //                     return response()->json(['message' => StatusMessage('Brand', $status), 'success' => true]);
+
     //     }
     //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     // }

@@ -8,9 +8,7 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import axios from "axios";
 import { toast } from "vue3-toastify";
-import { Inertia } from "@inertiajs/inertia";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import AttributeList from "./components/AttributeList.vue";
 
@@ -164,13 +162,13 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/attribute" class="text-muted text-hover-primary">Attribute</Link>
+                <Link href="/attributes" class="text-muted text-hover-primary">Attributes</Link>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Attribute</span>
+                <span class="text-muted text-hover-primary">Attribute Form</span>
             </li>
         </template>
 
@@ -335,7 +333,7 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-5">
-                    <Link href="/attribute"
+                    <Link href="/attributes"
                         class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                     Discard
                     </Link>
