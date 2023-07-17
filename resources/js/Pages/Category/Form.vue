@@ -51,9 +51,9 @@ export default defineComponent({
             form: this.$inertia.form({
                 id: this.category?.data?.id || '',
                 name: this.category?.data?.name || '',
-                image_id: this.form?.image_id || '',
+                image_id: this.category?.data?.image?.id || this.form?.image_id,
                 status: this.category?.data?.status || '',
-                banner_id: this.form?.banner_image || '',
+                banner_image: this.category?.data?.banner?.id || this.form?.banner_image,
                 parent_id: this.category?.data?.parent?.id || '',
                 description: this.category?.data?.description || '',
                 keyword: this.category?.data?.keywords || '',
@@ -78,36 +78,21 @@ export default defineComponent({
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.requesting = true;
-                if (route().current() == 'category.create') {
-                    axios.post(this.route("category.store"), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                this.requesting = false;
-                                toast.success(response.data.message)
-                                Inertia.get('/category')
-                            } else {
-                                toast.error(response.data.message)
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(route().current() == 'category.create' ? this.route("category.store") : this.route('category.update', this.form.id), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isEdit = false;
+                        },
+                        onError: (data) => {
+                            if (data.message) {
+                                toast.error(data.message);
                             }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        })
-                } else {
-                    axios.post(this.route('category.update', this.form.id), this.form)
-                        .then((response) => {
-                            if (response.data.success) {
-                                this.requesting = false;
-                                toast.success(response.data.message)
-                                Inertia.get('/category')
-                            } else {
-                                toast.error(response.data.message)
-                            }
-                            if (response.data.error) {
-                                toast.error(response.data.error)
-                            }
-                        })
-                }
+                        },
+                    });
             }
         },
         async onThumbnailChange(e) {
@@ -129,7 +114,6 @@ export default defineComponent({
             this.banner.isLoading = true;
             const data = await utils.imageUpload(route('upload.banner'), e)
             if (data.response.success) {
-
                 this.form.banner_image = data.response.data.id;
             } else {
                 toast.error(data.response.message);
@@ -202,7 +186,8 @@ export default defineComponent({
                             <!--begin::Card body-->
                             <div class="card-body text-center pt-0">
                                 <!--begin::Image input-->
-                                <ImageInput :image="this.category?.data?.image?.medium_path" :onchange="onBannerChange"
+
+                                <ImageInput :image="this.category?.data?.banner?.medium_path" :onchange="onBannerChange"
                                     :remove="removeSelectedAvatar" :selectedImage="banner.url"
                                     :errors="v$.form.banner_image.$errors" :isUploading="banner.isLoading" />
                             </div>
@@ -321,12 +306,12 @@ export default defineComponent({
                         </div>
                         <!--end::Meta options-->
                         <div class="d-flex justify-content-end gap-5">
-                            <Link href="/category"
+                            <Link href="/categories"
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                             Discard
                             </Link>
                             <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                :data-kt-indicator="requesting ? 'on' : 'off'">
+                                :data-kt-indicator="form.processing ? 'on' : 'off'">
                                 <span class="indicator-label">
 
                                     <span v-if="route().current() == 'category.edit'">Save Changes</span>

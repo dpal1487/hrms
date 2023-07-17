@@ -37,7 +37,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|unique:categories,name',
             'description' => 'required',
             'keyword' => 'required',
             'meta_description' => 'required',
@@ -46,10 +46,10 @@ class CategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
+            return redirect()->back()->withErrors([
                 'success' => false,
                 'message' => $validator->errors()->first()
-            ], 400);
+            ]);
         }
         $meta = Meta::create([
             'description' => $request->meta_description,
@@ -74,10 +74,16 @@ class CategoryController extends Controller
                         'order_by' => 1,
                     ]
                 );
-                return response()->json(['success' => true, 'message' => 'Category created successfully']);
             }
+            return redirect()->route('categories.index')->with('flash', [
+                'success' => true,
+                'message' => CreateMessage('Category')
+            ]);
         }
-        return response()->json(['success' => true, 'message' => 'Meta created failed']);
+        return redirect()->route('categories.index')->with('flash', [
+            'success' => false,
+            'message' => ErrorMessage()
+        ]);
     }
 
     public function edit($id)
@@ -103,8 +109,9 @@ class CategoryController extends Controller
             'meta_keyword' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->all()
+            return redirect()->back()->withErrors([
+                'success' => false,
+                'message' => $validator->errors()->first()
             ]);
         }
         $category = Category::find($id);
@@ -129,18 +136,18 @@ class CategoryController extends Controller
                     'description' => $request->description,
                     'keywords' => $request->keyword,
                     'parent_id' => $request->parent,
-                    'image_id' => $request->image_id ? $request->image_id : $category->image_id,
+                    'image_id' => $request->image_id,
                     'meta_id' => $meta->id,
                 ]);
                 if ($category) {
                     CategoryBanner::where(['category_id' => $id])->update([
                         'image_id' => $request->banner_image,
                     ]);
-                    return response()->json(['success' => true, 'message' => UpdateMessage('Category')]);
                 }
+                return redirect()->route('categories.index')->with('flash', ['success' => true, 'message' => UpdateMessage('Category')]);
             }
-            return response()->json(['success' => true, 'message' => ErrorMessage('Category')]);
         }
+        return redirect()->route('categories.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
     public function statusUdate(Request $request)
@@ -155,10 +162,9 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        $category = new CategoryResource($category);
         if ($category->delete()) {
-            return response()->json(['message' =>  'Category ' . DeleteMessage(), 'success' => true]);
+            return response()->json(['message' =>    DeleteMessage('Category '), 'success' => true]);
         }
-        return response()->json(['success' => false, 'message' => 'Opps something went wrong!'], 400);
+        return response()->json(['success' => false, 'message' => ErrorMessage()], 400);
     }
 }

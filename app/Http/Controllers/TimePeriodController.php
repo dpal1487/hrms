@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\TimePeriod;
 use App\Models\Category;
 use App\Models\Time;
@@ -9,8 +10,9 @@ use DB;
 
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\TimePeriodResource;
-
+use App\Http\Resources\TimeResource;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TimePeriodController extends Controller
 {
@@ -24,7 +26,9 @@ class TimePeriodController extends Controller
             $timePeriods = $timePeriods->where('name', 'like', "%{$request->q}%");
         }
         $categories = Category::paginate(10)->onEachSide(1);
-        return view('pages.time-period.index', ['categories' => $categories]);
+        return Inertia::render('TimePeriods/Index', [
+            'timeperiods' => CategoryResource::collection($categories),
+        ]);
     }
 
     // public function statusUdate(Request $request)
@@ -40,12 +44,12 @@ class TimePeriodController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request ,$id)
+    public function create($id)
     {
-        $segments = $request->segments();
-        $category = Category::find($id);
-        $times = Time::get();
-        return view('pages.time-period.add', ['category' => $category, 'times' => $times , 'segments' => $segments]);
+        return Inertia::render('TimePeriods/Form', [
+            'category' => new CategoryResource(Category::find($id)),
+            'times' => TimeResource::collection(Time::get()),
+        ]);
     }
 
     /**
@@ -55,47 +59,56 @@ class TimePeriodController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'category' => 'required',
-            'add_time_conditions.*.time' => 'required',
+            'timePeriods.*.time' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(
+            return redirect()->back()->withErrors(
                 [
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ],
-                400,
             );
         }
-
-        foreach ($request->add_time_conditions as $key => $value) {
-            TimePeriod::create([
+        foreach ($request->timePeriods as $key => $value) {
+            $timePeriods =    TimePeriod::create([
                 'category_id' => $request->category,
                 'time_id' => $value['time'],
             ]);
         }
-        return response()->json(['success' => true, 'message' => 'Time Period created successfully']);
+        if ($timePeriods) {
+            return redirect()->route('time-periods.index')->with('flash', ['success' => true, 'message' => CreateMessage('Time Period')]);
+        }
+
+        return redirect()->route('time-periods.index')->with('flash', ['success' => true, 'message' => ErrorMessage()]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TimePeriod $timePeriod)
+    public function show($id)
     {
-        //
+        return Inertia::render('TimePeriods/Form', [
+            'category' => new CategoryResource(Category::find($id)),
+            'times' => TimeResource::collection(Time::get()),
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request , $id)
+    public function edit(Request $request, $id)
     {
         $segments = $request->segments();
         $category = Category::find($id);
         $times = Time::get();
         $timePeriod = TimePeriod::where('category_id', '=', $id)->get();
 
-        return view('pages.time-period.edit', ['timePeriod' => TimePeriodResource::collection($timePeriod), 'times' => $times, 'category' => $category , 'segments' => $segments]);
+        return Inertia::render('TimePeriods/Form', [
+            'category' => new CategoryResource($category),
+            'times' => TimeResource::collection($times),
+            'timePeriods' => TimePeriodResource::collection($timePeriod),
+        ]);
     }
 
     /**
@@ -103,32 +116,34 @@ class TimePeriodController extends Controller
      */
     public function update(Request $request, TimePeriod $timePeriod, $id)
     {
-        $timeCategory = DB::table('time_periods')
-            ->where('category_id', '=', $id)
-            ->delete();
 
-            $validator = Validator::make($request->all(), [
+
+        $validator = Validator::make($request->all(), [
             'category' => 'required',
-            'add_time_conditions.*.time' => 'required',
+            'timePeriods.*.time' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(
+            return redirect()->back()->withErrors(
                 [
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ],
-                400,
             );
         }
 
-        foreach ($request->add_time_conditions as $key => $value) {
-            TimePeriod::create([
+        $timeCategory = TimePeriod::where('category_id', $id)->delete();
+        foreach ($request->timePeriods as $key => $value) {
+            $timePeriods =    TimePeriod::create([
                 'category_id' => $request->category,
                 'time_id' => $value['time'],
             ]);
         }
-        return response()->json(['success' => true, 'message' => 'Time Period Updated successfully']);
+        if ($timePeriods) {
+            return redirect()->route('time-periods.index')->with('flash', ['success' => true, 'message' => CreateMessage('Time Period')]);
+        }
+
+        return redirect()->route('time-periods.index')->with('flash', ['success' => true, 'message' => ErrorMessage()]);
     }
 
     /**

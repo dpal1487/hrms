@@ -15,7 +15,6 @@ class ItemImagesResource extends JsonResource
     public function toArray($request)
     {
         return [
-            // 'id' => $this->id,
             'file_name' => $this->image->file->file_name,
             'file_path' => $this->image->file->file_path,
             'file_size' => $this->image->file->file_size,

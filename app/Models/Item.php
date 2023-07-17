@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class Item extends Model
 {
   protected $hidden = ['user_id',];
-  protected $fillable = ['id', 'user_id', 'name', 'slug', 'category_id','base_url', 'description', 'rent_price', 'time_id', 'security_price', 'from_date', 'to_date', 'status_id'];
+  protected $fillable = ['id', 'user_id', 'name', 'slug', 'category_id', 'base_url', 'description', 'rent_price', 'time_id', 'security_price', 'from_date', 'to_date', 'status_id'];
 
   public function attributes()
   {
@@ -79,8 +78,8 @@ class Item extends Model
     // $user = Auth::guard('api')->user();
     $user = Auth::user();
     if ($user) {
-      return $this->hasOne(Favourite::class, 'item_id', 'id')->where('user_id',$user->id);
+      return $this->hasOne(Favourite::class, 'item_id', 'id')->where('user_id', $user->id);
     }
-    return $this->hasOne(Favourite::class, 'item_id', 'id')->where('user_id',0);
+    return $this->hasOne(Favourite::class, 'item_id', 'id')->where('user_id', 0);
   }
 }

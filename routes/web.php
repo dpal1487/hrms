@@ -85,14 +85,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::controller(ItemController::class)->group(function () {
         Route::get('/items', 'index')->name('items.index');
         Route::group(['prefix' => 'item'], function () {
-            Route::get('/{id}', 'show')->name('item.show');
-            Route::get('/customers', 'details')->name('item.customers');
-            Route::get('/reviews', 'reviews')->name('item.reviews');
-            Route::post('/status', 'updateStatus')->name('item.status');
+            Route::get('/', 'index')->name('item');
+            Route::get('{id}', 'show')->name('item.show');
+            Route::get('customers', 'details')->name('item.customers');
+            Route::get('reviews/{id}', 'reviews')->name('item.reviews');
+            Route::post('status', 'statusUdate')->name('item.status');
         });
     });
-    Route::get('/reviews/{id}', [ReviewController::class, 'reviews'])->name('item/reviews');
-
+    // Route::get('/reviews/{id}', [ReviewController::class, 'reviews'])->name('item/reviews');
     // category
 
     Route::controller(CategoryController::class)->group(function () {
@@ -301,14 +301,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::controller(TimePeriodController::class)->group(function () {
-        Route::group(['prefix' => 'time-periods'], function () {
-            Route::get('/', 'index')->name('time-periods.index');
-            Route::get('{id}/create', 'create')->name('time-periods.create');
-            Route::post('/store', 'store')->name('time-periods.store');
-            Route::get('{id}/view', 'show')->name('time-periods.view');
-            Route::get('{id}/edit', 'edit')->name('time-periods.edit');
-            Route::any('{id}/update', 'update')->name('time-periods.update');
-            Route::delete('{id}/destroy', 'destroy')->name('time-periods.destroy');
+        Route::get('time-periods', 'index')->name('time-periods.index');
+        Route::group(['prefix' => 'time-period'], function () {
+            Route::get('{id}/create', 'create')->name('time-period.create');
+            Route::post('/store', 'store')->name('time-period.store');
+            Route::get('{id}', 'show')->name('time-period.show');
+            Route::get('{id}/edit', 'edit')->name('time-period.edit');
+            Route::any('{id}/update', 'update')->name('time-period.update');
+            Route::delete('{id}/destroy', 'destroy')->name('time-period.destroy');
         });
     });
 

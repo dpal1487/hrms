@@ -5,10 +5,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
-import Swal from "sweetalert2";
-import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
-import axios from "axios";
 import ItemCard from "./Component/ItemCard.vue";
 export default defineComponent({
     props: ["items", 'itemStatus'],
@@ -23,7 +20,6 @@ export default defineComponent({
                 "Status",
                 "Action",
             ],
-            checkbox: [],
         };
     },
     components: {
@@ -37,65 +33,11 @@ export default defineComponent({
     },
     methods: {
 
-        confirmDelete(id, index) {
-            this.isLoading = true;
-            const name = this.industries.data[index].name;
-            Swal.fire({
-                title: "Are you sure you want to delete " + name + " ?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#dc3545",
-                cancelButtonColor: "#6c757d",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios
-                        .delete("/industry/" + id)
-                        .then((response) => {
-                            toast.success(response.data.message);
-                            if (response.data.success) {
-                                this.industries.data.splice(index, 1);
-                                return;
-                            }
-                        })
-                        .catch((error) => {
-                            if (error.response.status == 400) {
-                                toast.error(error.response.data.message);
-                            }
-                        });
-                } else if (result.dismiss === 'cancel') {
-                    Swal.fire({
-                        text: + name + "was not deleted.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn fw-bold btn-primary",
-                        }
-                    });
-                }
-
-            });
-        },
         search() {
             Inertia.get(
-                "/item",
+                "/items",
                 this.form,
             );
-        },
-        changeStatus(e, id) {
-            this.isLoading = true;
-            axios
-                .post("/industry/status", { id: id, status: e })
-                .then((response) => {
-                    if (response.data.success) {
-                        toast.success(response.data.message);
-                        return;
-                    }
-                    toast.error(response.data.message);
-                })
-                .finally(() => (this.isLoading = false));
         },
 
     },
@@ -130,7 +72,7 @@ export default defineComponent({
                         placeholder="Search " />
                 </div>
                 <div class="w-100 mw-200px">
-                    <Multiselect :options="itemStatus.data" label="label" valueProp="id" @change="changeStatus"
+                    <Multiselect :options="itemStatus.data" label="label" valueProp="id"
                         class="form-control form-control-solid" placeholder="Select Status" v-model="form.s" />
                 </div>
                 <button type="submit" class="btn btn-primary">

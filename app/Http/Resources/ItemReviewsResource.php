@@ -15,9 +15,9 @@ class ItemReviewsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'user' => $this->reviews[0]['user'],
+            'user' => $this->reviews,
             'reviews' => ReviewResource::collection($this->reviews),
-            'review' => $this->review,
+            'review' => $this->review?->review,
         ];
     }
 }

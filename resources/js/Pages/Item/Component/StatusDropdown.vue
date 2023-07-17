@@ -21,8 +21,7 @@ export default defineComponent({
                 .then((response) => {
                     if (response.data.success == true) {
                         Inertia.get(
-                            "/item",
-
+                            "/items",
                         );
                     }
                     else {
@@ -35,7 +34,7 @@ export default defineComponent({
             this.statusToggle = !this.statusToggle;
         },
         params() {
-           function getUrlVars() {
+            function getUrlVars() {
                 var vars = {};
                 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
                     function (m, key, value) {
@@ -49,8 +48,8 @@ export default defineComponent({
         Loading,
     },
     created() {
-        var fType = getUrlVars()["type"];
-        console.log(fType);
+        // var fType = getUrlVars()["type"];
+        // console.log(fType);
     }
 });
 </script>
@@ -70,7 +69,7 @@ export default defineComponent({
         </button>
         <!--begin::Menu 2-->
         <div v-if="statusToggle"
-            class="toggle menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px show"
+            class="toggle menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px show position-absolute end-0 "
             data-kt-menu="true">
             <!--begin::Menu item-->
             <div class="menu-item px-3">

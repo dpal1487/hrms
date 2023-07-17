@@ -338,7 +338,7 @@ export default defineComponent({
                     Discard
                     </Link>
                     <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                        :data-kt-indicator="requesting ? 'on' : 'off'">
+                        :data-kt-indicator="form.processing ? 'on' : 'off'">
                         <span class="indicator-label">
 
                             <span v-if="route().current() == 'attribute.edit'">Save Changes</span>

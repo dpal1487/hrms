@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ItemResource extends JsonResource
@@ -54,10 +53,11 @@ class ItemResource extends JsonResource
       ],
       'location' => [
         'id' => $this->location?->address?->id,
-        'address_id' => $this->location?->address?->address_id,
+        'address_line_1' => $this->location?->address?->address_line_1,
+        'address_line_2' => $this->location?->address?->address_line_2,
         'city' => $this->location?->address?->city,
         'state' => $this->location?->address?->state,
-        'locality' => $this->location?->locality,
+        'country' => $this->location?->address?->country,
         'pincode' => $this->location?->address?->pincode,
       ],
       'isFavourite' => $this->isFavourite ? true : false,

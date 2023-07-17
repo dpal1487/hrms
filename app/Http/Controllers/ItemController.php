@@ -7,46 +7,34 @@ use App\Models\User;
 use App\Models\ItemStatus;
 use Illuminate\Http\Request;
 use App\Http\Resources\ItemResource;
+use App\Http\Resources\ItemReviewsResource;
 use App\Http\Resources\ItemStatusesResource;
+use App\Http\Resources\UserResource;
 use Inertia\Inertia;
 
 class ItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public $itemstatus;
 
+    public function __construct()
+    {
+        $this->itemstatus = ItemStatusesResource::collection(ItemStatus::all());
+    }
     public function index(Request $request)
     {
-
         $items = new Item();
         if ($request->q) {
             $items = $items->where('name', 'like', "%{$request->q}%");
-        } elseif ($request->status != null) {
-            $items = $items->where('status_id', '=', intval($request->status));
         }
-        $items = $items
-            ->paginate(2)
-            ->onEachSide(1)
-            ->appends(request()->query());
-        $itemStatus = ItemStatus::all();
+        if (!empty($request->s) || $request->s != null) {
+            $items = $items->where('status_id', '=', $request->s);
+        }
         return Inertia::render('Item/Index', [
-            'items' => ItemResource::collection($items),
-            'itemStatus' => ItemStatusesResource::collection($itemStatus)
+            'items' => ItemResource::collection($items->paginate(2)->onEachSide(1)->appends(request()->query())),
+            'itemStatus' => $this->itemstatus,
         ]);
     }
-    // public function statusUdate(Request $request)
-    // {
-
-    //     if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
-    //         $status = $request->status == 0  ? "Inactive" : "Active";
-    //                     return response()->json(['message' => StatusMessage('Brand', $status), 'success' => true]);
-
-    //     }
-    //     return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
-    // }
-
-    public function updateStatus(Request $request)
+    public function statusUdate(Request $request)
     {
         $item = Item::find($request->id);
         $item->status_id = $request->status;
@@ -57,26 +45,21 @@ class ItemController extends Controller
         ]);
     }
 
-    public function items($id)
+    public function show($id)
     {
-        $title = "Item Details";
-        $data = User::find($id);
-
-        $itemStatus = ItemStatus::all();
-
         $item = Item::where(['user_id' => $id])->get();
-
-        return view('pages.users.items', ['title' => $title, 'user' => $data, 'itemstatus' => $itemStatus, 'items' => ItemResource::collection($item)]);
+        return Inertia::render('Item/Show', [
+            'itemdetails' => new ItemResource(Item::find($id)),
+            'user' => new UserResource(User::find($id)),
+            'itemStatus' => $this->itemstatus,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function details($id)
-    {
-        $title = "Item Details";
-        $item = Item::where(['id' => $id])->get();
 
-        return view('pages.item.details', ['title' => $title, 'itemdetails' => ItemResource::collection($item)]);
+    public function reviews($id)
+    {
+        return Inertia::render('Item/Review', [
+            'itemreview' => new ItemReviewsResource(Item::find($id))
+        ]);
     }
 }

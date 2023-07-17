@@ -154,9 +154,9 @@ class AttributeController extends Controller
                     ]);
                 }
             }
-            return redirect()->route('attribute.index')->with('flash', ['message' =>  UpdateMessage('Attribute')]);
+            return redirect()->route('attributes.index')->with('flash', ['message' =>  UpdateMessage('Attribute')]);
         }
-        return redirect()->route('attribute.index')->with('message', ErrorMessage());
+        return redirect()->route('attributes.index')->with('message', ErrorMessage());
     }
     public function destroy($id)
     {
