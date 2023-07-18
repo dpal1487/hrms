@@ -12,12 +12,12 @@ class ItemAttribute extends Model
     'attribute_id',
     'attribute_value',
   ];
-  public function value()
+  public function attribute()
   {
-    return $this->hasOne(Attribute::class, 'id','attribute_id');
+    return $this->hasOne(Attribute::class, 'id', 'attribute_id');
   }
   public function item()
   {
-    return $this->hasOne(Item::class , 'id' , 'item_id');
+    return $this->hasOne(Item::class, 'id', 'item_id');
   }
 }

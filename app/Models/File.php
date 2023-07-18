@@ -9,14 +9,15 @@ class File extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['file_name', 'file_path', 'file_size', 'file_mime', 'file_extension' , 'status'];
+    protected $fillable = ['file_name', 'file_path', 'file_size', 'file_mime', 'file_extension', 'status'];
+
     public function image()
     {
-        return $this->hasOne(ItemImage::class, 'image_id', 'id');
+        return $this->belongsTo(ItemImage::class, 'image_id', 'id');
     }
 
     public function images()
     {
-        return $this->hasMany(ItemImage::class, 'image_id', 'id');
+        return $this->belongsTo(ItemImage::class, 'image_id', 'id');
     }
 }

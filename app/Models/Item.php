@@ -14,12 +14,10 @@ class Item extends Model
   {
     return $this->hasMany(ItemAttribute::class, 'item_id', 'id');
   }
-
   public function customers()
   {
     return $this->hasMany(ItemCustomer::class, 'item_id', 'id');
   }
-
   public function favourties()
   {
     return $this->hasMany(Favourite::class, 'item_id', 'id');
@@ -32,12 +30,10 @@ class Item extends Model
   {
     return $this->hasMany(ItemImage::class, 'item_id', 'id');
   }
-
   public function location()
   {
     return $this->hasOne(ItemLocation::class, 'item_id', 'id');
   }
-
   public function reviews()
   {
     return $this->hasMany(ItemReview::class, 'item_id', 'id');
@@ -54,7 +50,6 @@ class Item extends Model
   {
     return $this->hasOne(Category::class, 'id', 'category_id');
   }
-
   public function visits()
   {
     return $this->hasMany(ItemVisit::class, 'item_id', 'id');
@@ -67,12 +62,10 @@ class Item extends Model
   {
     return $this->hasOne(User::class, 'id', 'user_id');
   }
-
   public function attribute()
   {
     return $this->hasOne(ItemAttribute::class, 'item_id', 'id');
   }
-
   public function isFavourite()
   {
     // $user = Auth::guard('api')->user();

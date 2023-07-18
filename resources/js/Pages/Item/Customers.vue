@@ -10,7 +10,7 @@ export default defineComponent({
 
     data() {
         return {
-            title: 'Item Review',
+            title: 'Customer Review',
             rating: this.itemreview.rating
         }
     },
@@ -36,6 +36,12 @@ export default defineComponent({
             <li class="breadcrumb-item">
                 <Link href="/items" class="text-muted text-hover-primary">Items</Link>
             </li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="text-muted text-hover-primary">Customer Review</span>
+            </li>
         </template>
         <div class="row g-5 g-xl-10 mb-5 mb-xl-10 position-relative;">
             <div class="col-sm-12 col-md-5">
@@ -54,7 +60,7 @@ export default defineComponent({
                             </span>
                             <span class="badge badge-light-info fs-6 fw-bold" v-else>
 
-                                {{ itemreview?.data?.rating_reviews?.count }} Reviews
+                                {{ itemreview?.data?.review?.rating }} Reviews
                             </span>
                         </div>
                         <div class="rating">
@@ -113,7 +119,6 @@ export default defineComponent({
                 </div>
             </div>
             <div class="col-sm-12 col-md-7 overflow-auto">
-                <!-- {{ itemreview?.data?.reviews }} -->
                 <div class="card mb-3 mt-4 rounded shadow-sm" v-for=" review in itemreview?.data?.reviews">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-stretch justify-content-between">
@@ -122,7 +127,8 @@ export default defineComponent({
                                     <img alt="user image" src="/assets/media/avatars/300-1.jpg" class="rounded h-100" />
                                 </div>
                                 <div class="">
-                                    <h4>
+                                    {{ review?.review }}
+                                    <!-- <h4>
                                         <span v-if="review == ''">
                                             John Doe
                                         </span>
@@ -130,7 +136,7 @@ export default defineComponent({
                                             {{ review?.user?.first_name + " " + review?.user?.last_name }}
                                         </span>
 
-                                    </h4>
+                                    </h4> -->
                                     <div class="rating">
                                         <div class="d-flex">
                                             <Rating :rating="review?.review?.rating" />

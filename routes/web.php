@@ -87,7 +87,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::group(['prefix' => 'item'], function () {
             Route::get('/', 'index')->name('item');
             Route::get('{id}', 'show')->name('item.show');
-            Route::get('customers', 'details')->name('item.customers');
+            Route::get('customers/{id}', 'customers')->name('item.customers');
             Route::get('reviews/{id}', 'reviews')->name('item.reviews');
             Route::post('status', 'statusUdate')->name('item.status');
         });

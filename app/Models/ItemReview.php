@@ -10,7 +10,8 @@ use App\Models\Item;
 
 class ItemReview extends Model
 {
-  protected $fillable=['item_id','user_id','review_id'];
+  protected $fillable = ['item_id', 'user_id', 'review_id'];
+
   public function user()
   {
     return $this->hasOne(User::class, 'id', 'user_id');
@@ -24,7 +25,7 @@ class ItemReview extends Model
     return $this->hasOne(Review::class, 'id', 'review_id');
   }
   public function reviews()
-    {
-        return $this->hasMany(Review::class , 'id' , 'review_id');
-    }
+  {
+    return $this->hasMany(Review::class, 'id', 'review_id');
+  }
 }

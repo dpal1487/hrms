@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ItemCustomerResource;
+use App\Http\Resources\ItemListResource;
+use App\Http\Resources\ItemOverViweResource;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\ItemStatus;
@@ -30,7 +33,7 @@ class ItemController extends Controller
             $items = $items->where('status_id', '=', $request->s);
         }
         return Inertia::render('Item/Index', [
-            'items' => ItemResource::collection($items->paginate(2)->onEachSide(1)->appends(request()->query())),
+            'items' => ItemListResource::collection($items->paginate(2)->onEachSide(1)->appends(request()->query())),
             'itemStatus' => $this->itemstatus,
         ]);
     }
@@ -47,9 +50,8 @@ class ItemController extends Controller
 
     public function show($id)
     {
-        $item = Item::where(['user_id' => $id])->get();
         return Inertia::render('Item/Show', [
-            'itemdetails' => new ItemResource(Item::find($id)),
+            'itemdetails' => new ItemOverViweResource(Item::find($id)),
             'user' => new UserResource(User::find($id)),
             'itemStatus' => $this->itemstatus,
         ]);
@@ -60,6 +62,12 @@ class ItemController extends Controller
     {
         return Inertia::render('Item/Review', [
             'itemreview' => new ItemReviewsResource(Item::find($id))
+        ]);
+    }
+    public function customers($id)
+    {
+        return Inertia::render('Item/Customers', [
+            'itemreview' => new ItemCustomerResource(Item::find($id))
         ]);
     }
 }

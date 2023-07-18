@@ -16,7 +16,7 @@ class ItemCustomerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'item_id' =>new ItemResource($this->item_id),
+            // 'item_id' =>new ItemResource($this->item_id),
             'document_id' => $this->document_id,
             'full_name' => $this->full_name,
             'rental_status' => $this->rental_status,

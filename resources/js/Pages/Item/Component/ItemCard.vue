@@ -98,13 +98,9 @@ export default defineComponent({
                             </div>
                             <!--end::Info-->
                         </div>
-
-
                         <div class="d-flex flex-column">
-                            <!--begin::Name-->
-                            <!--end::Name-->
                             <!--begin::Info-->
-                            <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
+                            <div class="d-flex flex-wrap fw-semibold fs-6 pe-2">
                                 <p class="d-flex align-items-center fw-bold text-gray-700 me-3">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
                                     <span class="svg-icon svg-icon-4 me-1">
@@ -129,14 +125,11 @@ export default defineComponent({
                                     </span>
                                     <!--end::Svg Icon-->{{ item?.security_price }} Security Price
                                 </p>
-    
+
                             </div>
                             <!--end::Info-->
                         </div>
                     </div>
-
-
-                   
                     <div class="d-flex flex-column">
                         <!--begin::Info-->
                         <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
@@ -185,39 +178,43 @@ export default defineComponent({
                                         </path>
                                     </svg>
                                 </span>
-                                <span>0 Views</span>
+                                <span>{{ item?.item_visits?.count }} Views</span>
                             </div>
                             <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
-                            <Link :href="route('item.reviews', item.id)" class=" me-5  d-flex align-items-center">
-                            <span class="svg-icon svg-icon-4">
-                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
-                                    aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            <span>
-                                0 Reviews
-                            </span>
-                            </Link>
-                            <Link :href="route('item.customers', item.id)" class=" me-5  d-flex align-items-center">
-                            <span class="svg-icon svg-icon-4">
-                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1"
-                                    viewBox="0 0 18 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M12 12.041v-0.825c1.102-0.621 2-2.168 2-3.716 0-2.485 0-4.5-3-4.5s-3 2.015-3 4.5c0 1.548 0.898 3.095 2 3.716v0.825c-3.392 0.277-6 1.944-6 3.959h14c0-2.015-2.608-3.682-6-3.959z">
-                                    </path>
-                                    <path
-                                        d="M5.112 12.427c0.864-0.565 1.939-0.994 3.122-1.256-0.235-0.278-0.449-0.588-0.633-0.922-0.475-0.863-0.726-1.813-0.726-2.748 0-1.344 0-2.614 0.478-3.653 0.464-1.008 1.299-1.633 2.488-1.867-0.264-1.195-0.968-1.98-2.841-1.98-3 0-3 2.015-3 4.5 0 1.548 0.898 3.095 2 3.716v0.825c-3.392 0.277-6 1.944-6 3.959h4.359c0.227-0.202 0.478-0.393 0.753-0.573z">
-                                    </path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            0
-                            Customers </Link>
-                            <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
+                            <div class="">
+                                <Link :href="route('item.reviews', item.id)" class="me-5 d-flex align-items-center">
+                                <span class="svg-icon svg-icon-4 me-2">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
+                                        aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                                <span>
+                                    {{ item?.rating_reviews?.count }} Reviews
+                                </span>
+                                </Link>
+                            </div>
+                            <div class="">
+                                <Link :href="route('item.customers', item.id)" class=" me-5 d-flex align-items-center">
+                                <span class="svg-icon svg-icon-4 me-2">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1"
+                                        viewBox="0 0 18 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 12.041v-0.825c1.102-0.621 2-2.168 2-3.716 0-2.485 0-4.5-3-4.5s-3 2.015-3 4.5c0 1.548 0.898 3.095 2 3.716v0.825c-3.392 0.277-6 1.944-6 3.959h14c0-2.015-2.608-3.682-6-3.959z">
+                                        </path>
+                                        <path
+                                            d="M5.112 12.427c0.864-0.565 1.939-0.994 3.122-1.256-0.235-0.278-0.449-0.588-0.633-0.922-0.475-0.863-0.726-1.813-0.726-2.748 0-1.344 0-2.614 0.478-3.653 0.464-1.008 1.299-1.633 2.488-1.867-0.264-1.195-0.968-1.98-2.841-1.98-3 0-3 2.015-3 4.5 0 1.548 0.898 3.095 2 3.716v0.825c-3.392 0.277-6 1.944-6 3.959h4.359c0.227-0.202 0.478-0.393 0.753-0.573z">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                                {{ item?.item_customers?.count }} Customers
+                                </Link>
+                                <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
+                            </div>
                         </div>
                         <!--end::Info-->
                     </div>
