@@ -90,6 +90,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('customers/{id}', 'customers')->name('item.customers');
             Route::get('reviews/{id}', 'reviews')->name('item.reviews');
             Route::post('status', 'statusUdate')->name('item.status');
+
+            Route::get('customer/documents/{id}', [ItemController::class, 'documentDownload'])->name('customer.document');
         });
     });
     // Route::get('/reviews/{id}', [ReviewController::class, 'reviews'])->name('item/reviews');

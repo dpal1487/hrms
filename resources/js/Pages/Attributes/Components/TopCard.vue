@@ -4,6 +4,21 @@ export default defineComponent({
     props: ["attribute"],
 });
 </script>
+
+<style>
+.rhombus {
+    clip-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
+    width: 250px;
+    height: 250px;
+    display: grid;
+    place-content: center;
+}
+
+.drop-shadow {
+    filter: drop-shadow(0 0 20px rgb(204, 253, 230));
+}
+</style>
+
 <template>
     <div class="mb-5">
         <div class="card">
@@ -12,11 +27,10 @@ export default defineComponent({
                     <h2>Attribute</h2>
                 </div>
             </div>
-            <div class="card-body pt-9 pb-0">
+            <div class="card-body p-0">
                 <div class="row">
-
                     <div class="col-6">
-                        <table class="table table-striped table-bordered text-center align-middle">
+                        <table class="table table-striped table-bordered text-left mx-10 align-middle">
                             <tbody>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
@@ -28,7 +42,6 @@ export default defineComponent({
                                 </tr>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
-
                                         Data Type
                                     </th>
                                     <td class="fs-6 fw-bold text-gray-700">
@@ -37,7 +50,6 @@ export default defineComponent({
                                 </tr>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
-
                                         Category
                                     </th>
                                     <td class="fs-6 fw-bold text-gray-700">
@@ -46,7 +58,6 @@ export default defineComponent({
                                 </tr>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
-
                                         Field
                                     </th>
                                     <td class="fs-6 fw-bold text-gray-700">
@@ -56,7 +67,6 @@ export default defineComponent({
 
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
-
                                         Input Type
                                     </th>
                                     <td class="fs-6 fw-bold text-gray-700">
@@ -66,10 +76,15 @@ export default defineComponent({
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
 
-                                        Display Order
+                                        Attribute Rules
                                     </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        {{ attribute?.display_order }}
+                                    <td class="fs-6 fw-bold text-gray-700 text-right">
+                                        <span class="" v-for="rule in attribute?.rules">
+                                            <p>
+                                                Message:
+                                                {{ rule?.message }}
+                                            </p>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -84,14 +99,19 @@ export default defineComponent({
                             </tbody>
                         </table>
                     </div>
+
                     <div class="col-6">
                         <div class="h-100 d-flex justify-content-center align-items-center bg-gray-100">
-                            <div class="text-center">
-                                <div class="badge bg-success">Active</div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <h1>{{ attribute?.header?.total_active }}&nbsp;</h1>
-                                    <span>Out Of</span>
-                                    <h1>&nbsp;{{ attribute?.header?.total_value }}</h1>
+                            <div class="drop-shadow">
+                                <div class="text-center bg-white p-20 rhombus">
+                                    <div>
+                                        <div class="badge bg-success w-fit">Active</div>
+                                        <div class="d-flex justify-content-center align-items-center text-gray-600">
+                                            <h1 class="text-gray-800">{{ attribute?.header?.total_active }}&nbsp;</h1>
+                                            <span>Out Of</span>
+                                            <h1 class="text-gray-800">&nbsp;{{ attribute?.header?.total_value }}</h1>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

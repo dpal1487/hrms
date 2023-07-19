@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AttributeListResurce;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
 use App\Http\Resources\AttributeResource;
@@ -32,7 +33,7 @@ class AttributeController extends Controller
             $attributes = $attributes->where('status', $request->s);
         }
         return Inertia::render('Attributes/Index', [
-            'attributes' => AttributeResource::collection($attributes->paginate(10)->onEachSide(1)->appends(request()->query()))
+            'attributes' => AttributeListResurce::collection($attributes->paginate(10)->onEachSide(1)->appends(request()->query()))
         ]);
     }
     public function statusUdate(Request $request)
@@ -41,7 +42,6 @@ class AttributeController extends Controller
         if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
             return response()->json(['message' => StatusMessage('Attribute', $status), 'success' => true]);
-
         }
         return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }
@@ -97,11 +97,22 @@ class AttributeController extends Controller
         return redirect()->route('attribute.index')->with('message', ErrorMessage());
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return Inertia::render('Attributes/Show', [
-            'attribute' => new AttributeResource(Attribute::find($id)),
-        ]);
+        $attribute = Attribute::find($id);
+
+        if ($attribute) {
+            $value = AttributeValue::where('attribute_id', $attribute->id)->get();
+            // if (!empty($request->q)) {
+            //     $attribute = $value->where('attribute_value', 'like', "%$request->q%");
+            // }
+            // if (!empty($request->s) || $request->s != '') {
+            //     $attribute = $value->where('status', $request->s);
+            // }
+            return Inertia::render('Attributes/Show', [
+                'attribute' => new AttributeResource($attribute),
+            ]);
+        }
     }
 
     public function edit($id)
@@ -109,7 +120,7 @@ class AttributeController extends Controller
         return Inertia::render('Attributes/Form', [
             'categories' => CategoryResource::collection(Category::get()),
             'rules' => RuleResource::collection(Rule::get()),
-            'attribute' => new AttributeResource(Attribute::find($id)),
+            'attribute' => new AttributeListResurce(Attribute::find($id)),
         ]);
     }
     public function attributevalue($id)

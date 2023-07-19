@@ -13,6 +13,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
 import utils from "../utils";
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
     props: ["attribute"],
@@ -33,6 +34,11 @@ export default defineComponent({
     },
     data() {
         return {
+            id: route.params,
+            // id: this.attribute?.data?.id,
+            filter: {
+
+            },
             tbody: [
                 "Attribute Value",
                 "Attribute Status",
@@ -86,6 +92,12 @@ export default defineComponent({
             await utils.deleteIndexDialog(route('attribute-value.destroy', id), this.attribute?.data?.values, index);
             this.isLoading = false;
         },
+        search() {
+            Inertia.get(
+                "/attribute/" + this.id,
+                this.filter,
+            );
+        },
     },
 });
 </script>
@@ -115,7 +127,6 @@ export default defineComponent({
             </div>
         </template>
         <div class="mb-5">
-
             <TopCard :attribute="attribute?.data" />
             <div class="card">
                 <div class="card-header align-items-center">
@@ -123,6 +134,30 @@ export default defineComponent({
                         <h2>Attribute List</h2>
                     </div>
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                        <div>
+                            <!--begin::Card title-->
+                            <form @submit.prevent="search()">
+                                <!--begin::Search-->
+                                <div class="d-flex align-items-center position-relative">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                    <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                                                transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
+                                            <path
+                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                    <input type="text" v-model="filter.q"
+                                        class="form-control form-control-solid h-35px w-200px ps-14"
+                                        placeholder="Search " />
+                                </div>
+                                <!--begin::Card title-->
+                            </form>
+
+                        </div>
 
                         <button class="btn btn-primary m-1 btn-sm" v-if="!isEdit"
                             @click="this.isAdd = this.isAdd ? false : true, this.form = {}"><i
@@ -163,10 +198,10 @@ export default defineComponent({
                     <div class="row" v-else>
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-1 text-center">
+                                <table class="table align-middle table-row-dashed fs-6 gy-1 text-left">
                                     <thead>
                                         <!--begin::Table row-->
-                                        <tr class="text-gray-800 fw-bold fs-7 text-uppercase">
+                                        <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                             <th v-for="(th, index) in tbody" :key="index">
                                                 {{ th }}
                                             </th>

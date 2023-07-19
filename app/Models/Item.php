@@ -14,6 +14,10 @@ class Item extends Model
   {
     return $this->hasMany(ItemAttribute::class, 'item_id', 'id');
   }
+  public function customer()
+  {
+    return $this->hasOne(ItemCustomer::class, 'item_id', 'id');
+  }
   public function customers()
   {
     return $this->hasMany(ItemCustomer::class, 'item_id', 'id');

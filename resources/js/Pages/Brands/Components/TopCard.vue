@@ -1,3 +1,17 @@
+
+<style>
+.rhombus {
+    clip-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
+    width: 250px;
+    height: 250px;
+    display: grid;
+    place-content: center;
+}
+
+.drop-shadow {
+    filter: drop-shadow(0 0 20px rgb(204, 253, 230));
+}
+</style>
 <script>
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -12,11 +26,10 @@ export default defineComponent({
                     <h2>Brand</h2>
                 </div>
             </div>
-            <div class="card-body pt-9 pb-0">
+            <div class="card-body p-0">
                 <div class="row">
-
                     <div class="col-6">
-                        <table class="table table-striped table-bordered text-center align-middle">
+                        <table class="table table-striped table-bordered text-left align-middle">
                             <tbody>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
@@ -68,19 +81,20 @@ export default defineComponent({
                                         </div>
                                     </td>
                                 </tr>
-
-
                             </tbody>
                         </table>
                     </div>
                     <div class="col-6">
                         <div class="h-100 d-flex justify-content-center align-items-center bg-gray-100">
-                            <div class="text-center">
-                                <div class="badge bg-success">Active</div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <h1>{{ brand?.header?.total_active }}&nbsp;</h1>
-                                    <span>Out Of</span>
-                                    <h1>&nbsp;{{ brand?.header?.total_value }}</h1>
+                            <div class="drop-shadow">
+                                <div class="text-center bg-white p-20 rhombus">
+                                    <div>
+                                        <div class="badge bg-success">Active</div>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <h1>{{ brand?.header?.total_active }}&nbsp;</h1>
+                                            <span>Out Of</span>
+                                            <h1>&nbsp;{{ brand?.header?.total_value }}</h1>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -89,4 +103,4 @@ export default defineComponent({
             </div>
         </div>
     </div>
-</template>
+</div></template>

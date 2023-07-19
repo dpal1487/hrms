@@ -16,15 +16,15 @@ class ItemCustomerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            // 'item_id' =>new ItemResource($this->item_id),
-            'document_id' => $this->document_id,
-            'full_name' => $this->full_name,
-            'rental_status' => $this->rental_status,
-            'rental_date' => $this->rental_date,
-            'return_date' => $this->return_date,
-            'mobile' => $this->mobile,
-            'security_pay' => $this->security_pay,
-            'email_address' => $this->email_address,
+            'image' => new ImageResource($this->image),
+            'item_details' => $this->customer->item,
+            'item_customer' => ItemResource::collection($this->customers),
+            'category' => $this->category,
+            'total_customers' => count($this->customers) > 0 ? [
+                'count' => count($this->customers)
+            ] : [
+                'count' => 0
+            ],
         ];
     }
 }

@@ -47,24 +47,23 @@ export default defineComponent({
                     </div>
                     <div class="col-md-9">
                         <div class="fs-3 fw-bold text-theme-primary">
-                            <span>{{ itemreview?.data?.category?.name }} </span><br>
-                            <span>Cusmtomer Reviews</span>
+                            <span class="fs-2 text-gray-800">{{ itemreview?.data?.item }} </span><br>
+                            <span class="fs-4 text-gray-800">{{ itemreview?.data?.category?.name }} </span><br>
                             <span class="badge badge-light-info fs-6 fw-bold" v-if="itemreview?.review == ''">
                                 0 Reviews
                             </span>
-                            <span class="badge badge-light-info fs-6 fw-bold" v-else>
-
+                            <span class="badge badge-light-info fs-4 fw-bold" v-else>
                                 {{ itemreview?.data?.rating_reviews?.count }} Reviews
                             </span>
                         </div>
                         <div class="rating">
                             <div class="d-flex">
-                                <Rating :rating="itemreview?.data?.review?.rating" />
+                                <Rating :rating="itemreview?.data?.rating_reviews?.count" />
                             </div>
                             <span class="mx-10 mt-2 fs-5 fw-bold" v-if="itemreview?.data?.review == null">
                                 0 Out Of 5
                             </span>
-                            <span class="mx-10 mt-2 fs-5 fw-bold" v-else>
+                            <span class="mx-10 mt-2 fs-5 fw-bold text-gray-800" v-else>
                                 {{ itemreview?.data?.review?.rating }} Out Of 5
                             </span>
                         </div>
@@ -114,15 +113,19 @@ export default defineComponent({
             </div>
             <div class="col-sm-12 col-md-7 overflow-auto">
                 <!-- {{ itemreview?.data?.reviews }} -->
-                <div class="card mb-3 mt-4 rounded shadow-sm" v-for=" review in itemreview?.data?.reviews">
+                <div class="card mb-3 rounded shadow-sm" v-for=" review in itemreview?.data?.reviews">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-stretch justify-content-between">
                             <div class="d-flex align-items-stretch">
-                                <div class="me-4" style="height: 4rem;">
+                                {{ }}
+                                <div class="me-4" style="height: 4rem;" v-if="review?.user_image?.small_path != ''">
+                                    <img alt="user image" :src="review?.user_image?.small_path" class="rounded h-100" />
+                                </div>
+                                <div v-else class="me-4" style="height: 4rem;">
                                     <img alt="user image" src="/assets/media/avatars/300-1.jpg" class="rounded h-100" />
                                 </div>
                                 <div class="">
-                                    <h4>
+                                    <h4 class="fs-4 text-gray-800">
                                         <span v-if="review == ''">
                                             John Doe
                                         </span>
@@ -133,20 +136,25 @@ export default defineComponent({
                                     </h4>
                                     <div class="rating">
                                         <div class="d-flex">
-                                            <Rating :rating="review?.review?.rating" />
-
-                                            <!-- <x-rating :itemreview="$itemreview" /> -->
+                                            <Rating :rating="+review?.rating" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-fit">
-                                {{ review?.review?.created_at }}
+                            <div class="w-fit fs-6 fw-bold text-gray-800">
+                                {{ review?.created_at }}
                             </div>
                         </div>
+
                         <div class="mt-2">
-                            {{ review?.review?.title }}<br>
-                            {{ review?.review?.content }}
+                            <div class="d-flex align-items-center ">
+                                <h5 class="card-title mt-1 fs-4 text-gray-800">Review Title : </h5>
+                                <h6 class="m-0 text-gray-700 text-capitalize"> {{ review?.title }}</h6>
+                            </div>
+                            <div class="d-flex align-items-center ">
+                                <h5 class="card-title fs-4 text-gray-800">Review Content : </h5>
+                                <h6 class="mt-0 py-1 text-gray-700"> {{ review?.content }}</h6>
+                            </div>
                         </div>
                     </div>
                 </div>

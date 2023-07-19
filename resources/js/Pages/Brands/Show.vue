@@ -162,7 +162,7 @@ export default defineComponent({
                     <div class="row" v-else>
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-1 text-center">
+                                <table class="table align-middle table-row-dashed fs-6 gy-1 text-left">
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-gray-800 fw-bold fs-7 text-uppercase">

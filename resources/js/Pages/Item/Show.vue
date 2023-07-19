@@ -77,6 +77,10 @@ export default defineComponent({
                             <div class="">
                                 <div class="d-flex gap-15">
                                     <div class="d-flex align-items-center ">
+                                            <h5 class="card-title fs-2 m-3">Rent Type : </h5>
+                                            <h1 class="m-0 fs-4 text-gray-800 text-uppercase">  {{ itemdetails?.data?.time }}</h1>
+                                        </div>
+                                    <div class="d-flex align-items-center ">
                                         <h5 class="card-title fs-2 m-3">Rent Prize : </h5>
                                         <h1 class="m-0 fs-4 text-gray-800"> ₹ {{ itemdetails?.data?.rent_price }}</h1>
                                     </div>
@@ -104,12 +108,16 @@ export default defineComponent({
                                             fill="currentColor" />
                                     </svg>
                                 </span>
-                                <h1 class="m-0 fs-4 text-gray-800">{{ itemdetails?.data?.location?.address_line_1
+                                <h1 v-if="itemdetails?.data?.location > 0" class="m-0 fs-4 text-gray-800">{{
+                                    itemdetails?.data?.location?.address_line_1
                                     + " " + itemdetails?.data?.location?.address_line_2
                                     + " " + itemdetails?.data?.location?.city
                                     + " " + itemdetails?.data?.location?.state
                                     + " " + itemdetails?.data?.location?.pincode
                                     + " " + itemdetails?.data?.location?.country?.name }}
+                                </h1>
+                                <h1 v-else class="m-0 fs-4 text-gray-800">
+                                    Address Not Found
                                 </h1>
                             </div>
                             <div class="">

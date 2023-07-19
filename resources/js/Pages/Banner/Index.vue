@@ -135,23 +135,19 @@ export default defineComponent({
                                 <td>
                                     <div class="d-flex">
                                         <!--begin::Thumbnail-->
-                                        <Link href="#"
+                                        <span
                                             class="d-block symbol symbol-50px symbol-lg-50px symbol-fixed position-relative">
-                                        <img v-if="banner?.image" :src="banner?.image?.small_path" alt="image"
-                                            class="rounded" />
-                                        <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image" class="rounded">
-                                        </Link>
+                                            <img v-if="banner?.image" :src="banner?.image?.small_path" alt="image"
+                                                class="rounded" />
+                                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
+                                                class="rounded">
+                                        </span>
                                         <!--end::Thumbnail-->
                                         <div class="ms-5">
                                             <!--begin::Title-->
-                                            <a href="" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                                banner-filter="banner_name">{{ banner?.title }}</a>
+                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
+                                                banner-filter="banner_name">{{ banner?.title }}</span>
                                             <!--end::Title-->
-                                            <!--begin::Description-->
-                                            <div class="text-muted fs-7 fw-bold">
-
-                                            </div>
-                                            <!--end::Description-->
                                         </div>
                                     </div>
                                 </td>

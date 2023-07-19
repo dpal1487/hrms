@@ -9,10 +9,10 @@ use App\Models\Item;
 use App\Models\User;
 use App\Models\ItemStatus;
 use Illuminate\Http\Request;
-use App\Http\Resources\ItemResource;
 use App\Http\Resources\ItemReviewsResource;
 use App\Http\Resources\ItemStatusesResource;
 use App\Http\Resources\UserResource;
+use App\Models\File;
 use Inertia\Inertia;
 
 class ItemController extends Controller
@@ -67,7 +67,12 @@ class ItemController extends Controller
     public function customers($id)
     {
         return Inertia::render('Item/Customers', [
-            'itemreview' => new ItemCustomerResource(Item::find($id))
+            'customerreview' => new ItemCustomerResource(Item::find($id))
         ]);
+    }
+    public function documentDownload($id)
+    {
+        $document = File::find($id);
+        return response()->download($document->file_path);
     }
 }
