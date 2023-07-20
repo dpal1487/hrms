@@ -123,11 +123,11 @@ export default defineComponent({
                     </div>
                     <div class="card-body">
                         <!-- end page title -->
-                        <menu-item-form @submitted="submit" :menu_lists="menu_lists" :item="item" :parents="parents">
+                        <menu-item-form @submitted="submit" :menu_lists="menu_lists?.data" :item="item" :parents="parents">
                             <template #action>
                                 <div class="d-flex justify-content-end">
                                     <!--begin::Button-->
-                                    <Link type="button" class="btn btn-outline-secondary me-5" href="/menus">Discard
+                                    <Link type="button" class="btn btn-outline-secondary me-5" href="/menu-items">Discard
                                     </Link>
                                     <!--begin::Button-->
                                     <button type="submit" class="btn btn-primary"
@@ -135,7 +135,7 @@ export default defineComponent({
                                         <div v-show="form.processing" class="spinner-border spinner-border-sm">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
-                                        Save Change
+                                        Update
                                     </button>
                                 </div>
                             </template>

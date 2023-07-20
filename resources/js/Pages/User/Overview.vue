@@ -33,7 +33,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/user" class="text-muted text-hover-primary">User</Link>
+                <Link href="/users" class="text-muted text-hover-primary">Users</Link>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -54,7 +54,7 @@ export default defineComponent({
                 </div>
                 <!--end::Card title-->
             </div>
-            <!--begin::Card header-->
+            <!--end::Card header-->
             <!--begin::Card body-->
             <div class="card-body p-9">
                 <!--begin::Row-->
@@ -102,10 +102,16 @@ export default defineComponent({
                         <span class="fw-bold fs-6 text-gray-800 me-2" v-else>
                             N / A
                         </span>
+                        <div class="fw-bold fs-2" v-if="user?.data?.email_verified_at == null">
+                            <Link href="#" class="badge badge-danger">Not Verified
+                            </Link>
 
+                        </div>
+                        <div class="fw-bold fs-2" v-else>
 
-                        <span class="badge badge-danger" v-if="user?.data?.email_verified_at == null">Not Verified</span>
-                        <span class="badge badge-success" v-else>Verified</span>
+                            <span class="badge badge-success">Verified</span>
+                        </div>
+
                     </div>
                     <!--end::Col-->
                 </div>
@@ -120,7 +126,7 @@ export default defineComponent({
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-6">
-                        <span class="fw-bold fs-6 text-gray-800">{{ user?.data?.address?.address }}</span>
+                        <span class="fw-bold fs-6 text-gray-800">{{ user?.data?.country?.name }}</span>
                     </div>
                     <!--end::Col-->
                 </div>

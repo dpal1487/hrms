@@ -16,155 +16,128 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="card-body  position-relative shadow-sm mt-4 rounded-2 bg-white">
+    <div class="card-body position-relative shadow-sm rounded-2 bg-white">
+    <StatusDropdown :id="item.id" />
         <!--begin::Toolbar-->
-        <StatusDropdown :id="item.id" />
         <!--end::Toolbar-->
         <!--begin::Details-->
-        <div class="d-flex flex-wrap flex-sm-nowrap">
+        <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
             <!--begin: Pic-->
-            {{ }}
-            <div class="me-5">
-                <Link :href="this.route('item.show', item.id)"
-                    class="d-block symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                <img v-if="item?.images?.file_path" :src="item?.images?.file_path" alt="image" class="rounded">
-                <img v-else src="/assets/media/avatars/300-1.jpg" alt="image" class="rounded">
+            <div class="px-3 d-block w-250px">
+                <Link :href="this.route('item.show', item.id)">
+                <img v-if="item?.images?.file_path" :src="item?.images?.file_path" alt="image">
+                <img v-else src="/assets/media/avatars/300-1.jpg" alt="image" class="h-100 w-100">
                 </Link>
             </div>
             <!--end::Pic-->
-            <!--begin::Info-->
             <div class="flex-grow-1">
-                <!--begin::Title-->
-                <div class="d-flex justify-content-between align-items-start flex-wrap">
-                    <!--begin::Item-->
-                    <div class="row col-md-12">
+                <div class="row col-md-12 py-4">
+                    <div class="mb-2">
+                        <Link :href="route('item.show', item.id)" class="text-gray-800  fs-2 fw-bold text-capitalize">{{
+                            item?.title
+                        }}</Link>
 
-                        <div class="d-flex flex-column ">
-                            <!--begin::Name-->
-                            <Link :href="route('item.show', item.id)" class="text-gray-800  fs-2 fw-bold text-uppercase">{{
-                                item?.title
-                            }}</Link>
-                            <!--end::Name-->
-                            <!--begin::Info-->
-                            <div class="d-flex">
-                                <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
-                                    <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
-                                    <span class="svg-icon svg-icon-4 me-1">
-                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                                            viewBox="0 0 1024 1024" height="1em" width="1em"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M483.2 790.3L861.4 412c1.7-1.7 2.5-4 2.3-6.3l-25.5-301.4c-.7-7.8-6.8-13.9-14.6-14.6L522.2 64.3c-2.3-.2-4.7.6-6.3 2.3L137.7 444.8a8.03 8.03 0 0 0 0 11.3l334.2 334.2c3.1 3.2 8.2 3.2 11.3 0zm122.7-533.4c18.7-18.7 49.1-18.7 67.9 0 18.7 18.7 18.7 49.1 0 67.9-18.7 18.7-49.1 18.7-67.9 0-18.7-18.7-18.7-49.1 0-67.9zm283.8 282.9l-39.6-39.5a8.03 8.03 0 0 0-11.3 0l-362 361.3-237.6-237a8.03 8.03 0 0 0-11.3 0l-39.6 39.5a8.03 8.03 0 0 0 0 11.3l243.2 242.8 39.6 39.5c3.1 3.1 8.2 3.1 11.3 0l407.3-406.6c3.1-3.1 3.1-8.2 0-11.3z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->{{ item?.category?.name }}
-                                </p>
-                                <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
-                                    <span class="svg-icon svg-icon-4 me-1">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.3"
-                                                d="M18.0624 15.3453L13.1624 20.7453C12.5624 21.4453 11.5624 21.4453 10.9624 20.7453L6.06242 15.3453C4.56242 13.6453 3.76242 11.4453 4.06242 8.94534C4.56242 5.34534 7.46242 2.44534 11.0624 2.04534C15.8624 1.54534 19.9624 5.24534 19.9624 9.94534C20.0624 12.0453 19.2624 13.9453 18.0624 15.3453Z"
-                                                fill="currentColor" />
-                                            <path
-                                                d="M12.0624 13.0453C13.7193 13.0453 15.0624 11.7022 15.0624 10.0453C15.0624 8.38849 13.7193 7.04535 12.0624 7.04535C10.4056 7.04535 9.06241 8.38849 9.06241 10.0453C9.06241 11.7022 10.4056 13.0453 12.0624 13.0453Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                    </span>
-
-                                    <span v-if="item?.location">
-                                        {{ item?.location?.city + " " + item?.location?.state + " " +
-                                            item?.location?.country?.name }}
-                                    </span>
-                                    <span v-else> N / A</span>
-
-                                </p>
-                                <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
-                                    <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
-                                    <span class="svg-icon svg-icon-4 me-1">
-                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
-                                            height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z">
-                                            </path>
-                                            <path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon--> {{ item?.time }}
-                                </p>
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                        <div class="d-flex flex-column">
-                            <!--begin::Info-->
-                            <div class="d-flex flex-wrap fw-semibold fs-6 pe-2">
-                                <p class="d-flex align-items-center fw-bold text-gray-700 me-3">
-                                    <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
-                                    <span class="svg-icon svg-icon-4 me-1">
-                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"
-                                            height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->{{ item?.rent_price }} Rent Price
-                                </p>
-                                <p class="d-flex align-items-center fw-bold text-gray-700 me-3">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
-                                    <span class="svg-icon svg-icon-4 me-1">
-                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16"
-                                            height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->{{ item?.security_price }} Security Price
-                                </p>
-
-                            </div>
-                            <!--end::Info-->
-                        </div>
                     </div>
-                    <div class="d-flex flex-column">
-                        <!--begin::Info-->
-                        <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
+                    <div class="d-flex mb-2">
+                        <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
                             <span class="svg-icon svg-icon-4 me-1">
-                                <span v-if="item?.status?.id == 1" class="badge badge-light-success fs-6 fw-bold">
-                                    {{ item?.status?.label }}</span>
-                                <span v-else-if="item?.status?.id == 2" class="badge badge-light-warning fs-6 fw-bold">
-                                    {{ item?.status?.label }}</span>
-                                <span v-else-if="item?.status?.id == 3" class="badge badge-light-danger fs-6 fw-bold">
-                                    {{ item?.status?.label }}</span>
-                                <span v-else-if="item?.status?.id == 4" class="badge badge-light-info fs-6 fw-bold">
-                                    {{ item?.status?.label }}</span>
-                                <span v-else="item?.status?.id == 5" class="badge badge-light-primary fs-6 fw-bold">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 15 16"
-                                        height="1.5em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z">
-                                        </path>
-                                    </svg>
-                                    {{ item?.status?.label }}</span>
-                                {{ item?.status?.text }}
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
+                                    height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M483.2 790.3L861.4 412c1.7-1.7 2.5-4 2.3-6.3l-25.5-301.4c-.7-7.8-6.8-13.9-14.6-14.6L522.2 64.3c-2.3-.2-4.7.6-6.3 2.3L137.7 444.8a8.03 8.03 0 0 0 0 11.3l334.2 334.2c3.1 3.2 8.2 3.2 11.3 0zm122.7-533.4c18.7-18.7 49.1-18.7 67.9 0 18.7 18.7 18.7 49.1 0 67.9-18.7 18.7-49.1 18.7-67.9 0-18.7-18.7-18.7-49.1 0-67.9zm283.8 282.9l-39.6-39.5a8.03 8.03 0 0 0-11.3 0l-362 361.3-237.6-237a8.03 8.03 0 0 0-11.3 0l-39.6 39.5a8.03 8.03 0 0 0 0 11.3l243.2 242.8 39.6 39.5c3.1 3.1 8.2 3.1 11.3 0l407.3-406.6c3.1-3.1 3.1-8.2 0-11.3z">
+                                    </path>
+                                </svg>
                             </span>
-                        </div>
-                        <!--end::Info-->
+                            <!--end::Svg Icon-->{{ item?.category?.name }}
+                        </p>
+                        <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
+                            <span class="svg-icon svg-icon-4 me-1">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.3"
+                                        d="M18.0624 15.3453L13.1624 20.7453C12.5624 21.4453 11.5624 21.4453 10.9624 20.7453L6.06242 15.3453C4.56242 13.6453 3.76242 11.4453 4.06242 8.94534C4.56242 5.34534 7.46242 2.44534 11.0624 2.04534C15.8624 1.54534 19.9624 5.24534 19.9624 9.94534C20.0624 12.0453 19.2624 13.9453 18.0624 15.3453Z"
+                                        fill="currentColor" />
+                                    <path
+                                        d="M12.0624 13.0453C13.7193 13.0453 15.0624 11.7022 15.0624 10.0453C15.0624 8.38849 13.7193 7.04535 12.0624 7.04535C10.4056 7.04535 9.06241 8.38849 9.06241 10.0453C9.06241 11.7022 10.4056 13.0453 12.0624 13.0453Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+
+                            <span v-if="item?.location">
+                                {{ item?.location?.city + " " + item?.location?.state + " " +
+                                    item?.location?.country?.name }}
+                            </span>
+                            <span v-else> N / A</span>
+
+                        </p>
+                        <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
+                            <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
+                            <span class="svg-icon svg-icon-4 me-1">
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
+                                    height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z">
+                                    </path>
+                                    <path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z">
+                                    </path>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon--> {{ item?.time }}
+                        </p>
                     </div>
-                    <div class="row col-md-12">
-                        <p class="text-gray-800 fs-3 fw-bold">
-                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512"
-                                height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <!--begin::Info-->
+                    <div class="d-flex flex-wrap fw-semibold fs-6 pe-2">
+                        <p class="d-flex align-items-center fw-bold">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="1em"
+                                width="1em" xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                    d="M428.4 27.8v456.4h60.9V27.8h-60.9zM327 168.2v316h60.8v-316H327zM225.4 273.6v210.6h61V273.6h-61zM124 343.8v140.4h60.9V343.8H124zM22.67 394.9v89.3h60.84v-89.3H22.67z">
+                                    d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z">
                                 </path>
                             </svg>
-                            STATS
+                            {{ item?.rent_price }}/-
                         </p>
+                        <span class="text-capitalize text-gray-600 me-3">
+                            &nbsp;{{ item.time }}
+                        </span>
+                        <p class="d-flex align-items-center fw-bold">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="1em"
+                                width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z">
+                                </path>
+                            </svg>
+                            {{ item?.security_price }}/-
+                        </p>
+                        <span class="text-capitalize text-gray-600 me-3">
+                            &nbsp;Security
+                        </span>
+
+                    </div>
+                    <!--end::Info-->
+                    <div class="d-flex flex-column mb-2">
+                        <!--begin::Info-->
+                        <div class="d-flex align-items-center">
+                            <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
+                            <span v-if="item?.status?.id == 1" class="badge badge-light-success fs-6 fw-bold">
+                                {{ item?.status?.label }}</span>
+                            <span v-else-if="item?.status?.id == 2" class="badge badge-light-warning fs-6 fw-bold">
+                                {{ item?.status?.label }}</span>
+                            <span v-else-if="item?.status?.id == 3" class="badge badge-light-danger fs-6 fw-bold">
+                                {{ item?.status?.label }}</span>
+                            <span v-else-if="item?.status?.id == 4" class="badge badge-light-info fs-6 fw-bold">
+                                {{ item?.status?.label }}</span>
+                            <span v-else="item?.status?.id == 5" class="badge badge-light-primary fs-6 fw-bold">
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 15 16"
+                                    height="1.5em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z">
+                                    </path>
+                                </svg>
+                                {{ item?.status?.label }}</span>
+                            <span>{{ item?.status?.text }}</span>
+                        </div>
+                        <!--end::Info-->
                     </div>
                     <div class="d-flex flex-column">
                         <!--begin::Info-->
@@ -218,8 +191,8 @@ export default defineComponent({
                         </div>
                         <!--end::Info-->
                     </div>
-                    <!--end::Item-->
                 </div>
+                <!--end::Item-->
                 <!--end::Title-->
             </div>
             <!--end::Info-->

@@ -10,6 +10,7 @@ export default defineComponent({
     props: ["users"],
     data() {
         return {
+            title: "Users",
             form: {},
             tbody: [
                 "Name",
@@ -30,7 +31,7 @@ export default defineComponent({
 
         search() {
             Inertia.get(
-                "/user",
+                "/users",
                 this.form
             );
         },
@@ -39,17 +40,17 @@ export default defineComponent({
 });
 </script>
 <template>
-    <app-layout title="User">
+    <app-layout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/user" class="text-muted text-hover-primary">User</Link>
+                <Link href="/users" class="text-muted text-hover-primary">Users</Link>
             </li>
         </template>
 
-        <Head title="user" />
+        <Head :title="title" />
         <div class="card card-flush">
             <div>
                 <form class="card-header justify-content-start py-5 gap-2 gap-md-5" @submit.prevent="search()">
@@ -80,11 +81,11 @@ export default defineComponent({
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-middle table-row-dashed fs-6 gy-4 text-left">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -96,7 +97,9 @@ export default defineComponent({
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(user, index) in users?.data" :key="index">
 
-                                <td>{{ user?.first_name + " " + user?.last_name }}</td>
+                                <Link :href="'/user/' + user.id" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">
+                                {{ user?.first_name + " " + user?.last_name }}</Link>
+
                                 <td>{{ user?.email }}</td>
                                 <td>{{ user?.mobile }}</td>
                                 <td>

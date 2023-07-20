@@ -9,7 +9,7 @@ import InputError from "@/jetstream/InputError.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, integer } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
 import { Inertia } from "@inertiajs/inertia";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -32,7 +32,7 @@ export default defineComponent({
                     required,
                 },
                 discount: {
-                    required,
+                    required, integer,
                 },
                 expires: {
                     required,
@@ -202,17 +202,14 @@ export default defineComponent({
                                     class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                                 Discard
                                 </Link>
-                                <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="requesting ? 'on' : 'off'">
-                                    <span class="indicator-label">
-                                        <span v-if="route().current() == 'coupon.edit'">Save Changes</span>
-                                        <span v-if="route().current() == 'coupon.create'">Save</span>
-                                    </span>
-                                    <span class="indicator-progress">
-                                        Please wait... <span
-                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
+                                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <span v-if="route().current() == 'coupon.edit'">Update</span>
+                                    <span v-if="route().current() == 'coupon.create'">Save</span>
                                 </button>
+
                                 <!--end::Button-->
                             </div>
                         </div>

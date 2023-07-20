@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Resources;
@@ -16,7 +15,7 @@ class CategoryBannerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'banner' =>$this->banner->image,
+            'banner' => $this->image,
         ];
     }
 }

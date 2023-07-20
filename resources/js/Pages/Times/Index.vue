@@ -115,11 +115,11 @@ export default defineComponent({
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
-                    <table class="table align-center table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-center table-row-dashed fs-6 gy-5 text-left">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>

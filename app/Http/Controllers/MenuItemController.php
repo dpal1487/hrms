@@ -9,6 +9,7 @@ use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Permission;
 
 class MenuItemController extends Controller
 {
@@ -16,21 +17,21 @@ class MenuItemController extends Controller
     {
         $menuLists = new MenuItem();
         if (!empty($request->q)) {
-            $menuLists = $menuLists->where('name', 'like', "%$request->q%");
+            $menuLists = $menuLists->where('title', 'like', "%$request->q%");
         }
         return Inertia::render('Menu/Index', [
-            'menu_lists' => MenuItemListResource::collection($menuLists->orderBy('title','asc')->paginate(5)->appends($request->all())),
+            'menu_lists' => MenuItemListResource::collection($menuLists->orderBy('title', 'asc')->paginate(5)->appends($request->all())),
         ]);
     }
     public function create(Request $request)
     {
         $menuLists = new Menu();
         return Inertia::render('Menu/Create', [
-            'menu_lists' => $menuLists->get(),
-            'parents' => MenuItem::where(['parent_id'=>null])->get(),
+            'menu_lists' => MenuListResource::collection($menuLists->get()),
+            'parents' => MenuItem::where(['parent_id' => null])->get(),
         ]);
     }
-    
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -62,13 +63,13 @@ class MenuItemController extends Controller
         }
         return redirect()->back()->withErrors(['Opps something went wrong!']);
     }
-    
-    public function edit(Request $request,$id)
+
+    public function edit(Request $request, $id)
     {
         $menuLists = new Menu();
         return Inertia::render('Menu/Edit', [
             'menu_lists' => MenuListResource::collection($menuLists->get()),
-            'parents' => MenuItem::where(['parent_id'=>null])->get(),
+            'parents' => MenuItem::where(['parent_id' => null])->get(),
             'item' => MenuItem::find($id),
         ]);
     }
@@ -86,7 +87,7 @@ class MenuItemController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors(['message' => $validator->errors()->first()]);
         }
-        $menu = MenuItem::where(['id'=>$id])->update([
+        $menu = MenuItem::where(['id' => $id])->update([
             'menu_id' => $request->menu,
             'title' => $request->title,
             'url' => $request->url,
@@ -104,7 +105,7 @@ class MenuItemController extends Controller
         return redirect()->back()->withErrors(['Opps something went wrong!']);
     }
 
-    
+
     public function destroy($id)
     {
         $permission = Permission::where('id', $id)->first();

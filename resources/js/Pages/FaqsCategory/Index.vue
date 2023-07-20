@@ -135,9 +135,9 @@ export default defineComponent({
                                         <!--end::Thumbnail-->
                                         <div class="ms-5">
                                             <!--begin::Title-->
-                                            <a :href="`/faqs-category/${faqs_category.id}`"
+                                            <Link :href="`/faqs-category/${faqs_category.id}`"
                                                 class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
-                                                    faqs_category?.title }}</a>
+                                                    faqs_category?.title }}</Link>
                                             <!--end::Title-->
                                         </div>
                                     </div>

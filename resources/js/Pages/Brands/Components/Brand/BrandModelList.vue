@@ -30,7 +30,8 @@ export default defineComponent({
 </script>
 
 <template>
-    <td>
+    <td class="fs-6 fw-bold text-gray-800 text-capitalize">
+
         {{ brand?.name }}
     </td>
     <td>

@@ -15,6 +15,7 @@ class AttributeRuleResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->attributeRule->id,
             'rule' => $this->attributeRule->rule,
             'value' => $this->attributeRule->value,
             'message' => $this->attributeRule->message,

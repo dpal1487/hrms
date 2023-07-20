@@ -26,6 +26,8 @@ class PlanResource extends JsonResource
             'price' => $this->price,
             'signup_fee' => $this->signup_fee,
             'sort_order' => $this->sort_order,
+            'period' => $this->period,
+            'currency' => $this->currency,
         ];
     }
 }

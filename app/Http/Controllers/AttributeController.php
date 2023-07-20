@@ -90,9 +90,9 @@ class AttributeController extends Controller
                 ]);
             }
             if (!empty($attributeRule)) {
-                return redirect()->route('attribute.index')->with('message', ErrorMessage());
+                return redirect()->route('attributes.index')->with('message', ErrorMessage());
             }
-            return redirect()->route('attribute.index')->with('flash', ['message' =>  CreateMessage('Attribute')]);
+            return redirect()->route('attributes.index')->with('flash', ['message' =>  CreateMessage('Attribute')]);
         }
         return redirect()->route('attribute.index')->with('message', ErrorMessage());
     }
@@ -100,17 +100,17 @@ class AttributeController extends Controller
     public function show(Request $request, $id)
     {
         $attribute = Attribute::find($id);
-
         if ($attribute) {
-            $value = AttributeValue::where('attribute_id', $attribute->id)->get();
-            // if (!empty($request->q)) {
-            //     $attribute = $value->where('attribute_value', 'like', "%$request->q%");
-            // }
-            // if (!empty($request->s) || $request->s != '') {
-            //     $attribute = $value->where('status', $request->s);
-            // }
+            $values = AttributeValue::where('attribute_id', $attribute->id)->get();
+            if (!empty($request->q)) {
+                $values =  $values->where('attribute_value', 'like', "%$request->q%");
+            }
+            if (!empty($request->s) || $request->s != '') {
+                $values = $values->where('status', $request->s);
+            }
             return Inertia::render('Attributes/Show', [
                 'attribute' => new AttributeResource($attribute),
+                'values' => $values,
             ]);
         }
     }

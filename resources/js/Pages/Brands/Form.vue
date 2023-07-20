@@ -10,7 +10,6 @@ import useVuelidate from "@vuelidate/core";
 import { required, url } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
 import ImageInput from '@/components/ImageInput.vue';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import utils from "../utils.js";
 
 export default defineComponent({
@@ -37,7 +36,6 @@ export default defineComponent({
                 isLoading: false,
                 url: null,
             },
-            editor: ClassicEditor,
             requesting: false,
             form: this.$inertia.form({
                 id: this.brand?.data?.id || '',
@@ -63,7 +61,6 @@ export default defineComponent({
         JetLabel,
         InputError,
         ImageInput,
-        ClassicEditor,
     },
     methods: {
         submit() {
@@ -219,15 +216,13 @@ export default defineComponent({
                                 <!--end::Input group-->
                                 <div class="row mb-5">
                                     <jet-label for="description" value="Description" />
-                                    <ckeditor id="description" :editor="editor" v-model="v$.form.description.$model"
+                                    <textarea id="description" v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
                                             " placeholder="Text ..." />
-
                                 </div>
                                 <!--end::Input group-->
-
                             </div>
                             <!--end::Card header-->
                         </div>
@@ -237,17 +232,14 @@ export default defineComponent({
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                             Discard
                             </Link>
-                            <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                :data-kt-indicator="form.processing ? 'on' : 'off'">
-                                <span class="indicator-label">
-
-                                    <span v-if="route().current() == 'brand.edit'">Save Changes</span>
-                                    <span v-if="route().current() == 'brand.create'">Save</span>
-                                </span>
-                                <span class="indicator-progress">
-                                    Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
+                            <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                                <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <span v-if="route().current() == 'brand.edit'">Update</span>
+                                <span v-if="route().current() == 'brand.create'">Save</span>
                             </button>
+
                             <!--end::Button-->
                         </div>
                     </div>

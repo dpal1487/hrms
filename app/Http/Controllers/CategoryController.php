@@ -140,9 +140,20 @@ class CategoryController extends Controller
                     'meta_id' => $meta->id,
                 ]);
                 if ($category) {
-                    CategoryBanner::where(['category_id' => $id])->update([
-                        'image_id' => $request->banner_image,
-                    ]);
+                    $categorybanner = CategoryBanner::where('category_id', $id)->first();
+                    if ($categorybanner) {
+                        CategoryBanner::where(['category_id' => $id])->update([
+                            'image_id' => $request->banner_image,
+                        ]);
+                    } else {
+                        CategoryBanner::create(
+                            [
+                                'category_id' => $id,
+                                'image_id' => $request->banner_image,
+                                'order_by' => 1,
+                            ]
+                        );
+                    }
                 }
                 return redirect()->route('categories.index')->with('flash', ['success' => true, 'message' => UpdateMessage('Category')]);
             }
@@ -162,6 +173,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
+        $category = new CategoryResource($category);
         if ($category->delete()) {
             return response()->json(['message' =>    DeleteMessage('Category '), 'success' => true]);
         }

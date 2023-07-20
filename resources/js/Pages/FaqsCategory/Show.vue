@@ -134,7 +134,7 @@ export default defineComponent({
                                                 Save
                                             </span>
                                             <span v-if="isEdit">
-                                                Save Changes
+                                                Update
                                             </span>
                                         </button>
                                     </div>
@@ -145,10 +145,10 @@ export default defineComponent({
                     <div class="row" v-else>
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-1 text-center">
+                                <table class="table align-middle table-row-dashed fs-6 gy-3 text-left">
                                     <thead>
                                         <!--begin::Table row-->
-                                        <tr class="text-gray-800 fw-bold fs-7 text-uppercase">
+                                        <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                             <th v-for="(th, index) in tbody" :key="index">
                                                 {{ th }}
                                             </th>

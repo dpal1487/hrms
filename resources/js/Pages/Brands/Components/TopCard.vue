@@ -29,7 +29,8 @@ export default defineComponent({
             <div class="card-body p-0">
                 <div class="row">
                     <div class="col-6">
-                        <table class="table table-striped table-bordered text-left align-middle">
+                        <table class="table table-striped table-bordered text-left mx-10 align-middle">
+
                             <tbody>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
@@ -94,6 +95,7 @@ export default defineComponent({
                                             <h1>{{ brand?.header?.total_active }}&nbsp;</h1>
                                             <span>Out Of</span>
                                             <h1>&nbsp;{{ brand?.header?.total_value }}</h1>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -103,4 +105,4 @@ export default defineComponent({
             </div>
         </div>
     </div>
-</div></template>
+</template>

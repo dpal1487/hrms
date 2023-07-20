@@ -22,6 +22,7 @@ class Category extends Model
             // before delete() method call this
             $category->image()->delete();
             $category->meta()->delete();
+            $category->banner()->delete();
             // do the rest of the cleanup...
         });
     }

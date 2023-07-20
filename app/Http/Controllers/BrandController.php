@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BrandListResource;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -14,14 +15,11 @@ use Inertia\Inertia;
 
 class BrandController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $brands = new Brand();
         if (!empty($request->q)) {
-            $brands = $brands->where('name', 'like', "%{$request->q}%")->where('description', 'like', "%{$request->q}%")->orWhereHas('category', function ($q) use ($request) {
+            $brands = $brands->where('name', 'like', "%{$request->q}%")->orWhere('description', 'like', "%{$request->q}%")->orWhereHas('category', function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->q}%");
             });
         }
@@ -30,7 +28,7 @@ class BrandController extends Controller
         }
         // return $brands;
         return Inertia::render('Brands/Index', [
-            'brands' => BrandResource::collection($brands->paginate(10)->onEachSide(1)->appends(request()->query()))
+            'brands' => BrandListResource::collection($brands->paginate(10)->onEachSide(1)->appends(request()->query()))
         ]);
     }
     public function statusUdate(Request $request)
@@ -105,7 +103,7 @@ class BrandController extends Controller
     {
         return Inertia::render('Brands/Form', [
             'categories' => CategoryResource::collection(Category::get()),
-            'brand' => new BrandResource(Brand::find($id)),
+            'brand' => new BrandListResource(Brand::find($id)),
         ]);
     }
 
@@ -167,8 +165,6 @@ class BrandController extends Controller
     public function destroy($id)
     {
         $brand = Brand::find($id);
-        $brand = new BrandResource($brand);
-        // dd($category->image);
         if ($brand->delete()) {
             return response()->json(['success' => true, 'message' => 'Brand has been deleted successfully.']);
         }

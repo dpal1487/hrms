@@ -94,6 +94,7 @@ export default defineComponent({
     <form @submit.prevent="submit" autocomplete="off">
         <!--begin::Input group-->
         <div class="row mb-6">
+            
             <div class="fv-row col-6 mb-3">
                 <jet-label for="menu" value="Menu List" />
                 <Multiselect :options="menu_lists" label="name" valueProp="id"

@@ -169,17 +169,14 @@ export default defineComponent({
                                     class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                                 Discard
                                 </Link>
-                                <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="requesting ? 'on' : 'off'">
-                                    <span class="indicator-label">
-                                        <span v-if="route().current() == 'time.edit'">Save Changes</span>
-                                        <span v-if="route().current() == 'time.create'">Save</span>
-                                    </span>
-                                    <span class="indicator-progress">
-                                        Please wait... <span
-                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
+                                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <span v-if="route().current() == 'time.edit'">Update</span>
+                                    <span v-if="route().current() == 'time.create'">Save</span>
                                 </button>
+                               
                                 <!--end::Button-->
                             </div>
                         </div>

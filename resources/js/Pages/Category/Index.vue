@@ -136,17 +136,17 @@ export default defineComponent({
                                 <td>
                                     <div class="d-flex">
                                         <!--begin::Thumbnail-->
-                                        <Link href="#"
+                                        <span
                                             class="d-block symbol symbol-50px symbol-lg-50px symbol-fixed position-relative">
                                         <img v-if="category?.image" :src="category?.image?.small_path" alt="image"
                                             class="rounded" />
                                         <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image" class="rounded">
-                                        </Link>
+                                    </span>
                                         <!--end::Thumbnail-->
                                         <div class="ms-5">
                                             <!--begin::Title-->
-                                            <a href="" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                                category-filter="category_name">{{ category?.name }}</a>
+                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
+                                                category-filter="category_name">{{ category?.name }}</span>
                                             <!--end::Title-->
                                             <!--begin::Description-->
                                             <div class="text-muted fs-7 fw-bold">

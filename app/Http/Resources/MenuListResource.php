@@ -15,8 +15,9 @@ class MenuListResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'name'=>$this->name,
-            'items'=>$this->items,
+            'id' => $this->id,
+            'name' => $this->name,
+            'items' => $this->items,
         ];
     }
 }

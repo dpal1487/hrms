@@ -86,11 +86,9 @@ export default defineComponent({
         },
         search() {
             Inertia.get(
-                "/menu",
+                "/menu-items",
                 this.form,
-                {
-                    preserveState: true,
-                }
+               
             );
         },
 
@@ -176,8 +174,8 @@ export default defineComponent({
                                 <td>
                                     <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
                                         :href="`/menu-item/${item.id}/edit`">
-                                        <i class="bi bi-pencil"></i>
-                                </Link>
+                                    <i class="bi bi-pencil"></i>
+                                    </Link>
                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
                                         item.id, index
                                     )

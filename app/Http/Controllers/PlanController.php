@@ -48,7 +48,6 @@ class PlanController extends Controller
         if (Plan::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
             return response()->json(['message' => StatusMessage('Plan', $status), 'success' => true]);
-
         }
         return response()->json(['message' => ErrorMessage(), 'success' => false]);
     }
@@ -135,38 +134,46 @@ class PlanController extends Controller
             'price' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'category' => 'required',
             'no_of_ads' => 'required|integer',
-            'currency' => 'required|integer',
-            'period' => 'required',
-            'sort_order' => 'required|integer',
+            'currency' => 'required',
             'status' => 'required|integer',
-            'sort_description' => 'required',
-            'prorate_day' => 'nullable|integer',
-            'prorate_extend_due' => 'nullable|integer',
-            'active_subscribers_limit' => 'nullable|integer',
+            'sort_description' => '',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->all(),
+            return redirect()->back()->withErrors([
+                'success' => false,
+                'message' => $validator->errors()->first(),
             ]);
         }
+
+        $response = $this->api->plan->create(
+            array(
+                'period' => $request->period, 'interval' => 1,
+                'item' => array('name' => $request->name, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
+            )
+        );
 
         $plan = Plan::find($id);
         if ($plan) {
             $plan = Plan::where(['id' => $id])->update([
                 'name' => $request->name,
+                'period' => $request->period,
                 'price' => $request->price,
+                'plan_id' => $response->id,
                 'category_id' => $request->category,
                 'no_of_ads' => $request->no_of_ads,
                 'currency' => $request->currency,
-                'period' => $request->period,
                 'sort_order' => $request->sort_order,
                 'status' => $request->status,
                 'sort_description' => $request->sort_description,
-                'description' => json_encode($request->plan_conditions),
+                'description' => json_encode($request->plan_descriptions),
             ]);
 
-            return response()->json(['success' => true, 'message' => 'Plan Updated successfully']);
+            if ($plan) {
+                return redirect()->route('plans.index')->with('flash', ['success' => true, 'message' => UpdateMessage('Plan')]);
+            } else {
+                return redirect()->route('plans.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
+            }
         }
     }
 

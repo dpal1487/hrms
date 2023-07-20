@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\ItemListResource;
 use App\Http\Resources\ItemResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ReviewResource;
@@ -43,9 +44,11 @@ class UserController extends Controller
     public function show($id)
     {
         $data = User::find($id);
+        $address = UserAddress::where('user_id', $id)->first();
 
         return Inertia::render('User/Overview', [
             'user' => new UserResource($data),
+            'address' => $address ? new AddressResource($address) : '',
         ]);
     }
 
@@ -62,18 +65,14 @@ class UserController extends Controller
 
     public function items($id)
     {
-        $title = "Item Details";
         $data = User::find($id);
-
         $itemStatus = ItemStatus::all();
-
-        $items = Item::where(['user_id' => $id])->simplePaginate(3);
+        $items = Item::where(['user_id' => $id])->paginate(2);
 
         return Inertia::render('User/Items', [
             'user' => new UserResource($data),
-            'title' => $title,
             'itemStatus' => $itemStatus,
-            'items' => ItemResource::collection($items),
+            'items' => ItemListResource::collection($items),
         ]);
     }
 
@@ -100,26 +99,33 @@ class UserController extends Controller
 
     public function packages($id)
     {
-        $title = "Item Package";
         $data = User::find($id);
-        // dd($data);
-        return view('pages.user.packages', ['title' => $title, 'user' => $data]);
+        return Inertia::render('User/Packages', [
+            'user' => new UserResource($data),
+        ]);
+        // return view('pages.user.packages', ['title' => $title, 'user' => $data]);
     }
     public function reports($id)
     {
         $title = "Item Report";
         $data = User::find($id);
         // dd($data);
+
+        return Inertia::render('User/Reports', [
+            'user' => new UserResource($data),
+            'title' => $title,
+        ]);
         return view('pages.user.reports', ['title' => $title, 'user' => $data]);
     }
 
     public function reviews($id)
     {
         $data = User::find($id);
-        $review = UserReview::where('user_id', $id)->get();
+        $reviews = UserReview::where('user_id', $id)->paginate(1);
 
-        $review = ReviewResource::collection($review);
-        // return $review;
-        return view('pages.user.review')->with(['user' => $data, 'review' => $review]);
+        return Inertia::render('User/Reviews', [
+            'user' => new UserResource($data),
+            'review' => ReviewResource::collection($reviews),
+        ]);
     }
 }

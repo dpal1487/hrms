@@ -67,10 +67,8 @@ export default defineComponent({
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <!--begin::Primary button-->
                 <Link href="/attribute/create" class="btn btn-sm fw-bold btn-primary">
                 <i class="bi bi-plus-circle"></i>Add New Attribute</Link>
-                <!--end::Primary button-->
             </div>
         </template>
 
@@ -106,17 +104,15 @@ export default defineComponent({
                     </button>
                     <!--begin::Card title-->
                 </form>
-
             </div>
-
             <div class="card-body pt-0">
                 <!--begin::Table-->
                 <div class="table-responsive">
-                    <table class="table align-center table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-center table-row-dashed fs-6 gy-5 text-left">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -132,7 +128,6 @@ export default defineComponent({
                                         <Link class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
                                             :href="`/attribute/${attribute.id}`">{{ attribute?.name }}
                                         </Link>
-
                                     </div>
                                 </td>
                                 <td>
@@ -144,7 +139,6 @@ export default defineComponent({
                                 <td>
                                     {{ attribute?.field }}
                                 </td>
-
                                 <td>
                                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
                                         <input class="form-check-input h-20px w-30px" type="checkbox"
@@ -167,7 +161,6 @@ export default defineComponent({
                                         <i class="bi bi-trash3"></i>
                                     </button>
                                 </td>
-
                                 <!--end::Action=-->
                             </tr>
                         </tbody>

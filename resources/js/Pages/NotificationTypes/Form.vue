@@ -9,7 +9,6 @@ import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default defineComponent({
     props: ['notification_type'],
@@ -33,8 +32,6 @@ export default defineComponent({
     },
     data() {
         return {
-            editor: ClassicEditor,
-
             isEdit: false,
             requesting: false,
             form: this.$inertia.form({
@@ -63,7 +60,6 @@ export default defineComponent({
         JetInput,
         JetLabel,
         InputError,
-        ClassicEditor
     },
     methods: {
 
@@ -149,7 +145,7 @@ export default defineComponent({
                             <div class="row mb-5">
                                 <jet-label for="descriptions" value="Description" />
                                 <div class="">
-                                    <ckeditor id=" descriptions" :editor="editor" v-model="v$.form.description.$model"
+                                    <textarea id=" descriptions" :editor="editor" v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
@@ -167,17 +163,15 @@ export default defineComponent({
                                     class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
                                 Discard
                                 </Link>
-                                <button type="submit" class="btn btn-primary align-items-center justify-content-center"
-                                    :data-kt-indicator="requesting ? 'on' : 'off'">
-                                    <span class="indicator-label">
-                                        <span v-if="route().current() == 'notification-type.edit'">Save Changes</span>
-                                        <span v-if="route().current() == 'notification-type.create'">Save</span>
-                                    </span>
-                                    <span class="indicator-progress">
-                                        Please wait... <span
-                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
+                                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <span v-if="route().current() == 'notification-type.edit'">Update</span>
+                                    <span v-if="route().current() == 'notification-type.create'">Save</span>
                                 </button>
+
+
                                 <!--end::Button-->
                             </div>
                         </div>

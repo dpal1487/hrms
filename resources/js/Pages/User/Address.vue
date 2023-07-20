@@ -32,7 +32,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/user" class="text-muted text-hover-primary">User</Link>
+                <Link href="/users" class="text-muted text-hover-primary">Users</Link>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>

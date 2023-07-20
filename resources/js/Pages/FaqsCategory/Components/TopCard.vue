@@ -4,6 +4,19 @@ export default defineComponent({
     props: ["faq_category"],
 });
 </script>
+<style>
+.rhombus {
+    clip-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
+    width: 150px;
+    height: 150px;
+    display: grid;
+    place-content: center;
+}
+
+.drop-shadow {
+    filter: drop-shadow(0 0 20px rgb(204, 253, 230));
+}
+</style>
 <template>
     <div class="mb-5">
         <div class="card">
@@ -12,10 +25,10 @@ export default defineComponent({
                     <h2>FAQs Category</h2>
                 </div>
             </div>
-            <div class="card-body pt-9 pb-0">
+            <div class="card-body p-0">
                 <div class="row">
                     <div class="col-6">
-                        <table class="table table-striped table-bordered text-center align-middle">
+                        <table class="table table-striped table-bordered mx-10 text-left align-middle">
                             <tbody>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
@@ -55,13 +68,17 @@ export default defineComponent({
                     </div>
                     <div class="col-6">
                         <div class="h-100 d-flex justify-content-center align-items-center bg-gray-100">
-                            <div class="text-center">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <h1>&nbsp;{{ faq_category?.header?.total }}</h1>
+                            <div class="drop-shadow">
+                                <div class="text-center bg-white p-20 rhombus">
+                                    <div>
+                                        <h1>{{ faq_category?.header?.total }}</h1>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
