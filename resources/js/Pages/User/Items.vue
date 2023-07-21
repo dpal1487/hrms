@@ -12,6 +12,8 @@ export default defineComponent({
     data() {
         return {
             title: "Item",
+            form: {},
+           
         }
     },
     components: {

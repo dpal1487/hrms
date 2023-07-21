@@ -6,17 +6,16 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Pagination from "../../Jetstream/Pagination.vue";
 
 export default defineComponent({
-    props: ['address', 'user', 'packages'],
+    props: ['address', 'user', 'reports'],
 
     data() {
         return {
-            title: 'Packages',
+            title: 'Reports',
             tbody: [
-                "Plan Name",
-                "Description",
-                "Period",
-                "AMMOUNT",
-                "Currency",
+                "Name",
+                "Report Type",
+                "Notes",
+                "Action",
             ],
         }
     },
@@ -53,11 +52,12 @@ export default defineComponent({
                 {{ user?.data?.first_name }}
             </li>
         </template>
+
         <Header :user="user?.data" :address="address?.data" />
         <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
             <div class="card-header cursor-pointer">
                 <div class="card-title m-0">
-                    <h3 class="fw-bold m-0">{{ title }}</h3>
+                    <h3 class="fw-bold m-0">Reports</h3>
                 </div>
             </div>
             <div class="card-body pt-0">
@@ -71,20 +71,23 @@ export default defineComponent({
                             </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(user_package, index) in packages?.data" :key="index">
+                            <tr v-for="(report, index) in reports?.data" :key="index">
                                 <td>
-                                    {{ user_package?.name }}
+
                                 </td>
-                                <td>{{ user_package?.sort_description }}</td>
-                                <td>{{ user_package?.period }}</td>
-                                <td>{{ user_package?.price }}</td>
-                                    <td>{{ user_package?.currency }}</td>
+
+                                <td>{{ report }}</td>
+                                <td>{{ report?.mobile }}</td>
+                                <td>
+
+                                </td>
                             </tr>
+
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="packages?.meta">
-                    <Pagination :links="packages?.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="reports?.meta">
+                    <Pagination :links="reports?.meta.links" />
                 </div>
             </div>
         </div>

@@ -96,9 +96,11 @@ export default defineComponent({
                         <!--begin::Table body-->
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(user, index) in users?.data" :key="index">
-
-                                <Link :href="'/user/' + user.id" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">
-                                {{ user?.first_name + " " + user?.last_name }}</Link>
+                                <td>
+                                    <Link :href="'/user/' + user.id"
+                                        class="text-gray-800 text-hover-primary fs-5 fw-bold mt-4">
+                                    {{ user?.first_name + " " + user?.last_name }}</Link>
+                                </td>
 
                                 <td>{{ user?.email }}</td>
                                 <td>{{ user?.mobile }}</td>

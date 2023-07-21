@@ -11,7 +11,6 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import useVuelidate from "@vuelidate/core";
 import { required, integer } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import { Inertia } from "@inertiajs/inertia";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default defineComponent({
@@ -90,8 +89,7 @@ export default defineComponent({
                     }))
                     .post(route().current() == 'coupon.create' ? this.route("coupon.store") : this.route('coupon.update', this.form.id),
                         {
-                            onSuccess: (data) => {
-                                console.log(data);
+                            onSuccess: (data) => {                                
                                 toast.success(this.$page.props.jetstream.flash.message);
                                 this.isEdit = false;
                             },
@@ -194,7 +192,6 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-5">
@@ -209,12 +206,9 @@ export default defineComponent({
                                     <span v-if="route().current() == 'coupon.edit'">Update</span>
                                     <span v-if="route().current() == 'coupon.create'">Save</span>
                                 </button>
-
-                                <!--end::Button-->
                             </div>
                         </div>
                     </div>
-                    <!--end::Actions-->
                 </form>
             </div>
         </div>

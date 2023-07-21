@@ -3,12 +3,15 @@ import { defineComponent } from "vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Index from "../CustomerReviews/Index.vue";
-export default defineComponent({
-    props: ['address', 'user', 'review'],
+import Review from "../CustomerReviews/Components/Review.vue";
+import Pagination from "../../Jetstream/Pagination.vue";
 
+export default defineComponent({
+    props: ['address', 'user', 'reviews'],
     data() {
         return {
+            title: "Reviews",
+            form: {}
         }
     },
     components: {
@@ -16,7 +19,8 @@ export default defineComponent({
         Header,
         Link,
         Head,
-        Index
+        Review,
+        Pagination
     },
     methods: {
 
@@ -27,26 +31,36 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head title="User Setting" />
-
-    <AppLayout>
+    <Head :title="title" />
+    <AppLayout :title="title">
+        <template #breadcrumb>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <Link href="/users" class="text-muted text-hover-primary">Users</Link>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="text-muted text-hover-primary">
+                {{ user?.data?.first_name }}
+            </li>
+        </template>
         <Header :user="user?.data" :address="address?.data" />
         <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-            <!--begin::Card header-->
             <div class="card-header cursor-pointer">
-                <!--begin::Card title-->
                 <div class="card-title m-0">
-                    <h3 class="fw-bold m-0">User Reviews</h3>
+                    <h3 class="fw-bold m-0">Reviews</h3>
                 </div>
-                <!--end::Card title-->
             </div>
-            <!--begin::Card header-->
-            <!--begin::Card body-->
-            <div class="card-body p-9">
-                <!-- {{ review }} -->
-                <Index :customer_reviews="review" />
+            <div class="card-body pt-0">
+                <Review :reviews="reviews?.data" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="reviews?.meta">
+                    <Pagination :links="reviews?.meta.links" />
+                </div>
+
             </div>
-            <!--end::Card body-->
         </div>
     </AppLayout>
 </template>

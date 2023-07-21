@@ -68,7 +68,6 @@ export default defineComponent({
                     }))
                     .post(route().current() == 'faqs-category.create' ? this.route("faqs-category.store") : this.route('faqs-category.update', this.form.id), {
                         onSuccess: (data) => {
-                            console.log(data);
                             toast.success(this.$page.props.jetstream.flash.message);
                             this.isEdit = false;
                         },
@@ -127,48 +126,31 @@ export default defineComponent({
                 <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row">
                     <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
 
-                        <!--begin::faqs_category settings-->
                         <div class="card card-flush py-4">
-                            <!--begin::Card header-->
                             <div class="card-header mb-5">
-                                <!--begin::Card title-->
                                 <div class="card-title">
                                     <h2>FAQs Category Image </h2>
                                 </div>
-                                <!--end::Card title-->
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
                             <div class="card-body text-center pt-0">
-                                <!--begin::Image input-->
                                 <ImageInput :image="this.faqs_category?.data?.image?.medium_path"
                                     :onchange="onfaqs_categoryChange" :remove="removeSelectedAvatar"
                                     :selectedImage="faqs_category_upload?.url" :errors="v$.form.image.$errors"
                                     :isUploading="faqs_category_upload?.isLoading" />
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Thumbnail settings-->
                     </div>
-                    <!--end::Aside column-->
-                    <!--begin::Main column-->
                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                        <!--begin::General options-->
 
                         <div class="card card-flush py-4">
-                            <!--begin::Card header-->
                             <div class="card-header">
                                 <div class="card-title">
                                     <h2>FAQs Category Form</h2>
                                 </div>
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
                             <div class="card-body">
                                 <div class="row mb-5">
-                                    <!--begin::Input group-->
                                     <div class="col-6">
-                                        <!--begin::Label-->
                                         <jet-label for="title" value="FAQs Category Title" />
                                         <jet-input id="title" type="text" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0
                                             ? 'is-invalid'
@@ -178,7 +160,6 @@ export default defineComponent({
                                             <input-error :message="error.$message" />
                                         </div>
                                     </div>
-                                    <!--end::Input group-->
                                     <div class="col-6">
                                         <jet-label value="Status" class="required" />
                                         <Multiselect :options="status" label="label" valueProp="value"
@@ -190,14 +171,10 @@ export default defineComponent({
                                         <div v-for="(error, index) of v$.form.status.$errors" :key="index">
                                             <input-error :message="error.$message" />
                                         </div>
-                                        <!--begin::Label-->
                                     </div>
-                                    <!--begin::Input group-->
                                 </div>
                             </div>
-                            <!--end::Card header-->
                         </div>
-                        <!--end::Meta options-->
                         <div class="d-flex justify-content-end gap-5">
                             <Link href="/faqs-categories"
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
@@ -210,8 +187,6 @@ export default defineComponent({
                                 <span v-if="route().current() == 'faqs-category.edit'">Update</span>
                                 <span v-if="route().current() == 'faqs-category.create'">Save</span>
                             </button>
-
-                            <!--end::Button-->
                         </div>
                     </div>
                 </form>

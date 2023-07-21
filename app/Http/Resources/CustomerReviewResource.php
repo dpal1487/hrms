@@ -18,7 +18,13 @@ class CustomerReviewResource extends JsonResource
 
             'ip_address' => $this->ip_address,
             'user' => $this->user,
-            'review' => $this->review
+            'id' => $this->review->id,
+            'title' => $this->review->title,
+            'content' => $this->review->content,
+            'rating' => $this->review->rating,
+            'status' => $this->review->status,
+            'created_at' => date('y M d', strtotime($this->review->created_at)),
+            'updated_at' => date('y M d', strtotime($this->review->updated_at)),
         ];
     }
 }

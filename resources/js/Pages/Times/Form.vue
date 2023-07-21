@@ -73,13 +73,11 @@ export default defineComponent({
                     .post(route().current() == 'time.create' ? this.route("time.store") : this.route('time.update', this.form.id),
                         {
                             onSuccess: (data) => {
-                                console.log(data);
                                 toast.success(this.$page.props.jetstream.flash.message);
                                 this.requesting = false;
 
                             },
                             onError: (data) => {
-                                console.log(data);
                                 if (data.message) {
                                     toast.error(data.message);
                                 }
@@ -161,7 +159,6 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-5">
@@ -176,12 +173,10 @@ export default defineComponent({
                                     <span v-if="route().current() == 'time.edit'">Update</span>
                                     <span v-if="route().current() == 'time.create'">Save</span>
                                 </button>
-                               
-                                <!--end::Button-->
+
                             </div>
                         </div>
                     </div>
-                    <!--end::Actions-->
                 </form>
             </div>
         </div>

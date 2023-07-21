@@ -72,7 +72,6 @@ export default defineComponent({
                     }))
                     .post(route().current() == 'brand.create' ? this.route("brand.store") : this.route('brand.update', this.form.id), {
                         onSuccess: (data) => {
-                            console.log(data);
                             toast.success(this.$page.props.jetstream.flash.message);
                             this.isEdit = false;
                         },
@@ -130,47 +129,28 @@ export default defineComponent({
             <div class="col-12">
                 <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row">
                     <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-
-                        <!--begin::brand settings-->
                         <div class="card card-flush py-4">
-                            <!--begin::Card header-->
                             <div class="card-header mb-5">
-                                <!--begin::Card title-->
                                 <div class="card-title">
                                     <h2>Brand Image </h2>
                                 </div>
-                                <!--end::Card title-->
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
                             <div class="card-body text-center pt-0">
-                                <!--begin::Image input-->
                                 <ImageInput :image="this.brand?.data?.image?.medium_path" :onchange="onbrandChange"
                                     :remove="removeSelectedAvatar" :selectedImage="brand_upload?.url"
                                     :errors="v$.form.image.$errors" :isUploading="brand_upload?.isLoading" />
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Thumbnail settings-->
                     </div>
-                    <!--end::Aside column-->
-                    <!--begin::Main column-->
                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                        <!--begin::General options-->
-
                         <div class="card card-flush py-4">
-                            <!--begin::Card header-->
                             <div class="card-header">
                                 <div class="card-title">
                                     <h2>General</h2>
                                 </div>
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
                             <div class="card-body">
-                                <!--begin::Input group-->
                                 <div class="row col-10 mb-5">
-                                    <!--begin::Label-->
                                     <jet-label for="name" value="brand Name" />
                                     <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                         ? 'is-invalid'
@@ -180,8 +160,6 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
                                 <div class="row ">
                                     <div class="col-6 mb-5">
                                         <jet-label for="category" value="Category" class="required" />
@@ -195,10 +173,6 @@ export default defineComponent({
                                             <input-error :message="error.$message" />
                                         </div>
                                     </div>
-                                    <!--begin::Label-->
-
-                                    <!--end::Input group-->
-                                    <!--begin::Input group-->
                                     <div class="col-6 mb-5">
                                         <jet-label value="Status" class="required" />
                                         <Multiselect :options="status" label="label" valueProp="value"
@@ -210,10 +184,8 @@ export default defineComponent({
                                         <div v-for="(error, index) of v$.form.status.$errors" :key="index">
                                             <input-error :message="error.$message" />
                                         </div>
-                                        <!--begin::Label-->
                                     </div>
                                 </div>
-                                <!--end::Input group-->
                                 <div class="row mb-5">
                                     <jet-label for="description" value="Description" />
                                     <textarea id="description" v-model="v$.form.description.$model"
@@ -222,11 +194,8 @@ export default defineComponent({
                                             : ''
                                             " placeholder="Text ..." />
                                 </div>
-                                <!--end::Input group-->
                             </div>
-                            <!--end::Card header-->
                         </div>
-                        <!--end::Meta options-->
                         <div class="d-flex justify-content-end gap-5">
                             <Link href="/brands"
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
@@ -239,8 +208,6 @@ export default defineComponent({
                                 <span v-if="route().current() == 'brand.edit'">Update</span>
                                 <span v-if="route().current() == 'brand.create'">Save</span>
                             </button>
-
-                            <!--end::Button-->
                         </div>
                     </div>
                 </form>

@@ -32,7 +32,6 @@ class AttributeResource extends JsonResource
             ],
             'values' => AttributeValueResource::collection($this->values),
             'rules' => AttributeRuleResource::collection($this->rules),
-
         ];
     }
 }

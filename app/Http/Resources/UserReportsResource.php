@@ -2,15 +2,15 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CountryResource extends JsonResource
+class UserReportsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {

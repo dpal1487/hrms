@@ -16,14 +16,14 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="card-body position-relative shadow-sm rounded-2 bg-white">
+    <div class="card-body position-relative shadow-sm rounded-2 bg-white p-6">
     <StatusDropdown :id="item.id" />
         <!--begin::Toolbar-->
         <!--end::Toolbar-->
         <!--begin::Details-->
-        <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
+        <div class="d-flex flex-wrap flex-sm-nowrap align-items-start gap-4">
             <!--begin: Pic-->
-            <div class="px-3 d-block w-250px">
+            <div class="d-block w-250px">
                 <Link :href="this.route('item.show', item.id)">
                 <img v-if="item?.images?.file_path" :src="item?.images?.file_path" alt="image">
                 <img v-else src="/assets/media/avatars/300-1.jpg" alt="image" class="h-100 w-100">
@@ -31,7 +31,7 @@ export default defineComponent({
             </div>
             <!--end::Pic-->
             <div class="flex-grow-1">
-                <div class="row col-md-12 py-4">
+                <div class="row col-md-12">
                     <div class="mb-2">
                         <Link :href="route('item.show', item.id)" class="text-gray-800  fs-2 fw-bold text-capitalize">{{
                             item?.title

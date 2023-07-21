@@ -55,7 +55,7 @@ export default defineComponent({
 </script>
 <template type>
     <loading v-model:active="loading" :can-cancel="false" :is-full-page="true" />
-    <div class="card-toolbar position-absolute top-0 end-0 pe-3 pt-3">
+    <div class="card-toolbar position-absolute top-0 end-0 pe-6 pt-6">
         <!--begin::Menu-->
         <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end" style="height:0px;" @click="toggleStatus">
             <span class="svg-icon svg-icon-1 svg-icon-gray-300 me-n1">

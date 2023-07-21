@@ -54,10 +54,8 @@ export default defineComponent({
 <template>
     <form @submit.prevent="submit" class="my-auto pb-5">
 
-        <div class="row g-9 mb-5">
-            <!--begin::Col-->
+        <div class="row col-8 g-5 mx-10 mb-5">
             <div class="col-6 mb-3">
-                <!--begin::Input group-->
                 <div class="fv-row">
                     <jet-label for="title" value="Title" />
                     <jet-input id="title" type="text" placeholder="Title" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0
@@ -69,26 +67,23 @@ export default defineComponent({
                         <input-error :message="error.$message" />
                     </div>
                 </div>
-                <!--end::Input group-->
             </div>
-            <!--begin::Input group-->
-            <div class="col-6 mb-3">
+            <div class="col-12 mb-3">
                 <div class="fv-row">
                     <jet-label for="artical" value="Artical" />
-                    <jet-input id="artical" type="text" placeholder="Artical" v-model="v$.form.artical.$model" :class="v$.form.artical.$errors.length > 0
-                        ? 'is-invalid'
-                        : ''
-                        " />
+                    <textarea class="form-control form-control-solid" id="artical" type="text" placeholder="Artical"
+                        v-model="v$.form.artical.$model" :class="v$.form.artical.$errors.length > 0
+                            ? 'is-invalid'
+                            : ''
+                            " />
                     <div v-for="(error, index) of v$.form.artical
                         .$errors" :key="index">
                         <input-error :message="error.$message" />
                     </div>
                 </div>
             </div>
+            <slot name="action"></slot>
         </div>
-
-        <!--begin::Actions-->
-        <slot name="action"></slot>
-        <!--end::Actions-->
+       
     </form>
 </template>

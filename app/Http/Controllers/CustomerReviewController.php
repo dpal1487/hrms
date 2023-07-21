@@ -6,6 +6,7 @@ use App\Models\CustomerReview;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomerReviewResource;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class CustomerReviewController extends Controller
@@ -35,7 +36,6 @@ class CustomerReviewController extends Controller
         if (CustomerReview::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
             return response()->json(['message' => StatusMessage('Customer Review', $status), 'success' => true]);
-
         }
         return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
     }
@@ -81,7 +81,7 @@ class CustomerReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CustomerReview $customerReview)
+    public function show(CustomerReview $customerReview, $id)
     {
         $faq = CustomerReview::find($id);
         $faq = new CustomerReviewResource($faq);
@@ -92,7 +92,7 @@ class CustomerReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CustomerReview $customerReview)
+    public function edit(CustomerReview $customerReview, $id)
     {
 
         $faq = CustomerReview::find($id);
@@ -103,7 +103,7 @@ class CustomerReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CustomerReview $customerReview)
+    public function update(Request $request, CustomerReview $customerReview, $id)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -132,12 +132,10 @@ class CustomerReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CustomerReview $customerReview)
+    public function destroy(CustomerReview $customerReview, $id)
     {
         $faq = CustomerReview::find($id);
         $faq = new CustomerReviewResource($faq);
-        // return $faq;
-        // dd($faq->image);
         if ($faq->delete()) {
             return response()->json(['success' => true, 'message' => 'Customer Review has been deleted successfully.']);
         }

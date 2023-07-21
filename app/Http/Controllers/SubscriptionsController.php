@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SubscriptionsListResource;
 use Illuminate\Http\Request;
 use App\Models\Subscription;
-use App\Http\Resources\SubscriptionsResource;
-use DB;
 use Inertia\Inertia;
 
 class SubscriptionsController extends Controller
@@ -30,7 +29,7 @@ class SubscriptionsController extends Controller
         }
         return Inertia::render('Subscriptions/Index', [
 
-            'subscriptions' => SubscriptionsResource::collection($subscriptions->paginate(10)->onEachSide(1)->appends(request()->query()))
+            'subscriptions' => SubscriptionsListResource::collection($subscriptions->paginate(10)->onEachSide(1)->appends(request()->query()))
         ]);
     }
 }

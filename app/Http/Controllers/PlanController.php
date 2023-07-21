@@ -84,18 +84,18 @@ class PlanController extends Controller
         }
 
 
-        $response = $this->api->plan->create(
-            array(
-                'period' => $request->period, 'interval' => 1,
-                'item' => array('name' => $request->name, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
-            )
-        );
+        // $response = $this->api->plan->create(
+        //     array(
+        //         'period' => $request->period, 'interval' => 1,
+        //         'item' => array('name' => $request->name, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
+        //     )
+        // );
 
         $plan = Plan::create([
             'name' => $request->name,
             'period' => $request->period,
             'price' => $request->price,
-            'plan_id' => $response->id,
+            // 'plan_id' => $response->id,
             'category_id' => $request->category,
             'no_of_ads' => $request->no_of_ads,
             'currency' => $request->currency,
@@ -146,12 +146,12 @@ class PlanController extends Controller
             ]);
         }
 
-        $response = $this->api->plan->create(
-            array(
-                'period' => $request->period, 'interval' => 1,
-                'item' => array('name' => $request->name, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
-            )
-        );
+        // $response = $this->api->plan->create(
+        //     array(
+        //         'period' => $request->period, 'interval' => 1,
+        //         'item' => array('name' => $request->name, 'description' => $request->short_description, 'amount' => $request->price, 'currency' => $request->currency)
+        //     )
+        // );
 
         $plan = Plan::find($id);
         if ($plan) {
@@ -159,7 +159,7 @@ class PlanController extends Controller
                 'name' => $request->name,
                 'period' => $request->period,
                 'price' => $request->price,
-                'plan_id' => $response->id,
+                // 'plan_id' => $response->id,
                 'category_id' => $request->category,
                 'no_of_ads' => $request->no_of_ads,
                 'currency' => $request->currency,

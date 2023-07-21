@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::group(['prefix' => 'user'], function () {
             Route::get('/{id}', 'show')->name('user.show');
             Route::get('/{id}/address', 'address')->name('user.address');
+            Route::post('/{id}/address/update', 'addressUpdate')->name('user.address.update');
             Route::get('/{id}/items', 'items')->name('user.items');
             Route::get('/{id}/createress', 'createress')->name('user.createress');
             Route::get('/{id}/packages', 'packages')->name('user.packages');

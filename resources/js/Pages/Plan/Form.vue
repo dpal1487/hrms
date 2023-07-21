@@ -9,7 +9,6 @@ import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, integer } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 export default defineComponent({
     props: ['plan', 'categories', 'currencies', 'times'],
     setup() {
@@ -36,7 +35,6 @@ export default defineComponent({
             rowCount: 1,
             plan_descriptions: 1,
             isEdit: false,
-            editor: ClassicEditor,
             requesting: false,
             form: this.$inertia.form({
                 id: this.plan?.data?.id || '',
@@ -49,11 +47,7 @@ export default defineComponent({
                 price: this.plan?.data?.price || '',
                 currency: this.plan?.data?.currency || '',
                 sort_order: this.plan?.data?.sort_order || '',
-                plan_descriptions:  JSON.parse(this.plan?.data.description) || [
-                    {
-                        description: '',
-                    }
-                ]
+                plan_descriptions: this.plan?.data?.description ? JSON.parse(this.plan?.data?.description) : [],
             }),
             status: [
                 { value: '1', label: 'Active' },
@@ -69,7 +63,6 @@ export default defineComponent({
         JetInput,
         JetLabel,
         InputError,
-        ClassicEditor,
     },
     methods: {
 
@@ -81,7 +74,7 @@ export default defineComponent({
             }
         },
         removePlanDescriptionForm(index) {
-            if (this.form.plan_descriptions.length > 0) {
+            if (this.form.plan_descriptions.length > 1) {
                 this.form.plan_descriptions.splice(index, 1)
             }
         },
@@ -138,23 +131,16 @@ export default defineComponent({
         </template>
         <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row gap-5">
             <div class="d-flex col-12 col-lg-8 flex-column flex-row-fluid gap-7 gap-lg-10">
-                <!--begin::General options-->
                 <div class="card card-flush py-4">
-                    <!--begin::Card header-->
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Plan</h2>
                         </div>
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="row g-5 mb-5">
                             <div class="fv-row col-6">
-                                <!--begin::Label-->
                                 <jet-label for="name" value="Name" class="required" />
-                                <!--end::Label-->
-                                <!--begin::Input-->
                                 <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                     ? 'is-invalid'
                                     : ''
@@ -164,10 +150,7 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="fv-row col-6">
-                                <!--begin::Label-->
                                 <jet-label for="price" value="Price" class="required" />
-                                <!--end::Label-->
-                                <!--begin::Input-->
                                 <jet-input id="price" type="text" v-model="v$.form.price.$model" :class="v$.form.price.$errors.length > 0
                                     ? 'is-invalid'
                                     : ''
@@ -205,10 +188,7 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="fv-row col-6">
-                                <!--begin::Label-->
                                 <jet-label for="no_of_ads" value="Number Of Adds" class="required" />
-                                <!--end::Label-->
-                                <!--begin::Input-->
                                 <jet-input id="no_of_ads" type="text" v-model="v$.form.no_of_ads.$model" :class="v$.form.no_of_ads.$errors.length > 0
                                     ? 'is-invalid'
                                     : ''
@@ -233,9 +213,7 @@ export default defineComponent({
                             </div>
                             <div class="fv-row col-6">
                                 <jet-label for="sort_order" value="Sort Order" class="required" />
-                                <!--end::Label-->
                                 <div class="">
-                                    <!--begin::Input-->
                                     <jet-input id="sort_order" type="text" v-model="v$.form.sort_order.$model" :class="v$.form.sort_order.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -269,39 +247,28 @@ export default defineComponent({
                                         " placeholder="Text ..." />
                             </div>
                         </div>
-                        <!--end::Input group-->
-
                     </div>
-                    <!--end::Card header-->
                 </div>
-
-                <!--end::Meta options-->
-
             </div>
             <div class="d-flex col-12 col-lg-4 flex-column flex-row-fluid gap-7 gap-lg-10">
                 <div class="card card-flush py-4">
-                    <!--begin::Card header-->
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Plan Description</h2>
                         </div>
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div>
-                            <!--begin::Form group-->
                             <div class="">
                                 <div>
                                     <div class="row align-items-center">
                                         <div v-for="(plan, index) in form.plan_descriptions" :key="index"
                                             class="d-flex align-items-center mb-6">
                                             <div class="fv-row col-10">
-                                                <!--begin::Input-->
                                                 <jet-input id="name" type="text" v-model="plan.description"
                                                     placeholder="Plan Description" />
                                             </div>
-                                            <button type="button" @click="$emit('removeSingle', index)"
+                                            <button type="button" @click="removePlanDescriptionForm(index)"
                                                 class="btn btn-sm btn-icon btn-light-danger ms-4">
                                                 <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15"
                                                     height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -311,12 +278,10 @@ export default defineComponent({
                                                 </svg>
                                             </button>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mt-5">
-                                <!--begin::Button-->
                                 <button type="button" @click="addPlanDescriptionForm(this.rowCount)"
                                     class="btn btn-sm btn-light-primary">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 12 16"
@@ -325,11 +290,8 @@ export default defineComponent({
                                     </svg>
                                     Add More
                                 </button>
-                                <!--end::Button-->
                             </div>
-                            <!--end::Form group-->
                         </div>
-                        <!--end::Card header-->
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-5">
@@ -343,11 +305,8 @@ export default defineComponent({
                         <span v-if="route().current() == 'plan.edit'">Update</span>
                         <span v-if="route().current() == 'plan.create'">Save</span>
                     </button>
-
-                    <!--end::Button-->
                 </div>
             </div>
-
         </form>
     </AppLayout>
 </template>

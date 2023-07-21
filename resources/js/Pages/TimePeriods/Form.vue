@@ -6,9 +6,7 @@ import Multiselect from "@vueform/multiselect";
 import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import TimePeriodList from "./Components/TimePeriodList.vue";
 
 export default defineComponent({
     props: ['times', 'category', 'timePeriods'],
@@ -18,19 +16,19 @@ export default defineComponent({
     validations() {
         return {
             form: {
-
+                time_periods: {}
             },
         };
     },
     data() {
         return {
             rowCount: 1,
+            time_periods: 1,
             isEdit: false,
-            time_periods: [],
             form: this.$inertia.form({
                 id: this.category?.data?.id,
                 category: this.category?.data?.id,
-                time: this.time_period?.data?.time || '',
+                time_periods: this.timePeriods?.data || [],
             }),
         };
     },
@@ -41,64 +39,39 @@ export default defineComponent({
         Multiselect,
         JetLabel,
         InputError,
-        TimePeriodList
     },
     methods: {
-        validateTimePeriods() {
-            this.time_periods = this.time_periods.map(time_period => {
-                if (!Object.keys(time_period).includes("time")) {
-                    return { ...time_period, error: { message: "This field is required." } }
-                }
-                return time_period;
-            });
-        },
-        addTimePeriods() {
-            this.time_periods = [...this.time_periods, { id: Date.now() }];
-        },
-        removeTimePeriod(id) {
-            if (this.time_periods.length > 1) {
-                this.time_periods = this.time_periods.filter(time_period => time_period.id !== id);
+        addTimePeriods(rowCount) {
+            for (var i = 0; i < rowCount; i++) {
+                this.form.time_periods.push({
+                    times: '',
+                });
             }
-            return;
         },
-        timePeriodOnChange(time = {}) {
-            this.time_periods = this.time_periods.map(time_period => {
-                if (time_period.id === time.id) {
-                    return {
-                        id: time_period.id,
-                        time: time.value,
-                    };
-                }
-
-                return time_period;
-            })
+        removeTimePeriods(index) {
+            if (this.form.time_periods.length > 1) {
+                this.form.time_periods.splice(index, 1)
+            }
+            return
         },
-
         submit() {
-            this.validateTimePeriods();
-
-            if (!this.time_periods.find(a => Object.keys(a).includes("error"))) {
-                let timePeriods = this.time_periods.map(a => ({ time: a.time }));
-
-                this.v$.$touch();
-                if (!this.v$.form.$invalid) {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                            timePeriods
-                        }))
-                        .post(route().current() == 'time-period.create' ? this.route("time-period.store") : this.route('time-period.update', this.form.id), {
-                            onSuccess: (data) => {
-                                toast.success(this.$page.props.jetstream.flash.message);
-                                this.isEdit = false;
-                            },
-                            onError: (data) => {
-                                if (data.message) {
-                                    toast.error(data.message);
-                                }
-                            },
-                        });
-                }
+            this.v$.$touch();
+            if (!this.v$.form.$invalid) {
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(route().current() == 'time-period.create' ? this.route("time-period.store") : this.route('time-period.update', this.form.id), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isEdit = false;
+                        },
+                        onError: (data) => {
+                            if (data.message) {
+                                toast.error(data.message);
+                            }
+                        },
+                    });
             }
         },
     },
@@ -107,7 +80,11 @@ export default defineComponent({
         if (route().current() == 'time-period.edit') {
             this.isEdit = true;
         }
-        this.time_periods = [{ id: Date.now() }];
+        else {
+            this.form.time_periods = [{
+                times: '',
+            }]
+        }
     },
     mounted() {
     }
@@ -115,14 +92,13 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="isEdit ? 'Edit Time Period' : `Add New Period`" />
-
     <AppLayout :title="isEdit ? 'Edit Period' : `Add New Period`">
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/time-period" class="text-muted text-hover-primary">Time Period</Link>
+                <Link href="/time-periods" class="text-muted text-hover-primary">Time Periods</Link>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -131,39 +107,48 @@ export default defineComponent({
                 <span class="text-muted text-hover-primary">Time Period Form</span>
             </li>
         </template>
-
         <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row gap-5">
-
             <div class="d-flex col-12 col-lg-4 flex-column flex-row-fluid gap-7 gap-lg-10">
                 <div class="card card-flush py-4">
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div>
-                            <!--begin::Form group-->
                             <div class="">
-
                                 <div>
                                     <div class="row align-items-center">
-                                        <TimePeriodList @onChange="timePeriodOnChange" :options="times?.data"
-                                            @remove="removeTimePeriod" :time_periods="time_periods"
-                                            :timePeriods="timePeriods" />
+                                        <div v-for='(time_period, index) in form.time_periods'
+                                            class="d-flex align-items-center mb-6">
+                                            <div class="w-100 position-relative">
+                                                <Multiselect :canClear="false" :options="times?.data" label="title"
+                                                    valueProp="id" class="form-control form-control-lg form-control-solid"
+                                                    placeholder="Select One" v-model="time_period.id" track-by="label" />
+                                                <div v-for="(error, index) of v$.form.time_periods.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+                                            </div>
+                                            <button type="button" @click="removeTimePeriods(index)"
+                                                class="btn btn-sm btn-icon btn-light-danger ms-4">
+                                                <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15"
+                                                    height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-time="evenodd" clip-time="evenodd"
+                                                        d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
+                                                        fill="currentColor"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mt-5">
-                                <!--begin::Button-->
-                                <button type="button" @click="addTimePeriods()" class="btn btn-sm btn-light-primary">
+                                <button type="button" @click="addTimePeriods(this.rowCount)"
+                                    class="btn btn-sm btn-light-primary">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 12 16"
                                         height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-time="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
                                     </svg>
                                     Add More
                                 </button>
-                                <!--end::Button-->
                             </div>
-                            <!--end::Form group-->
                         </div>
-                        <!--end::Card header-->
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-5">
@@ -178,11 +163,8 @@ export default defineComponent({
                         <span v-if="route().current() == 'time-period.edit'">Update</span>
                         <span v-if="route().current() == 'time-period.create'">Save</span>
                     </button>
-                   
-                    <!--end::Button-->
                 </div>
             </div>
-
         </form>
     </AppLayout>
 </template>

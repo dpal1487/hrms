@@ -8,7 +8,6 @@ import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default defineComponent({
     props: ['report_type'],
@@ -29,10 +28,8 @@ export default defineComponent({
     },
     data() {
         return {
-            editor: ClassicEditor,
 
             isEdit: false,
-            requesting: false,
             form: this.$inertia.form({
                 id: this.report_type?.data?.id || '',
                 title: this.report_type?.data?.title || '',
@@ -47,14 +44,12 @@ export default defineComponent({
         JetInput,
         JetLabel,
         InputError,
-        ClassicEditor
     },
     methods: {
 
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                this.requesting = true;
                 this.form
                     .transform((data) => ({
                         ...data,
@@ -62,7 +57,6 @@ export default defineComponent({
                     .post(route().current() == 'report-type.create' ? this.route("report-type.store") : this.route('report-type.update', this.form.id),
                         {
                             onSuccess: (data) => {
-                                console.log(data);
                                 toast.success(this.$page.props.jetstream.flash.message);
                                 this.isEdit = false;
                             },
@@ -120,7 +114,7 @@ export default defineComponent({
                             <div class="row mb-5">
                                 <jet-label for="descriptions" value="Description" />
                                 <div class="">
-                                    <ckeditor id=" descriptions" :editor="editor" v-model="v$.form.description.$model"
+                                    <textarea id=" descriptions" v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''
@@ -130,7 +124,6 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-5">
@@ -145,13 +138,9 @@ export default defineComponent({
                                     <span v-if="route().current() == 'report-type.edit'">Update</span>
                                     <span v-if="route().current() == 'report-type.create'">Save</span>
                                 </button>
-
-                                
-                                <!--end::Button-->
                             </div>
                         </div>
                     </div>
-                    <!--end::Actions-->
                 </form>
             </div>
         </div>

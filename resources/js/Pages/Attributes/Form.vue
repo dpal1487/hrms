@@ -27,15 +27,15 @@ export default defineComponent({
                 field: { required },
                 status: { required },
                 description: {},
+                attribute_rules: {},
             },
         };
     },
     data() {
         return {
             rowCount: 1,
+            attribute_rules: 1,
             isEdit: false,
-            requesting: false,
-            attributes: [],
             form: this.$inertia.form({
                 id: this.attribute?.data?.id || '',
                 name: this.attribute?.data?.name || '',
@@ -46,11 +46,7 @@ export default defineComponent({
                 field: this.attribute?.data?.field || '',
                 status: this.attribute?.data?.status || '',
                 description: this.attribute?.data?.description || '',
-                attribute_rules: this.attribute?.data?.rules || [
-                    {
-                        rule: ''
-                    }
-                ]
+                attribute_rules: this.attribute?.data?.rules || [],
             }),
             input_type: [
                 { value: 'text', label: 'Text' },
@@ -83,60 +79,37 @@ export default defineComponent({
         InputError,
     },
     methods: {
-        validateAttributes() {
-            this.attributes = this.attributes.map(attr => {
-                if (!Object.keys(attr).includes("rule")) {
-                    return { ...attr, error: { message: "This field is required." } }
-                }
-                return attr;
-            });
-        },
-        addAttribute() {
-            this.attributes = [...this.attributes, { id: Date.now() }];
-        },
-        removeAttribute(id) {
-            if (this.attributes.length > 1) {
-                this.attributes = this.attributes.filter(attribute => attribute.id !== id);
+
+        addAttribute(rowCount) {
+            for (var i = 0; i < rowCount; i++) {
+                this.form.attribute_rules.push({
+                    rules: '',
+                });
             }
-            return;
         },
-        attributeOnChange(rule = {}) {
-            this.attributes = this.attributes.map(attribute => {
-                if (attribute.id === rule.id) {
-                    return {
-                        id: attribute.id,
-                        rule: rule.value,
-                    };
-                }
-
-                return attribute;
-            })
+        removeAttribute(index) {
+            if (this.form.attribute_rules.length > 1) {
+                this.form.attribute_rules.splice(index, 1)
+            }
         },
-
         submit() {
-            this.validateAttributes();
-            if (!this.attributes.find(a => Object.keys(a).includes("error"))) {
-                let finalAttrbutes = this.attributes.map(a => ({ id: a.rule }));
-                this.v$.$touch();
-                if (!this.v$.form.$invalid) {
-                    this.form
-                        .transform((data) => ({
-                            ...data,
-                            finalAttrbutes
-                        }))
-                        .post(route().current() == 'attribute.create' ? this.route("attribute.store") : this.route('attribute.update', this.form.id), {
-                            onSuccess: (data) => {
-                                console.log(data);
-                                toast.success(this.$page.props.jetstream.flash.message);
-                                this.isEdit = false;
-                            },
-                            onError: (data) => {
-                                if (data.message) {
-                                    toast.error(data.message);
-                                }
-                            },
-                        });
-                }
+            this.v$.$touch();
+            if (!this.v$.form.$invalid) {
+                this.form
+                    .transform((data) => ({
+                        ...data,
+                    }))
+                    .post(route().current() == 'attribute.create' ? this.route("attribute.store") : this.route('attribute.update', this.form.id), {
+                        onSuccess: (data) => {
+                            toast.success(this.$page.props.jetstream.flash.message);
+                            this.isEdit = false;
+                        },
+                        onError: (data) => {
+                            if (data.message) {
+                                toast.error(data.message);
+                            }
+                        },
+                    });
             }
         },
     },
@@ -145,7 +118,11 @@ export default defineComponent({
         if (route().current() == 'attribute.edit') {
             this.isEdit = true;
         }
-        this.attributes = [{ id: Date.now() }];
+        else {
+            this.form.attribute_rules = [{
+                rules: '',
+            }]
+        }
     },
     mounted() {
     }
@@ -170,25 +147,17 @@ export default defineComponent({
         </template>
         <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row gap-5">
             <div class="d-flex col-12 col-lg-8 flex-column flex-row-fluid gap-7 gap-lg-10">
-                {{ attribute }}
-                <!--begin::General options-->
                 <div class="card card-flush py-4">
-                    <!--begin::Card header-->
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Attribute</h2>
                         </div>
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div class="row g-3">
                             <div class="mb-10 row col-12">
-                                <!--begin::Label-->
                                 <jet-label for="name" value="Name" class="required" />
-                                <!--end::Label-->
                                 <div class="">
-                                    <!--begin::Input-->
                                     <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -199,7 +168,6 @@ export default defineComponent({
                                 </div>
                             </div>
                         </div>
-                        <!--begin::Input group-->
                         <div class="row g-3">
                             <div class="mb-10 fv-row col-6">
                                 <div class="">
@@ -241,15 +209,11 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-
                         </div>
                         <div class="row g-3">
-
                             <div class="mb-10 fv-row col-6">
                                 <jet-label for="field" value="Field" class="required" />
-                                <!--end::Label-->
                                 <div class="">
-                                    <!--begin::Input-->
                                     <jet-input id="field" type="text" v-model="v$.form.field.$model" :class="v$.form.field.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -258,7 +222,6 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-
                             </div>
                             <div class="mb-10 fv-row col-6">
                                 <jet-label for="department_id" value="Status" class="required" />
@@ -280,46 +243,33 @@ export default defineComponent({
                                         " placeholder="Text ..." />
                             </div>
                         </div>
-                        <!--end::Input group-->
-
                     </div>
-                    <!--end::Card header-->
                 </div>
-
-                <!--end::Meta options-->
-
             </div>
             <div class="d-flex col-12 col-lg-4 flex-column flex-row-fluid gap-7 gap-lg-10">
                 <div class="card card-flush py-4">
-                    <!--begin::Card header-->
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Attribute Rule</h2>
                         </div>
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
                     <div class="card-body pt-0">
                         <div id="add_rule_conditions" data-select2-id="select2-data-kt_ecommerce_add_category_conditions">
-                            <!--begin::Form group-->
                             <div class="">
-
                                 <div>
                                     <div class="row align-items-center">
-
-                                        <div v-for='attr in attributes' class="d-flex align-items-center mb-6">
+                                        <div v-for='(attr, index) in form.attribute_rules'
+                                            class="d-flex align-items-center mb-6">
                                             <div class="w-100 position-relative">
-                                                <Multiselect :options="rules?.data" label="rule" valueProp="id"
-                                                    :class="`form-control form-control-lg form-control-solid ${attr.error && 'is-invalid'}`"
-                                                    placeholder="Select One" track-by="name" min="1"
-                                                    @select="(value) => handleChange(value, attr.id)" :canClear="false" />
-                                                <small
-                                                    :class="`position-absolute top-100 left-0 w-100 ${attr.error && 'text-danger'}`"
-                                                    v-if="attr.error">
-                                                    {{ attr.error.message }}
-                                                </small>
+                                                <Multiselect :canClear="false" :options="rules?.data" label="rule"
+                                                    valueProp="id" class="form-control form-control-lg form-control-solid"
+                                                    placeholder="Select One" v-model="attr.id" track-by="label" />
+                                                <div v-for="(error, index) of v$.form.attribute_rules.$errors" :key="index">
+                                                    <input-error :message="error.$message" />
+                                                </div>
+
                                             </div>
-                                            <button type="button" @click="$emit('remove', attr.id)"
+                                            <button type="button" @click="removeAttribute(index)"
                                                 class="btn btn-sm btn-icon btn-light-danger ms-4">
                                                 <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15"
                                                     height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -333,19 +283,16 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="form-group mt-5">
-                                <!--begin::Button-->
-                                <button type="button" @click="addAttribute()" class="btn btn-sm btn-light-primary">
+                                <button type="button" @click="addAttribute(this.rowCount)"
+                                    class="btn btn-sm btn-light-primary">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 12 16"
                                         height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
                                     </svg>
-                                    Add Rule
+                                    Add More
                                 </button>
-                                <!--end::Button-->
                             </div>
-                            <!--end::Form group-->
                         </div>
-                        <!--end::Card header-->
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-5">
@@ -360,11 +307,8 @@ export default defineComponent({
                         <span v-if="route().current() == 'attribute.edit'">Update</span>
                         <span v-if="route().current() == 'attribute.create'">Save</span>
                     </button>
-
-                    <!--end::Button-->
                 </div>
             </div>
-
         </form>
     </AppLayout>
 </template>

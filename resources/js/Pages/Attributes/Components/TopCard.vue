@@ -30,7 +30,7 @@ export default defineComponent({
             <div class="card-body p-0">
                 <div class="row">
                     <div class="col-6">
-                        <table class="table table-striped table-bordered text-left mx-10 align-middle">
+                        <table class="table table-striped table-bordered text-left mx-10 align-middle text-capitalize">
                             <tbody>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">

@@ -2,19 +2,19 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Razorpay\Api\Api;
 
-class SubscriptionsResource extends JsonResource
+class SubscriptionsListResource extends JsonResource
 {
-    public $api;
-    public function __construct($api)
-    {
-        $this->api = $api;
-    }
+    private $api;
+    // function __construct()
+    // {
+    //     $this->api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+    // }
     public function toArray($request)
     {
-        $subscription = $this->api->subscription->fetch($this->subscription_id);
+        // $subscription = $this->api->subscription->fetch("sub_00000000000001");
         return [
             'id' => $this->id,
             'payment_id' => $this->payment_id,
@@ -25,7 +25,7 @@ class SubscriptionsResource extends JsonResource
             'order_id' => $this->order_id,
             'start_at' => date("Y-m-d H:i:s", $this->start_at),
             'end_at' => date("Y-m-d H:i:s", $this->end_at),
-            'start_date' => $subscription->start_date
+            // 'start_date' => $subscription->start_date
         ];
     }
 }

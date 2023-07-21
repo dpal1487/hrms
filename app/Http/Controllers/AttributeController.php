@@ -38,7 +38,6 @@ class AttributeController extends Controller
     }
     public function statusUdate(Request $request)
     {
-
         if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
             $status = $request->status == 0  ? "Inactive" : "Active";
             return response()->json(['message' => StatusMessage('Attribute', $status), 'success' => true]);
@@ -58,7 +57,6 @@ class AttributeController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'unique:' . Attribute::class],
             'category' => 'required',
@@ -83,7 +81,7 @@ class AttributeController extends Controller
             'status' => $request->status,
         ]);
         if ($attribute) {
-            foreach ($request->finalAttrbutes as $key => $value) {
+            foreach ($request->attribute_rules as $key => $value) {
                 $attributeRule =  AttributeRule::create([
                     'attribute_id' => $attribute->id,
                     'rule_id' => $value['id'],
@@ -120,7 +118,7 @@ class AttributeController extends Controller
         return Inertia::render('Attributes/Form', [
             'categories' => CategoryResource::collection(Category::get()),
             'rules' => RuleResource::collection(Rule::get()),
-            'attribute' => new AttributeListResurce(Attribute::find($id)),
+            'attribute' => new AttributeResource(Attribute::find($id)),
         ]);
     }
     public function attributevalue($id)
@@ -158,7 +156,7 @@ class AttributeController extends Controller
             ]);
             $attributeRule = AttributeRule::where('attribute_id', '=', $id)->delete();
             if ($attribute) {
-                foreach ($request->finalAttrbutes as $key => $value) {
+                foreach ($request->attribute_rules as $key => $value) {
                     AttributeRule::create([
                         'attribute_id' => $id,
                         'rule_id' => $value['id'],

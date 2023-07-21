@@ -73,7 +73,6 @@ export default defineComponent({
                     .post(route().current() == 'page.create' ? this.route("page.store") : this.route('page.update', this.form.id),
                         {
                             onSuccess: (data) => {
-                                console.log(data);
                                 toast.success(this.$page.props.jetstream.flash.message);
                                 this.isEdit = false;
                             },
@@ -166,7 +165,6 @@ export default defineComponent({
                             </div>
                         </div>
                     </div>
-                    <!--end::Variations-->
                     <div class="row">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-5">
@@ -181,12 +179,9 @@ export default defineComponent({
                                     <span v-if="route().current() == 'page.edit'">Update</span>
                                     <span v-if="route().current() == 'page.create'">Save</span>
                                 </button>
-
-                                <!--end::Button-->
                             </div>
                         </div>
                     </div>
-                    <!--end::Actions-->
                 </form>
             </div>
         </div>

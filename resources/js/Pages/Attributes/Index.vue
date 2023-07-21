@@ -124,11 +124,9 @@ export default defineComponent({
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(attribute, index) in attributes.data" :key="index">
                                 <td>
-                                    <div class="ms-5">
-                                        <Link class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
-                                            :href="`/attribute/${attribute.id}`">{{ attribute?.name }}
-                                        </Link>
-                                    </div>
+                                    <Link class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
+                                        :href="`/attribute/${attribute.id}`">{{ attribute?.name }}
+                                    </Link>
                                 </td>
                                 <td>
                                     {{ attribute?.data_type }}
