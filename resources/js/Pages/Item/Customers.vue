@@ -58,7 +58,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Customers Reviews</span>
+                <span class="text-muted">Customers Reviews</span>
             </li>
         </template>
         <div class="row g-5 g-xl-10 mb-5 mb-xl-10 position-relative;">

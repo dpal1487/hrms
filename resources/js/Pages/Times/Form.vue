@@ -109,7 +109,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Time Form</span>
+                <span class="text-muted">Time Form</span>
             </li>
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">

@@ -64,11 +64,8 @@ export default defineComponent({
 <template>
     <form @submit.prevent="submit" class="my-auto pb-5">
 
-        <div class="row g-9 mb-5">
-            <!--begin::Col-->
-
+        <div class="row g-5 mb-5">
             <div class="col-6 mb-3">
-                <!--begin::Input group-->
                 <div class="fv-row">
                     <jet-label for="value" value="Value" />
                     <jet-input id="value" type="text" placeholder="Value" v-model="v$.form.value.$model" :class="v$.form.value.$errors.length > 0
@@ -80,9 +77,7 @@ export default defineComponent({
                         <input-error :message="error.$message" />
                     </div>
                 </div>
-                <!--end::Input group-->
             </div>
-            <!--begin::Input group-->
             <div class="col-6 mb-3">
                 <div class="fv-row">
                     <jet-label for="status" value="Status" />
@@ -98,9 +93,6 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-
-        <!--begin::Actions-->
         <slot name="action"></slot>
-        <!--end::Actions-->
     </form>
 </template>

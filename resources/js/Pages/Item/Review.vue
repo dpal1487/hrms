@@ -112,12 +112,10 @@ export default defineComponent({
                 </div>
             </div>
             <div class="col-sm-12 col-md-7 overflow-auto">
-                <!-- {{ itemreview?.data?.reviews }} -->
                 <div class="card mb-3 rounded shadow-sm" v-for=" review in itemreview?.data?.reviews">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-stretch justify-content-between">
                             <div class="d-flex align-items-stretch">
-                                {{ }}
                                 <div class="me-4" style="height: 4rem;" v-if="review?.user_image?.small_path != ''">
                                     <img alt="user image" :src="review?.user_image?.small_path" class="rounded h-100" />
                                 </div>

@@ -150,69 +150,41 @@ export default defineComponent({
             <div class="col-12">
                 <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row">
                     <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-                        <!--begin::Thumbnail settings-->
-                        <div class="card card-flush py-4">
-
-                            <!--begin::Card header-->
+                        <div class="card">
                             <div class="card-header mb-5">
-                                <!--begin::Card title-->
                                 <div class="card-title">
                                     <h2>Thumbnail</h2>
                                 </div>
-                                <!--end::Card title-->
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
-                            <div class="card-body text-center pt-0">
-                                <!--begin::Image input-->
+                            <div class="card-body text-center">
                                 <ImageInput :image="this.category?.data?.image?.small_path" :onchange="onThumbnailChange"
                                     :remove="removeSelectedAvatar" :selectedImage="thumbnail.url"
                                     :errors="v$.form.thumbnail.$errors" :isUploading="thumbnail.isLoading" />
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Thumbnail settings-->
-                        <!--begin::Banner settings-->
-                        <div class="card card-flush py-4">
-                            <!--begin::Card header-->
+                        <div class="card">
                             <div class="card-header mb-5">
-                                <!--begin::Card title-->
                                 <div class="card-title">
                                     <h2>Banner Image </h2>
                                 </div>
-                                <!--end::Card title-->
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
-                            <div class="card-body text-center pt-0">
-                                <!--begin::Image input-->
-
+                            <div class="card-body text-center">
                                 <ImageInput :image="this.category?.data?.banner?.medium_path" :onchange="onBannerChange"
                                     :remove="removeSelectedAvatar" :selectedImage="banner.url"
                                     :errors="v$.form.banner_image.$errors" :isUploading="banner.isLoading" />
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Thumbnail settings-->
                     </div>
-                    <!--end::Aside column-->
-                    <!--begin::Main column-->
                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                        <!--begin::General options-->
-                        <div class="card card-flush py-4">
-                            <!--begin::Card header-->
+                        <div class="card">
                             <div class="card-header mb-5">
                                 <div class="card-title">
                                     <h2>Category</h2>
                                 </div>
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
-                            <div class="card-body pt-0">
-                                <!--begin::Input group-->
-                                <div class="row gap-3 mb-5">
-                                    <div class="row col-6">
-                                        <!--begin::Label-->
+                            <div class="card-body pt-2">
+                                <div class="row mb-5">
+                                    <div class="col-6">
                                         <jet-label for="name" value="Name" />
                                         <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                             ? 'is-invalid'
@@ -222,8 +194,7 @@ export default defineComponent({
                                             <input-error :message="error.$message" />
                                         </div>
                                     </div>
-                                    <!--end::Input group-->
-                                    <div class="row col-6">
+                                    <div class="col-6 mb-5">
                                         <jet-label for="department_id" value="Category Parent" />
                                         <Multiselect :options="category_parent?.data" label="name" valueProp="id"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
@@ -232,8 +203,18 @@ export default defineComponent({
                                             <input-error :message="error.$message" />
                                         </div>
                                     </div>
+                                    <div class="col-10">
+                                        <jet-label for="keywords" value="Keyword" />
+                                        <jet-input id="keywords" type="text" v-model="v$.form.keyword.$model" :class="v$.form.keyword.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="Keyword" />
+                                        <div v-for="(error, index) of v$.form.keyword.$errors" :key="index">
+                                            <input-error :message="error.$message" />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="row mb-5">
+                                <div class="fv-row mb-5">
                                     <jet-label for="description" value="Description" />
                                     <ckeditor :editor="editor" v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
@@ -243,42 +224,39 @@ export default defineComponent({
 
 
                                 </div>
-                                <div class="row col-10">
-                                    <jet-label for="keywords" value="Keyword" />
-                                    <jet-input id="keywords" type="text" v-model="v$.form.keyword.$model" :class="v$.form.keyword.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Keyword" />
-                                    <div v-for="(error, index) of v$.form.keyword.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
-                        <div class="card card-flush py-4">
-                            <!--begin::Card header-->
+                        <div class="card">
                             <div class="card-header">
                                 <div class="card-title">
                                     <h2>Meta Options</h2>
                                 </div>
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
                             <div class="card-body">
-                                <!--begin::Input group-->
-                                <div class="row col-10 mb-5">
-                                    <!--begin::Label-->
-                                    <jet-label for="meta_tag" value="Tag" />
-                                    <jet-input id="meta_tag" type="text" v-model="v$.form.meta_tag.$model" :class="v$.form.meta_tag.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Tag" />
-                                    <div v-for="(error, index) of v$.form.meta_tag.$errors" :key="index">
-                                        <input-error :message="error.$message" />
+                                <div class="row mb-5">
+                                    <div class="col-6">
+                                        <jet-label for="meta_tag" value="Tag" />
+                                        <jet-input id="meta_tag" type="text" v-model="v$.form.meta_tag.$model" :class="v$.form.meta_tag.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="Tag" />
+                                        <div v-for="(error, index) of v$.form.meta_tag.$errors" :key="index">
+                                            <input-error :message="error.$message" />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <jet-label for="keywords" value="Keyword" />
+                                        <jet-input id="keywords" type="text" v-model="v$.form.meta_keyword.$model" :class="v$.form.meta_keyword.$errors.length > 0
+                                            ? 'is-invalid'
+                                            : ''
+                                            " placeholder="Keywords" />
+                                        <div v-for="(error, index) of v$.form.meta_keyword.$errors" :key="index">
+                                            <input-error :message="error.$message" />
+                                        </div>
                                     </div>
                                 </div>
-                                <!--end::Input group-->
-                                <div class="row mb-5">
+                                <div class="fv-row mb-5">
                                     <jet-label for="description" value="Description" />
                                     <ckeditor id="description" :editor="editor" v-model="v$.form.meta_description.$model"
                                         class="form-control form-control-solid" :class="v$.form.meta_description.$errors.length > 0
@@ -287,24 +265,9 @@ export default defineComponent({
                                             " placeholder="Text" />
 
                                 </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row col-10">
-                                    <jet-label for="keywords" value="Keyword" />
-                                    <jet-input id="keywords" type="text" v-model="v$.form.meta_keyword.$model" :class="v$.form.meta_keyword.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Keywords" />
-                                    <div v-for="(error, index) of v$.form.meta_keyword.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
-                                    <!--begin::Label-->
-                                </div>
-                                <!--end::Input group-->
+
                             </div>
-                            <!--end::Card header-->
                         </div>
-                        <!--end::Meta options-->
                         <div class="d-flex justify-content-end gap-5">
                             <Link href="/categories"
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
@@ -317,7 +280,6 @@ export default defineComponent({
                                 <span v-if="route().current() == 'category.edit'">Update</span>
                                 <span v-if="route().current() == 'category.create'">Save</span>
                             </button>
-                            <!--end::Button-->
                         </div>
                     </div>
                 </form>

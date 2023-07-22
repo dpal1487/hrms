@@ -56,8 +56,6 @@
 
     <div v-if="tokens.length > 0">
       <jet-section-border />
-
-      <!-- Manage API Tokens -->
       <div>
         <jet-action-section>
           <template #title>
@@ -67,26 +65,21 @@
           <template #description>
             You may delete any of your existing tokens if they are no longer needed.
           </template>
-
-          <!-- API Token List -->
           <template #content>
             <div>
               <div class="d-flex justify-content-between" v-for="token in tokens" :key="token.id">
                 <div>
                   {{ token.name }}
                 </div>
-
                 <div class="d-flex">
                   <div class="text-sm text-muted" v-if="token.last_used_ago">
                     Last used {{ token.last_used_ago }}
                   </div>
-
                   <button class="btn btn-link text-secondary"
                           @click="manageApiTokenPermissions(token)"
                           v-if="availablePermissions.length > 0">
                     Permissions
                   </button>
-
                   <button class="btn btn-link text-danger text-decoration-none" @click="confirmApiTokenDeletion(token)">
                     Delete
                   </button>
@@ -97,36 +90,28 @@
         </jet-action-section>
       </div>
     </div>
-
-    <!-- Token Value Modal -->
     <jet-dialog-modal id="displayingTokenModal">
       <template #title>
         API Token
       </template>
-
       <template #content>
         <div>
           Please copy your new API token. For your security, it won't be shown again.
         </div>
-
         <div class="bg-light rounded p-3 user-select-all" v-if="$page.props.jetstream.flash.token">
           {{ $page.props.jetstream.flash.token }}
         </div>
       </template>
-
       <template #footer>
         <jet-secondary-button @click="displayingToken = false" data-dismiss="modal">
           Close
         </jet-secondary-button>
       </template>
     </jet-dialog-modal>
-
-    <!-- API Token Permissions Modal -->
     <jet-dialog-modal id="managingPermissionsForModal">
       <template #title>
         API Token Permissions
       </template>
-
       <template #content>
         <div class="mt-2 row">
           <div class="col-6" v-for="permission in availablePermissions" :key="permission">
@@ -141,7 +126,6 @@
           </div>
         </div>
       </template>
-
       <template #footer>
         <jet-secondary-button data-dismiss="modal" @click="managingPermissionsFor = null">
           Cancel
@@ -152,22 +136,17 @@
         </jet-button>
       </template>
     </jet-dialog-modal>
-
-    <!-- Delete Token Confirmation Modal -->
     <jet-confirmation-modal id="apiTokenBeingDeletedModal">
       <template #title>
         Delete API Token
       </template>
-
       <template #content>
         Are you sure you would like to delete this API token?
       </template>
-
       <template #footer>
         <jet-secondary-button @click="apiTokenBeingDeleted = null" data-dismiss="modal">
           Cancel
         </jet-secondary-button>
-
         <jet-danger-button class="ms-2" @click="deleteApiToken" :class="{ 'text-white-50': deleteApiTokenForm.processing }" :disabled="deleteApiTokenForm.processing">
           Delete
         </jet-danger-button>
@@ -175,7 +154,6 @@
     </jet-confirmation-modal>
   </div>
 </template>
-
 <script>
   import { defineComponent } from 'vue'
   import JetActionMessage from '@/Jetstream/ActionMessage.vue'

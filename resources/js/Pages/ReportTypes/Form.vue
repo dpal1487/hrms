@@ -91,7 +91,7 @@ export default defineComponent({
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
-                <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+                <form @submit.prevent="submit()" class="d-flex flex-column flex-row-fluid gap-5">
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">

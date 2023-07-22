@@ -11,7 +11,6 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import useVuelidate from "@vuelidate/core";
 import { required, integer } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default defineComponent({
     props: ['coupon'],
@@ -42,7 +41,6 @@ export default defineComponent({
     },
     data() {
         return {
-            editor: ClassicEditor,
 
             isEdit: false,
             requesting: false,
@@ -75,7 +73,6 @@ export default defineComponent({
         JetLabel,
         InputError,
         VueDatePicker,
-        ClassicEditor
     },
     methods: {
 
@@ -182,7 +179,7 @@ export default defineComponent({
                             <div class="row mb-5">
                                 <jet-label for="descriptions" value="Description" />
                                 <div class="">
-                                    <ckeditor id=" descriptions" :editor="editor" v-model="v$.form.description.$model"
+                                    <textarea id=" descriptions"  v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''

@@ -109,8 +109,8 @@ export default defineComponent({
 });
 </script>
 <template>
-    <Head :title="isEdit ? 'Edit brand' : `Add New brand`" />
-    <AppLayout :title="isEdit ? 'Edit brand' : `Add New brand`">
+    <Head :title="isEdit ? 'Edit brand' : `Add New Brand`" />
+    <AppLayout :title="isEdit ? 'Edit brand' : `Add New Brand`">
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -122,20 +122,20 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Brand</span>
+                <span class="text-muted">Brand</span>
             </li>
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row">
                     <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-                        <div class="card card-flush py-4">
+                        <div class="card">
                             <div class="card-header mb-5">
                                 <div class="card-title">
                                     <h2>Brand Image </h2>
                                 </div>
                             </div>
-                            <div class="card-body text-center pt-0">
+                            <div class="card-body text-center">
                                 <ImageInput :image="this.brand?.data?.image?.medium_path" :onchange="onbrandChange"
                                     :remove="removeSelectedAvatar" :selectedImage="brand_upload?.url"
                                     :errors="v$.form.image.$errors" :isUploading="brand_upload?.isLoading" />
@@ -143,27 +143,27 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                        <div class="card card-flush py-4">
-                            <div class="card-header">
+                        <div class="card">
+                            <div class="card-header align-items-center">
                                 <div class="card-title">
                                     <h2>General</h2>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="row col-10 mb-5">
-                                    <jet-label for="name" value="brand Name" />
+                                <div class="fv-row col-10 mb-5">
+                                    <jet-label for="name" value="Brand Name" />
                                     <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        " placeholder="brand Name" />
+                                        " placeholder="Brand Name" />
                                     <div v-for="(error, index) of v$.form.name.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <div class="row ">
+                                <div class="row">
                                     <div class="col-6 mb-5">
                                         <jet-label for="category" value="Category" class="required" />
-                                        <Multiselect :options="categories?.data" label="name" valueProp="id"
+                                        <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                             v-model="v$.form.category.$model" track-by="label" :class="v$.form.category.$errors.length > 0
                                                 ? 'is-invalid'
@@ -175,7 +175,7 @@ export default defineComponent({
                                     </div>
                                     <div class="col-6 mb-5">
                                         <jet-label value="Status" class="required" />
-                                        <Multiselect :options="status" label="label" valueProp="value"
+                                        <Multiselect :canClear="false" :options="status" label="label" valueProp="value"
                                             class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                             v-model="v$.form.status.$model" :class="v$.form.status.$errors.length > 0
                                                 ? 'is-invalid'
@@ -186,7 +186,7 @@ export default defineComponent({
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mb-5">
+                                <div class="fv-row mb-5">
                                     <jet-label for="description" value="Description" />
                                     <textarea id="description" v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0

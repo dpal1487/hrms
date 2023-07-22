@@ -122,14 +122,11 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- end page title -->
                         <menu-item-form @submitted="submit" :menu_lists="menu_lists?.data" :item="item" :parents="parents">
                             <template #action>
                                 <div class="d-flex justify-content-end">
-                                    <!--begin::Button-->
                                     <Link type="button" class="btn btn-outline-secondary me-5" href="/menu-items">Discard
                                     </Link>
-                                    <!--begin::Button-->
                                     <button type="submit" class="btn btn-primary"
                                         :class="{ 'text-white-50': form.processing }">
                                         <div v-show="form.processing" class="spinner-border spinner-border-sm">
@@ -140,7 +137,6 @@ export default defineComponent({
                                 </div>
                             </template>
                         </menu-item-form>
-                        <!-- end row -->
                     </div>
                 </div>
             </div>
@@ -154,13 +150,9 @@ export default defineComponent({
                             <i class="bi bi-plus-circle"></i>Add Menu</button>
                     </div>
                     <div class="card-body p-0">
-                        <!-- end page title -->
-                        <!--begin::Table-->
                         <div class="table-responsive">
                             <table class="table align-middle table-row-dashed fs-6 gy-5">
-                                <!--begin::Table head-->
                                 <thead>
-                                    <!--begin::Table row-->
                                     <tr class="text-gray-400 text-center fw-bold fs-7 min-w-100px text-uppercase">
                                         <th>
                                             Name
@@ -169,15 +161,10 @@ export default defineComponent({
                                             Action
                                         </th>
                                     </tr>
-                                    <!--end::Table row-->
                                 </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
                                 <tbody class="fw-semibold">
                                     <tr class="text-center" v-for="(menu, index) in menu_lists" :key="index">
-                                        <!--begin::Name=-->
                                         <td class="text-bold">{{ menu.name }}</td>
-                                        <!--begin::Action=-->
                                         <td>
                                             <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
                                                 @click="showEditMenuModal(menu)">
@@ -190,15 +177,11 @@ export default defineComponent({
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                         </td>
-                                        <!--end::Action=-->
                                     </tr>
 
                                 </tbody>
-                                <!--end::Table body-->
                             </table>
                         </div>
-                        <!--end::Table-->
-                        <!-- end row -->
                     </div>
                 </div>
             </div>

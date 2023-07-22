@@ -142,45 +142,41 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Attribute Form</span>
+                <span class="text-muted">Attribute Form</span>
             </li>
         </template>
         <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row gap-5">
             <div class="d-flex col-12 col-lg-8 flex-column flex-row-fluid gap-7 gap-lg-10">
-                <div class="card card-flush py-4">
-                    <div class="card-header">
+                <div class="card">
+                    <div class="card-header align-items-center">
                         <div class="card-title">
                             <h2>Attribute</h2>
                         </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="row g-3">
-                            <div class="mb-10 row col-12">
-                                <jet-label for="name" value="Name" class="required" />
-                                <div class="">
-                                    <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Name" />
-                                    <div v-for="(error, index) of v$.form.name.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
+                    <div class="card-body">
+                        <div class="row mb-5">
+                            <jet-label for="name" value="Name" class="required" />
+                            <div class="">
+                                <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
+                                    ? 'is-invalid'
+                                    : ''
+                                    " placeholder="Attribute Name" />
+                                <div v-for="(error, index) of v$.form.name.$errors" :key="index">
+                                    <input-error :message="error.$message" />
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-3">
-                            <div class="mb-10 fv-row col-6">
-                                <div class="">
-                                    <jet-label for="department_id" value="Category" class="required" />
-                                    <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
-                                        class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                        v-model="v$.form.category.$model" track-by="name" />
-                                    <div v-for="(error, index) of v$.form.category.$errors" :key="index">
-                                        <input-error :message="error.$message" />
-                                    </div>
+                        <div class="row mb-5">
+                            <div class="col-6">
+                                <jet-label for="department_id" value="Category" class="required" />
+                                <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                    v-model="v$.form.category.$model" track-by="name" />
+                                <div v-for="(error, index) of v$.form.category.$errors" :key="index">
+                                    <input-error :message="error.$message" />
                                 </div>
                             </div>
-                            <div class="mb-10 fv-row col-6">
+                            <div class="col-6">
                                 <jet-label for="department_id" value="Input Type" class="required" />
                                 <Multiselect :canClear="false" :options="input_type" label="label" valueProp="value"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select One"
@@ -190,9 +186,9 @@ export default defineComponent({
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-3">
-                            <div class="mb-10 fv-row col-6">
-                                <jet-label for="data-type" value="Data Type" class="required" />
+                        <div class="row mb-5">
+                            <div class="col-6">
+                                <jet-label value="Data Type" class="required" />
                                 <Multiselect :canClear="false" :options="data_type" label="label" valueProp="value"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                     v-model="v$.form.data_type.$model" track-by="label" />
@@ -200,8 +196,8 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-                            <div class="mb-10 fv-row col-6">
-                                <jet-label for="department_id" value="Display Order" class="required" />
+                            <div class="col-6">
+                                <jet-label value="Display Order" class="required" />
                                 <Multiselect :canClear="false" :options="display_order" label="label" valueProp="value"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                     v-model="v$.form.display_order.$model" track-by="label" />
@@ -210,8 +206,8 @@ export default defineComponent({
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-3">
-                            <div class="mb-10 fv-row col-6">
+                        <div class="row mb-5">
+                            <div class="col-6">
                                 <jet-label for="field" value="Field" class="required" />
                                 <div class="">
                                     <jet-input id="field" type="text" v-model="v$.form.field.$model" :class="v$.form.field.$errors.length > 0
@@ -223,7 +219,7 @@ export default defineComponent({
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-10 fv-row col-6">
+                            <div class="col-6">
                                 <jet-label for="department_id" value="Status" class="required" />
                                 <Multiselect :canClear="false" :options="status" label="label" valueProp="value"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select One"
@@ -233,65 +229,52 @@ export default defineComponent({
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-5">
+                        <div class="fv-row">
                             <jet-label for="description" value="Description" />
-                            <div class="mx-3">
-                                <textarea id="description" v-model="v$.form.description.$model"
-                                    class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
-                                        ? 'is-invalid'
-                                        : ''
-                                        " placeholder="Text ..." />
-                            </div>
+                            <textarea id="description" v-model="v$.form.description.$model"
+                                class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
+                                    ? 'is-invalid'
+                                    : ''
+                                    " placeholder="Text ..." />
                         </div>
                     </div>
                 </div>
             </div>
             <div class="d-flex col-12 col-lg-4 flex-column flex-row-fluid gap-7 gap-lg-10">
-                <div class="card card-flush py-4">
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Attribute Rule</h2>
                         </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <div id="add_rule_conditions" data-select2-id="select2-data-kt_ecommerce_add_category_conditions">
-                            <div class="">
-                                <div>
-                                    <div class="row align-items-center">
-                                        <div v-for='(attr, index) in form.attribute_rules'
-                                            class="d-flex align-items-center mb-6">
-                                            <div class="w-100 position-relative">
-                                                <Multiselect :canClear="false" :options="rules?.data" label="rule"
-                                                    valueProp="id" class="form-control form-control-lg form-control-solid"
-                                                    placeholder="Select One" v-model="attr.id" track-by="label" />
-                                                <div v-for="(error, index) of v$.form.attribute_rules.$errors" :key="index">
-                                                    <input-error :message="error.$message" />
-                                                </div>
-
-                                            </div>
-                                            <button type="button" @click="removeAttribute(index)"
-                                                class="btn btn-sm btn-icon btn-light-danger ms-4">
-                                                <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15"
-                                                    height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-time="evenodd" clip-time="evenodd"
-                                                        d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
-                                                        fill="currentColor"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
+                    <div class="card-body">
+                        <div v-for='(attr, index) in form.attribute_rules' class="d-flex align-items-center mb-6">
+                            <div class="w-100 position-relative">
+                                <Multiselect :canClear="false" :options="rules?.data" label="rule" valueProp="id"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                    v-model="attr.id" track-by="label" />
+                                <div v-for="(error, index) of v$.form.attribute_rules.$errors" :key="index">
+                                    <input-error :message="error.$message" />
                                 </div>
                             </div>
-                            <div class="form-group mt-5">
-                                <button type="button" @click="addAttribute(this.rowCount)"
-                                    class="btn btn-sm btn-light-primary">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 12 16"
-                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
-                                    </svg>
-                                    Add More
-                                </button>
-                            </div>
+                            <button type="button" @click="removeAttribute(index)"
+                                class="btn btn-sm btn-icon btn-light-danger ms-4">
+                                <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15" height="1em"
+                                    width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-time="evenodd" clip-time="evenodd"
+                                        d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mt-5">
+                            <button type="button" @click="addAttribute(this.rowCount)" class="btn btn-sm btn-light-primary">
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 12 16"
+                                    height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M12 9H7v5H5V9H0V7h5V2h2v5h5v2z"></path>
+                                </svg>
+                                Add More
+                            </button>
                         </div>
                     </div>
                 </div>

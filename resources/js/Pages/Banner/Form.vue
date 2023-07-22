@@ -119,54 +119,35 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Banner Form</span>
+                <span class="text-muted">Banner Form</span>
             </li>
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
             <div class="col-12">
                 <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row">
                     <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-
-                        <!--begin::Banner settings-->
-                        <div class="card card-flush py-4">
-                            <!--begin::Card header-->
-                            <div class="card-header mb-5">
-                                <!--begin::Card title-->
+                        <div class="card">
+                            <di v class="card-header mb-5">
                                 <div class="card-title">
                                     <h2>Banner Image </h2>
                                 </div>
-                                <!--end::Card title-->
-                            </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
-                            <div class="card-body text-center pt-0">
-                                <!--begin::Image input-->
+                            </di>
+                            <div class="card-body text-center">
                                 <ImageInput :image="this.banner?.data?.image?.medium_path" :onchange="onBannerChange"
                                     :remove="removeSelectedAvatar" :selectedImage="banner_upload?.url"
                                     :errors="v$.form.image.$errors" :isUploading="banner_upload?.isLoading" />
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Thumbnail settings-->
                     </div>
-                    <!--end::Aside column-->
-                    <!--begin::Main column-->
-                    <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                        <!--begin::General options-->
-
-                        <div class="card card-flush py-4">
-                            <!--begin::Card header-->
+                    <div class="d-flex flex-column flex-row-fluid gap-5">
+                        <div class="card">
                             <div class="card-header">
                                 <div class="card-title">
                                     <h2>General</h2>
                                 </div>
                             </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
                             <div class="card-body">
-                                <!--begin::Input group-->
-                                <div class="row col-10 mb-5">
-                                    <!--begin::Label-->
+                                <div class="fv-row col-10 mb-5">
                                     <jet-label for="title" value="Banner Name" />
                                     <jet-input id="title" type="text" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0
                                         ? 'is-invalid'
@@ -176,9 +157,7 @@ export default defineComponent({
                                         <input-error :message="error.$message" />
                                     </div>
                                 </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row col-10 mb-5">
+                                <div class="fv-row col-10 mb-5">
                                     <jet-label for="url" value="Banner URL" />
                                     <jet-input id="url" type="text" v-model="v$.form.url.$model" :class="v$.form.url.$errors.length > 0
                                         ? 'is-invalid'
@@ -187,10 +166,8 @@ export default defineComponent({
                                     <div v-for="(error, index) of v$.form.url.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>
-                                    <!--begin::Label-->
                                 </div>
-                                <!--end::Input group-->
-                                <div class="row mb-5">
+                                <div class="fv-row mb-5">
                                     <jet-label for="description" value="Description" />
                                     <textarea id="description" v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
@@ -199,12 +176,8 @@ export default defineComponent({
                                             " placeholder="Text ..." />
 
                                 </div>
-                                <!--end::Input group-->
-
                             </div>
-                            <!--end::Card header-->
                         </div>
-                        <!--end::Meta options-->
                         <div class="d-flex justify-content-end gap-5">
                             <Link href="/banners"
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
@@ -217,7 +190,6 @@ export default defineComponent({
                                     <span v-if="route().current() == 'banner.edit'">Update</span>
                                     <span v-if="route().current() == 'banner.create'">Save</span>
                                 </button>
-                            <!--end::Button-->
                         </div>
                     </div>
                 </form>

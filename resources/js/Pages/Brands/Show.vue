@@ -108,14 +108,11 @@ export default defineComponent({
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <!--begin::Primary button-->
                 <Link href="/brand/create" class="btn btn-sm fw-bold btn-primary">
                 <i class="bi bi-plus-circle"></i>Add New Brand</Link>
-                <!--end::Primary button-->
             </div>
         </template>
         <div class="mb-5">
-
             <TopCard :brand="brand?.data" />
             <div class="card">
                 <div class="card-header align-items-center">
@@ -131,17 +128,13 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="card-body">
-                    <!--begin::Form-->
                     <div class="row" v-if="isEdit || isAdd">
-
-                        <div class="col-12">
+                        <div class="col-6 mx-10">
                             <brand-model-form @submitted="submit" :brand="form" :id="brand?.data?.id">
                                 <template #action>
-                                    <div class="d-flex justify-content-end">
-                                        <!--begin::Button-->
+                                    <div class="d-flex justify-content-end me-5">
                                         <button type="button" class="btn btn-outline-secondary me-5"
                                             @click="this.isEdit = false, this.isAdd = false">Discard</button>
-                                        <!--begin::Button-->
                                         <button type="submit" class="btn btn-primary"
                                             :class="{ 'text-white-50': form.processing }">
                                             <div v-show="form.processing" class="spinner-border spinner-border-sm">
@@ -165,13 +158,11 @@ export default defineComponent({
                                 <table class="table align-middle table-row-dashed fs-6 gy-3 text-left">
 
                                     <thead>
-                                        <!--begin::Table row-->
                                         <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                             <th v-for="(th, index) in tbody" :key="index">
                                                 {{ th }}
                                             </th>
                                         </tr>
-                                        <!--end::Table row-->
                                     </thead>
                                     <tbody class="fw-semibold text-gray-600">
                                         <tr v-for="(brand, index) in brand?.data?.models" :key="index">
@@ -195,7 +186,7 @@ export default defineComponent({
                             </div>
                             <div class="d-flex align-items-center justify-content-center justify-content-md-end"
                                 v-if="brand.meta">sd
-                                <!-- <Pagination :links="brands.meta.links" /> -->
+                                <!-- <Pagination :links="brand.meta.links" /> -->
                             </div>
                         </div>
                     </div>

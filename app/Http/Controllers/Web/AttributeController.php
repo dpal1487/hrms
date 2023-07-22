@@ -1,0 +1,178 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Resources\Web\AttributeListResurce;
+use App\Models\Attribute;
+use Illuminate\Http\Request;
+use App\Http\Resources\AttributeResource;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\RuleResource;
+use App\Models\AttributeValue;
+use App\Models\Category;
+use App\Models\Rule;
+use App\Models\AttributeRule;
+use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
+
+class AttributeController extends Controller
+{
+
+    public function index(Request $request)
+    {
+        $attributes = new Attribute();
+        if (!empty($request->q)) {
+            $attributes = $attributes->where('name', 'like', "%{$request->q}%")
+                ->orWhere('data_type', 'like', "%{$request->q}%")
+                ->orWhere('field', 'like', "%{$request->q}%")
+                ->orWhereHas('category', function ($category) use ($request) {
+                    $category->where('name', 'like', "%{$request->q}%");
+                });
+        }
+        if (!empty($request->s) || $request->s != '') {
+            $attributes = $attributes->where('status', $request->s);
+        }
+        return Inertia::render('Attributes/Index', [
+            'attributes' => AttributeListResurce::collection($attributes->paginate(10)->onEachSide(1)->appends(request()->query()))
+        ]);
+    }
+    public function statusUdate(Request $request)
+    {
+        if (Attribute::where(['id' => $request->id])->update(['status' => $request->status ? 1 : 0])) {
+            $status = $request->status == 0  ? "Inactive" : "Active";
+            return response()->json(['message' => StatusMessage('Attribute', $status), 'success' => true]);
+        }
+        return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
+
+    public function create()
+    {
+        $categories = Category::get();
+        $rules = Rule::get();
+        return Inertia::render('Attributes/Form', [
+            'categories' => CategoryResource::collection($categories),
+            'rules' => RuleResource::collection($rules),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'unique:' . Attribute::class],
+            'category' => 'required',
+            'field' => 'required',
+            'input_type' => 'required',
+            'data_type' => 'required',
+            'display_order' => 'required|integer',
+            'status' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
+        }
+        $attribute = Attribute::create([
+            'name' => $request->name,
+            'field' => $request->field,
+            'category_id' => $request->category,
+            'type' => $request->input_type,
+            'data_type' => $request->data_type,
+            'description' => $request->description,
+            'display_order' => $request->display_order,
+            'status' => $request->status,
+        ]);
+        if ($attribute) {
+            foreach ($request->attribute_rules as $key => $value) {
+                $attributeRule =  AttributeRule::create([
+                    'attribute_id' => $attribute->id,
+                    'rule_id' => $value['id'],
+                ]);
+            }
+            if (!empty($attributeRule)) {
+                return redirect()->route('attributes.index')->with('message', ErrorMessage());
+            }
+            return redirect()->route('attributes.index')->with('flash', ['message' =>  CreateMessage('Attribute')]);
+        }
+        return redirect()->route('attribute.index')->with('message', ErrorMessage());
+    }
+
+    public function show(Request $request, $id)
+    {
+        $attribute = Attribute::find($id);
+        if ($attribute) {
+            $values = AttributeValue::where('attribute_id', $attribute->id)->get();
+            if (!empty($request->q)) {
+                $values =  $values->where('attribute_value', 'like', "%$request->q%");
+            }
+            if (!empty($request->s) || $request->s != '') {
+                $values = $values->where('status', $request->s);
+            }
+            return Inertia::render('Attributes/Show', [
+                'attribute' => new AttributeResource($attribute),
+                'values' => $values,
+            ]);
+        }
+    }
+
+    public function edit($id)
+    {
+        return Inertia::render('Attributes/Form', [
+            'categories' => CategoryResource::collection(Category::get()),
+            'rules' => RuleResource::collection(Rule::get()),
+            'attribute' => new AttributeResource(Attribute::find($id)),
+        ]);
+    }
+    public function attributevalue($id)
+    {
+        $attributeValue = AttributeValue::find($id);
+
+        return response()->json($attributeValue);
+    }
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required'],
+            'category' => 'required',
+            'field' => 'required',
+            'input_type' => 'required',
+            'data_type' => 'required',
+            'display_order' => 'required|integer',
+            'status' => 'required',
+            'finalAttrbutes.*.id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors(['message' => $validator->errors()->first(), 'success' => false]);
+        }
+        $attribute = Attribute::find($id);
+        if ($attribute) {
+            $attribute = Attribute::where(['id' => $attribute->id])->update([
+                'name' => $request->name == $attribute->name ? $attribute->name :   $request->name,
+                'field' => $request->field,
+                'category_id' => $request->category,
+                'type' => $request->input_type,
+                'data_type' => $request->data_type,
+                'description' => $request->description,
+                'display_order' => $request->display_order,
+                'status' => $request->status,
+            ]);
+            $attributeRule = AttributeRule::where('attribute_id', '=', $id)->delete();
+            if ($attribute) {
+                foreach ($request->attribute_rules as $key => $value) {
+                    AttributeRule::create([
+                        'attribute_id' => $id,
+                        'rule_id' => $value['id'],
+                    ]);
+                }
+            }
+            return redirect()->route('attributes.index')->with('flash', ['message' =>  UpdateMessage('Attribute')]);
+        }
+        return redirect()->route('attributes.index')->with('message', ErrorMessage());
+    }
+    public function destroy($id)
+    {
+        $attribute = Attribute::find($id);
+        if ($attribute->delete()) {
+            return response()->json(['success' => true, 'message' =>  DeleteMessage('Attribute')]);
+        }
+        return response()->json(['success' => false, 'message' => ErrorMessage()]);
+    }
+}

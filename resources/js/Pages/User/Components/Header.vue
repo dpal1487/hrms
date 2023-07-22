@@ -58,8 +58,8 @@ export default defineComponent({
                                             <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <span> {{ user?.first_name }}</span></span>
-                                <span class="d-flex align-items-center text-gray-400  me-5 mb-2">
+                                    <span> {{ user?.first_name +" "+ user?.last_name }}</span></span>
+                                <span class="d-flex align-items-center text-gray-400  me-5 mb-2 text-capitalize">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">

@@ -118,7 +118,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">FAQs Category</span>
+                <span class="text-muted">FAQs Category</span>
             </li>
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
@@ -126,13 +126,13 @@ export default defineComponent({
                 <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row">
                     <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
 
-                        <div class="card card-flush py-4">
+                        <div class="card">
                             <div class="card-header mb-5">
                                 <div class="card-title">
                                     <h2>FAQs Category Image </h2>
                                 </div>
                             </div>
-                            <div class="card-body text-center pt-0">
+                            <div class="card-body text-center">
                                 <ImageInput :image="this.faqs_category?.data?.image?.medium_path"
                                     :onchange="onfaqs_categoryChange" :remove="removeSelectedAvatar"
                                     :selectedImage="faqs_category_upload?.url" :errors="v$.form.image.$errors"
@@ -142,7 +142,7 @@ export default defineComponent({
                     </div>
                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
 
-                        <div class="card card-flush py-4">
+                        <div class="card">
                             <div class="card-header">
                                 <div class="card-title">
                                     <h2>FAQs Category Form</h2>

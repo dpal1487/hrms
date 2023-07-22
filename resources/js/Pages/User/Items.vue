@@ -13,7 +13,7 @@ export default defineComponent({
         return {
             title: "Item",
             form: {},
-           
+
         }
     },
     components: {
@@ -45,25 +45,20 @@ export default defineComponent({
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
-            <li class="text-muted text-hover-primary">
+            <li class="text-muted">
                 {{ user?.data?.first_name }}
             </li>
         </template>
         <Header :user="user?.data" :address="address?.data" />
         <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-            <!--begin::Card header-->
             <div class="card-header cursor-pointer">
-                <!--begin::Card title-->
                 <div class="card-title m-0">
                     <h3 class="fw-bold m-0">Items Details</h3>
                 </div>
-                <!--end::Card title-->
             </div>
-            <!--begin::Card header-->
         </div>
-        <!--begin::Card body-->
         <div v-for="item in items.data" class="mb-5">
-            <ItemCard :item="item" />
+            <ItemCard :item="item" :pagename="`/user/${user?.data?.id}/items`" />
         </div>
         <div class="d-flex align-items-center justify-content-center" v-if="items?.meta">
             <Pagination :links="items?.meta.links" />

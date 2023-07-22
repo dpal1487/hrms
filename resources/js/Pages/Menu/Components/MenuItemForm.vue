@@ -92,7 +92,6 @@ export default defineComponent({
 <template>
     <JetValidationErrors />
     <form @submit.prevent="submit" autocomplete="off">
-        <!--begin::Input group-->
         <div class="row mb-6">
             
             <div class="fv-row col-6 mb-3">

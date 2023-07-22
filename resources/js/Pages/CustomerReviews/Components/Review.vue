@@ -37,19 +37,14 @@ export default defineComponent({
 <template>
     <div class="table-responsive">
         <table class="table align-middle table-row-dashed fs-6 gy-5 text-left">
-            <!--begin::Table head-->
             <thead>
-                <!--begin::Table row-->
                 <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
 
                     <th v-for="(th, index) in tbody" :key="index">
                         {{ th }}
                     </th>
                 </tr>
-                <!--end::Table row-->
             </thead>
-            <!--end::Table head-->
-            <!--begin::Table body-->
             <tbody class="fw-semibold text-gray-600">
                 <tr v-for="(customer_review, index) in reviews" :key="index">
                     <td>
@@ -70,7 +65,6 @@ export default defineComponent({
                     </td>
                 </tr>
             </tbody>
-            <!--end::Table body-->
         </table>
     </div>
 </template>

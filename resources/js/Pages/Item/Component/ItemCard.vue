@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import StatusDropdown from './StatusDropdown.vue';
 export default defineComponent({
-    props: ["item",],
+    props: ["item", "pagename"],
 
     data() {
         return {
@@ -17,30 +17,23 @@ export default defineComponent({
 
 <template>
     <div class="card-body position-relative shadow-sm rounded-2 bg-white p-6">
-    <StatusDropdown :id="item.id" />
-        <!--begin::Toolbar-->
-        <!--end::Toolbar-->
-        <!--begin::Details-->
+        <StatusDropdown :id="item.id" :pagename="pagename" />
         <div class="d-flex flex-wrap flex-sm-nowrap align-items-start gap-4">
-            <!--begin: Pic-->
-            <div class="d-block w-250px">
+            <div class="d-block w-150px h-150px">
                 <Link :href="this.route('item.show', item.id)">
-                <img v-if="item?.images?.file_path" :src="item?.images?.file_path" alt="image">
+                <img v-if="item?.image?.medium_path" :src="item?.image?.medium_path" alt="image">
                 <img v-else src="/assets/media/avatars/300-1.jpg" alt="image" class="h-100 w-100">
                 </Link>
             </div>
-            <!--end::Pic-->
-            <div class="flex-grow-1">
+            <div class="flex-root">
                 <div class="row col-md-12">
                     <div class="mb-2">
                         <Link :href="route('item.show', item.id)" class="text-gray-800  fs-2 fw-bold text-capitalize">{{
                             item?.title
                         }}</Link>
-
                     </div>
                     <div class="d-flex mb-2">
                         <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
-                            <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
                             <span class="svg-icon svg-icon-4 me-1">
                                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
                                     height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -49,10 +42,9 @@ export default defineComponent({
                                     </path>
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->{{ item?.category?.name }}
+                            {{ item?.category?.name }}
                         </p>
                         <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
                             <span class="svg-icon svg-icon-4 me-1">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -73,7 +65,6 @@ export default defineComponent({
 
                         </p>
                         <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
-                            <!--begin::Svg Icon | path: icons/duotune/communication/com011.svg-->
                             <span class="svg-icon svg-icon-4 me-1">
                                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
                                     height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -84,10 +75,9 @@ export default defineComponent({
                                     </path>
                                 </svg>
                             </span>
-                            <!--end::Svg Icon--> {{ item?.time }}
+                            {{ item?.time }}
                         </p>
                     </div>
-                    <!--begin::Info-->
                     <div class="d-flex flex-wrap fw-semibold fs-6 pe-2">
                         <p class="d-flex align-items-center fw-bold">
                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="1em"
@@ -115,11 +105,8 @@ export default defineComponent({
                         </span>
 
                     </div>
-                    <!--end::Info-->
                     <div class="d-flex flex-column mb-2">
-                        <!--begin::Info-->
                         <div class="d-flex align-items-center">
-                            <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
                             <span v-if="item?.status?.id == 1" class="badge badge-light-success fs-6 fw-bold">
                                 {{ item?.status?.label }}</span>
                             <span v-else-if="item?.status?.id == 2" class="badge badge-light-warning fs-6 fw-bold">
@@ -137,10 +124,8 @@ export default defineComponent({
                                 {{ item?.status?.label }}</span>
                             <span>{{ item?.status?.text }}</span>
                         </div>
-                        <!--end::Info-->
                     </div>
                     <div class="d-flex flex-column">
-                        <!--begin::Info-->
                         <div class="d-flex flex-wrap  fw-semibold fs-6 me-5">
                             <div class="me-5 text-gray-700 d-flex align-items-center">
                                 <span class="svg-icon svg-icon-4 me-2">
@@ -153,7 +138,6 @@ export default defineComponent({
                                 </span>
                                 <span>{{ item?.item_visits?.count }} Views</span>
                             </div>
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen018.svg-->
                             <div class="">
                                 <Link :href="route('item.reviews', item.id)" class="me-5 d-flex align-items-center">
                                 <span class="svg-icon svg-icon-4 me-2">
@@ -164,7 +148,6 @@ export default defineComponent({
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </span>
-                                <!--end::Svg Icon-->
                                 <span>
                                     {{ item?.rating_reviews?.count }} Reviews
                                 </span>
@@ -183,20 +166,13 @@ export default defineComponent({
                                         </path>
                                     </svg>
                                 </span>
-                                <!--end::Svg Icon-->
                                 {{ item?.item_customers?.count }} Customers
                                 </Link>
-                                <!--begin::Svg Icon | path: icons/duotune/communication/com006.svg-->
                             </div>
                         </div>
-                        <!--end::Info-->
                     </div>
                 </div>
-                <!--end::Item-->
-                <!--end::Title-->
             </div>
-            <!--end::Info-->
         </div>
-        <!--end::Details-->
     </div>
 </template>

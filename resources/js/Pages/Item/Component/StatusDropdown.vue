@@ -7,7 +7,7 @@ import { toast } from 'vue3-toastify';
 import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
-    props: ['id'],
+    props: ['id', 'pagename'],
     data() {
         return {
             loading: false,
@@ -20,15 +20,22 @@ export default defineComponent({
             axios.post(this.route("item.status"), { id: this.id, status: value })
                 .then((response) => {
                     if (response.data.success == true) {
-                        Inertia.get(
-                            "/items",
-                        );
+                        if (this.pagename != " ") {
+                            Inertia.get(
+                                this.pagename,
+                            );
+                        }
+                        else {
+                            Inertia.get(
+                                "/items",
+                                this.form
+                            );
+                        }
                     }
                     else {
                         toast.error(response.data.message)
                     }
                 });
-
         },
         toggleStatus() {
             this.statusToggle = !this.statusToggle;
@@ -48,16 +55,15 @@ export default defineComponent({
         Loading,
     },
     created() {
-        // var fType = getUrlVars()["type"];
-        // console.log(fType);
+
     }
 });
 </script>
 <template type>
     <loading v-model:active="loading" :can-cancel="false" :is-full-page="true" />
     <div class="card-toolbar position-absolute top-0 end-0 pe-6 pt-6">
-        <!--begin::Menu-->
-        <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end" style="height:0px;" @click="toggleStatus">
+        <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end" style="height:0px;"
+            @click="toggleStatus">
             <span class="svg-icon svg-icon-1 svg-icon-gray-300 me-n1">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="4" fill="currentColor" />
@@ -67,11 +73,9 @@ export default defineComponent({
                 </svg>
             </span>
         </button>
-        <!--begin::Menu 2-->
         <div v-if="statusToggle"
             class="toggle menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px show position-absolute end-0 "
             data-kt-menu="true">
-            <!--begin::Menu item-->
             <div class="menu-item px-3">
                 <button href="#" id="kt_docs_sweetalert_basic" @click="statusChange(item, 1)"
                     class="menu-link px-3 border-0 bg-transparent statusChange">Active</button>
@@ -92,8 +96,6 @@ export default defineComponent({
                 <button href="#" id="kt_docs_sweetalert_basic" @click="statusChange(item, 5)" data-id="{{ $itemid }}"
                     data-status="5" class="menu-link px-3 border-0 bg-transparent statusChange">Deactivated</button>
             </div>
-            <!-- <x-item-cart-status :itemid="item?.id" /> -->
-            <!--end::Menu item-->
         </div>
     </div>
 </template>

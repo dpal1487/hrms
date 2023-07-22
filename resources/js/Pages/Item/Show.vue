@@ -52,15 +52,11 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted text-hover-primary">Items Overview</span>
+                <span class="text-muted">Items Overview</span>
             </li>
         </template>
-
-        <!--begin::Content container-->
-        <!--begin::Details-->
         <carousel :autoplay="3000" :wrap-around="true">
             <slide v-for="image in itemdetails?.data?.images" :key="slide">
-                <!-- {{ image }} -->
                 <img :src="image?.small_path" class="d-block w-100 slideimage" alt="...">
             </slide>
             <template #addons>
@@ -68,7 +64,6 @@ export default defineComponent({
                 <pagination />
             </template>
         </carousel>
-        <!--end::Details-->
         <div class="row mt-5">
             <div class="col-sm-12 col-md-8">
                 <div class="card mb-5">
@@ -195,6 +190,5 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-        <!--end::Content container-->
     </app-layout>
 </template>

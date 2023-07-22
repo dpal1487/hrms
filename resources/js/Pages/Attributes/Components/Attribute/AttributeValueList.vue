@@ -9,7 +9,6 @@ export default defineComponent({
     props: ['attribute'],
     data: () => {
         return {
-
         }
     },
     methods: {

@@ -48,7 +48,7 @@ export default defineComponent({
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
-            <li class="text-muted text-hover-primary">
+            <li class="text-muted">
                 {{ user?.data?.first_name }}
             </li>
         </template>

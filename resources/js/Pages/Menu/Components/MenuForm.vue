@@ -70,7 +70,6 @@ export default defineComponent({
     <Modal :show="show" :title="isEdit ? 'Edit Menu' : 'Add Menu'" @onhide="$emit('hidemodal')">
         <JetValidationErrors />
         <form @submit.prevent="submit()" class="form">
-            <!--begin::Input group-->
             <div class="fv-row mb-2">
                 <jet-label for="menu-name" value="Menu Name" />
                 <jet-input id="menu-name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
@@ -81,7 +80,6 @@ export default defineComponent({
                     <input-error :message="error.$message" />
                 </div>
             </div>
-            <!--begin::Actions-->
             <div class="text-center pt-15">
                 <button type="reset" class="btn btn-light me-3" @click="$emit('hidemodal', false)">Discard</button>
                 <button type="submit" class="btn btn-primary" :data-kt-indicator="processing ? 'on' : 'off'">
@@ -90,7 +88,6 @@ export default defineComponent({
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                 </button>
             </div>
-            <!--end::Actions-->
         </form>
     </Modal>
 </template>

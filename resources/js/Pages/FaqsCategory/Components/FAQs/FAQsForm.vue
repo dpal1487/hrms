@@ -54,8 +54,8 @@ export default defineComponent({
 <template>
     <form @submit.prevent="submit" class="my-auto pb-5">
 
-        <div class="row col-8 g-5 mx-10 mb-5">
-            <div class="col-6 mb-3">
+        <div class="row g-5">
+            <div class="col-8">
                 <div class="fv-row">
                     <jet-label for="title" value="Title" />
                     <jet-input id="title" type="text" placeholder="Title" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0

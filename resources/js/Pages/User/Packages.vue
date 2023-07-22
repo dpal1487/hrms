@@ -13,6 +13,7 @@ export default defineComponent({
             title: 'Packages',
             tbody: [
                 "Plan Name",
+                "Subscription ID",
                 "Description",
                 "Period",
                 "AMMOUNT",
@@ -49,7 +50,7 @@ export default defineComponent({
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
-            <li class="text-muted text-hover-primary">
+            <li class="text-muted">
                 {{ user?.data?.first_name }}
             </li>
         </template>
@@ -70,15 +71,14 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize">
                             <tr v-for="(user_package, index) in packages?.data" :key="index">
-                                <td>
-                                    {{ user_package?.name }}
-                                </td>
+                                <td>{{ user_package?.name }}</td>
+                                <td>{{ user_package?.subscription_id }}</td>
                                 <td>{{ user_package?.sort_description }}</td>
                                 <td>{{ user_package?.period }}</td>
                                 <td>{{ user_package?.price }}</td>
-                                    <td>{{ user_package?.currency }}</td>
+                                <td>{{ user_package?.currency }}</td>
                             </tr>
                         </tbody>
                     </table>

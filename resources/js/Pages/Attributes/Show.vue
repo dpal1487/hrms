@@ -120,10 +120,8 @@ export default defineComponent({
         </template>
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
-                <!--begin::Primary button-->
                 <Link href="/attribute/create" class="btn btn-sm fw-bold btn-primary">
                 <i class="bi bi-plus-circle"></i>Add New Attribute</Link>
-                <!--end::Primary button-->
             </div>
         </template>
         <div class="mb-5">
@@ -135,11 +133,8 @@ export default defineComponent({
                     </div>
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <div>
-                            <!--begin::Card title-->
                             <form @submit.prevent="search()">
-                                <!--begin::Search-->
                                 <div class="d-flex align-items-center position-relative">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                     <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
@@ -149,16 +144,12 @@ export default defineComponent({
                                                 fill="currentColor"></path>
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
                                     <input type="text" v-model="filter.q"
                                         class="form-control form-control-solid h-35px w-200px ps-14"
                                         placeholder="Search " />
                                 </div>
-                                <!--begin::Card title-->
                             </form>
-
                         </div>
-
                         <button class="btn btn-primary m-1 btn-sm" v-if="!isEdit"
                             @click="this.isAdd = this.isAdd ? false : true, this.form = {}"><i
                                 class="bi bi-plus-circle"></i>Add New
@@ -166,18 +157,13 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="card-body">
-                    <!--begin::Form-->
-
                     <div class="row" v-if="isEdit || isAdd">
-
-                        <div class="col-12">
+                        <div class="col-6 mx-10">
                             <attribute-value-form @submitted="submit" :attribute="form" :id="attribute?.data?.id">
                                 <template #action>
-                                    <div class="d-flex justify-content-end">
-                                        <!--begin::Button-->
+                                    <div class="d-flex justify-content-end me-5">
                                         <button type="button" class="btn btn-outline-secondary me-5"
                                             @click="this.isEdit = false, this.isAdd = false">Discard</button>
-                                        <!--begin::Button-->
                                         <button type="submit" class="btn btn-primary"
                                             :class="{ 'text-white-50': form.processing }">
                                             <div v-show="form.processing" class="spinner-border spinner-border-sm">
@@ -200,13 +186,11 @@ export default defineComponent({
                             <div class="table-responsive">
                                 <table class="table align-middle table-row-dashed fs-6 gy-3 text-left">
                                     <thead>
-                                        <!--begin::Table row-->
                                         <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                             <th v-for="(th, index) in tbody" :key="index">
                                                 {{ th }}
                                             </th>
                                         </tr>
-                                        <!--end::Table row-->
                                     </thead>
                                     <tbody class="fw-semibold text-gray-600">
                                         <tr v-for="(attribute, index) in attribute?.data?.values" :key="index">

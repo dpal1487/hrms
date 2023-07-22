@@ -50,14 +50,14 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/item" class="text-muted text-hover-primary">Item</Link>
+                <span class="text-muted">Item</span>
             </li>
         </template>
 
         <Head :title="title" />
         <div class="card mb-5 mb-xxl-5 bg-white">
 
-            <form class="card-header align-items-center py-5 gap-2 gap-md-5" @submit.prevent="search()">
+            <form class="card-header align-items-center py-5 gap-4" @submit.prevent="search()">
                 <div class="d-flex align-items-center position-relative">
                     <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,7 +82,7 @@ export default defineComponent({
                 </div>
             </form>
             <div v-for="item in items.data" class="mb-5">
-                <ItemCard :item="item" />
+                <ItemCard :item="item" pagename="items" />
             </div>
             <div class="d-flex align-items-center justify-content-center" v-if="items?.meta">
                 <Pagination :links="items?.meta.links" />
