@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use App\Models\Banner;
 use Illuminate\Http\Request;
-use App\Http\Resources\BannerResource;
+use App\Http\Resources\Web\BannerResource;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 

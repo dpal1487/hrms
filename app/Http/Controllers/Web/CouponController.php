@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
+
 
 use App\Models\Coupon;
 use Illuminate\Http\Request;
-use App\Http\Resources\CouponResource;
+use App\Http\Resources\Web\CouponResource;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 

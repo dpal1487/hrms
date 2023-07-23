@@ -2,6 +2,8 @@
 
 
 namespace App\Http\Controllers\Api;
+
+use App\Http\Resources\Api\MessageResource;
 use Illuminate\Http\Request;
 use App\Models\Participant;
 use App\Models\Conversation;
@@ -14,6 +16,8 @@ use App\Http\Resources\Api\Users;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\ItemListResource;
+use App\Http\Resources\Api\UserResource;
 
 class MessageController extends Controller
 {
@@ -24,16 +28,16 @@ class MessageController extends Controller
             Message::where(['conversation_id'=>$request->uid])->where('sender_id', '!=', $this->uid())->update(['is_read'=>1]);
             $messages = Message::where(['conversation_id'=>$request->uid])->get();
             return [
-                'messages'=>Messages::collection($messages),
-                'user'=>new Users(User::find($participant->users_id))
+                'messages'=>MessageResource::collection($messages),
+                'user'=>new UserResource(User::find($participant->users_id))
             ];
         }
         else
         {
             return [
                 'messages'=>[],
-                'user'=>new Users(User::find($request->uid)),
-                'item'=>new Items(Item::find($request->pid)),
+                'user'=>new UserResource(User::find($request->uid)),
+                'item'=>new ItemListResource(Item::find($request->pid)),
             ];
         }
     }
@@ -41,18 +45,18 @@ class MessageController extends Controller
     {
         $participant = Participant::where(['user_id'=> $request->uid])->whereColumn('user_id', 'user_id')->get();
         if($participant){
-            retrun $participant;
+            return $participant;
             Message::where(['conversation_id'=>$request->uid])->where('sender_id', '!=', $this->uid())->update(['is_read'=>1]);
             $messages = Message::where(['conversation_id'=>$request->uid])->get();
             return [
-                'messages'=>Messages::collection($messages),
+                'messages'=>MessageResource::collection($messages),
             ];
         }
         else
         {
             return [
                 'messages'=>[],
-                'item'=>new Items(Item::find($request->pid)),
+                'item'=>new ItemListResource(Item::find($request->pid)),
             ];
         }
     }

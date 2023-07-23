@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\MenuItemListResource;
-use App\Http\Resources\MenuListResource;
+
+use App\Http\Resources\Web\MenuItemListResource;
+use App\Http\Resources\Web\MenuListResource;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;

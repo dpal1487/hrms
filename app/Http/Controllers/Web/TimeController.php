@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
+
 
 use App\Models\Time;
-use App\Http\Resources\TimeResource;
+use App\Http\Resources\Web\TimeResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

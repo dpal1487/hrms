@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
+
 
 use App\Models\NotificationType;
-use App\Http\Resources\NotificationTypeResource;
+use App\Http\Resources\Web\NotificationTypeResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\EnquiryResource;
+
+use App\Http\Resources\Web\EnquiryResource;
 use App\Models\Enquiry;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\SubscriptionsListResource;
+
+use App\Http\Resources\Web\SubscriptionsListResource;
 use Illuminate\Http\Request;
 use App\Models\Subscription;
 use Inertia\Inertia;

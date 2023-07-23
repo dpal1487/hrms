@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
+
 
 use App\Models\ItemStatus;
-use App\Http\Resources\ItemStatusesResource;
+use App\Http\Resources\Web\ItemStatusesResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

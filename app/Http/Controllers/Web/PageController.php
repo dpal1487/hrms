@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\MetaResource;
+
+use App\Http\Resources\Web\MetaResource;
 use App\Models\Page;
 use App\Models\Meta;
 use Illuminate\Http\Request;
-use App\Http\Resources\PageResource;
+use App\Http\Resources\Web\PageResource;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\CurrencyResource;
+use App\Http\Resources\Web\CategoryResource;
+use App\Http\Resources\Web\CurrencyResource;
 use App\Models\Plan;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Http\Resources\PlanResource;
-use App\Http\Resources\TimeResource;
+use App\Http\Resources\Web\PlanResource;
+use App\Http\Resources\Web\TimeResource;
 use App\Models\Currency;
 use App\Models\Time;
 use Illuminate\Support\Env;
@@ -25,7 +25,7 @@ class PlanController extends Controller
     }
     public function index(Request $request)
     {
-        
+
         $plans = new Plan();
         if (!empty($request->q)) {
             $plans = $plans->where('name', 'like', "%{$request->q}%")

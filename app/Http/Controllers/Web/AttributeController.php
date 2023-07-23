@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use App\Http\Resources\Web\AttributeListResurce;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
-use App\Http\Resources\AttributeResource;
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\RuleResource;
+use App\Http\Resources\Web\AttributeSingleResource;
+use App\Http\Resources\Web\CategoryResource;
+use App\Http\Resources\Web\RuleResource;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\Rule;
@@ -107,7 +107,7 @@ class AttributeController extends Controller
                 $values = $values->where('status', $request->s);
             }
             return Inertia::render('Attributes/Show', [
-                'attribute' => new AttributeResource($attribute),
+                'attribute' => new AttributeSingleResource($attribute),
                 'values' => $values,
             ]);
         }
@@ -118,7 +118,7 @@ class AttributeController extends Controller
         return Inertia::render('Attributes/Form', [
             'categories' => CategoryResource::collection(Category::get()),
             'rules' => RuleResource::collection(Rule::get()),
-            'attribute' => new AttributeResource(Attribute::find($id)),
+            'attribute' => new AttributeSingleResource(Attribute::find($id)),
         ]);
     }
     public function attributevalue($id)

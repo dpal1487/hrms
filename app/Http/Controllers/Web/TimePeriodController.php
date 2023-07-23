@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\CategoryResource;
+
+use App\Http\Resources\Web\CategoryResource;
 use App\Models\TimePeriod;
 use App\Models\Category;
 use App\Models\Time;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\TimePeriodResource;
-use App\Http\Resources\TimeResource;
+use App\Http\Resources\Web\TimePeriodResource;
+use App\Http\Resources\Web\TimeResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

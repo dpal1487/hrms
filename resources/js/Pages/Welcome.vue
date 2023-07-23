@@ -40,13 +40,7 @@ export default defineComponent({
     </app-layout>
 
     <template v-else>
-      <Link :href="route('login')" class="text-muted">
       <Login />
-      </Link>
-
-      <Link v-if="canRegister" :href="route('register')" class="ms-4 text-muted">
-      <Register />
-      </Link>
     </template>
   </div>
 </template>

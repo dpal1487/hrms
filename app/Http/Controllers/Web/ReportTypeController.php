@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
+
 
 use App\Models\ReportType;
 use Illuminate\Http\Request;
-use App\Http\Resources\ReportTypeResource;
+use App\Http\Resources\Web\ReportTypeResource;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 

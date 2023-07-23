@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Resources\AddressResource;
-use App\Http\Resources\MenuListResource;
+use App\Http\Resources\Web\MenuListResource;
 use App\Models\CompanyAddress;
 use App\Models\CompanyEmail;
 use App\Models\CompanyUser;

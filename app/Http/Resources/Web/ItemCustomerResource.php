@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Web;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\ItemResource;
+use App\Http\Resources\Web\ItemResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ItemCustomerResource extends JsonResource

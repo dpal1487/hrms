@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
+
 
 use App\Models\Meta;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\CategoryBanner;
-use App\Http\Resources\CategoryResource;
+use App\Http\Resources\Web\CategoryResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;

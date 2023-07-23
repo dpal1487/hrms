@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\BrandListResource;
+
+use App\Http\Resources\Web\BrandListResource;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Image as CategoryImage;
-use App\Http\Resources\BrandResource;
-use App\Http\Resources\CategoryResource;
+use App\Http\Resources\Web\BrandResource;
+use App\Http\Resources\Web\CategoryResource;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\ItemCustomerResource;
-use App\Http\Resources\ItemListResource;
-use App\Http\Resources\ItemOverViweResource;
+use App\Http\Resources\Web\ItemCustomerResource;
+use App\Http\Resources\Web\ItemListResource;
+use App\Http\Resources\Web\ItemOverViweResource;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\ItemStatus;
 use Illuminate\Http\Request;
-use App\Http\Resources\ItemReviewsResource;
-use App\Http\Resources\ItemStatusesResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Web\ItemReviewsResource;
+use App\Http\Resources\Web\ItemStatusesResource;
+use App\Http\Resources\Web\UserResource;
 use App\Models\File;
 use Inertia\Inertia;
 

@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
+
 
 use App\Models\Faq;
 use Illuminate\Http\Request;
@@ -8,7 +9,7 @@ use App\Models\Category;
 
 use Illuminate\Support\Facades\Validator;
 use App\Models\Image as CategoryImage;
-use App\Http\Resources\FAQsResource;
+use App\Http\Resources\Web\FAQsResource;
 use Illuminate\Support\Str;
 
 class FaqController extends Controller
