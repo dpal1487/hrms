@@ -7,7 +7,7 @@ use App\Models\Favourite;
 use App\Http\Resources\Api\Account\Favourites;
 use Illuminate\Http\Request;
 use JWTAuth;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 
 class FavouriteController extends Controller
 {

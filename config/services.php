@@ -47,5 +47,8 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    "msg91" => [
+        'key' => env("Msg91_KEY"),
+    ],
 
 ];

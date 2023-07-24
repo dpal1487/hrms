@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Account;
 
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Mail\ChangeEmail;

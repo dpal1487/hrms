@@ -11,7 +11,7 @@ use App\Http\Resources\Api\Users;
 use App\Models\Item;
 use App\Models\ItemReview;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 
 class ItemController extends Controller
 {

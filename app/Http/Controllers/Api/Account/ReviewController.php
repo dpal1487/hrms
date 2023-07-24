@@ -10,7 +10,7 @@ use App\Models\ItemReview;
 use App\Models\Review;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Items;
 use App\Models\Item;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Account;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\MyAds\Customers;
 use App\Models\ItemCustomer;
 use App\Models\Item;

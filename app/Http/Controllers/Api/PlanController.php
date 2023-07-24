@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\Api\Plans;
 use App\Models\Plan;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use App\Models\Order;
 use App\Models\Subscription;
 use Exception;

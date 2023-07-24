@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Account;
+namespace App\Http\Controllers\Api\Account;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Http\Controllers\Api\Controller;
+use App\Http\Resources\Api\UserResource;
 use App\Models\Follower;
 use App\Models\Item;
 

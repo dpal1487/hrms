@@ -187,6 +187,8 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         \Chatify\ChatifyServiceProvider::class,
         browner12\helpers\HelperServiceProvider::class,
+        Craftsys\Msg91\Msg91LaravelServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -217,6 +219,9 @@ return [
             'Socialite' => Laravel\Socialite\Facades\Socialite::class,
             'Chatify' => Chatify\Facades\ChatifyMessenger::class,
             'Image' => Intervention\Image\Facades\Image::class,
+            'Msg91' => Craftsys\Msg91\Facade\Msg91::class,
+            'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+            'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         ])
         ->toArray(),
 ];

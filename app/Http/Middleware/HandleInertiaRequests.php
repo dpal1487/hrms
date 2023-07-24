@@ -2,12 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Resources\AddressResource;
 use App\Http\Resources\Web\MenuListResource;
-use App\Models\CompanyAddress;
-use App\Models\CompanyEmail;
-use App\Models\CompanyUser;
-use App\Models\Employee;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -8,7 +8,7 @@ use App\Models\Address;
 use App\Models\UserAddress;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\AddressResource;
 use App\Http\Resources\States;
 use App\Models\State;

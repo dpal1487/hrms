@@ -13,7 +13,8 @@ use App\Models\UserReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use JWTAuth;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
+
 
 class ProfileController extends Controller
 {

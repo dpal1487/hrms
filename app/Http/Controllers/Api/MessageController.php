@@ -15,7 +15,8 @@ use App\Models\Item;
 use App\Http\Resources\Api\Users;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
+
 use App\Http\Resources\Api\ItemListResource;
 use App\Http\Resources\Api\UserResource;
 

@@ -4,7 +4,7 @@ namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class CategoryChildrenResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,13 +18,12 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'children' => CategoryChildrenResource::collection($this->children),
-            'meta' => new MetaResource($this->meta),
             'description' => $this->description,
-            'image' => new ImageResource($this->image),
+            'keywords' => $this->keywords,
+            'category_image' => $this->image,
             'status' => $this->status,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
         ];
     }
 }

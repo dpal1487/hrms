@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\UserResource;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -16,7 +16,7 @@ class LoginController extends Controller
         $credentials = $request->only('mobile', 'password');
         //valid credential
         $validator = Validator::make($credentials, [
-            'mobile' => 'required',
+            'mobile' => 'required|numeric|digits:10',
             'password' => 'required|string|min:8'
         ]);
 
@@ -26,45 +26,22 @@ class LoginController extends Controller
         }
         //Request is validated
         //Crean token
-        $data = $request->validate([
-            'mobile' => 'required',
-            'password' => 'required|string|min:8'
-        ]);
-        if (!auth()->attempt($data)) {
-            return response(['message' => 'Your mobile number or password is incorrect. Please try again.', 'success' => false]);
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json(['user' => new UserResource($user), 'success' => true])->withCookie(cookie('api_token', $token, 60 * 24));;
         }
-        $token = auth()->user()->createToken('API Token')->accessToken;
-        if ($token) {
-            return response(['user' => new UserResource(auth()->user()), 'access_token' => $token, 'success' => true]);
-        } else {
-            return response()->json(['success' => false, 'type' => 'error', 'message' => 'Opps something went wrong !']);
-        }
+
+        return response()->json(['error' => 'Invalid credentials'], 401);
     }
     public function logout(Request $request)
     {
-        //valid credential
-        $validator = Validator::make($request->only('token'), [
-            'token' => 'required'
-        ]);
 
-        //Send failed response if request is not valid
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
-        }
-
-        //Request is validated, do logout
-        try {
-            JWTAuth::invalidate($request->token);
-            return response()->json([
-                'success' => true,
-                'message' => 'User has been logged out'
-            ]);
-        } catch (JWTException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, user cannot be logged out'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return "sadsdfd";
+        Auth::user()->tokens()->delete();
+        return response()->json(['message' => 'Logged out successfully'])->withCookie(cookie('auth_token', null));
     }
     public function user()
     {

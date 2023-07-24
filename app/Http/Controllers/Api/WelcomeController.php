@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Item;
 use App\Models\Category;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\BannerResource;
-use App\Http\Resources\CategoryResource;
+use App\Http\Controllers\Api\Controller;
+use App\Http\Resources\Api\BannerResource;
+use App\Http\Resources\Api\CategoryResource;
 use App\Http\Resources\ItemResource;
 use App\Models\Banner;
 use Illuminate\Http\Request;

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
@@ -32,13 +31,17 @@ class Category extends Model
         return $this->hasOne(Image::class, 'id', 'image_id');
     }
 
-    public function children()
+    public function child()
     {
         return $this->hasOne(Category::class, 'parent_id', 'id');
     }
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id', 'id');
+        return $this->hasOne(Category::class, 'parent_id', 'id');
     }
     public function childrens()
     {

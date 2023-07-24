@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\Account\AccountController;
-use App\Http\Controllers\Api\Account\AddressController;
-use App\Http\Controllers\Api\Account\AdReviewController;
-use App\Http\Controllers\Api\Account\CustomerController;
+// LoginController
+
+use App\Http\Controllers\Api\Auth\ForgetController;
+use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\RegisterController;
+
 /*Register Controller*/
 use App\Http\Controllers\Api\Account\EmailController;
 use App\Http\Controllers\Api\Account\FavouriteController;
@@ -11,10 +13,13 @@ use App\Http\Controllers\Api\Account\MyAdsController;
 /*Account Controller*/
 use App\Http\Controllers\Api\Account\NotificationController;
 use App\Http\Controllers\Api\Account\ReviewController;
+use App\Http\Controllers\Api\Account\AccountController;
+use App\Http\Controllers\Api\Account\AddressController;
+use App\Http\Controllers\Api\Account\AdReviewController;
+use App\Http\Controllers\Api\Account\CustomerController;
+
 use App\Http\Controllers\Api\AppController;
-use App\Http\Controllers\Api\Auth\ForgetController;
-use App\Http\Controllers\Api\Auth\LoginController;
-use App\Http\Controllers\Api\Auth\RegisterController;
+
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\CouponController;
@@ -30,12 +35,14 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WelcomeController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
 
     Route::group(['prefix' => 'auth'], function () {
+        /*Login Controllers*/
         Route::post('login', [LoginController::class, 'authenticate']);
         /*Register Controllers*/
         Route::post('register', [RegisterController::class, 'register']);
@@ -46,6 +53,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::post('forget/verify', [ForgetController::class, 'verify']);
         Route::post('forget/resend', [ForgetController::class, 'resend']);
     });
+
     Route::group(['prefix' => 'welcome'], function () {
         Route::get('/', [WelcomeController::class, 'index']);
         Route::get('/banners', [WelcomeController::class, 'banners']);
@@ -56,9 +64,12 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
     Route::get('premium-collections', [WelcomeController::class, 'getPremiums']);
     Route::get('fetch', [AppController::class, 'index']);
 
-    Route::group(['middleware' => ['auth:api']], function () {
-        Broadcast::routes();
-        Route::get('logout', [LoginController::class, 'logout']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+   
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Broadcast::routes(['middleware' => ['auth:sanctum']]);
+        Route::post('logout', [LoginController::class, 'logout']);
         Route::get('user/me', [LoginController::class, 'user']);
         /*Account Controller*/
         Route::group(['prefix' => 'account'], function () {
@@ -150,5 +161,4 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::get('{id}', [UserController::class, 'index']);
         Route::get('items/{id}', [UserController::class, 'items']);
     });
-    Route::get('/categories', [CategoryController::class, 'index']);
 });

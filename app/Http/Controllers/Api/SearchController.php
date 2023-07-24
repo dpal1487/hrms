@@ -11,7 +11,8 @@ use App\Http\Resources\Api\Categories;
 use App\Http\Resources\Api\Items;
 use App\Http\Resources\Api\States;
 use App\Http\Resources\Api\Filters;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
+
 
 class SearchController extends Controller
 {

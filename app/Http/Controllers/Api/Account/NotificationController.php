@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Account;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Notifications;
 use Illuminate\Http\Request;
 use App\Models\Notification;

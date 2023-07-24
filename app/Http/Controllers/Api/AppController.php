@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
 use App\Models\Category;
 use App\Models\State;
 use App\Models\Notification;
 use Illuminate\Http\Request;
-use App\Http\Resources\Categories;
+use App\Http\Resources\Api\Categories;
 use App\Http\Resources\Notifications;
 use App\Http\Resources\States;
 
