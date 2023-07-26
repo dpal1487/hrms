@@ -35,7 +35,6 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WelcomeController;
-use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -65,11 +64,12 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
     Route::get('fetch', [AppController::class, 'index']);
 
     Route::get('/categories', [CategoryController::class, 'index']);
-   
 
     Route::middleware('auth:sanctum')->group(function () {
-        Broadcast::routes(['middleware' => ['auth:sanctum']]);
         Route::post('logout', [LoginController::class, 'logout']);
+        // Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+
+        Broadcast::routes(['middleware' => ['auth:sanctum']]);
         Route::get('user/me', [LoginController::class, 'user']);
         /*Account Controller*/
         Route::group(['prefix' => 'account'], function () {
@@ -92,6 +92,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
             Route::get('notifications', [NotificationController::class, 'index']);
             Route::post('notification/add', [NotificationController::class, 'store']);
             Route::post('notification/remove', [NotificationController::class, 'destroy']);
+            /* Coupons */
             Route::get('coupons', [CouponController::class, 'index']);
         });
         /*My Ads*/
@@ -121,7 +122,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::post('message/send', [MessageController::class, 'store']);
         /*Setting*/
         Route::put('setting/update-password', [SettingController::class, 'updatePassword']);
-    });
+    })->middleware('web');
     /*Item*/
     Route::group(['prefix' => 'item'], function () {
         Route::get('', [ItemController::class, 'index']);
@@ -129,7 +130,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::get('report/{id}', [ItemController::class, 'report']);
         Route::get('reviews/{id}', [ReviewController::class, 'index']);
         Route::group(['middleware' => ['auth:api']], function () {
-            Route::delete('delete/{id}', [ReviewController::class, 'destroy']);
+            Route::delete('delete/{id}', [ReviewController::class, 'remove']);
             Route::get('write-review/{id}', [ReviewController::class, 'edit']);
             Route::post('write-review/{id}', [ReviewController::class, 'createOrUpdate']);
             Route::post('review/report/{id}', [ReviewController::class, 'report']);
@@ -137,10 +138,12 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         });
     });
 
-    Route::get('profile/{id}', [ProfileController::class, 'index']);
-    Route::get('profile/reviews/{id}', [ProfileController::class, 'getReviews']);
-    Route::post('profile/follow', [ProfileController::class, 'follow']);
-    Route::post('profile/unfollow', [ProfileController::class, 'follow']);
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('{id}', [ProfileController::class, 'index']);
+        Route::get('reviews/{id}', [ProfileController::class, 'getReviews']);
+        Route::post('follow', [ProfileController::class, 'follow']);
+        Route::post('unfollow', [ProfileController::class, 'follow']);
+    });
 
     /*Item*/
     Route::get('location/cities', [LocationController::class, 'cities']);
@@ -148,7 +151,6 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
     Route::group(['prefix' => 'package'], function () {
         Route::post('order/{plan}', [PlanController::class, 'placeOrder']);
         Route::get('paysuccess', [PlanController::class, 'razorPaySuccess']);
-
         Route::get('bougth-packages', [SubscriptionController::class, 'active']);
         Route::get('bougth-packages/expired', [SubscriptionController::class, 'expired']);
     });

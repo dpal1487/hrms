@@ -69,7 +69,6 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import useVuelidate from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
-import { toast } from "vue3-toastify";
 import Swal from "sweetalert2";
 
 export default defineComponent({

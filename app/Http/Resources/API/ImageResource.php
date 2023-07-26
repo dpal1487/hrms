@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+
 class ImageResource extends JsonResource
 {
     /**
@@ -14,12 +15,22 @@ class ImageResource extends JsonResource
      */
     public function toArray($request)
     {
+        $baseUrl = $request->root();
+        $protocol = $request->getScheme();
+        $hostname = $request->getHost();
+        $port = $request->getPort(); // remove in production
+
+        $filepath =  $protocol . "://" . $hostname .":".$port. "/assets/images/category/". $this->name;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'small_path' => $this->small_path,
-            'medium_path' => $this->medium_path,
-            'large_path' => $this->large_path,
+            'url' => $this->base_url,
+            'file_path' => $filepath,
+            'base_path' => $this->base_path,
+            'small_path' => $filepath."?width=100&height=100",
+            'medium_path' => $filepath . "?width=200&height=200",
+            'large_path' =>$filepath . "?width=1024",
         ];
     }
 }

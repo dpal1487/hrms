@@ -2,8 +2,9 @@
 
 
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Api\Controller;
 
+use App\Http\Controllers\Api\Controller;
+use App\Http\Resources\Api\ImageResource;
 use Illuminate\Http\Request;
 use App\Models\Image as ImageModel;
 use Illuminate\Support\Facades\Storage;
@@ -14,11 +15,12 @@ class ImageController extends Controller
 {
   public function post(Request $request)
   {
+
     $request->validate([
       'image' => ['required', 'max:4028']
     ]);
     $filePath = "images/post/" . $request->file('image')->hashName();
-    $image = Image::make($request->file('image'))->resize('',300, function ($constraint) {
+    $image = Image::make($request->file('image'))->resize('', 300, function ($constraint) {
       $constraint->aspectRatio();
       $constraint->upsize();
     })->encode('jpeg', 60);
@@ -29,7 +31,7 @@ class ImageController extends Controller
       'medium_path' => Storage::disk('s3')->url($filePath),
       'large_path' => Storage::disk('s3')->url($filePath),
     ]);
-    return new Images($img);
+    return new ImageResource($img);
   }
   public function store(Request $request)
   {
@@ -37,7 +39,7 @@ class ImageController extends Controller
       'image' => ['required', 'max:4028']
     ]);
     $filePath = "images/$request->destination/" . $request->file('image')->hashName();
-    $image = Image::make($request->file('image'))->resize(300,300, function ($constraint) {
+    $image = Image::make($request->file('image'))->resize(300, 300, function ($constraint) {
       $constraint->aspectRatio();
       $constraint->upsize();
     })->encode('jpeg', 60);
@@ -48,6 +50,6 @@ class ImageController extends Controller
       'medium_path' => Storage::disk('s3')->url($filePath),
       'large_path' => Storage::disk('s3')->url($filePath),
     ]);
-    return new Images($img);
+    return new ImageResource($img);
   }
 }

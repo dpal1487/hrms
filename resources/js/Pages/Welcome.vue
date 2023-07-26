@@ -5,7 +5,6 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 import Welcome from "@/Jetstream/Welcome.vue"
 import AppLayout from "@/Layouts/AppLayout.vue"
 import Login from "../Pages/Auth/Login.vue";
-import Register from "../Pages/Auth/Register.vue";
 
 export default defineComponent({
   components: {
@@ -14,7 +13,6 @@ export default defineComponent({
     Welcome,
     AppLayout,
     Login,
-    Register
   },
 
   props: {
@@ -29,7 +27,7 @@ export default defineComponent({
 <template>
   <Head title="Welcome" />
 
-  <div v-if="canLogin">
+  <div v-if="canLogin" style="height: 100vh;">
     <app-layout title="Dashboard" v-if="$page.props.user" :href="route('dashboard')">
       <template #header>
         <h2 class="h4 font-weight-bold">

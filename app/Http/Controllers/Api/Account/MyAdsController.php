@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\ItemStatus;
 use App\Models\Subscription;
-use App\Http\Resources\Api\MyAds\MyAds;
-use App\Http\Resources\Api\Status;
-use App\Http\Resources\Api\Subscriptions;
+use App\Http\Resources\Api\MyAdsResource;
+use App\Http\Resources\Api\StatusResource;
 
 class MyAdsController extends Controller
 {
@@ -37,7 +36,7 @@ class MyAdsController extends Controller
       $items->where('name', 'LIKE', "%$request->keyword%");
     }
     $items = $items->paginate(20)->setPath('/myads')->appends($request->all());
-    return MyAds::collection($items)->additional(['filters' => Status::collection(ItemStatus::all()), 'totalCounts' => $count]);
+    return MyAdsResource::collection($items)->additional(['filters' => StatusResource::collection(ItemStatus::all()), 'totalCounts' => $count]);
   }
   public function delete($id)
   {
@@ -52,7 +51,7 @@ class MyAdsController extends Controller
   public function deactivate($id)
   {
     if (Item::where(['id' => $id, 'user_id' => $this->uid()])->first()) {
-      $item = Item::where(['id' => $id, 'user_id' => $this->uid()])->orWhereIn(['status_id'=>[1,4]])->update(['status_id' => 5]);
+      $item = Item::where(['id' => $id, 'user_id' => $this->uid()])->orWhereIn('status_id', array(1, 4))->update(['status_id' => 5]);
       if ($item) {
         return response()->json(['success' => true, 'message' => 'Your item deactivate from listing successfully.']);
       }
@@ -61,7 +60,7 @@ class MyAdsController extends Controller
   }
   public function activate($id)
   {
-    if (Item::where(['id' => $id, 'user_id' => $this->uid(),'status_id'=>5])->first()) {
+    if (Item::where(['id' => $id, 'user_id' => $this->uid(), 'status_id' => 5])->first()) {
       $item = Item::where(['id' => $id, 'user_id' => $this->uid()])->update(['status_id' => 2]);
       if ($item) {
         return response()->json(['success' => true, 'message' => 'Your Item wating for activate.']);
@@ -72,9 +71,8 @@ class MyAdsController extends Controller
   public function rentFaster()
   {
     $subscriptions = Subscription::where(['user_id' => $this->uid()])->get();
-    if(count($subscriptions)>0){
-      foreach($subscriptions as $subscription){
-
+    if (count($subscriptions) > 0) {
+      foreach ($subscriptions as $subscription) {
       }
     }
   }

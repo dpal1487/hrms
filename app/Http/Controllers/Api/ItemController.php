@@ -12,6 +12,11 @@ use App\Models\Item;
 use App\Models\ItemReview;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
+use App\Http\Resources\Api\AttributesResource;
+use App\Http\Resources\Api\ImageResource;
+use App\Http\Resources\Api\ItemResource;
+use App\Http\Resources\Api\UserResource;
+use App\Http\Resources\Web\ReviewResource;
 
 class ItemController extends Controller
 {
@@ -25,7 +30,7 @@ class ItemController extends Controller
       'category' => $item->category,
       'slug' => $item->slug,
       'time' => $item->time->title,
-      'images' => Images::collection($item->images),
+      'images' => ImageResource::collection($item->images),
       'rent_price' => $item->rent_price,
       'security_price' => $item->security_price,
       'currency' => '₹',
@@ -42,28 +47,30 @@ class ItemController extends Controller
         'isFavourite' => $item->isFavourite ? true : false,
         'count' => count($item->favourties)
       ],
-      'user' => new Users($item->user),
+      'user' => new UserResource($item->user),
       'visitors' => count($item->visits),
       'customers' => [
-        'total_customers'=>count($item->customers),
-        'data'=>count($item->customers),
+        'total_customers' => count($item->customers),
+        'data' => count($item->customers),
       ],
-      'attributes' => Attributes::collection($item->attributes),
+      'attributes' => AttributesResource::collection($item->attributes),
       'description' => $item->description,
-      'reviews'=>[
-        'data'=>Reviews::collection($item->reviews->skip(0)->take(3)),
-        'place_rating'=>$this->placeRating($item->reviews)
+      'reviews' => [
+        'data' => ReviewResource::collection($item->reviews->skip(0)->take(3)),
+        'place_rating' => $this->placeRating($item->reviews)
       ],
-      'related'=>$this->related($request)
+      'related' => $this->related($request)
     ];
   }
-  public function itemReviews(Request $request){
+  public function itemReviews(Request $request)
+  {
     $reviews = ItemReview::where($request->pid);
-    $data =['data'=> Reviews::collection($reviews->get()),'totalReviews'=>$reviews->count()];
+    $data = ['data' => ReviewResource::collection($reviews->get()), 'totalReviews' => $reviews->count()];
   }
-  public function related($item){
-    $related = Item::where('category_id', $item->category_id)->take(20)->get();
-    return Items::collection($related);
+  public function related(Request $request)
+  {
+    $related = Item::where('category_id', $request->category_id)->take(20)->get();
+    return ItemResource::collection($related);
   }
   public function placeRating($reviews)
   {
@@ -83,12 +90,13 @@ class ItemController extends Controller
       );
     }
     return array(
-        'totalReviews' => 0,
-        'average_rating' => 0,
-        'ratings' => 0,
-      );
+      'totalReviews' => 0,
+      'average_rating' => 0,
+      'ratings' => 0,
+    );
   }
-  public function report(){
-    
+  public function report($id)
+  {
+    return $id;
   }
 }

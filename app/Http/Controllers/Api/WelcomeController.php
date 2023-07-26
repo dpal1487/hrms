@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\BannerResource;
 use App\Http\Resources\Api\CategoryResource;
-use App\Http\Resources\ItemResource;
+use App\Http\Resources\Api\ItemResource;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 
@@ -50,5 +50,9 @@ class WelcomeController extends Controller
     public function featureItems()
     {
         return ItemResource::collection(Item::take(12)->where(['is_deleted' => 0])->orderBy('created_at', 'desc')->get());
+    }
+    public  function  getPremiums()
+    {
+        return "Premium not found. Please";
     }
 }

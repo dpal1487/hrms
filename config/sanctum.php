@@ -15,12 +15,13 @@ return [
     |
     */
 
-    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
-        '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
-        Sanctum::currentApplicationUrlWithPort()
-    ))),
+    // 'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
+    //     '%s%s',
+    //     'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1,http://192.168.1.7:8000',
+    //     Sanctum::currentApplicationUrlWithPort()
+    // ))),
 
+    'stateful' => true,
     /*
     |--------------------------------------------------------------------------
     | Sanctum Guards

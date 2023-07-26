@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
-
+use App\Http\Resources\Api\ItemResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
-use App\Http\Resources\Api\UserProfile;
 use App\Http\Resources\Api\Items;
+use App\Http\Resources\Api\UserProfileResource;
 
 class UserController extends Controller
 {
     public function index(Request $request , $id){
         return [
-            'data'=>new UserProfile(User::find($id))
+            'data'=>new UserProfileResource(User::find($id))
         ];
     }
-    public function items(Request $request){
+    public function items(Request $request , $id){
         $items = Item::orderBy('id','desc')->get();
-        return Items::collection($items);   
+        return ItemResource::collection($items);   
     }
      public function getReviews($id)
       {

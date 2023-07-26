@@ -24,60 +24,58 @@ class MessageController extends Controller
 {
     public function index(Request $request)
     {
-        $participant = Participant::where('conversation_id', '=', $request->uid)->where('users_id', '!=', $this->uid())->first();
-        if($participant){
-            Message::where(['conversation_id'=>$request->uid])->where('sender_id', '!=', $this->uid())->update(['is_read'=>1]);
-            $messages = Message::where(['conversation_id'=>$request->uid])->get();
+        $participant = Participant::where('conversation_id', '=', $request->uid)->where('user_id', '!=', $this->uid())->first();
+
+
+        if ($participant) {
+            Message::where(['conversation_id' => $request->uid])->where('sender_id', '!=', $this->uid())->update(['is_read' => 1]);
+            $messages = Message::where(['conversation_id' => $request->uid])->get();
             return [
-                'messages'=>MessageResource::collection($messages),
-                'user'=>new UserResource(User::find($participant->users_id))
+                'messages' => MessageResource::collection($messages),
+                'user' => new UserResource(User::find($participant->users_id))
             ];
-        }
-        else
-        {
+        } else {
             return [
-                'messages'=>[],
-                'user'=>new UserResource(User::find($request->uid)),
-                'item'=>new ItemListResource(Item::find($request->pid)),
+                'messages' => [],
+                'user' => new UserResource(User::find($request->uid)),
+                'item' => new ItemListResource(Item::find($request->pid)),
             ];
         }
     }
-     public function compose(Request $request)
+    public function compose(Request $request)
     {
-        $participant = Participant::where(['user_id'=> $request->uid])->whereColumn('user_id', 'user_id')->get();
-        if($participant){
+        $participant = Participant::where(['user_id' => $request->uid])->whereColumn('user_id', 'user_id')->get();
+        if ($participant) {
             return $participant;
-            Message::where(['conversation_id'=>$request->uid])->where('sender_id', '!=', $this->uid())->update(['is_read'=>1]);
-            $messages = Message::where(['conversation_id'=>$request->uid])->get();
+            Message::where(['conversation_id' => $request->uid])->where('sender_id', '!=', $this->uid())->update(['is_read' => 1]);
+            $messages = Message::where(['conversation_id' => $request->uid])->get();
             return [
-                'messages'=>MessageResource::collection($messages),
+                'messages' => MessageResource::collection($messages),
             ];
-        }
-        else
-        {
+        } else {
             return [
-                'messages'=>[],
-                'item'=>new ItemListResource(Item::find($request->pid)),
+                'messages' => [],
+                'item' => new ItemListResource(Item::find($request->pid)),
             ];
         }
     }
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'message' => 'required',
             'thread_id' => 'required',
         ]);
         if ($validator->fails()) {
-          return response()->json(['success' => false, 'message' => $validator->errors()->first()], 400);
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()], 400);
         }
-        if(count(Participant::where(['conversation_id'=>$request->thread_id,'users_id'=>$this->uid()])->get())>0){
-            if(Message::create(['message'=>Crypt::encryptString($request->message),'sender_id'=>$this->uid(),'conversation_id'=>$request->thread_id]))
-            {
-                return response()->json(['success'=>true],200);
+
+        if (count(Participant::where(['conversation_id' => $request->thread_id, 'user_id' => $this->uid()])->get()) > 0) {
+            if (Message::create(['body' => Crypt::encryptString($request->message), 'user_id' => $this->uid(), 'thread_id' => $request->thread_id])) {
+                return response()->json(['success' => true], 200);
             }
         }
-        return response()->json(['message'=>'Opps someting wrong.','success'=>false],400);
-
+        return response()->json(['message' => 'Opps someting wrong.', 'success' => false], 400);
     }
 
     /**

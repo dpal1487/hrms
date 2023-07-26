@@ -1,30 +1,29 @@
 <?php
 
-namespace App\Http\Resources\Web;
+namespace App\Http\Resources\Api;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerReviewResource extends JsonResource
+class ReviewsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
         return [
-
-            'ip_address' => $this->ip_address,
-            'user' => $this->user,
             'id' => $this->review?->id,
             'title' => $this->review?->title,
             'content' => $this->review?->content,
-            'rating' => $this->review?->rating,
+            'review' => $this->review,
             'status' => $this->review?->status,
             'created_at' => date('y M d', strtotime($this->review?->created_at)),
-            'updated_at' => date('y M d', strtotime($this->review?->updated_at)),
+            'updated_at' => $this->review?->updated_at,
+            'user' => $this->user,
+            'user_image' => $this->user->image
         ];
     }
 }

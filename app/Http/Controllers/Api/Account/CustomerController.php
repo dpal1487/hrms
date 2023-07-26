@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Account;
 
 use App\Http\Controllers\Api\Controller;
-use App\Http\Resources\Api\MyAds\Customers;
+use App\Http\Resources\Api\CustomersResource;
 use App\Models\ItemCustomer;
 use App\Models\Item;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +15,7 @@ class CustomerController extends Controller
   {
     if (Item::where(['id' => $id, 'user_id' => $this->uid()])->first()) {
       $customers = ItemCustomer::with('document')->where(['item_id' => $id])->get();
-      return Customers::collection($customers);
+      return CustomersResource::collection($customers);
     }
   }
   public function sendOtp(Request $request)

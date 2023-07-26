@@ -2,19 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\Profile\Profile;
-use App\Http\Resources\Api\Profile\Reviews;
-use App\Http\Resources\Api\Users;
-use App\Http\Resources\Items;
-use App\Models\Follower;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\UserReview;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use JWTAuth;
 use App\Http\Controllers\Api\Controller;
-
+use App\Http\Resources\Api\ItemResource;
+use App\Http\Resources\Api\UserResource;
 
 class ProfileController extends Controller
 {
@@ -24,8 +17,8 @@ class ProfileController extends Controller
     $items = Item::where('user_id', $id)->orderBy('id','desc');
     $reviews = UserReview::where(['user_id' => $id]);
     return [
-      'user' => new Users($user),
-      'items' => Items::collection($items->get()),
+      'user' => new UserResource($user),
+      'items' => ItemResource::collection($items->get()),
     ];
   }
  
