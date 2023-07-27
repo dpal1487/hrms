@@ -74,6 +74,7 @@ export default defineComponent({
                 <i class="bi bi-plus-circle"></i>Add New Category</Link>
             </div>
         </template>
+
         <Head :title="title" />
         <div class="card card-flush">
             <div>
@@ -104,7 +105,7 @@ export default defineComponent({
                 <div class="table-responsive">
                     <table class="table align-center table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">                                
+                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -112,15 +113,15 @@ export default defineComponent({
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(category, index) in categories.data" :key="index">
-                               
                                 <td>
                                     <div class="d-flex">
                                         <span
                                             class="d-block symbol symbol-50px symbol-lg-50px symbol-fixed position-relative">
-                                        <img v-if="category?.image" :src="category?.image?.small_path" alt="image"
-                                            class="rounded" />
-                                        <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image" class="rounded">
-                                    </span>
+                                            <img v-if="category?.image" :src="category?.image?.small_path" alt="image"
+                                                class="rounded" />
+                                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
+                                                class="rounded">
+                                        </span>
                                         <div class="ms-5">
                                             <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
                                                 category-filter="category_name">{{ category?.name }}</span>

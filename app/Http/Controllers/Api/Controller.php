@@ -30,4 +30,17 @@ abstract class Controller extends BaseController
   {
     return Auth::guard('api')->user();
   }
+
+
+  public function getTokenId()
+  {
+    $user = Auth::user();
+    $token = $user->currentAccessToken();
+
+    if ($token) {
+      return $token->tokenable_id;
+    } else {
+      return response()->json(['error' => 'Token not found.'], 404);
+    }
+  }
 }

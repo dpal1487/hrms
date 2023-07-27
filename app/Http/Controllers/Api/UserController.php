@@ -7,8 +7,11 @@ use App\Http\Resources\Api\ItemResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
-use App\Http\Resources\Api\Items;
 use App\Http\Resources\Api\UserProfileResource;
+use App\Http\Resources\Api\UserResource;
+use App\Models\Follower;
+use App\Models\Review;
+use App\Models\UserReview;
 
 class UserController extends Controller
 {
@@ -25,8 +28,8 @@ class UserController extends Controller
       {
         $reviews = UserReview::where(['user_id' => $id])->get();
         return [
-          'reviews' => Reviews::collection($reviews),
-          'user' => new Users(User::find($id)),
+          'reviews' => Review::collection($reviews),
+          'user' => new UserResource(User::find($id)),
         ];
       }
       public function follow(Request $request)

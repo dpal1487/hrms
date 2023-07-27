@@ -16,6 +16,7 @@ class AccountController extends Controller
   public function index()
   {
     $user = User::where('id', $this->uid())->first();
+
     return [
         'user'=>new UserResource($user),
         'data'=>[

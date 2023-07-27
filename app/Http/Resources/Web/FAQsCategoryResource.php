@@ -19,7 +19,8 @@ class FAQsCategoryResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'status' => $this->status,
-            'image' => $this->image,
+            'image' => new ImageResource($this->image),
+
             'header' => [
                 'total' => count($this->faqs),
             ],

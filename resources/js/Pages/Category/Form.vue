@@ -112,7 +112,7 @@ export default defineComponent({
 
         async onBannerChange(e) {
             this.banner.isLoading = true;
-            const data = await utils.imageUpload(route('upload.banner'), e)
+            const data = await utils.imageUpload(route('category.banner'), e)
             if (data.response.success) {
                 this.form.banner_image = data.response.data.id;
             } else {
@@ -169,7 +169,7 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="card-body text-center">
-                                <ImageInput :image="this.category?.data?.banner?.medium_path" :onchange="onBannerChange"
+                                <ImageInput :image="this.category?.data?.banner?.small_path" :onchange="onBannerChange"
                                     :remove="removeSelectedAvatar" :selectedImage="banner.url"
                                     :errors="v$.form.banner_image.$errors" :isUploading="banner.isLoading" />
                             </div>

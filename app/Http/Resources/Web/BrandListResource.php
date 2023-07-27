@@ -23,7 +23,8 @@ class BrandListResource extends JsonResource
                 'status' => $this->status,
                 'category' => $this->category,
                 'models' => $this->models,
-                'image' => $this->image,
+                'image' => new ImageResource($this->image),
+
             ];
     }
 }

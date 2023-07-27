@@ -67,9 +67,6 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('logout', [LoginController::class, 'logout']);
-        // Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-
-        Broadcast::routes(['middleware' => ['auth:sanctum']]);
         Route::get('user/me', [LoginController::class, 'user']);
         /*Account Controller*/
         Route::group(['prefix' => 'account'], function () {
@@ -142,7 +139,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::get('{id}', [ProfileController::class, 'index']);
         Route::get('reviews/{id}', [ProfileController::class, 'getReviews']);
         Route::post('follow', [ProfileController::class, 'follow']);
-        Route::post('unfollow', [ProfileController::class, 'follow']);
+        Route::post('unfollow', [ProfileController::class, 'unfollow']);
     });
 
     /*Item*/

@@ -14,6 +14,16 @@ class UserProfileResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'mobile' => $this->mobile,
+            'email' => $this->email,
+            'gender' => $this->gender,
+            'image' => new ImageResource($this->image),
+            'date_of_birth' => $this->date_of_birth,
+            'about' => $this->about,
+        ];
     }
 }

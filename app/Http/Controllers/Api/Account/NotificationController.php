@@ -13,13 +13,13 @@ class NotificationController extends Controller
   public $data;
   public function index()
   {
-
     $notifications = Notification::where(['recipient_id' => $this->uid(), 'deleted' => 0, 'is_read' => 0])->get();
     return NotificationsResource::collection($notifications);
   }
-  public function store($sourceId, $recipient_id, $typeId)
+  // public function store($sourceId, $recipient_id, $typeId)
+  public function store(Request $request)
   {
-    if ($notification = Notification::create(['type_id' => $typeId, 'recipient_id' => $recipient_id, 'sender_id' => $this->getTokenId(), 'source_id' => $sourceId])) {
+    if ($notification = Notification::create(['type_id' => $request->type_id, 'recipient_id' => $request->recipient_id, 'sender_id' => $this->getTokenId(), 'source_id' => $request->source_id])) {
       return $notification;
     }
   }
@@ -48,6 +48,7 @@ class NotificationController extends Controller
   public function destroy(Request $request)
   {
     $notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first();
+
     if ($notification) {
       Notification::where('id', $notification->id)->update(['deleted' => 1]);
       return response()->json(['success' => true, 'message' => 'Notification deleted successfully.']);

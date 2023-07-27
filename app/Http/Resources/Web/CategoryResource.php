@@ -20,9 +20,9 @@ class CategoryResource extends JsonResource
             'description' => $this->description,
             'keywords' => $this->keywords,
             'status' => $this->status,
-            'image' => $this->image,
+            'image' => new ImageResource($this->image),
             'meta' => $this->meta,
-            'banner' => $this->banner?->banner,
+            'banner' =>new ImageResource($this->banner?->banner),
             'parent' => $this->parent,
         ];
     }

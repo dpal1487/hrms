@@ -61,7 +61,6 @@ class MessageController extends Controller
     }
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'message' => 'required',
             'thread_id' => 'required',
@@ -69,7 +68,6 @@ class MessageController extends Controller
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()->first()], 400);
         }
-
         if (count(Participant::where(['conversation_id' => $request->thread_id, 'user_id' => $this->uid()])->get()) > 0) {
             if (Message::create(['body' => Crypt::encryptString($request->message), 'user_id' => $this->uid(), 'thread_id' => $request->thread_id])) {
                 return response()->json(['success' => true], 200);

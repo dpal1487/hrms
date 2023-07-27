@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'mobile' => $this->mobile,
             'email' => $this->email,
             'gender' => $this->gender,
-            'image' => $this->image,
+            'image' => new ImageResource($this->image),
             'date_of_birth' => $this->date_of_birth,
             'about' => $this->about,
         ];

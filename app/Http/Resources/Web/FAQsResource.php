@@ -19,7 +19,8 @@ class FAQsResource extends JsonResource
             'title' => $this->title,
             'status' => $this->status,
             'categories' => $this->faqcategorys,
-            'image' => $this->image,
+            'image' => new ImageResource($this->image),
+
         ];
     }
 }

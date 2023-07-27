@@ -20,7 +20,7 @@ class ImageResource extends JsonResource
         $hostname = $request->getHost();
         $port = $request->getPort(); // remove in production
 
-        $filepath =  $protocol . "://" . $hostname .":".$port. "/assets/images/category/". $this->name;
+        $filepath =  $protocol . "://" . $hostname . ":" . $port . "/" . $this->base_path . $this->name;
 
         return [
             'id' => $this->id,
@@ -28,9 +28,9 @@ class ImageResource extends JsonResource
             'url' => $this->base_url,
             'file_path' => $filepath,
             'base_path' => $this->base_path,
-            'small_path' => $filepath."?width=100&height=100",
+            'small_path' => $filepath . "?width=100&height=100",
             'medium_path' => $filepath . "?width=200&height=200",
-            'large_path' =>$filepath . "?width=1024",
+            'large_path' => $filepath . "?width=1024",
         ];
     }
 }

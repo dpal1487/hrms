@@ -25,7 +25,6 @@ class LoginController extends Controller
             return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
         }
         //Request is validated
-        //Crean token
         $data = $request->validate([
             'mobile' => 'required',
             'password' => 'required|string|min:8'
@@ -36,11 +35,8 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
             $token = auth()->user()->tokens()->delete();
-
             $token = $user->createToken('API Token')->plainTextToken;
-
             if ($token) {
                 return response(['user' => new UserResource($user), 'access_token' => $token, 'success' => true]);
             } else {
@@ -48,13 +44,11 @@ class LoginController extends Controller
             }
         }
 
-
         // if (Auth::attempt($credentials)) {
         //     $user = Auth::user();
         //     $token = $user->createToken('auth_token')->plainTextToken;
-        //     $user->setAttribute('token', $token);
         //     $response = response()->json(['user' => new UserResource($user), 'success' => true]);
-        //     $cookie = cookie('api_token', $token, 60 * 24);
+        //     $cookie = cookie('api_token', $token, 60 * 2);
         //     $response->withCookie($cookie);
         //     return $response;
         // }
@@ -72,6 +66,6 @@ class LoginController extends Controller
 
     public function user()
     {
-        return response()->json(['data' => auth()->user(), 'success' => true]);
+        return response()->json(['data' =>new UserResource(auth()->user()), 'success' => true]);
     }
 }
