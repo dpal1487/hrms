@@ -64,6 +64,7 @@ export default defineComponent({
             <!--begin::Mobile logo-->
             <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                 <Link href="/" class="d-lg-none">
+                    
                 </Link>
             </div>
             <!--end::Mobile logo-->

@@ -10,6 +10,7 @@
         "browner12/helpers": "^3.5",
         "craftsys/msg91-laravel": "^0.14.0",
         "davejamesmiller/laravel-breadcrumbs": "^5.3",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
         "haruncpi/laravel-id-generator": "^1.1",
         "inertiajs/inertia-laravel": "^0.6.3",

@@ -4,15 +4,13 @@ namespace App\Http\Controllers\Api\Account;
 
 
 use App\Models\Favourite;
-use App\Http\Resources\Api\Account\Favourites;
 use Illuminate\Http\Request;
-use JWTAuth;
 use App\Http\Controllers\Api\Controller;
-use App\Http\Resources\Api\FavouritesResource;
+use App\Http\Resources\Api\Account\FavouritesResource;
 
 class FavouriteController extends Controller
 {
-  public $offset, $limit;
+  public $offset, $limit, $data;
 
   function __construct($offset = 0, $limit = 10)
   {
@@ -36,6 +34,7 @@ class FavouriteController extends Controller
   }
   public function store($id)
   {
+    return $id;
     if (Favourite::create(['user_id' => $this->uid(), 'item_id' => $id])) {
       return response()->json([
         'message' => "Your Item Has Been Added To Shortlist.",

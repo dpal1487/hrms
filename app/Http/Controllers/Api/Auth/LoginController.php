@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\UserResource;
@@ -34,7 +33,7 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+            $user = Auth::guard('api')->user();
             $token = auth()->user()->tokens()->delete();
             $token = $user->createToken('API Token')->plainTextToken;
             if ($token) {
@@ -57,7 +56,7 @@ class LoginController extends Controller
     }
     public function logout(Request $request)
     {
-        Auth::user()->tokens->each(function ($token, $key) {
+        $user = Auth::guard('api')->user()->tokens->each(function ($token, $key) {
             $token->delete();
         });
         return response()->json(['message' => 'Successfully logged out']);
@@ -66,6 +65,6 @@ class LoginController extends Controller
 
     public function user()
     {
-        return response()->json(['data' =>new UserResource(auth()->user()), 'success' => true]);
+        return response()->json(['data' => new UserResource(auth()->user()), 'success' => true]);
     }
 }

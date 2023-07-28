@@ -15,11 +15,11 @@ class ItemAttributeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'name' => $this->attribute->name,
-            'data_type' => $this->attribute->data_type,
-            'field' => $this->attribute->field,
-            'type' => $this->attribute->type,
-            'status' => $this->attribute->status,
+            'name' => $this->attribute?->name,
+            'data_type' => $this->attribute?->data_type,
+            'field' => $this->attribute?->field,
+            'type' => $this->attribute?->type,
+            'status' => $this->attribute?->status,
         ];
     }
 }

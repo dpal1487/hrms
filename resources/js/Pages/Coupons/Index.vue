@@ -15,7 +15,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "coupon",
+            title: "Coupon",
             isLoading: false,
             tbody: [
                 "Code",

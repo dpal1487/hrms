@@ -31,11 +31,12 @@ export default defineComponent({
         Pagination,
         Navigation,
     },
+    setup() {
 
-    created() {
-        const center = { lat: this.itemdetails?.data?.location?.country?.longitude, lng: this.itemdetails?.data?.location?.country?.longitude };
+        const center = { lat: 28.6362211, lng: 77.2922332 };
+
         return { center };
-    }
+    },
 })
 </script>
 <template>
@@ -67,27 +68,20 @@ export default defineComponent({
         <div class="row mt-5">
             <div class="col-sm-12 col-md-8">
                 <div class="card mb-5">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="">
-                                <div class="d-flex gap-15">
-                                    <div class="d-flex align-items-center ">
-                                            <h5 class="card-title fs-2 m-3">Rent Type : </h5>
-                                            <h1 class="m-0 fs-4 text-gray-800 text-uppercase">  {{ itemdetails?.data?.time }}</h1>
-                                        </div>
-                                    <div class="d-flex align-items-center ">
-                                        <h5 class="card-title fs-2 m-3">Rent Prize : </h5>
-                                        <h1 class="m-0 fs-4 text-gray-800"> ₹ {{ itemdetails?.data?.rent_price }}</h1>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title fs-1 m-3">Security Prize : </h5>
-                                        <h1 class="m-0 fs-4 text-gray-800"> ₹ {{ itemdetails?.data?.security_price }}</h1>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <h5 class="card-title fs-1 m-3">Category Name : </h5>
-                                    <h1 class="m-0 fs-4 text-gray-800">{{ itemdetails?.data?.category?.name }}</h1>
-                                </div>
+                    <div class="card-body my-0">
+                        <div class="">
+                            <div class="d-flex gap-5">
+                                <h5 class="card-title fs-4">Rent Type </h5>
+                                <h1 class="fs-4 text-gray-800 text-uppercase"> {{ itemdetails?.data?.time }}</h1>
+                                <h5 class="card-title fs-4 mx-3">Rent Prize </h5>
+                                <h1 class="fs-4 text-gray-800"> ₹{{ itemdetails?.data?.rent_price }}</h1>
+                                <h5 class="card-title fs-4 mx-3">Security Prize </h5>
+                                <h1 class="fs-4 text-gray-800"> ₹{{ itemdetails?.data?.security_price }}</h1>
+                            </div>
+                            <hr class="W-100 m-0">
+                            <div class="d-flex align-items-center">
+                                <h5 class="card-title fs-3 m-3">Category Name </h5>
+                                <h1 class="m-0 fs-4 text-gray-800">{{ itemdetails?.data?.category?.name }}</h1>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
@@ -117,20 +111,19 @@ export default defineComponent({
                             </div>
                             <div class="">
                                 <div class="d-flex">
-                                    <h5 class="card-title fs-2 mx-3">From Date : </h5>
+                                    <h5 class="card-title fs-3 mx-3">From Date : </h5>
                                     <h1 class="fs-4 text-gray-800"> {{ itemdetails?.data?.from_date }}</h1>
                                 </div>
                                 <div class="d-flex">
-                                    <h5 class="card-title fs-2 mx-3">To Date : </h5>
+                                    <h5 class="card-title fs-3 mx-3">To Date : </h5>
                                     <h1 class="fs-4 text-gray-800">{{ itemdetails?.data?.to_date }}</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="card mb-5">
-                    <h5 class="card-title fs-1 mt-4 px-3">Attribute</h5>
+                    <div class="card-title fs-1 fw-bold m-4 px-3 text-gray-900">Attribute</div>
                     <div class="card-body py-0 bg-slate-400" v-for="(attribute) in  itemdetails?.data?.attributes">
                         <div class="d-flex align-items-center gap-20 gap-y-0 mb-2">
                             <h1 class="fs-4 fw-bold w-25">Name</h1>
@@ -140,8 +133,8 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="card mb-5">
+                    <div class="card-title fw-bold fs-1 m-4 px-3">Reviews </div>
                     <div class="card-body p-2 m-3">
-                        <h5 class="card-title fs-1 mb-4 p-0">Reviews </h5>
                         <h1 class="fs-4 text-gray-800">Place Rating : 0 average based on {{
                             itemdetails?.data?.rating_reviews?.count }} reviews.</h1>
                     </div>
@@ -160,7 +153,7 @@ export default defineComponent({
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="">
                                 <Link class="user_link d-flex align-items-center gap-4"
-                                    :href="`/item/user/userProfile/${itemdetails?.data?.user?.id}`">
+                                    :href="`/user/${itemdetails?.data?.user?.id}`">
                                 <img alt="user image" src="/assets/media/avatars/300-1.jpg" width="50" height="50">
                                 <div
                                     class="user_name fs-3 fw-bold text-theme-primary flex-root d-flex align-items-center justify-content-between">
@@ -182,8 +175,7 @@ export default defineComponent({
                 <div class="card mb-5">
                     <div class="card-body p-2 m-3">
                         <h5 class="card-title fs-1 mb-4 p-0">Posted In</h5>
-                        <GoogleMap api-key="YOUR_GOOGLE_MAPS_API_KEY" style="width: 100%; height: 300px" :center="center"
-                            :zoom="15">
+                        <GoogleMap style="width: 100; height: 400px" :center="center" :zoom="5">
                             <Marker :options="{ position: center }" />
                         </GoogleMap>
                     </div>

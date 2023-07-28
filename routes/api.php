@@ -17,9 +17,7 @@ use App\Http\Controllers\Api\Account\AccountController;
 use App\Http\Controllers\Api\Account\AddressController;
 use App\Http\Controllers\Api\Account\AdReviewController;
 use App\Http\Controllers\Api\Account\CustomerController;
-
 use App\Http\Controllers\Api\AppController;
-
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\CouponController;
@@ -65,7 +63,8 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
 
     Route::get('/categories', [CategoryController::class, 'index']);
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::group(['middleware' => ['auth:api' , 'auth:sanctum']], function () {
+        Broadcast::routes();
         Route::post('logout', [LoginController::class, 'logout']);
         Route::get('user/me', [LoginController::class, 'user']);
         /*Account Controller*/

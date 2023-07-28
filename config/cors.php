@@ -19,16 +19,16 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'https://api.website.com', 'https://customer.website.com', 'https://192.168.1.12:8000', 'http://192.168.1.8:3000'],
+    'allowed_origins' => ['*', 'http://192.168.1.8:3000' , 'http://192.168.1.12:8000/api/v1/auth/login'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['x-csrf-token', 'x-xsrf-token', 'content-type' ,'Authorization'],
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 
     'max_age' => 0,
 
-    'supports_credentials' => true, 
+    'supports_credentials' => false,
 
 ];

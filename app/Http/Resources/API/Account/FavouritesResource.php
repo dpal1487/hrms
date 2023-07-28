@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Resources\Api;
+namespace App\Http\Resources\Api\Account;
 
+use App\Http\Resources\Api\ItemResource;
+use App\Http\Resources\Api\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FavouritesResource extends JsonResource
