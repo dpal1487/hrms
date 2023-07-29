@@ -31,7 +31,11 @@ class LoginController extends Controller
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json(['user' => new UserResource($user), 'success' => true])->withCookie(cookie('api_token', $token, 60 * 24));;
+            return response()->json([
+                'user' => new UserResource($user), 
+                'success' => true,
+                'auth_token' => $token
+                ])->withCookie(cookie('api_token', $token, 60 * 24));;
         }
 
         return response()->json(['error' => 'Invalid credentials'], 401);
