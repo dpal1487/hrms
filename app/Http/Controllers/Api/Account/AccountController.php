@@ -7,9 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Api\Controller;
-use App\Http\Resources\Api\UserResource;
-use App\Models\Follower;
-use App\Models\Item;
+use App\Http\Resources\Api\Account\UserResource;
 
 class AccountController extends Controller
 {
@@ -17,12 +15,12 @@ class AccountController extends Controller
   {
     $user = User::where('id', $this->uid())->first();
     return [
-        'user'=>new UserResource($user),
-        'data'=>[
-            'posts'=>Item::where(['user_id'=>$this->uid()])->count(),
-            'follower'=>Follower::where('following_id',$this->uid())->count(),
-            'following'=>Follower::where('follower_id',$this->uid())->count(),
-        ]
+        'data'=>new UserResource($user),
+        // 'data'=>[
+        //     'posts'=>Item::where(['user_id'=>$this->uid()])->count(),
+        //     'follower'=>Follower::where('following_id',$this->uid())->count(),
+        //     'following'=>Follower::where('follower_id',$this->uid())->count(),
+        // ]
     ];
   }
   public function update(Request $request)

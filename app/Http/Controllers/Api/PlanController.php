@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\Api\Plans;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
+use App\Http\Resources\Api\PlansResourse;
 use App\Models\Order;
 use App\Models\Subscription;
 use Exception;
@@ -18,7 +18,7 @@ class PlanController extends Controller
     public function index()
     {
         $plans = Plan::all();
-        return Plans::collection($plans);
+        return PlansResourse::collection($plans);
     }
     public function placeOrder(Plan $plan)
     {
@@ -47,6 +47,7 @@ class PlanController extends Controller
     }
     public function razorPaySuccess(Request $request)
     {
+
         if (empty($request->payment_id) === false) {
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
             try {
@@ -55,6 +56,7 @@ class PlanController extends Controller
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
             }
         }
+        return response()->json(['success' => false, 'message' => "No select transaction"], 400);
     }
     public function verifySignature(Request $request)
     {
@@ -64,7 +66,7 @@ class PlanController extends Controller
                 try {
                     $attributes  = array('razorpay_signature'  => $request->signature,  'razorpay_payment_id'  => $request->payment_id,  'razorpay_order_id' => $request->order_id);
                     $api->utility->verifyPaymentSignature($attributes);
-                    $order=Order::where('order_id', $request->order_id)->first();
+                    $order = Order::where('order_id', $request->order_id)->first();
                     $order->update([
                         'razorpay_signature' => $request->signature,
                         'razorpay_payment_id' => $request->payment_id,
@@ -82,8 +84,10 @@ class PlanController extends Controller
                     ];
                     $plan = Plan::find($request->plan_id);
 
-                    if (!Subscription::where(['user_id' => $this->uid(), 'payment_id' => $request->payment_id,
-                    'order_id' => $order->id,])->first()) {
+                    if (!Subscription::where([
+                        'user_id' => $this->uid(), 'payment_id' => $request->payment_id,
+                        'order_id' => $order->id,
+                    ])->first()) {
                         $id = Subscription::create([
                             'user_id' => $this->uid(),
                             'plan_id' => $request->plan_id,
@@ -94,8 +98,8 @@ class PlanController extends Controller
                             'end_at' => Carbon::now()->addDays($plan->expires_in_days)->timestamp,
                             'status' => 'created'
                         ]);
-                        if(!Subscription::where(['user_id'=>$this->uid(),'status'=>'active'])->first()){
-                            Subscription::where(['id'=>$id])->update(['status'=>'active']);
+                        if (!Subscription::where(['user_id' => $this->uid(), 'status' => 'active'])->first()) {
+                            Subscription::where(['id' => $id])->update(['status' => 'active']);
                         }
                     }
                     return response()->json(['message' => 'Verification success', 'data' => $data, 'success' => true], 200);

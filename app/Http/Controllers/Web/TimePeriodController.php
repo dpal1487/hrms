@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 
-use App\Http\Resources\Web\CategoryResource;
+use App\Http\Resources\Web\CategoryListResource;
 use App\Models\TimePeriod;
 use App\Models\Category;
 use App\Models\Time;
@@ -23,13 +23,13 @@ class TimePeriodController extends Controller
         }
         $categories = Category::paginate(10)->onEachSide(1);
         return Inertia::render('TimePeriods/Index', [
-            'timeperiods' => CategoryResource::collection($categories),
+            'timeperiods' => CategoryListResource::collection($categories),
         ]);
     }
     public function create($id)
     {
         return Inertia::render('TimePeriods/Form', [
-            'category' => new CategoryResource(Category::find($id)),
+            'category' => new CategoryListResource(Category::find($id)),
             'times' => TimeResource::collection(Time::get()),
         ]);
     }
@@ -64,7 +64,7 @@ class TimePeriodController extends Controller
     public function show($id)
     {
         return Inertia::render('TimePeriods/Form', [
-            'category' => new CategoryResource(Category::find($id)),
+            'category' => new CategoryListResource(Category::find($id)),
             'times' => TimeResource::collection(Time::get()),
         ]);
     }
@@ -74,7 +74,7 @@ class TimePeriodController extends Controller
         $times = Time::get();
         $timePeriod = TimePeriod::where('category_id', '=', $id)->get();
         return Inertia::render('TimePeriods/Form', [
-            'category' => new CategoryResource($category),
+            'category' => new CategoryListResource($category),
             'times' => TimeResource::collection($times),
             'timePeriods' => TimePeriodResource::collection($timePeriod),
         ]);

@@ -2,15 +2,15 @@
 
 namespace App\Http\Resources\Web;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class CategorySingleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
@@ -20,10 +20,10 @@ class CategoryResource extends JsonResource
             'description' => $this->description,
             'keywords' => $this->keywords,
             'status' => $this->status,
-            'image' => $this->image,
+            'image' => new ImageResource($this->image),
             'meta' => $this->meta,
-            'banner' => $this->banner?->banner,
             'parent' => $this->parent,
+            'banner'=>new ImageResource($this->banner->banner),
         ];
     }
 }

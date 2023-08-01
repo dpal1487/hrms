@@ -5,34 +5,33 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\Api\AttributeResource;
 use App\Http\Resources\Api\AddressResource;
+use App\Http\Resources\Api\AttributesResource;
 use App\Http\Resources\Api\TimeResource;
 use App\Models\Category;
 use App\Models\Attribute;
 use App\Models\Address;
 use App\Models\TimePeriod;
 use App\Models\Item;
-use App\Models\ItemImage;
 use App\Models\ItemAttribute;
 use App\Models\UserAddress;
 use App\Models\ItemLocation;
-use Validator;
-use Str;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
   public function index(Request $request)
   {
     $category = Category::find($request->category_id);
-    $address = UserAddress::where(['user_id'=>$this->uid()])->first();
+    $address = UserAddress::where(['user_id' => $this->uid()])->first();
     return [
-      'category'=>$category,
-      'attributes'=>AttributeResource::collection(Attribute::where(['category_id'=>$request->category_id,'parent_id'=>null])->get()),
-      'price_conditions'=>TimeResource::collection(TimePeriod::where(['category_id'=>$request->category_id])->get()),
-      //'address'=>new AddressResource($address->address)
-      ];
+      'category' => $category,
+      'attributes' => AttributesResource::collection(Attribute::where(['category_id' => $request->category_id])->get()),
+      'price_conditions' => TimeResource::collection(TimePeriod::where(['category_id' => $request->category_id])->get()),
+      'address' => new AddressResource($address->address)
+    ];
   }
   public function store(Request $request)
   {
@@ -82,8 +81,8 @@ class PostController extends Controller
           'longitude' => $request->address['longitude'],
         ]);
         if (ItemLocation::create([
-          'address_id'=>$address->id,
-          'item_id'=>$item->id
+          'address_id' => $address->id,
+          'item_id' => $item->id
         ])) {
           return response()->json(['message' => 'Item has been added successfully', 'data' => $item, 'success' => true]);
         }
@@ -94,6 +93,7 @@ class PostController extends Controller
   public function success(Request $request)
   {
     $item = Item::where(['id' => $request->adid, 'user_id' => auth()->user()->id])->first();
+
     if ($item) {
       return response()->json(['success' => true]);
     }
@@ -106,11 +106,11 @@ class PostController extends Controller
       $item = Item::where(['id' => $request->pid])->first();
       if ($item) {
         $category = Category::find($item->category_id);
-        return[
-          'category'=>$category,
-          'attributes'=>AttributeResource::collection(Attribute::where(['category_id'=>$category->id,'parent_id'=>null])->get()),
-          'price_conditions'=>TimeResource::collection(TimePeriod::where(['category_id'=>$category->id])->get()),
-          'data'=>$item,
+        return [
+          'category' => $category,
+          'attributes' => AttributesResource::collection(Attribute::where(['category_id' => $category->id, 'parent_id' => null])->get()),
+          'price_conditions' => TimeResource::collection(TimePeriod::where(['category_id' => $category->id])->get()),
+          'data' => $item,
         ];
       }
     }
@@ -142,16 +142,16 @@ class PostController extends Controller
       );
       $item = Item::where(['id' => $request->pid, 'user_id' => $this->uid()])->update($data);
       if ($item) {
-        ItemAttribute::where(['item_id'=>$request->pid])->delete();
+        ItemAttribute::where(['item_id' => $request->pid])->delete();
         if (count($request['attributes']) > 0) {
           foreach ($request['attributes'] as $attribute) {
             ItemAttribute::create(['item_id' => $request->pid, 'attribute_id' => $attribute['attribute'], 'attribute_value' => $attribute['value']]);
           }
         }
         $address = ItemLocation::where([
-          'item_id'=>$request->pid
+          'item_id' => $request->pid
         ])->first();
-        if(Address::where('id',$address->id)->update([
+        if (Address::where('id', $address->id)->update([
           'country' => 'IN',
           'address' => $request->address['address'],
           'locality' => $request->address['locality'],
@@ -161,17 +161,17 @@ class PostController extends Controller
           'latitude' => $request->address['latitude'],
           'longitude' => $request->address['longitude'],
         ])) {
-        // ItemImage::where(['item_id' => $request->pid])->delete();
-        // foreach ($request->images as $image) {
-        //   ItemImage::create([
-        //     'item_id' => $request->pid,
-        //     'image_id' => $image['id'],
-        //   ]);
-        // }
-        return response()->json(['message' => 'Item has been added successfully', 'data' => $request->pid, 'success' => true]);
+          // ItemImage::where(['item_id' => $request->pid])->delete();
+          // foreach ($request->images as $image) {
+          //   ItemImage::create([
+          //     'item_id' => $request->pid,
+          //     'image_id' => $image['id'],
+          //   ]);
+          // }
+          return response()->json(['message' => 'Item has been added successfully', 'data' => $request->pid, 'success' => true]);
+        }
       }
+      return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false]);
     }
-    return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false]);
   }
-}
 }

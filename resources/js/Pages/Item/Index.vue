@@ -56,7 +56,6 @@ export default defineComponent({
 
         <Head :title="title" />
         <div class="card mb-5 mb-xxl-5 bg-white">
-
             <form class="card-header align-items-center py-5 gap-4" @submit.prevent="search()">
                 <div class="d-flex align-items-center position-relative">
                     <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24" viewBox="0 0 24 24"

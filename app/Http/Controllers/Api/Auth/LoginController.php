@@ -34,7 +34,7 @@ class LoginController extends Controller
             return response()->json([
                 'user' => new UserResource($user), 
                 'success' => true,
-                'auth_token' => $token
+                'access_token' => $token
                 ])->withCookie(cookie('api_token', $token, 60 * 24));;
         }
 

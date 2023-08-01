@@ -21,9 +21,15 @@ class UserResource extends JsonResource
             'mobile' => $this->mobile,
             'email' => $this->email,
             'gender' => $this->gender,
-            'image' => $this->image,
             'date_of_birth' => $this->date_of_birth,
             'about' => $this->about,
+            'isVerified' => $this->is_verified,
+            'total_ads' => count($this->items),
+            'followers' => [
+                'followerCount' => count($this->followers),
+                'followingCount' => count($this->following),
+            ],
+            'image' => new ImageResource($this->image),
         ];
     }
 }

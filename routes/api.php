@@ -16,13 +16,13 @@ use App\Http\Controllers\Api\Account\ReviewController;
 use App\Http\Controllers\Api\Account\AccountController;
 use App\Http\Controllers\Api\Account\AddressController;
 use App\Http\Controllers\Api\Account\AdReviewController;
+use App\Http\Controllers\Api\Account\CouponsController;
 use App\Http\Controllers\Api\Account\CustomerController;
 
 use App\Http\Controllers\Api\AppController;
 
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ConversationController;
-use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\LocationController;
@@ -35,7 +35,6 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WelcomeController;
-use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -65,7 +64,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
     Route::get('fetch', [AppController::class, 'index']);
 
     Route::get('/categories', [CategoryController::class, 'index']);
-   
+
 
     Route::middleware('auth:sanctum')->group(function () {
         Broadcast::routes(['middleware' => ['auth:sanctum']]);
@@ -73,6 +72,9 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::get('user/me', [LoginController::class, 'user']);
         /*Account Controller*/
         Route::group(['prefix' => 'account'], function () {
+            /*Image*/
+            Route::post('image', [ImageController::class, 'userImage']);
+            /*User*/
             Route::get('user', [AccountController::class, 'index']);
             Route::post('user', [AccountController::class, 'update']);
             /*Email*/
@@ -92,7 +94,8 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
             Route::get('notifications', [NotificationController::class, 'index']);
             Route::post('notification/add', [NotificationController::class, 'store']);
             Route::post('notification/remove', [NotificationController::class, 'destroy']);
-            Route::get('coupons', [CouponController::class, 'index']);
+            /*Coupons*/
+            Route::get('coupons', [CouponsController::class, 'index']);
         });
         /*My Ads*/
         Route::group(['prefix' => 'my-ads'], function () {
@@ -143,6 +146,8 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
     Route::post('profile/unfollow', [ProfileController::class, 'follow']);
 
     /*Item*/
+    Route::get('location/states', [LocationController::class, 'states']);
+
     Route::get('location/cities', [LocationController::class, 'cities']);
     Route::get('packages', [PlanController::class, 'index']);
     Route::group(['prefix' => 'package'], function () {

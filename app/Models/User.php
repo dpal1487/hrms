@@ -7,9 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
-  use HasFactory, Notifiable , HasApiTokens;
+  use HasFactory, Notifiable, HasApiTokens;
 
   /**
    * The attributes that are mass assignable.
@@ -49,11 +49,16 @@ class User extends Authenticatable
     'email_verified_at' => 'datetime',
   ];
 
+  public function findForPassport($mobile)
+  {
+    $mobile = 'mobile';
+    return $this->where($mobile, $mobile)->first();
+  }
 
- 
+
   public function image()
   {
-    return $this->hasOne(File::class, 'id', 'image_id');
+    return $this->hasOne(Image::class, 'id', 'image_id');
   }
   public function user_address()
   {
@@ -79,10 +84,23 @@ class User extends Authenticatable
   {
     return $this->hasMany(Review::class, 'user_id', 'id');
   }
-
-
   public function review()
   {
     return $this->hasOne(Review::class, 'user_id', 'id');
+  }
+
+  public function items()
+  {
+    return $this->hasMany(Item::class, 'user_id', 'id');
+  }
+
+  public function followers()
+  {
+    return $this->hasMany(Follower::class,'following_id', 'id');
+  }
+
+  public function following()
+  {
+    return $this->hasMany(Follower::class, 'follower_id', 'id');
   }
 }

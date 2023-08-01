@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
+  protected $fillable = ['type_id', 'recipient_id', 'sender_id', 'source_id'];
   public function sender()
   {
     return $this->hasOne(User::class, 'id', 'sender_id');

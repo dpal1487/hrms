@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api\Account;
 
 use App\Http\Controllers\Api\Controller;
-use App\Http\Resources\Api\Notifications;
+use App\Http\Resources\Api\Account\NotificationsResource;
 use Illuminate\Http\Request;
 use App\Models\Notification;
-use App\Models\Reports;
-use JWTAuth;
+use App\Models\Report;
 
 class NotificationController extends Controller
 {
@@ -15,11 +14,12 @@ class NotificationController extends Controller
   public function index()
   {
     $notifications = Notification::where(['recipient_id' => $this->uid(), 'deleted' => 0, 'is_read' => 0])->get();
-    return Notifications::collection($notifications);
+    return NotificationsResource::collection($notifications);
   }
-  public function create($sourceId, $recipient_id, $typeId)
+  // public function store($sourceId, $recipient_id, $typeId)
+  public function store(Request $request)
   {
-    if ($notification = Notification::create(['type_id' => $typeId, 'recipient_id' => $recipient_id, 'sender_id' => $this->getTokenId(), 'source_id' => $sourceId])) {
+    if ($notification = Notification::create(['type_id' => $request->type_id, 'recipient_id' => $request->recipient_id, 'sender_id' => $this->getTokenId(), 'source_id' => $request->source_id])) {
       return $notification;
     }
   }
@@ -45,9 +45,10 @@ class NotificationController extends Controller
     }
     return response()->json(['success' => false, 'Faild to Unread Notification!'], 400);
   }
-  public function delete(Request $request)
+  public function destroy(Request $request)
   {
     $notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first();
+
     if ($notification) {
       Notification::where('id', $notification->id)->update(['deleted' => 1]);
       return response()->json(['success' => true, 'message' => 'Notification deleted successfully.']);
@@ -57,7 +58,7 @@ class NotificationController extends Controller
   public function report(Request $request)
   {
     $data = array('user_id' => $this->getTokenId(), 'type_id' => 4, 'source_id' => $request->id);
-    $reviews = Reports::updateOrCreate($data, $data);
+    $reviews = Report::updateOrCreate($data, $data);
     if ($reviews) {
       return response()->json(['message' => 'Thanks for reporting it. Our team will look into it at the earliest.', 'success' => true]);
     }

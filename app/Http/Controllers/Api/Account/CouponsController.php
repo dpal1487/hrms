@@ -1,17 +1,18 @@
 <?php
 
 
-namespace App\Http\Controllers\Api;
-use App\Http\Resources\Api\Coupons;
+namespace App\Http\Controllers\Api\Account;
+
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
+use App\Http\Resources\Api\Account\CouponsResource;
 
-class CouponController extends Controller
+class CouponsController extends Controller
 {
     public function index()
     {
-        return Coupons::collection(Coupon::all());
+        return CouponsResource::collection(Coupon::all());
     }
     /**
      * Show the form for creating a new resource.

@@ -7,7 +7,8 @@ use App\Models\Meta;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\CategoryBanner;
-use App\Http\Resources\Web\CategoryResource;
+use App\Http\Resources\Web\CategoryListResource;
+use App\Http\Resources\Web\CategorySingleResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -24,14 +25,14 @@ class CategoryController extends Controller
             $categories = $categories->where('status', $request->s);
         }
         return Inertia::render('Category/Index', [
-            'categories' => CategoryResource::collection($categories->paginate(10)->appends($request->all())),
+            'categories' => CategoryListResource::collection($categories->paginate(10)->appends($request->all())),
         ]);
     }
     public function create()
     {
         $categoryParent = Category::where('parent_id', '=', NULL)->get();
         return Inertia::render('Category/Form', [
-            'category_parent' => (CategoryResource::collection($categoryParent)),
+            'category_parent' => (CategoryListResource::collection($categoryParent)),
         ]);
     }
 
@@ -93,8 +94,8 @@ class CategoryController extends Controller
         $category = Category::find($id);
 
         return Inertia::render('Category/Form', [
-            'category_parent' => (CategoryResource::collection($categoryParent)),
-            'category' => new CategoryResource($category)
+            'category_parent' => (CategoryListResource::collection($categoryParent)),
+            'category' => new CategorySingleResource($category)
         ]);
     }
 

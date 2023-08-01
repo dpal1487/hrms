@@ -18,7 +18,7 @@ class ItemListResource extends JsonResource
             'security_price' => $this->security_price,
             'status' => $this->status,
             'category' => $this->category,
-            'image' => $this->image?->image,
+            'image' =>new ImageResource($this->image),
             'location' => [
                 'id' => $this->location?->address?->id,
                 'address_line_1' => $this->location?->address?->address_line_1,

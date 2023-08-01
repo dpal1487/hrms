@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Web;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\ImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -22,7 +21,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'mobile' => $this->mobile,
             'country' => $this->country,
-            'image' => $this->image,
+            'image' =>new ImageResource($this->image),
         ];
     }
 }

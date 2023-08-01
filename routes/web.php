@@ -111,7 +111,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('category.destroy');
         });
     });
-
     Route::controller(BannerController::class)->group(function () {
         Route::get('/banners', 'index')->name('banners.index');
         Route::group(['prefix' => 'banner'], function () {
@@ -124,7 +123,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('banner.destroy');
         });
     });
-
     Route::controller(AttributeController::class)->group(function () {
         Route::get('/attributes', 'index')->name('attributes.index');
         Route::group(['prefix' => 'attribute'], function () {
@@ -137,7 +135,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('attribute.destroy');
         });
     });
-
     Route::controller(AttributeValueController::class)->group(function () {
         Route::group(['prefix' => 'attribute-value'], function () {
             Route::get('/', 'index')->name('attribute-value.index');
@@ -161,7 +158,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('plan.destroy');
         });
     });
-
     Route::controller(BrandController::class)->group(function () {
         Route::get('brands', 'index')->name('brands.index');
         Route::group(['prefix' => 'brand'], function () {
@@ -174,7 +170,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('brand.destroy');
         });
     });
-
     Route::controller(BrandModelController::class)->group(function () {
         Route::group(['prefix' => 'brand-model'], function () {
             Route::post('status', 'statusUdate')->name('brand-model.status');
@@ -183,7 +178,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('brand-model.destroy');
         });
     });
-
     Route::controller(CouponController::class)->group(function () {
         Route::get('coupons', 'index')->name('coupons.index');
         Route::group(['prefix' => 'coupon'], function () {
@@ -195,9 +189,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('coupon.destroy');
         });
     });
-
-
-
     Route::controller(FaqsCategoryController::class)->group(function () {
         Route::get('faqs-categories', 'index')->name('faqs-categories.index');
         Route::group(['prefix' => 'faqs-category'], function () {
@@ -210,7 +201,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('faqs-category.destroy');
         });
     });
-
     Route::controller(FaqController::class)->group(function () {
         Route::group(['prefix' => 'faqs'], function () {
             Route::get('/', 'index')->name('faqs.index');
@@ -221,7 +211,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('faqs.destroy');
         });
     });
-
     Route::controller(CustomerReviewController::class)->group(function () {
         Route::get('customer-reviews', 'index')->name('customer-reviews.index');
         Route::group(['prefix' => 'customer-review'], function () {
@@ -234,7 +223,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('customer-review.destroy');
         });
     });
-
     Route::controller(PageController::class)->group(function () {
         Route::get('pages', 'index')->name('pages.index');
         Route::group(['prefix' => 'page'], function () {
@@ -247,14 +235,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('page.destroy');
         });
     });
-
     Route::controller(EnquiryController::class)->group(function () {
         Route::get('enquires', 'index')->name('enquires.index');
         Route::group(['prefix' => 'enquire'], function () {
             Route::post('/status', 'statusUdate')->name('enquire.status');
         });
     });
-
     Route::controller(ReportTypeController::class)->group(function () {
         Route::get('report-types', 'index')->name('report-types.index');
         Route::group(['prefix' => 'report-type'], function () {
@@ -278,7 +264,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('notification-type.destroy');
         });
     });
-
     Route::controller(ItemStatusController::class)->group(function () {
         Route::group(['prefix' => 'item-status'], function () {
             Route::get('/', 'index')->name('item-status.index');
@@ -290,7 +275,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('item-status.destroy');
         });
     });
-
     Route::controller(TimeController::class)->group(function () {
         Route::get('times', 'index')->name('times.index');
         Route::group(['prefix' => 'time'], function () {
@@ -303,7 +287,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('time.destroy');
         });
     });
-
     Route::controller(TimePeriodController::class)->group(function () {
         Route::get('time-periods', 'index')->name('time-periods.index');
         Route::group(['prefix' => 'time-period'], function () {
@@ -315,7 +298,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::delete('{id}/destroy', 'destroy')->name('time-period.destroy');
         });
     });
-
     Route::controller(SubscriptionsController::class)->group(function () {
         Route::get('subscriptions', 'index')->name('subscriptions.index');
         Route::group(['prefix' => 'subscription'], function () {

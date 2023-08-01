@@ -10,13 +10,13 @@ class UserReviewsResource extends JsonResource
     {
         return
             [
-                'id' => $this->review->id,
-                'title' => $this->review->title,
-                'content' => $this->review->content,
-                'rating' => $this->review->rating,
-                'status' => $this->review->status,
-                'created_at' => date('y M d', strtotime($this->review->created_at)),
-                'updated_at' => date('y M d', strtotime($this->review->updated_at)),
+                'id' => $this->review?->id,
+                'title' => $this->review?->title,
+                'content' => $this->review?->content,
+                'rating' => $this->review?->rating,
+                'status' => $this->review?->status,
+                'created_at' => date('y M d', strtotime($this->review?->created_at)),
+                'updated_at' => date('y M d', strtotime($this->review?->updated_at)),
                 'user' => $this->user,
             ];
     }

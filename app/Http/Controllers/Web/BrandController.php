@@ -8,9 +8,8 @@ use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Image as CategoryImage;
 use App\Http\Resources\Web\BrandResource;
-use App\Http\Resources\Web\CategoryResource;
+use App\Http\Resources\Web\CategoryListResource;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -48,7 +47,7 @@ class BrandController extends Controller
     public function create()
     {
         return Inertia::render('Brands/Form', [
-            'categories' => CategoryResource::collection(Category::get())
+            'categories' => CategoryListResource::collection(Category::get())
         ]);
     }
 
@@ -103,7 +102,7 @@ class BrandController extends Controller
     public function edit($id)
     {
         return Inertia::render('Brands/Form', [
-            'categories' => CategoryResource::collection(Category::get()),
+            'categories' => CategoryListResource::collection(Category::get()),
             'brand' => new BrandListResource(Brand::find($id)),
         ]);
     }

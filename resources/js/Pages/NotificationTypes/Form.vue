@@ -144,7 +144,7 @@ export default defineComponent({
                             <div class="row mb-5">
                                 <jet-label for="descriptions" value="Description" />
                                 <div class="">
-                                    <textarea id=" descriptions" :editor="editor" v-model="v$.form.description.$model"
+                                    <textarea id=" descriptions"  v-model="v$.form.description.$model"
                                         class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
                                             ? 'is-invalid'
                                             : ''

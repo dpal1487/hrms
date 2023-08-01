@@ -82,7 +82,6 @@ export default defineComponent({
             this.banner_upload.isLoading = true;
             const data = await utils.imageUpload(route('upload.banner'), e)
             if (data.response.success) {
-
                 this.form.banner_image = data.response.data.id;
             } else {
                 toast.error(data.response.message);
@@ -127,13 +126,13 @@ export default defineComponent({
                 <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row">
                     <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
                         <div class="card">
-                            <di v class="card-header mb-5">
+                            <div class="card-header mb-5">
                                 <div class="card-title">
                                     <h2>Banner Image </h2>
                                 </div>
-                            </di>
+                            </div>
                             <div class="card-body text-center">
-                                <ImageInput :image="this.banner?.data?.image?.medium_path" :onchange="onBannerChange"
+                                <ImageInput :image="this.banner?.data?.image?.small_path" :onchange="onBannerChange"
                                     :remove="removeSelectedAvatar" :selectedImage="banner_upload?.url"
                                     :errors="v$.form.image.$errors" :isUploading="banner_upload?.isLoading" />
                             </div>

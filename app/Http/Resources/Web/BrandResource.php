@@ -22,7 +22,7 @@ class BrandResource extends JsonResource
             'status' => $this->status,
             'category' => $this->category,
             'models' => $this->models,
-            'image' => $this->image,
+            'image' =>new ImageResource ($this->image),
             'header' => [
                 'total_active' => count($this->models->where('status', 1)),
                 'total_value' => count($this->models),

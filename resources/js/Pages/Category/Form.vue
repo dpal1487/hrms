@@ -156,6 +156,7 @@ export default defineComponent({
                                     <h2>Thumbnail</h2>
                                 </div>
                             </div>
+
                             <div class="card-body text-center">
                                 <ImageInput :image="this.category?.data?.image?.small_path" :onchange="onThumbnailChange"
                                     :remove="removeSelectedAvatar" :selectedImage="thumbnail.url"

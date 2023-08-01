@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\Web\CategoryResource;
+use App\Http\Resources\Web\CategoryListResource;
 use App\Http\Resources\Web\CurrencyResource;
 use App\Models\Plan;
 use App\Models\Category;
@@ -57,7 +57,7 @@ class PlanController extends Controller
         return Inertia::render('Plan/Form', [
             'times' =>  TimeResource::collection(Time::get()),
             'currencies' => CurrencyResource::collection(Currency::get()),
-            'categories' => CategoryResource::collection(Category::get())
+            'categories' => CategoryListResource::collection(Category::get())
         ]);
     }
 
@@ -120,7 +120,7 @@ class PlanController extends Controller
         return Inertia::render('Plan/Form', [
             'times' =>  TimeResource::collection(Time::get()),
             'currencies' => CurrencyResource::collection(Currency::get()),
-            'categories' => CategoryResource::collection(Category::get()),
+            'categories' => CategoryListResource::collection(Category::get()),
             'plan' => new PlanResource(Plan::find($id)),
         ]);
     }

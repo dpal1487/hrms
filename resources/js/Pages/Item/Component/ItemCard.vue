@@ -21,7 +21,7 @@ export default defineComponent({
         <div class="d-flex flex-wrap flex-sm-nowrap align-items-start gap-4">
             <div class="d-block w-150px h-150px">
                 <Link :href="this.route('item.show', item.id)">
-                <img v-if="item?.image?.medium_path" :src="item?.image?.medium_path" alt="image">
+                <img v-if="item?.image?.small_path" :src="item?.image?.small_path" alt="image" class="h-100 w-100">
                 <img v-else src="/assets/media/avatars/300-1.jpg" alt="image" class="h-100 w-100">
                 </Link>
             </div>
