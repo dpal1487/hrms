@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\Web\ItemCustomerResource;
-use App\Http\Resources\Web\ItemListResource;
-use App\Http\Resources\Web\ItemOverViweResource;
+use App\Http\Resources\Web\Item\ItemCustomerResource;
+use App\Http\Resources\Web\Item\ItemListResource;
+use App\Http\Resources\Web\Item\ItemOverViweResource;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\ItemStatus;
 use Illuminate\Http\Request;
-use App\Http\Resources\Web\ItemReviewsResource;
-use App\Http\Resources\Web\ItemStatusesResource;
+use App\Http\Resources\Web\Item\ItemReviewsResource;
+use App\Http\Resources\Web\Item\ItemStatusesResource;
 use App\Http\Resources\Web\UserResource;
 use App\Models\File;
 use Inertia\Inertia;

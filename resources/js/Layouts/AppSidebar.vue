@@ -12,100 +12,7 @@ export default defineComponent({
     data() {
         return {
             q: "",
-            navigations: [
-                {
-                    link: "/user",
-                    title: "User View",
-                    icon: "bi bi-person-badge-fill",
-                },
-                {
-                    link: "/item",
-                    title: "Item View",
-                    icon: "bi bi-diagram-2-fill",
-                },
-                {
-                    link: "/category",
-                    title: "Category",
-                    icon: "bi bi-stack",
-                },
-                {
-                    link: "/banner",
-                    title: "Banners",
-                    icon: "bi bi-file-earmark-richtext-fill",
-                },
-                {
-                    link: "/attribute",
-                    title: "Attributes",
-                    icon: "bi bi-kanban-fill",
-                },
-                {
-                    link: "/plan",
-                    title: "Plan",
-                    icon: "bi bi-wallet-fill",
-                },
-
-                {
-                    link: "/brand",
-                    title: "Brand",
-                    icon: "bi bi-ticket-fill",
-                },
-                {
-                    link: "/coupon",
-                    title: "Coupon",
-                    icon: "bi bi-gift-fill",
-                },
-                {
-                    link: "/faqs",
-                    title: "FAQs",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/customer-review",
-                    title: "Customer Review",
-                    icon: "bi bi-hand-thumbs-up-fill",
-                },
-                {
-                    link: "/page",
-                    title: "Page",
-                    icon: "bi bi-layers-fill",
-                },
-                {
-                    link: "/enquire",
-                    title: "Enquire",
-                    icon: "bi bi-person-lines-fill",
-                },
-                {
-                    link: "/report-types",
-                    title: "Report-Types",
-                    icon: "bi bi-tags-fill",
-                },
-                {
-                    link: "/notification-type",
-                    title: "Notification Type",
-                    icon: "bi bi-phone-vibrate-fill",
-                },
-                {
-                    link: "/item-status",
-                    title: "Item Status",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/time",
-                    title: "Time",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/time-periods",
-                    title: "Time Periods",
-                    icon: "bi bi-pie-chart-fill",
-                },
-                {
-                    link: "/subscriptions",
-                    title: "Subscriptions",
-                    icon: "bi bi-pie-chart-fill",
-                }
-
-            ],
+           
         };
     },
     methods: {
@@ -128,12 +35,12 @@ export default defineComponent({
         <!--begin::Logo-->
         <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
             <!--begin::Logo image-->
-            <a href="/dashboard">
+            <!-- <a href="/dashboard">
                 <img alt="Logo" src="https://suppliers.alrestion.com/assets/media/logos/logo.png"
                     class="h-25px app-sidebar-logo-default" />
                 <img alt="Logo" src="https://suppliers.alrestion.com/assets/media/logos/logo.png"
                     class="h-20px app-sidebar-logo-minimize" />
-            </a>
+            </a> -->
             <!--end::Logo image-->
             <!--begin::Sidebar toggle-->
             <div id="kt_app_sidebar_toggle"

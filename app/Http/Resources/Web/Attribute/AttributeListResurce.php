@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Api;
+namespace App\Http\Resources\Web\Attribute;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryChildrenResource extends JsonResource
+class AttributeListResurce extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,13 +17,13 @@ class CategoryChildrenResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'slug' => $this->slug,
-            'description' => $this->description,
-            'keywords' => $this->keywords,
-            'category_image' => $this->image,
+            'data_type' => $this->data_type,
+            'field' => $this->field,
+            'type' => $this->type,
+            'display_order' => $this->display_order,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'description' => $this->description,
+            'category' => $this->category,
         ];
     }
 }

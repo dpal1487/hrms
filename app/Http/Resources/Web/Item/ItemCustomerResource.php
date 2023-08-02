@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Resources\Web;
+namespace App\Http\Resources\Web\Item;
 
-use Illuminate\Http\Request;
-use App\Http\Resources\Web\ItemResource;
+use App\Http\Resources\Web\ImageResource;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ItemCustomerResource extends JsonResource

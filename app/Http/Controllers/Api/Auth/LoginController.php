@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\Controller;
-use App\Http\Resources\Api\UserResource;
+use App\Http\Resources\Api\Account\UserResource;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -19,7 +18,6 @@ class LoginController extends Controller
             'mobile' => 'required|numeric|digits:10',
             'password' => 'required|string|min:8'
         ]);
-
         //Send failed response if request is not valid
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
@@ -28,7 +26,9 @@ class LoginController extends Controller
         //Crean token
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+            // $user = Auth::user();
+            $user = Auth::guard('api')->user();
+            $token = auth()->user()->tokens()->delete();
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
@@ -42,8 +42,6 @@ class LoginController extends Controller
     }
     public function logout(Request $request)
     {
-
-        return "sadsdfd";
         Auth::user()->tokens()->delete();
         return response()->json(['message' => 'Logged out successfully'])->withCookie(cookie('auth_token', null));
     }

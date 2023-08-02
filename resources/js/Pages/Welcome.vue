@@ -5,7 +5,6 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 import Welcome from "@/Jetstream/Welcome.vue"
 import AppLayout from "@/Layouts/AppLayout.vue"
 import Login from "../Pages/Auth/Login.vue";
-import Register from "../Pages/Auth/Register.vue";
 
 export default defineComponent({
   components: {
@@ -14,14 +13,10 @@ export default defineComponent({
     Welcome,
     AppLayout,
     Login,
-    Register
   },
 
   props: {
     canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
   }
 })
 </script>
@@ -29,7 +24,7 @@ export default defineComponent({
 <template>
   <Head title="Welcome" />
 
-  <div v-if="canLogin">
+  <div v-if="canLogin" class="h-100">
     <app-layout title="Dashboard" v-if="$page.props.user" :href="route('dashboard')">
       <template #header>
         <h2 class="h4 font-weight-bold">
@@ -38,11 +33,10 @@ export default defineComponent({
       </template>
       <welcome />
     </app-layout>
-
     <template v-else>
-      <Login />
+      <div class="h-100">
+        <Login />
+      </div>
     </template>
   </div>
 </template>
-
-<style scoped></style>

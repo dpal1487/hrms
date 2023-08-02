@@ -7,15 +7,33 @@ use App\Http\Resources\Api\Account\NotificationsResource;
 use Illuminate\Http\Request;
 use App\Models\Notification;
 use App\Models\Report;
+use App\Models\User;
+use App\Notifications\UserFollowNotification;
+
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
   public $data;
   public function index()
   {
+
+    return  $notifications = Auth::user()->notifications()->get();
     $notifications = Notification::where(['recipient_id' => $this->uid(), 'deleted' => 0, 'is_read' => 0])->get();
     return NotificationsResource::collection($notifications);
   }
+
+  public function notify()
+  {
+    if (Auth::user()) {
+      $user = User::first();
+      auth()->user()->notify(new UserFollowNotification($user));
+    }
+
+    return "done";
+  }
+
+
   // public function store($sourceId, $recipient_id, $typeId)
   public function store(Request $request)
   {
@@ -25,24 +43,36 @@ class NotificationController extends Controller
   }
   public function markAsRead(Request $request)
   {
-    if ($notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first()) {
-      if ($notification->is_read == 1) {
-        if (Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->update(['is_read' => 0])) {
-          return response()->json(['success' => true]);
-        }
-      }
-    }
+    $user = Auth::user();
+    $notification = $user->notifications()->where('id', $request->id)->first();
+    $notification->markAsRead();
+
+    // if ($notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first()) {
+    //   if ($notification->is_read == 1) {
+    //     if (Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->update(['is_read' => 0])) {
+    //       return response()->json(['success' => true]);
+    //     }
+    //   }
+    // }
     return response()->json(['success' => false, 'Faild to Read Notification!'], 400);
   }
   public function markAsUnread(Request $request)
   {
-    if ($notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first()) {
-      if ($notification->is_read == 0) {
-        if (Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->update(['is_read' => 0])) {
-          return response()->json(['success' => true]);
-        }
-      }
+    if ($request->id) {
+    
+      $user = Auth::user();
+      $notification = $user->notifications()->where('id', $request->id)->first();
+      $notification->markAsUnread();
+
+      return response()->json(['success' => true]);
     }
+    // if ($notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first()) {
+    //   if ($notification->is_read == 0) {
+    //     if (Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->update(['is_read' => 0])) {
+    //       return response()->json(['success' => true]);
+    //     }
+    //   }
+    // }
     return response()->json(['success' => false, 'Faild to Unread Notification!'], 400);
   }
   public function destroy(Request $request)

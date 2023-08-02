@@ -18,7 +18,7 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'children' => CategoryChildrenResource::collection($this->children),
+            'childrens' => count($this->childrens) > 0 ? CategoryResource::collection($this->childrens) : [],
             'meta' => new MetaResource($this->meta),
             'description' => $this->description,
             'image' => new ImageResource($this->image),

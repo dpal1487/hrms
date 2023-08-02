@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Web;
+namespace App\Http\Resources\Web\Item;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AttributeValueResource extends JsonResource
+class ItemReviewsLikesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,10 @@ class AttributeValueResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'review_id' =>$this->review_id,
+            'user_id' =>$this->user_id,
+
+        ];
     }
 }

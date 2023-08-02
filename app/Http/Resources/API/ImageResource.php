@@ -19,7 +19,8 @@ class ImageResource extends JsonResource
         $hostname = $request->getHost();
         $port = $request->getPort(); // remove in production
 
-        $filepath =  $protocol . "://" . $hostname . ":" . $port . "/" . $this->base_path . $this->name;
+        $filepath =  $protocol . "://" . $hostname . ":" . $port . "/" . $this->base_path . $this->name;  // remove in production
+        //$filepath = $this->base_url . '/' . $this->base_path . $this->name;
 
         return [
             'id' => $this->id,

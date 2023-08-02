@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Resources\Web\AttributeListResurce;
+use App\Http\Resources\Web\Attribute\AttributeListResurce;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
-use App\Http\Resources\Web\AttributeSingleResource;
+use App\Http\Resources\Web\Attribute\AttributeSingleResource;
 use App\Http\Resources\Web\CategoryResource;
 use App\Http\Resources\Web\RuleResource;
 use App\Models\AttributeValue;

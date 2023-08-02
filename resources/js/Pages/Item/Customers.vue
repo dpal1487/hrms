@@ -131,7 +131,7 @@ export default defineComponent({
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mt-5">
-                                        <div class="me-20 text-gray-800">
+                                        <div class="me-20 mb-5">
                                             <h6 class=" fs-4 text-gray-800">
                                                 <i class="bi bi-credit-card-fill fs-3 me-2"></i>Security Price
                                             </h6>
@@ -143,11 +143,8 @@ export default defineComponent({
                                             <h6 class="text-gray-800 fs-4 ">
                                                 <i class="bi bi-files fs-3 me-2"></i>Documents
                                             </h6>
-                                            <button @click="download(customer?.document?.id)" class="btn btn-non btn-sm"><i
+                                            <button @click="download(customer?.document?.id)" class="btn btn-non btn-sm my-0"><i
                                                     class="bi bi-file-earmark-check-fill fs-4"></i></button>
-                                            <!-- <Link :href="route('customer.document', customer?.document?.id)">
-                                            <i class="bi bi-file-earmark-check-fill "></i>
-                                            </Link> -->
                                         </div>
                                     </div>
                                 </div>

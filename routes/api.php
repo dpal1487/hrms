@@ -92,6 +92,9 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
             Route::delete('favourite/{id}', [FavouriteController::class, 'destroy']);
             /*Notifications*/
             Route::get('notifications', [NotificationController::class, 'index']);
+            Route::get('notify', [NotificationController::class, 'notify']);
+            Route::get('mark_as_read', [NotificationController::class, 'markAsRead']);
+            Route::get('mark_as_unread', [NotificationController::class, 'markAsUnread']);
             Route::post('notification/add', [NotificationController::class, 'store']);
             Route::post('notification/remove', [NotificationController::class, 'destroy']);
             /*Coupons*/
@@ -101,8 +104,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::group(['prefix' => 'my-ads'], function () {
             Route::get('', [MyAdsController::class, 'index']);
             Route::delete('delete/{id}', [MyAdsController::class, 'delete']);
-            Route::put('deactivate/{id}', [MyAdsController::class, 'deactivate']);
-            Route::put('activate/{id}', [MyAdsController::class, 'activate']);
+            Route::put('status/{id}', [MyAdsController::class, 'activateOrDeactivate']);
             Route::get('customers/{id}', [CustomerController::class, 'index']);
             Route::post('customers/send-otp', [CustomerController::class, 'sendOtp']);
             Route::get('reviews/{id}', [AdReviewController::class, 'index']);

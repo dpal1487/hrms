@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api\Account;
 
-
 use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\ItemStatus;
 use App\Models\Subscription;
-use App\Http\Resources\Api\MyAdsResource;
+use App\Http\Resources\Api\MyAdsListResource;
 use App\Http\Resources\Api\StatusResource;
 
 class MyAdsController extends Controller
@@ -36,37 +35,35 @@ class MyAdsController extends Controller
       $items->where('name', 'LIKE', "%$request->keyword%");
     }
     $items = $items->paginate(20)->setPath('/myads')->appends($request->all());
-    return MyAdsResource::collection($items)->additional(['filters' => StatusResource::collection(ItemStatus::all()), 'totalCounts' => $count]);
+    return MyAdsListResource::collection($items)->additional(['filters' => StatusResource::collection(ItemStatus::all()), 'totalCounts' => $count]);
   }
   public function delete($id)
   {
     if (Item::where(['id' => $id, 'user_id' => $this->uid()])->first()) {
       $item = Item::where(['id' => $id, 'user_id' => $this->uid()])->update(['is_deleted' => 1]);
       if ($item) {
-        return response()->json(['success' => true, 'message' => 'Your item removed from listing successfully.']);
+        return response()->json(['success' => true, 'message' => 'Your item removed from listing successfully.'],200);
       }
-      return response()->json(['success' => false, 'message' => 'Faild to Remove Listing.'], 400);
+      return response()->json(['success' => false, 'message' => ErrorMessage()], 400);
     }
   }
-  public function deactivate($id)
+
+  public function activateOrDeactivate($id)
   {
     if (Item::where(['id' => $id, 'user_id' => $this->uid()])->first()) {
-      $item = Item::where(['id' => $id, 'user_id' => $this->uid()])->orWhereIn('status_id', array(1, 4))->update(['status_id' => 5]);
-      if ($item) {
-        return response()->json(['success' => true, 'message' => 'Your item deactivate from listing successfully.']);
+      if (Item::where(['id' => $id, 'user_id' => $this->uid(), 'status_id' => 5])->first()) {
+        $status = Item::where(['id' => $id])->update(['status_id' => 2]);
+        if ($status) {
+          return response()->json(['success' => true, 'message' => 'Your item wating for activate.'],200);
+        }
+      } elseif (Item::where(['id' => $id, 'user_id' => $this->uid()])->orWhereIn('status_id', array(1, 4))->first()) {
+        $status = Item::where(['id' => $id])->update(['status_id' => 5]);
+        if ($status) {
+          return response()->json(['success' => true, 'message' => 'Your item deactivate from listing successfully.'],200);
+        }
       }
-      return response()->json(['success' => false, 'message' => 'Faild to deactivate listing.'], 400);
     }
-  }
-  public function activate($id)
-  {
-    if (Item::where(['id' => $id, 'user_id' => $this->uid(), 'status_id' => 5])->first()) {
-      $item = Item::where(['id' => $id, 'user_id' => $this->uid()])->update(['status_id' => 2]);
-      if ($item) {
-        return response()->json(['success' => true, 'message' => 'Your Item wating for activate.']);
-      }
-      return response()->json(['success' => false, 'message' => 'Faild to Activate Item.'], 400);
-    }
+    return response()->json(['success' => false, 'message' => ErrorMessage()], 400);
   }
   public function rentFaster()
   {

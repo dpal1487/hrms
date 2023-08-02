@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Web;
+namespace App\Http\Resources\Web\Item;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ItemReviewsLikesResource extends JsonResource
+class ItemFavouritesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,8 @@ class ItemReviewsLikesResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'review_id' =>$this->review_id,
+            'item_id' =>$this->item_id,
             'user_id' =>$this->user_id,
-
         ];
     }
 }

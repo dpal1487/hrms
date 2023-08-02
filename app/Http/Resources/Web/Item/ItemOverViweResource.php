@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Resources\Web;
+namespace App\Http\Resources\Web\Item;
 
+use App\Http\Resources\Web\ImageResource;
+use App\Http\Resources\Web\ReviewResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ItemOverViweResource extends JsonResource
