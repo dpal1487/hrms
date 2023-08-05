@@ -14,7 +14,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "Attribute",
+            title: "Attributes",
             isLoading: false,
             tbody: [
                 "Name",
@@ -62,7 +62,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted">Attribute</span>
+                <span class="text-muted">Attributes</span>
             </li>
         </template>
         <template #toolbar>

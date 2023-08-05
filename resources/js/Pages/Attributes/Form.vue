@@ -155,8 +155,8 @@ export default defineComponent({
                     </div>
                     <div class="card-body">
                         <div class="row mb-5">
-                            <jet-label for="name" value="Name" class="required" />
-                            <div class="">
+                            <div class="col-6">
+                                <jet-label for="name" value="Name" class="required" />
                                 <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                     ? 'is-invalid'
                                     : ''
@@ -165,8 +165,15 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-5">
+                            <div class="col-6">
+                                <jet-label for="rules" value="Status" class="required" />
+                                <Multiselect :canClear="false" :options="rules?.data" label="rule" valueProp="id"
+                                    :hide-selected="false" class="form-control form-control-lg form-control-solid"
+                                    placeholder="Select One" v-model="attr.id" track-by="label" />
+                                <div v-for="(error, index) of v$.form.attribute_rules.$errors" :key="index">
+                                    <input-error :message="error.$message" />
+                                </div>
+                            </div>
                             <div class="col-6">
                                 <jet-label for="department_id" value="Category" class="required" />
                                 <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
@@ -185,8 +192,7 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-5">
+
                             <div class="col-6">
                                 <jet-label value="Data Type" class="required" />
                                 <Multiselect :canClear="false" :options="data_type" label="label" valueProp="value"
@@ -205,8 +211,7 @@ export default defineComponent({
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-5">
+
                             <div class="col-6">
                                 <jet-label for="field" value="Field" class="required" />
                                 <div class="">
@@ -251,8 +256,8 @@ export default defineComponent({
                         <div v-for='(attr, index) in form.attribute_rules' class="d-flex align-items-center mb-6">
                             <div class="w-100 position-relative">
                                 <Multiselect :canClear="false" :options="rules?.data" label="rule" valueProp="id"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                    v-model="attr.id" track-by="label" />
+                                    :hide-selected="false" class="form-control form-control-lg form-control-solid"
+                                    placeholder="Select One" v-model="attr.id" track-by="label" />
                                 <div v-for="(error, index) of v$.form.attribute_rules.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>

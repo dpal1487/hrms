@@ -40,7 +40,7 @@ class PlanController extends Controller
             $plans = $plans->where('status', $request->s);
         }
         return Inertia::render('Plan/Index', [
-            'plans' => PlanResource::collection($plans->paginate(10)->onEachSide(1)->appends(request()->query())),
+            'plans' => PlanResource::collection($plans->paginate(5)->onEachSide(1)->appends(request()->query())),
         ]);
     }
 

@@ -50,7 +50,7 @@ export default defineComponent({
                 processing: false,
             },
             isLoading: false,
-            title: "Attbute Value",
+            title: "Attribute Value",
         };
     },
     components: {
