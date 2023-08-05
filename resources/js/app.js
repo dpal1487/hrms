@@ -1,7 +1,6 @@
 import('./bootstrap');
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-import { Multiselect } from 'vue-multiselect'
-
+import { Multiselect } from 'vue-multiselect';
 // Import modules...
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';

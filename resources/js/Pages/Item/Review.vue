@@ -3,7 +3,7 @@
 import { defineComponent } from 'vue';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from '@inertiajs/inertia-vue3';
-
+import { Progress } from 'flowbite-vue'
 import Rating from "../CustomerReviews/Rating.vue";
 export default defineComponent({
     props: ['itemreview'],
@@ -66,12 +66,16 @@ export default defineComponent({
                             <span class="mx-10 mt-2 fs-5 fw-bold text-gray-800" v-else>
                                 {{ itemreview?.data?.review?.rating }} Out Of 5
                             </span>
-                        </div>
+                        </div>  
                         <div class="">
                             <div class="d-flex align-items-center mt-2">
                                 <span class="color:#777777 w-100">5 Stars</span>
                                 <div class='ms-4 position-relative bg-secondary rounded-pill'>
-                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100"></div>
+                                    <Progress progress="45"></Progress>
+                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100">
+
+                                        
+                                    </div>
                                 </div>
                                 <span class='ms-4'>15 Reviews</span>
                             </div>
@@ -79,7 +83,9 @@ export default defineComponent({
                             <div class="d-flex align-items-center mt-2">
                                 <span class="color:#777777 w-100">4 Stars</span>
                                 <div class='ms-4 position-relative bg-secondary rounded-pill'>
-                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100"></div>
+                                    <Progress labelProgress="true" labelPosition="outside" label="Flowbite Vue 3" progress="45"></Progress>
+                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100">
+                                    </div>
                                 </div>
                                 <span class='ms-4'>10 Reviews</span>
                             </div>

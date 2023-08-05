@@ -108,7 +108,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize">
                             <tr v-for="(attribute, index) in attributes.data" :key="index">
                                 <td>
                                     <Link class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"

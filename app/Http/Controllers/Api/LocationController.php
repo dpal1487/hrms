@@ -25,7 +25,6 @@ class LocationController extends Controller
         return StatesResource::collection(State::where('country_id',101)->orderBy('name')->get());
     }
     public function cities(Request $request){
-
         if(isset($request->parent)){
             $states = State::where('id',$request->parent)->with('cities')->first();
         }

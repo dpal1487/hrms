@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Item;
 use App\Models\ItemReview;
+use App\Models\Report;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\AttributesResource;
 use App\Http\Resources\Api\ImageResource;
 use App\Http\Resources\Api\ItemResource;
-use App\Http\Resources\Api\UserResource;
+use App\Http\Resources\Api\Account\UserResource;
+use App\Http\Resources\Api\ReportsResource;
 use App\Http\Resources\Web\ReviewResource;
 
 class ItemController extends Controller
@@ -91,8 +93,21 @@ class ItemController extends Controller
       'ratings' => 0,
     );
   }
-  public function report($id)
+
+  public function getReportsItems($id)
   {
-    return "function not working";
+    $report = Report::where(['source_id' => $id, 'type_id' => 5])->get();
+
+    return ReportsResource::collection($report);
+  }
+
+  public function report(Request $request, $id)
+  {
+    $data = array('user_id' => $this->uid(), 'type_id' => 5, 'source_id' => $id);
+    $reviews = Report::updateOrCreate($data, $data);
+    if ($reviews) {
+      return response()->json(['message' => 'Thanks for reporting it. Our team will look into it at the earliest.', 'success' => true]);
+    }
+    return response()->json(['message' => 'Opps someting went wrong!.', 'success' => false]);
   }
 }

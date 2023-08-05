@@ -60,7 +60,6 @@ Route::post('login', [LoginController::class, 'login'])->name('user.login');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-
     Route::controller(ImageController::class)->group(function () {
         Route::post('category/thumbnail', 'categoryThumbnail')->name('category.thumbnail');
         Route::post('/upload/banner', 'bannerImage')->name('upload.banner');
@@ -82,6 +81,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/{id}/reviews', 'reviews')->name('user.reviews');
         });
     });
+
     // item page
 
     Route::controller(ItemController::class)->group(function () {
@@ -92,11 +92,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('customers/{id}', 'customers')->name('item.customers');
             Route::get('reviews/{id}', 'reviews')->name('item.reviews');
             Route::post('status', 'statusUdate')->name('item.status');
-
             Route::get('customer/documents/{id}', [ItemController::class, 'documentDownload'])->name('customer.document');
         });
     });
-    // Route::get('/reviews/{id}', [ReviewController::class, 'reviews'])->name('item/reviews');
+
     // category
 
     Route::controller(CategoryController::class)->group(function () {
@@ -218,7 +217,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/create', 'create')->name('customer-review.create');
             Route::post('/store', 'store')->name('customer-review.store');
             Route::get('{id}/view', 'show')->name('customer-review.view');
-            Route::get('{id}/edit', 'edit')->name('customer-review.edit');
+            Route::get('{id}/edit' , 'edit')->name('customer-review.edit');
             Route::post('{id}/update', 'update')->name('customer-review.update');
             Route::delete('{id}/destroy', 'destroy')->name('customer-review.destroy');
         });

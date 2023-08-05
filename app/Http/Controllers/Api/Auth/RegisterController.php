@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
-use Validator;
 use Craftsys\Msg91\Facade\Msg91;
-use Hash;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -32,7 +32,7 @@ class RegisterController extends Controller
             if (true) {
                 return response()->json(['success' => true, 'message' => 'OTP is sent to your mobile number.']);
             } else {
-                return response()->json(['success' => false, 'message' => $response['message']]);
+                // return response()->json(['success' => false, 'message' => $response['message']]);
             }
         }
     }
@@ -80,7 +80,7 @@ class RegisterController extends Controller
                     return response()->json(['success' => false, 'type' => 'error', 'message' => 'Opps something went wrong !']);
                 }
             } else {
-                return response()->json(['success' => false, 'type' => 'error', 'message' => $response['message']]);
+                // return response()->json(['success' => false, 'type' => 'error', 'message' => $response['message']]);
             }
         }
     }

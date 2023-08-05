@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Account;
 
+use App\Events\NotificationCreated;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Account\NotificationsResource;
 use Illuminate\Http\Request;
@@ -23,8 +24,13 @@ class NotificationController extends Controller
     return NotificationsResource::collection($notifications);
   }
 
-  public function notify()
+  public function notify(Request $request)
   {
+
+    $createdResourceData = User::first();
+    event(new NotificationCreated($createdResourceData));
+    return response()->json(['message' => 'Notification created successfully']);
+
     if (Auth::user()) {
       $user = User::first();
       auth()->user()->notify(new UserFollowNotification($user));
@@ -45,34 +51,23 @@ class NotificationController extends Controller
   {
     $user = Auth::user();
     $notification = $user->notifications()->where('id', $request->id)->first();
-    $notification->markAsRead();
-
-    // if ($notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first()) {
-    //   if ($notification->is_read == 1) {
-    //     if (Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->update(['is_read' => 0])) {
-    //       return response()->json(['success' => true]);
-    //     }
-    //   }
-    // }
+    if ($notification->read_at == null) {
+      $notification->markAsRead();
+      return response()->json(['success' => true, 'message' => 'Mark as read']);
+    }
     return response()->json(['success' => false, 'Faild to Read Notification!'], 400);
   }
   public function markAsUnread(Request $request)
   {
-    if ($request->id) {
-    
-      $user = Auth::user();
-      $notification = $user->notifications()->where('id', $request->id)->first();
-      $notification->markAsUnread();
 
-      return response()->json(['success' => true]);
+    $user = Auth::user();
+    $notification = $user->notifications()->where('id', $request->id)->first();
+
+
+    if ($notification->read_at != null) {
+      $notification->markAsUnRead();
+      return response()->json(['success' => true , 'message' => 'Marked as unread']);
     }
-    // if ($notification = Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->first()) {
-    //   if ($notification->is_read == 0) {
-    //     if (Notification::where(['id' => $request->id, 'recipient_id' => $this->getTokenId()])->update(['is_read' => 0])) {
-    //       return response()->json(['success' => true]);
-    //     }
-    //   }
-    // }
     return response()->json(['success' => false, 'Faild to Unread Notification!'], 400);
   }
   public function destroy(Request $request)

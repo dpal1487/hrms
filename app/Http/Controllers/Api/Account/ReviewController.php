@@ -38,7 +38,7 @@ class ReviewController extends Controller
     }
     return ReviewsResource::collection($reviews->paginate(1)->setPath("/item/{$item->slug}/$id"))->additional(['ratings' => $this->data]);
   }
-  
+
   public function myReviews()
   {
     $reviews = ItemReview::where('user_id', $this->uid())->get();
