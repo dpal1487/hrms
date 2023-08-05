@@ -19,7 +19,7 @@ class AttributeSingleResource extends JsonResource
             'display_order' => $this->display_order,
             'status' => $this->status,
             'description' => $this->description,
-            'category' => $this->category,
+            'category' => $this->category,  
             'header' => [
                 'total_active' => count($this->values->where('status', 1)),
                 'total_value' => count($this->values),

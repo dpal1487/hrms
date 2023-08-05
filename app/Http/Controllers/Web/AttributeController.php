@@ -81,10 +81,10 @@ class AttributeController extends Controller
             'status' => $request->status,
         ]);
         if ($attribute) {
-            foreach ($request->attribute_rules as $key => $value) {
+            foreach ($request->rules as $key => $value) {
                 $attributeRule =  AttributeRule::create([
                     'attribute_id' => $attribute->id,
-                    'rule_id' => $value['id'],
+                    'rule_id' => $value,
                 ]);
             }
             if (!empty($attributeRule)) {
@@ -156,10 +156,10 @@ class AttributeController extends Controller
             ]);
             $attributeRule = AttributeRule::where('attribute_id', '=', $id)->delete();
             if ($attribute) {
-                foreach ($request->attribute_rules as $key => $value) {
+                foreach ($request->rules as $key => $value) {
                     AttributeRule::create([
                         'attribute_id' => $id,
-                        'rule_id' => $value['id'],
+                        'rule_id' => $value,
                     ]);
                 }
             }
