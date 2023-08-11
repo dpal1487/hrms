@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Resources\Web\Item\ItemCustomerResource;
 use App\Http\Resources\Web\Item\ItemListResource;
 use App\Http\Resources\Web\Item\ItemOverViweResource;
+use App\Http\Resources\Web\Item\ItemRatingsResource;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\ItemStatus;
@@ -13,6 +14,7 @@ use App\Http\Resources\Web\Item\ItemReviewsResource;
 use App\Http\Resources\Web\Item\ItemStatusesResource;
 use App\Http\Resources\Web\UserResource;
 use App\Models\File;
+use App\Models\ItemReview;
 use Inertia\Inertia;
 
 class ItemController extends Controller
@@ -39,7 +41,6 @@ class ItemController extends Controller
     }
     public function statusUdate(Request $request)
     {
-
         $item = Item::find($request->id);
         $item->status_id = $request->status;
         $item->update();
@@ -62,7 +63,7 @@ class ItemController extends Controller
     public function reviews($id)
     {
         return Inertia::render('Item/Review', [
-            'itemreview' => new ItemReviewsResource(Item::find($id))
+            'itemreview' => new ItemReviewsResource(Item::find($id)),
         ]);
     }
     public function customers($id)

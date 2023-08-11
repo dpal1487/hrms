@@ -19,9 +19,10 @@ class CategoryListResource extends JsonResource
             'description' => $this->description,
             'keywords' => $this->keywords,
             'status' => $this->status,
-            'image' =>new ImageResource($this->image),
+            'image' => new ImageResource($this->image),
             'meta' => $this->meta,
             'parent' => $this->parent,
+            'times' =>TimePeriodResource::collection($this->times)
         ];
     }
 }

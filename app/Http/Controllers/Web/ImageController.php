@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Image;
 use App\Models\Image as DBImage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -25,15 +26,12 @@ class ImageController extends Controller
         if ($image) {
             $name = time() . '_' . $request->image->getClientOriginalName();
             $folder = 'assets/images/category/';
-
             $result = Image::make($image)->save($folder . $name);
-
             $Imagefile = DBImage::updateOrCreate([
                 'name' => $name,
                 'base_url' => $request->root(),
                 'base_path' => $folder,
             ]);
-
             if ($Imagefile->save()) {
                 return response()->json([
                     'success' => true,
@@ -57,16 +55,13 @@ class ImageController extends Controller
         $image = $request->file('image');
         if ($image) {
             $name = time() . '_' . $request->image->getClientOriginalName();
-            $folder = 'assets/images/banner/category';
-
+            $folder = 'assets/images/banner/category/';
             $result = Image::make($image)->save($folder . $name);
-
             $Imagefile = DBImage::updateOrCreate([
                 'name' => $name,
                 'base_url' => $request->root(),
                 'base_path' => $folder,
             ]);
-
             if ($Imagefile->save()) {
                 return response()->json([
                     'success' => true,
@@ -75,8 +70,9 @@ class ImageController extends Controller
             }
         }
     }
-    public function bannerImage (Request $request)
+    public function bannerImage(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'image' => 'required|mimes:jpeg,png,jpg'
         ]);
@@ -87,25 +83,45 @@ class ImageController extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
-        $image = $request->file('image');
-        if ($image) {
-            $folder = 'assets/images/banner/home';
-            $name = time() . '_' . $request->image->getClientOriginalName();
 
-            $result = Image::make($image)->save($folder . $name);
+        $record = DBImage::findOrFail($request->id);
 
-            $Imagefile = DBImage::updateOrCreate([
-                'name' => $name,
-                'base_url' => $request->root(),
-                'base_path' => $folder,
-            ]);
-            if ($Imagefile->save()) {
-                return response()->json([
-                    'success' => true,
-                    'data' => $Imagefile
-                ]);
+        // Delete the existing image if it exists
+        if ($record->name) {
+
+            // Generate the path to the existing image
+            $existingImagePath =  $record->base_path . $record->name;
+            // Delete the existing image
+            return Storage::exists($existingImagePath);
+            return $existingImagePath;
+            
+            if (Storage::exists($existingImagePath)) {
+
+
+                Storage::delete($existingImagePath);
             }
         }
+
+
+        // $image = $request->file('image');
+        // if ($image) {
+        //     $folder = 'assets/images/banner/home/';
+        //     $name = time() . '_' . $request->image->getClientOriginalName();
+
+        //     $result = Image::make($image)->save($folder . $name);
+
+        //     $Imagefile = DBImage::updateOrCreate([
+        //         'name' => $name,
+        //         'base_url' => $request->root(),
+        //         'base_path' => $folder,
+        //     ]);
+        //     if ($Imagefile->save()) {
+        //         return response()->json([
+        //             'success' => true,
+        //             'data' => $Imagefile
+        //         ]);
+        //     }
+        // }
     }
     public function uploadBrand(Request $request)
     {

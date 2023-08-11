@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Resources\Web\AddressResource;
 use App\Http\Resources\Web\CountryResource;
-use App\Http\Resources\Web\ItemListResource;
+use App\Http\Resources\Web\Item\ItemListResource;
 use App\Http\Resources\Web\UserPackagesResource;
 use App\Http\Resources\Web\UserReportsResource;
 use App\Http\Resources\Web\UserResource;

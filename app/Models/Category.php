@@ -67,6 +67,6 @@ class Category extends Model
 
     public function times()
     {
-        return $this->hasMany(TimePeriod::class, 'time_id', 'id');
+        return $this->hasMany(TimePeriod::class, 'category_id', 'id');
     }
 }

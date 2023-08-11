@@ -15,7 +15,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "Page",
+            title: "Pages",
             isLoading: false,
             tbody: [
                 "Title",
@@ -65,7 +65,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted">page</span>
+                <span class="text-muted">{{ title }}</span>
             </li>
         </template>
         <template #toolbar>
@@ -103,29 +103,25 @@ export default defineComponent({
             </div>
             <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table align-center table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-center table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize">
                             <tr v-for="(page, index) in pages.data" :key="index">
                                 <td>
-                                    <div class="d-flex">
-                                        <div class="ms-5">
-                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{ page?.title
-                                            }}</span>
-                                        </div>
-                                    </div>
+                                    <span class="text-gray-800 fs-5 fw-bold mb-1">{{ page?.title
+                                    }}</span>
                                 </td>
                                 <td>
                                     {{ page?.heading }}
                                 </td>
                                 <td>
-                                    <span v-html="page?.meta?.tag"></span>
+                                    {{ page?.meta?.tag }}
                                 </td>
 
                                 <td>

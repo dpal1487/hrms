@@ -92,31 +92,26 @@ export default defineComponent({
 
             <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table align-center table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-center table-row-dashed fs-6 gy-5 text-left">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize">
                             <tr v-for="(itemstatus, index) in itemstatuss.data" :key="index">
-
                                 <td>
-                                    <div class="d-flex">
-                                        <div class="ms-5">
-                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
-                                                itemstatus?.label
-                                            }}</span>
-                                        </div>
-                                    </div>
+                                    <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
+                                        itemstatus?.label
+                                    }}</span>
                                 </td>
                                 <td>
                                     {{ itemstatus?.text }}
                                 </td>
                                 <td>
-                                    <span v-html="itemstatus?.description"></span>
+                                    {{ itemstatus?.description }}
                                 </td>
                                 <td>
                                     <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"

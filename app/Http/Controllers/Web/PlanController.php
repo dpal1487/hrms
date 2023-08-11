@@ -8,9 +8,12 @@ use App\Models\Plan;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Resources\Web\PlanResource;
+use App\Http\Resources\Web\PlanUsersResource;
 use App\Http\Resources\Web\TimeResource;
 use App\Models\Currency;
+use App\Models\Subscription;
 use App\Models\Time;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -40,7 +43,7 @@ class PlanController extends Controller
             $plans = $plans->where('status', $request->s);
         }
         return Inertia::render('Plan/Index', [
-            'plans' => PlanResource::collection($plans->paginate(5)->onEachSide(1)->appends(request()->query())),
+            'plans' => PlanResource::collection($plans->paginate(10)->onEachSide(1)->appends(request()->query())),
         ]);
     }
 
@@ -131,7 +134,7 @@ class PlanController extends Controller
     public function update(Request $request, Plan $plan, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => ['required', Rule::unique('plans')->ignore($id),],
             'price' => 'required|regex:/^\d*(\.\d{1,2})?$/',
             'category' => 'required',
             'no_of_ads' => 'required|integer',
@@ -176,6 +179,34 @@ class PlanController extends Controller
                 return redirect()->route('plans.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
             }
         }
+    }
+
+    public function show($id)
+    {
+        // $earnings = Subscription::where('plan_id', $id)->sum('price');
+        // return "Total Earnings: $" . number_format($earnings, 2);
+        $plan = Plan::find($id);
+        if ($plan) {
+            return Inertia::render('Plan/Overview', [
+                'plan' => new PlanResource($plan),
+            ]);
+        }
+        return redirect()->back();
+    }
+
+    public function users(Request $request, $id)
+    {
+        $subscriptions = Subscription::where('plan_id', $id);
+        if (!empty($request->q)) {
+            $subscriptions = $subscriptions->whereHas('user', function ($q) use ($request) {
+                $q->where('first_name', 'like', "%{$request->q}%");
+            });
+        }
+        return Inertia::render('Plan/Users', [
+            'users' => PlanUsersResource::collection($subscriptions->paginate(10)->onEachSide(1)->appends(request()->query())),
+            'plan' => new PlanResource(Plan::find($id)),
+
+        ]);
     }
 
     /**

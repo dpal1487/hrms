@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Account\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 class LoginController extends Controller
 {
@@ -32,10 +33,11 @@ class LoginController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
-                'user' => new UserResource($user), 
+                'user' => new UserResource($user),
                 'success' => true,
-                'access_token' => $token
-                ])->withCookie(cookie('api_token', $token, 60 * 24));;
+                'access_token' => $token,
+                'message' => 'Successfully login',
+            ])->withCookie(cookie('api_token', $token, 60 * 24));;
         }
 
         return response()->json(['error' => 'Invalid credentials'], 401);

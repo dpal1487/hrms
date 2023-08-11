@@ -204,7 +204,7 @@ export default defineComponent({
                                             <input-error :message="error.$message" />
                                         </div>
                                     </div>
-                                    <div class="col-10">
+                                    <div class="">
                                         <jet-label for="keywords" value="Keyword" />
                                         <jet-input id="keywords" type="text" v-model="v$.form.keyword.$model" :class="v$.form.keyword.$errors.length > 0
                                             ? 'is-invalid'

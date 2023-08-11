@@ -111,9 +111,8 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize">
                             <tr v-for="(time, index) in times.data" :key="index">
-
                                 <td>
                                     <div class="d-flex">
                                         <div class="ms-5">

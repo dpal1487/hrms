@@ -33,8 +33,8 @@ class BannerController extends Controller
             'description' => 'required',
             'title' => 'required',
             'url' => 'required|url',
+            'banner_image' => 'required'
         ]);
-
         if ($validator->fails()) {
             return redirect()->back()->withErrors([
                 'success' => false,

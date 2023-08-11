@@ -233,12 +233,12 @@ export default defineComponent({
                             </div>
                         </div>
                         <div class="fv-row mb-5">
-                            <jet-label for="description" value="Description" />
-                            <textarea id="description" v-model="v$.form.sort_description.$model"
+                            <jet-label for="description" value="Sort Description" />
+                            <jet-input id="description" v-model="v$.form.sort_description.$model"
                                 class="form-control form-control-solid" :class="v$.form.sort_description.$errors.length > 0
                                     ? 'is-invalid'
                                     : ''
-                                    " placeholder="Text ..." />
+                                    " placeholder="Sort Description" />
                         </div>
                     </div>
                 </div>

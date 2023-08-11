@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Web\Item;
 
+use App\Http\Resources\Web\ImageResource;
 use App\Http\Resources\Web\ReviewResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,11 +17,11 @@ class ItemReviewsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'user' => $this->user->image,
-            'reviews' => ReviewResource::collection($this->reviews),
-            'review' => $this->review,
-            'category' => $this->category,
             'item' => $this->name,
+            'category' => $this->category,
+            'review' => $this->review,
+            'user' => new ImageResource($this->user),
+            'reviews' => ReviewResource::collection($this->reviews),
             'rating_reviews' => count($this->reviews) > 0 ? [
                 'count' => count($this->reviews)
             ] : [

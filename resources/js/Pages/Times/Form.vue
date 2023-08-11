@@ -135,7 +135,7 @@ export default defineComponent({
                                 </div>
                                 <div class="fv-row col-6">
                                     <jet-label for="status" value="Status" />
-                                    <Multiselect :options="status" label="name" valueProp="value"
+                                    <Multiselect :canClear="false" :options="status" label="name" valueProp="value"
                                         class="form-control form-control-lg form-control-solid" placeholder="Select One"
                                         v-model="form.status" track-by="name" :class="v$.form.status.$errors.length > 0
                                             ? 'is-invalid'

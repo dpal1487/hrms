@@ -35,6 +35,11 @@ class Plan extends Model
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
+    public function subcriptions()
+    {
+        return $this->hasMany(Subscription::class, 'plan_id', 'id');
+    }
+
     protected static function boot()
     {
         parent::boot();

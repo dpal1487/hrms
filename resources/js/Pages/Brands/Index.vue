@@ -15,7 +15,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "Brand",
+            title: "Brands",
             isLoading: false,
             tbody: [
                 "Name",
@@ -65,7 +65,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted">Brand</span>
+                <span class="text-muted">{{ title }}</span>
             </li>
         </template>
         <template #toolbar>
@@ -111,7 +111,7 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-left text-capitalize">
                             <tr v-for="(brand, index) in brands.data" :key="index">
                                 <td>
                                     <div class="d-flex">

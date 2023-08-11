@@ -24,9 +24,8 @@ class SubscriptionsListResource extends JsonResource
             'user' => $this->user,
             'plan' => $this->plan,
             'order_id' => $this->order_id,
-            'start_at' => date("Y-m-d H:i:s", $this->start_at),
-            'end_at' => date("Y-m-d H:i:s", $this->end_at),
-            // 'start_date' => $subscription->start_date
+            'start_at' => date("Y-m-d g:i:s A", $this->start_at),
+            'end_at' => date("Y-m-d g:i:s A", $this->end_at),
         ];
     }
 }

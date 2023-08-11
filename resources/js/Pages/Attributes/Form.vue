@@ -44,7 +44,7 @@ export default defineComponent({
                 field: this.attribute?.data?.field || '',
                 status: this.attribute?.data?.status || '',
                 description: this.attribute?.data?.description || '',
-                rules: this.attribute?.data?.rules || [],
+                rules: this.attribute?.data?.rules.map(rule => rule.id) || [],
             }),
             input_type: [
                 { value: 'text', label: 'Text' },
@@ -78,7 +78,6 @@ export default defineComponent({
     },
     methods: {
 
-
         submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
@@ -100,15 +99,11 @@ export default defineComponent({
             }
         },
     },
-
     created() {
         if (route().current() == 'attribute.edit') {
             this.isEdit = true;
         }
-
     },
-    mounted() {
-    }
 });
 </script>
 <template>
@@ -150,22 +145,17 @@ export default defineComponent({
                             </div>
                             <div class="col-6">
                                 <jet-label for="rules" value="Attribute Rule" />
-                                <Multiselect id="rules" v-model="v$.form.rules.$model" track-by="rule" :canClear="false"
-                                    mode="tags" placeholder="Select rules" label="rule" valueProp="id"
-                                    :close-on-select="false" :searchable="true" :options="rules.data"
-                                    class="form-control form-control-lg form-control-solid">
-                                    <template v-slot:tag="{ option, handleTagRemove, disabled }">
-                                        <div class="multiselect-tag is-user" :class="{
-                                            'is-disabled': disabled
-                                        }">
-                                            {{ option.rule }}
-                                            <span v-if="!disabled" class="multiselect-tag-remove"
-                                                @click="handleTagRemove(option, $event)">
-                                                <span class="multiselect-tag-remove-icon"></span>
-                                            </span>
-                                        </div>
-                                    </template>
-                                </Multiselect>
+                                <Multiselect id="rules" :can-clear="false" :options="rules?.data" label="rule"
+                                    valueProp="id" class="form-control form-control-solid" placeholder="Select Time Periods"
+                                    mode="tags" :close-on-select="false" track-by="rule" :searchable="true"
+                                    :create-option="true" :class="v$.form.rules.$errors.length > 0
+                                        ? 'is-invalid'
+                                        : ''
+                                        " v-model="v$.form.rules.$model" />
+                                <div v-for="(error, index) of v$.form.rules
+                                    .$errors" :key="index">
+                                    <input-error :message="error.$message" />
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-5">

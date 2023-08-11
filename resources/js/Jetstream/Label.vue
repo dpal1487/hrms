@@ -1,5 +1,5 @@
 <template>
-	<label  class="fs-6 fw-semibold form-label" :class="classes">
+	<label  class="fs-6 fw-semibold form-label mx-1" :class="classes">
 		<span v-if="value">{{ value }}</span>
 		<span v-else><slot></slot></span>
 	</label>

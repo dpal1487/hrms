@@ -15,7 +15,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "coupon",
+            title: "Coupons",
             isLoading: false,
             tbody: [
                 "Code",
@@ -60,7 +60,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/coupons" class="text-muted text-hover-primary">coupon</Link>
+                <Link href="/coupons" class="text-muted text-hover-primary">{{ title }}</Link>
             </li>
         </template>
         <template #toolbar>
@@ -95,9 +95,9 @@ export default defineComponent({
 
             <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table align-center table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-center table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
@@ -105,20 +105,16 @@ export default defineComponent({
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
                             <tr v-for="(coupon, index) in coupons.data" :key="index">
-
                                 <td>
-                                    <div class="d-flex">
-                                        <div class="ms-5">
-                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{ coupon?.code
-                                            }}</span>
-                                        </div>
-                                    </div>
+                                    <span class="text-gray-800 text-hover-primary fs-5 fw-bold">{{ coupon?.code
+                                    }}</span>
+
                                 </td>
                                 <td>
                                     {{ coupon?.type }}
                                 </td>
                                 <td>
-                                    <span v-html="coupon?.descriptions"></span>
+                                    {{ coupon?.descriptions }}
                                 </td>
                                 <td>
                                     {{ coupon?.discount }}

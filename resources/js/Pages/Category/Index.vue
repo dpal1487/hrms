@@ -26,6 +26,7 @@ export default defineComponent({
                 "Status",
                 "Action",
             ],
+            title: "Categories",
         };
     },
     components: {
@@ -65,7 +66,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted">category</span>
+                <span class="text-muted">{{ title }}</span>
             </li>
         </template>
         <template #toolbar>
@@ -74,6 +75,7 @@ export default defineComponent({
                 <i class="bi bi-plus-circle"></i>Add New Category</Link>
             </div>
         </template>
+
         <Head :title="title" />
         <div class="card card-flush">
             <div>
@@ -102,64 +104,44 @@ export default defineComponent({
             </div>
             <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table align-center table-row-dashed fs-6 gy-5">
+                    <table class="table table-row-dashed fs-6 gy-5 text-left">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">                                
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-left text-capitalize">
                             <tr v-for="(category, index) in categories.data" :key="index">
-                               
                                 <td>
                                     <div class="d-flex">
                                         <span
                                             class="d-block symbol symbol-50px symbol-lg-50px symbol-fixed position-relative">
-                                        <img v-if="category?.image" :src="category?.image?.small_path" alt="image"
-                                            class="rounded" />
-                                        <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image" class="rounded">
-                                    </span>
+                                            <img v-if="category?.image" :src="category?.image?.small_path" alt="image"
+                                                class="rounded" />
+                                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
+                                                class="rounded">
+                                        </span>
                                         <div class="ms-5">
                                             <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
                                                 category-filter="category_name">{{ category?.name }}</span>
-                                            <div class="text-muted fs-7 fw-bold">
-                                                <span v-html="category?.description"></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex">
-                                        <div class="ms-5">
-                                            <div class="text-muted fs-7 fw-bold">
-                                                {{ category?.meta ? category?.meta?.tag : '' }} </div>
-                                        </div>
-                                    </div>
+                                        {{ category?.meta?.tag  }}
                                 </td>
                                 <td>
-                                    <div class="d-flex">
-                                        <div class="ms-5">
-                                            <div class="text-muted fs-7 fw-bold" v-if="category?.meta">
-                                                <span v-html="category?.meta?.description">
-
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <span v-html="category?.meta?.description">
+                                        </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex">
-                                        <div class="ms-5">
-                                            <div class="text-muted fs-7 fw-bold">
-                                                {{ category?.meta ? category?.meta?.keywords : '' }} </div>
-                                        </div>
-                                    </div>
+                                        {{ category?.meta?.keywords }}
                                 </td>
 
                                 <td>
-                                    <div class="badge badge-secondary">
+                                    <div class="badge badge-secondary p-0">
                                         {{ category?.parent ? category?.parent?.name : 'Parent' }}
                                     </div>
                                 </td>

@@ -7,6 +7,7 @@ use App\Models\Time;
 use App\Http\Resources\Web\TimeResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class TimeController extends Controller
@@ -89,7 +90,7 @@ class TimeController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => ['required', Rule::unique('times')->ignore($id),],
             'status' => 'required',
             'description' => 'required',
         ]);

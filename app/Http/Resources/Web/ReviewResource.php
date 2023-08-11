@@ -18,12 +18,12 @@ class ReviewResource extends JsonResource
             'id' => $this->review?->id,
             'title' => $this->review?->title,
             'content' => $this->review?->content,
-            'review' => $this->review,
+            'rating' => $this->review?->rating,
             'status' => $this->review?->status,
             'created_at' => date('y M d', strtotime($this->review?->created_at)),
             'updated_at' => $this->review?->updated_at,
-            'user' => $this->user,
-            'user_image' => $this->user->image
+            'user' => new UserResource($this->user),
+            
         ];
     }
 }

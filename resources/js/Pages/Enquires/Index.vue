@@ -13,7 +13,7 @@ export default defineComponent({
     data() {
         return {
             form: {},
-            title: "Enquire",
+            title: "Enquiries",
             tbody: [
                 "Name",
                 "Email",
@@ -89,22 +89,25 @@ export default defineComponent({
             </div>
             <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 text-center">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5">
                         <thead>
-                            <tr class="text-gray-400 fw-bold fs-7 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
 
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize">
                             <tr v-for="(enquiry, index) in enquiries.data" :key="index">
 
                                 <td>
-                                    {{ enquiry?.name }}
+                                    <span class="text-gray-800 text-hover-primary fs-5 fw-bold">
+
+                                        {{ enquiry?.name }}
+                                    </span>
                                 </td>
-                                <td>
+                                <td class="text-lowercase">
                                     {{ enquiry?.email }}
                                 </td>
                                 <td>
@@ -118,11 +121,13 @@ export default defineComponent({
                                 </td>
 
                                 <td>
+                                    Active
                                     <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
                                         <input class="form-check-input h-20px w-30px" type="checkbox"
                                             @input="changeStatus($event.target.checked, enquiry.id)"
                                             :checked="enquiry.status == 1 ? true : false" />
-                                    </div>
+                                        </div>
+                                        Inactive
                                 </td>
                             </tr>
                         </tbody>

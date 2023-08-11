@@ -6,19 +6,23 @@ import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Loading from "vue-loading-overlay";
+import TimePeriod from "./Components/TimePeriod.vue";
 export default defineComponent({
-    props: ["timeperiods"],
+    props: ["categories", "times"],
 
     data() {
         return {
             form: {},
             tbody: [
+                "Time Period",
                 "Category",
                 "Description",
                 "Action",
             ],
             isLoading: false,
             title: "Time Periods",
+            isModalOpen: false,
+            timePeriod: {}
         };
     },
     components: {
@@ -28,6 +32,8 @@ export default defineComponent({
         Pagination,
         Multiselect,
         Loading,
+        TimePeriod,
+
     },
     methods: {
         search() {
@@ -35,6 +41,19 @@ export default defineComponent({
                 "/time-periods",
                 this.form,
             );
+        },
+        showMenuModal(timeperiod) {
+            this.isEdit = false;
+            this.isModalOpen = true;
+            this.timeperiod = timeperiod
+        },
+        hideMenuModal() {
+            this.isModalOpen = false;
+        },
+        showEditMenuModal(timeperiod) {
+            this.isModalOpen = true;
+            this.isEdit = true;
+            this.timeperiod = timeperiod
         },
     },
 });
@@ -51,6 +70,8 @@ export default defineComponent({
         </template>
 
         <Head :title="title" />
+        <TimePeriod v-if="isModalOpen" :show="isModalOpen" :isEdit="isEdit" @hidemodal="hideMenuModal"
+            :category="timeperiod" :times="times" />
         <div class="card card-flush">
             <div class="card-title">
                 <form class="card-header justify-content-start py-5 gap-4" @submit.prevent="search()">
@@ -67,10 +88,7 @@ export default defineComponent({
                         <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search " />
                     </div>
-                    <div class="w-100 mw-200px">
-                        <Multiselect :options="$page.props.ziggy.status" label="name" valueProp="value"
-                            class="form-control form-control-solid" placeholder="Select Status" v-model="form.s" />
-                    </div>
+
                     <button type="submit" class="btn btn-primary">
                         Search
                     </button>
@@ -86,40 +104,33 @@ export default defineComponent({
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(timeperiod, index) in timeperiods.data" :key="index">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize">
+                            <tr v-for="(category, index) in categories.data" :key="index">
                                 <td>
-                                    <div class="ms-5">
-                                        <a :href="`/time-period/${timeperiod.id}/create`"
-                                            class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
-                                                timeperiod?.name }}</a>
+                                    <div class="text-gray-800 fs-5 fw-bold p-0 text-capitalize">
+                                        {{ category?.times?.map(t => t.title)?.join(", ") }}
                                     </div>
 
                                 </td>
-
                                 <td>
-                                    <span v-html="timeperiod?.description">
-
-                                    </span>
+                                    {{ category?.name }}
                                 </td>
                                 <td>
-                                    <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                        :href="`/time-period/${timeperiod.id}/edit`">
-                                    <i class="bi bi-pencil"></i>
-                                    </Link>
-                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
-                                        timeperiod.id, index
-                                    )">
-                                        <i class="bi bi-trash3"></i>
+                                    <span v-html="category?.description"></span>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                        @click="showEditMenuModal(category)">
+                                        <i class="bi bi-view-list"></i>
                                     </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end"
-                    v-if="timeperiods.meta">
-                    <Pagination :links="timeperiods.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="categories.meta">
+                    <Pagination :links="categories.meta.links" />
                 </div>
             </div>
         </div>

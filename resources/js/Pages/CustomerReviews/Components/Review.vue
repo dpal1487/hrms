@@ -45,10 +45,11 @@ export default defineComponent({
                     </th>
                 </tr>
             </thead>
-            <tbody class="fw-semibold text-gray-600">
+            <tbody class="fw-semibold text-gray-600 text-capitalize">
                 <tr v-for="(customer_review, index) in reviews" :key="index">
-                    <td>
-                        {{ customer_review?.user?.first_name + " " + customer_review?.user?.last_name }}
+                    <td><span class="text-gray-800 text-hover-primary fs-5 fw-bold">
+                            {{ customer_review?.user?.first_name + " " + customer_review?.user?.last_name }}
+                        </span>
                     </td>
                     <td>
                         {{ customer_review?.title }}

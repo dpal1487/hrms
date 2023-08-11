@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'email' => $this->email,
             'mobile' => $this->mobile,
-            'country' => $this->country,
+            'country' => $this->country?->name,
             'image' =>new ImageResource($this->image),
         ];
     }

@@ -89,10 +89,12 @@ export default {
                 toast.error(error.message)
             });
     },
-    async imageUpload(route, e) {
+    async imageUpload(route, e, id) {
+
         const file = e.target.files[0];
         const formdata = new FormData();
-        formdata.append("image", file)
+        formdata.append("image", file);
+        formdata.append("id", id);
         try {
             const response = await axios.post(route, formdata, { headers: { "Content-Type": "multipart/form-data", } });
             return {

@@ -1,17 +1,23 @@
+<style>
+.reviewtext {
+    width: 100px;
+}
+</style>
 <script>
 
 import { defineComponent } from 'vue';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import { Progress } from 'flowbite-vue'
+import RatingBar from '../../Components/RatingBar.vue';
 import Rating from "../CustomerReviews/Rating.vue";
 export default defineComponent({
-    props: ['itemreview'],
+    props: ['itemreview', 'reviews_count'],
 
     data() {
         return {
             title: 'Item Review',
-            rating: this.itemreview.rating
+            rating: this.itemreview.rating,
+            userRating: this.itemreview?.data?.review?.rating, // Set the user's rating here
         }
     },
 
@@ -19,7 +25,8 @@ export default defineComponent({
         Rating,
         AppLayout,
         Head,
-        Link
+        Link,
+        RatingBar
     }
 
 });
@@ -35,6 +42,12 @@ export default defineComponent({
             </li>
             <li class="breadcrumb-item">
                 <Link href="/items" class="text-muted text-hover-primary">Items</Link>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-400 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="text-muted">Item Reviews</span>
             </li>
         </template>
         <div class="row g-5 g-xl-10 mb-5 mb-xl-10 position-relative;">
@@ -64,100 +77,78 @@ export default defineComponent({
                                 0 Out Of 5
                             </span>
                             <span class="mx-10 mt-2 fs-5 fw-bold text-gray-800" v-else>
-                                {{ itemreview?.data?.review?.rating }} Out Of 5
+                                {{ itemreview?.data?.rating_reviews?.count }} Out Of 5
                             </span>
-                        </div>  
-                        <div class="">
-                            <div class="d-flex align-items-center mt-2">
-                                <span class="color:#777777 w-100">5 Stars</span>
-                                <div class='ms-4 position-relative bg-secondary rounded-pill'>
-                                    <Progress progress="45"></Progress>
-                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100">
-
-                                        
-                                    </div>
-                                </div>
-                                <span class='ms-4'>15 Reviews</span>
-                            </div>
-
-                            <div class="d-flex align-items-center mt-2">
-                                <span class="color:#777777 w-100">4 Stars</span>
-                                <div class='ms-4 position-relative bg-secondary rounded-pill'>
-                                    <Progress labelProgress="true" labelPosition="outside" label="Flowbite Vue 3" progress="45"></Progress>
-                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100">
-                                    </div>
-                                </div>
-                                <span class='ms-4'>10 Reviews</span>
-                            </div>
-
-                            <div class="d-flex align-items-center mt-2">
-                                <span class="color:#777777 w-100">3 Stars</span>
-                                <div class='ms-4 position-relative bg-secondary rounded-pill'>
-                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100"></div>
-                                </div>
-                                <span class='ms-4'>8 Reviews</span>
-                            </div>
-
-                            <div class="d-flex align-items-center mt-2">
-                                <span class="color:#777777 w-100">2 Stars</span>
-                                <div class='ms-4 position-relative bg-secondary rounded-pill'>
-                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100"></div>
-                                </div>
-                                <span class='ms-4'>5 Reviews</span>
-                            </div>
-
-                            <div class="d-flex align-items-center mt-2">
-                                <span class="color:#777777 w-100">1 Stars</span>
-                                <div class='ms-4 position-relative bg-secondary rounded-pill'>
-                                    <div class="position-absolute bg-warning rounded-pill top-0 start-0 end-0 h-100"></div>
-                                </div>
-                                <span class='ms-4'>2 Reviews</span>
-                            </div>
                         </div>
+
+                            <div class="d-flex align-items-center mt-2 gap-4">
+                                <span class="w-fit">5 Stars</span>
+                                <rating-bar :initial-rating="15" />
+                                <span class="reviewtext">15 Reviews</span>
+                            </div>
+                            <div class="d-flex align-items-center mt-2 gap-4">
+                                <span class="w-fit">4 Stars</span>
+                                <rating-bar :initial-rating="10" />
+                                <span class="reviewtext">10 Reviews</span>
+                            </div>
+                            <div class="d-flex align-items-center mt-2 gap-4">
+                                <span class="w-fit">3 Stars</span>
+                                <rating-bar :initial-rating="2" />
+                                <span class="reviewtext">2 Reviews</span>
+                            </div>
+                            <div class="d-flex align-items-center mt-2 gap-4">
+                                <span class="w-fit">2 Stars</span>
+                                <rating-bar :initial-rating="5" />
+                                <span class="reviewtext">5 Reviews</span>
+                            </div>
+                            <div class="d-flex align-items-center mt-2 gap-4">
+                                <span class="w-fit">1 Stars</span>
+                                <rating-bar :initial-rating="2" />
+                                <span class="reviewtext">2 Reviews</span>
+                            </div>
                     </div>
                 </div>
             </div>
+
             <div class="col-sm-12 col-md-7 overflow-auto">
                 <div class="card mb-3 rounded shadow-sm" v-for=" review in itemreview?.data?.reviews">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-stretch justify-content-between">
                             <div class="d-flex align-items-stretch">
-                                <div class="me-4" style="height: 4rem;" v-if="review?.user_image?.small_path != ''">
-                                    <img alt="user image" :src="review?.user_image?.small_path" class="rounded h-100" />
+                                <div class="me-4" style="height: 4rem;" v-if="review?.user?.image != ''">
+                                    <img alt="user image" :src="review?.user?.image?.file_path" class="rounded h-100" />
                                 </div>
                                 <div v-else class="me-4" style="height: 4rem;">
                                     <img alt="user image" src="/assets/media/avatars/300-1.jpg" class="rounded h-100" />
                                 </div>
                                 <div class="">
-                                    <h4 class="fs-4 text-gray-800">
+                                    <h4 class="fs-4 text-gray-800 text-capitalize">
                                         <span v-if="review == ''">
                                             John Doe
                                         </span>
                                         <span v-else>
                                             {{ review?.user?.first_name + " " + review?.user?.last_name }}
                                         </span>
-
                                     </h4>
                                     <div class="rating">
                                         <div class="d-flex">
                                             <Rating :rating="+review?.rating" />
                                         </div>
                                     </div>
+                                    <div class="mt-5 text-capitalize">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <h5 class="card-title fs-4 text-gray-800">Review Title : </h5>
+                                            <h6 class="text-gray-700 "> {{ review?.title }}</h6>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 ">
+                                            <h5 class="card-title fs-4 text-gray-800">Review Content : </h5>
+                                            <h6 class="mt-0 py-1 text-gray-700"> {{ review?.content }}</h6>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="w-fit fs-6 fw-bold text-gray-800">
                                 {{ review?.created_at }}
-                            </div>
-                        </div>
-
-                        <div class="mt-2">
-                            <div class="d-flex align-items-center ">
-                                <h5 class="card-title mt-1 fs-4 text-gray-800">Review Title : </h5>
-                                <h6 class="m-0 text-gray-700 text-capitalize"> {{ review?.title }}</h6>
-                            </div>
-                            <div class="d-flex align-items-center ">
-                                <h5 class="card-title fs-4 text-gray-800">Review Content : </h5>
-                                <h6 class="mt-0 py-1 text-gray-700"> {{ review?.content }}</h6>
                             </div>
                         </div>
                     </div>

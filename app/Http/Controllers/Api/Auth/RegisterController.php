@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Controller;
 use Craftsys\Msg91\Facade\Msg91;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -17,9 +18,9 @@ class RegisterController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'unique:users,email',
-            'password' => 'required|string|min:8',
-            'mobile' => 'required|numeric|unique:users,mobile',
+            'email' => 'email|unique:users',
+            'password' =>  Password::min(8),
+            'mobile' => 'numeric|unique:users,mobile|digits:10',
         ]);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()->first()], 400);
@@ -38,12 +39,12 @@ class RegisterController extends Controller
     }
     public function verify(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'password' => 'required',
+            'password' =>  Password::min(8),
             'otp_number' => 'required|numeric',
-            'mobile' => 'required|numeric|min:10|unique:users,mobile',
+            'email' => 'email|unique:users',
+            'mobile' => 'numeric|min:10|unique:users,mobile|digits:10',
         ]);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'type' => 'error', 'message' => $validator->errors()->first()]);
@@ -62,9 +63,10 @@ class RegisterController extends Controller
 
                 $user = User::create([
                     'first_name' => $first_name,
-                    'last_name' => explode(' ', $request->name)[1] ? explode(' ', $request->name)[1] : "",
+                    'last_name' => count(explode(' ', $request->name)) > 1 ? explode(' ', $request->name)[1] : "",
                     'country_code' => '+91',
                     'mobile' => $request->mobile,
+                    'email' => $request->email,
                     'image_id' => 1,
                     'password' => Hash::make($request->get('password'))
                 ]);

@@ -10,11 +10,11 @@ use App\Http\Resources\Web\CategoryResource;
 use App\Http\Resources\Web\RuleResource;
 use App\Models\AttributeValue;
 use App\Models\Category;
-use App\Models\Rule;
+use App\Models\Rule as RuleModel;
 use App\Models\AttributeRule;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
-
+use Illuminate\Validation\Rule;
 class AttributeController extends Controller
 {
 
@@ -48,7 +48,7 @@ class AttributeController extends Controller
     public function create()
     {
         $categories = Category::get();
-        $rules = Rule::get();
+        $rules = RuleModel::get();
         return Inertia::render('Attributes/Form', [
             'categories' => CategoryResource::collection($categories),
             'rules' => RuleResource::collection($rules),
@@ -57,6 +57,7 @@ class AttributeController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'unique:' . Attribute::class],
             'category' => 'required',
@@ -87,9 +88,6 @@ class AttributeController extends Controller
                     'rule_id' => $value,
                 ]);
             }
-            if (!empty($attributeRule)) {
-                return redirect()->route('attributes.index')->with('message', ErrorMessage());
-            }
             return redirect()->route('attributes.index')->with('flash', ['message' =>  CreateMessage('Attribute')]);
         }
         return redirect()->route('attribute.index')->with('message', ErrorMessage());
@@ -117,7 +115,7 @@ class AttributeController extends Controller
     {
         return Inertia::render('Attributes/Form', [
             'categories' => CategoryResource::collection(Category::get()),
-            'rules' => RuleResource::collection(Rule::get()),
+            'rules' => RuleResource::collection(RuleModel::get()),
             'attribute' => new AttributeSingleResource(Attribute::find($id)),
         ]);
     }
@@ -130,7 +128,7 @@ class AttributeController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required'],
+            'name' => ['required', Rule::unique('attributes')->ignore($id),],
             'category' => 'required',
             'field' => 'required',
             'input_type' => 'required',
