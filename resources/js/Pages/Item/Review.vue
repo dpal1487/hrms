@@ -15,6 +15,9 @@ export default defineComponent({
 
     data() {
         return {
+            ratingCount: this.itemreview?.data?.rating_reviews?.count,
+            tptalStars: 0,
+            categorizedReviews: {},
             title: 'Item Review',
             rating: this.itemreview.rating,
             userRating: this.itemreview?.data?.review?.rating, // Set the user's rating here
@@ -27,12 +30,22 @@ export default defineComponent({
         Head,
         Link,
         RatingBar
+    },
+    mounted() {
+        const reviews = this.itemreview.data.reviews;
+        const result = reviews.reduce((obj, review) => {
+            const { rating } = review;
+            if (obj[rating + "_star"]) {
+                obj[rating + "_star"].push(review);
+            } else {
+                obj[rating + "_star"] = [review];
+            }
+            return obj
+        }, {});
+        this.categorizedReviews = result;
     }
-
 });
-
 </script>
-
 <template>
     <Head :title="title" />
     <AppLayout :title="title">
@@ -62,50 +75,50 @@ export default defineComponent({
                         <div class="fs-3 fw-bold text-theme-primary">
                             <span class="fs-2 text-gray-800">{{ itemreview?.data?.item }} </span><br>
                             <span class="fs-4 text-gray-800">{{ itemreview?.data?.category?.name }} </span><br>
-                            <span class="badge badge-light-info fs-6 fw-bold" v-if="itemreview?.review == ''">
-                                0 Reviews
-                            </span>
-                            <span class="badge badge-light-info fs-4 fw-bold" v-else>
-                                {{ itemreview?.data?.rating_reviews?.count }} Reviews
+                            <span class="badge badge-outline badge-primary fs-4 fw-bold mt-2">
+                                {{ ratingCount }} Reviews
                             </span>
                         </div>
-                        <div class="rating">
+
+
+                        <!-- <div class="rating">
                             <div class="d-flex">
-                                <Rating :rating="itemreview?.data?.rating_reviews?.count" />
+                                <Rating :rating="ratingCount" />
                             </div>
                             <span class="mx-10 mt-2 fs-5 fw-bold" v-if="itemreview?.data?.review == null">
                                 0 Out Of 5
                             </span>
                             <span class="mx-10 mt-2 fs-5 fw-bold text-gray-800" v-else>
-                                {{ itemreview?.data?.rating_reviews?.count }} Out Of 5
+                                {{ ratingCount }} Out Of 5
                             </span>
-                        </div>
+                        </div> -->
 
-                            <div class="d-flex align-items-center mt-2 gap-4">
-                                <span class="w-fit">5 Stars</span>
-                                <rating-bar :initial-rating="15" />
-                                <span class="reviewtext">15 Reviews</span>
-                            </div>
-                            <div class="d-flex align-items-center mt-2 gap-4">
-                                <span class="w-fit">4 Stars</span>
-                                <rating-bar :initial-rating="10" />
-                                <span class="reviewtext">10 Reviews</span>
-                            </div>
-                            <div class="d-flex align-items-center mt-2 gap-4">
-                                <span class="w-fit">3 Stars</span>
-                                <rating-bar :initial-rating="2" />
-                                <span class="reviewtext">2 Reviews</span>
-                            </div>
-                            <div class="d-flex align-items-center mt-2 gap-4">
-                                <span class="w-fit">2 Stars</span>
-                                <rating-bar :initial-rating="5" />
-                                <span class="reviewtext">5 Reviews</span>
-                            </div>
-                            <div class="d-flex align-items-center mt-2 gap-4">
-                                <span class="w-fit">1 Stars</span>
-                                <rating-bar :initial-rating="2" />
-                                <span class="reviewtext">2 Reviews</span>
-                            </div>
+                        <div class="d-flex align-items-center mt-5 gap-4">
+                            <span class="w-fit">5 Stars</span>
+                            <rating-bar :initial-rating="categorizedReviews['5_star']?.length || 0" :rating="ratingCount" />
+
+                            <span class="reviewtext">{{ categorizedReviews["5_star"]?.length || 0 }} Reviews</span>
+                        </div>
+                        <div class="d-flex align-items-center mt-2 gap-4">
+                            <span class="w-fit">4 Stars</span>
+                            <rating-bar :initial-rating="categorizedReviews['4_star']?.length || 0" :rating="ratingCount" />
+                            <span class="reviewtext">{{ categorizedReviews["4_star"]?.length || 0 }} Reviews</span>
+                        </div>
+                        <div class="d-flex align-items-center mt-2 gap-4">
+                            <span class="w-fit">3 Stars</span>
+                            <rating-bar :initial-rating="categorizedReviews['3_star']?.length || 0" :rating="ratingCount" />
+                            <span class="reviewtext">{{ categorizedReviews["3_star"]?.length || 0 }} Reviews</span>
+                        </div>
+                        <div class="d-flex align-items-center mt-2 gap-4">
+                            <span class="w-fit">2 Stars</span>
+                            <rating-bar :initial-rating="categorizedReviews['2_star']?.length || 0" :rating="ratingCount" />
+                            <span class="reviewtext">{{ categorizedReviews["2_star"]?.length || 0 }} Reviews</span>
+                        </div>
+                        <div class="d-flex align-items-center mt-2 gap-4">
+                            <span class="w-fit">1 Stars</span>
+                            <rating-bar :initial-rating="categorizedReviews['1_star']?.length || 0" :rating="ratingCount" />
+                            <span class="reviewtext">{{ categorizedReviews["1_star"]?.length || 0 }} Reviews</span>
+                        </div>
                     </div>
                 </div>
             </div>

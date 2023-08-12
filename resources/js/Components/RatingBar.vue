@@ -18,21 +18,21 @@
 </style>
 <script>
 export default {
-    props: {
-        initialRating: {
-            type: Number,
-            default: 0,
-        },
-    },
+
+    props: ['rating', 'initialRating'],
     data() {
         return {
-            rating: this.initialRating,
-            maxRating: 100,
+            maxRating: this.rating,
         };
     },
     computed: {
         ratingPercentage() {
-            return (this.rating / this.maxRating) * 100;
+            if (this.maxRating != 0) {                
+                return (this.initialRating / this.maxRating) * 100;
+            }
+            else {
+                return 0;
+            }
         },
     },
     methods: {
@@ -41,6 +41,7 @@ export default {
 </script>
 
 <template>
+    <!-- {{ initialRating["4_star"]?.length || 0  }} -->
     <div class="flex-root">
         <div class="rating-bar">
             <div class="progress-bar" :style="{ width: ratingPercentage + '%' }"></div>

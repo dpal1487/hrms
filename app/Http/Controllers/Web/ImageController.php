@@ -84,24 +84,25 @@ class ImageController extends Controller
             ], 400);
         }
 
-        $record = DBImage::findOrFail($request->id);
+        $data = DBImage::findOrFail($request->id);
 
-        // Delete the existing image if it exists
-        if ($record->name) {
+        $existingImagePath = 'public/' . $data->base_path . $data->name;
 
-            // Generate the path to the existing image
-            $existingImagePath =  $record->base_path . $record->name;
-            // Delete the existing image
-            return Storage::exists($existingImagePath);
-            return $existingImagePath;
-            
-            if (Storage::exists($existingImagePath)) {
+        return $existingImagePath;
+
+        return Storage::disk('public')->exists('public/' . $existingImagePath);
+
+        if ($request->id != 'undefined') {
+            $data = DBImage::findOrFail($request->id);
+            $existingImagePath =  $data->base_path . $data->name;
+            return Storage::disk('public')->exists($existingImagePath);
 
 
-                Storage::delete($existingImagePath);
+            if (Storage::disk('public')->exists($existingImagePath)) {
+
+                return Storage::disk('public')->delete($existingImagePath);
             }
         }
-
 
         // $image = $request->file('image');
         // if ($image) {

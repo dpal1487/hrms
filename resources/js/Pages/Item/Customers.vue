@@ -78,15 +78,10 @@ export default defineComponent({
                         <div>
                             <span class="fs-3 fw-bold text-gray-800">{{ customerreview?.data?.item_details?.name }}
                             </span><br>
-                            <span class="fs-5 fw-bold text-gray-800">{{ customerreview?.data?.category?.name }} </span>
+                            <span class="fs-5 fw-bold text-gray-800 mt-2">{{ customerreview?.data?.category?.name }}</span>
                         </div>
                         <div class="fs-5 fw-bold text-gray-800">
-                            <span>Total Cusmtomer</span>
-                            <span class="badge badge-light-info fs-6 fw-bold"
-                                v-if="customerreview?.data?.total_customers?.count == ''">
-                                0 Reviews
-                            </span>
-                            <span class="badge badge-light-info fs-6 fw-bold" v-else>
+                            <span class="badge badge-outline badge-primary fs-4 fw-bold mt-2">Total Cusmtomer :
                                 {{ customerreview?.data?.total_customers?.count }}
                             </span>
                         </div>
@@ -143,7 +138,8 @@ export default defineComponent({
                                             <h6 class="text-gray-800 fs-4 ">
                                                 <i class="bi bi-files fs-3 me-2"></i>Documents
                                             </h6>
-                                            <button @click="download(customer?.document?.id)" class="btn btn-non btn-sm my-0"><i
+                                            <button @click="download(customer?.document?.id)"
+                                                class="btn btn-non btn-sm my-0"><i
                                                     class="bi bi-file-earmark-check-fill fs-4"></i></button>
                                         </div>
                                     </div>

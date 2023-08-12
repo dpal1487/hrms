@@ -95,6 +95,7 @@ export default defineComponent({
                     required,
                     email,
                 },
+              
                 password: {
                     required,
                     min: minLength(6),

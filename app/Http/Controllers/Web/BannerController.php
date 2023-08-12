@@ -6,6 +6,7 @@ use App\Models\Banner;
 use Illuminate\Http\Request;
 use App\Http\Resources\Web\BannerResource;
 use Illuminate\Support\Facades\Validator;
+
 use Inertia\Inertia;
 
 class BannerController extends Controller

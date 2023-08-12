@@ -28,4 +28,8 @@ class ItemReview extends Model
   {
     return $this->hasMany(Review::class, 'id', 'review_id');
   }
+  public function overallRating()
+  {
+    return $this->reviews()->avg('rating');
+  }
 }
