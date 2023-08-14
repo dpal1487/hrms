@@ -51,9 +51,9 @@ export default defineComponent({
             form: this.$inertia.form({
                 id: this.category?.data?.id || '',
                 name: this.category?.data?.name || '',
-                image_id: this.category?.data?.image?.id || this.form?.image_id,
+                image_id: this.category?.data?.image?.id ? this.category?.data?.image?.id : this.form?.image_id,
                 status: this.category?.data?.status || '',
-                banner_image: this.category?.data?.banner?.id || this.form?.banner_image,
+                banner_image: this.category?.data?.banner?.id ? this.category?.data?.banner?.id : this.form?.banner_image,
                 parent_id: this.category?.data?.parent?.id || '',
                 description: this.category?.data?.description || '',
                 keyword: this.category?.data?.keywords || '',
@@ -97,7 +97,7 @@ export default defineComponent({
         },
         async onThumbnailChange(e) {
             this.thumbnail.isLoading = true;
-            const data = await utils.imageUpload(route('category.thumbnail'), e)
+            const data = await utils.imageUpload(route('category.thumbnail'), e , this.form.image_id)
 
             if (data.response.success) {
                 this.form.image_id = data.response.data.id;
@@ -111,8 +111,9 @@ export default defineComponent({
         },
 
         async onBannerChange(e) {
+            console.log(this.form.banner_image)
             this.banner.isLoading = true;
-            const data = await utils.imageUpload(route('upload.banner'), e)
+            const data = await utils.imageUpload(route('category.banner'), e , this.form.banner_image)
             if (data.response.success) {
                 this.form.banner_image = data.response.data.id;
             } else {
@@ -170,6 +171,7 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="card-body text-center">
+                                
                                 <ImageInput :image="this.category?.data?.banner?.medium_path" :onchange="onBannerChange"
                                     :remove="removeSelectedAvatar" :selectedImage="banner.url"
                                     :errors="v$.form.banner_image.$errors" :isUploading="banner.isLoading" />

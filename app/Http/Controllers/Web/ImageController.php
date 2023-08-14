@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Web;
 use Illuminate\Http\Request;
 use Image;
 use App\Models\Image as DBImage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -22,6 +22,17 @@ class ImageController extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
+
+        if ($request->id != 'undefined') {
+            $data = DBImage::findOrFail($request->id);
+            $categoryThumbnail = $data->delete();
+            $existingImagePath =  $data->base_path . $data->name;
+            if (File::exists($existingImagePath)) {
+                File::delete($existingImagePath);
+            }
+        }
+
+
         $image = $request->file('image');
         if ($image) {
             $name = time() . '_' . $request->image->getClientOriginalName();
@@ -52,6 +63,16 @@ class ImageController extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
+
+        if ($request->id != 'undefined') {
+            $data = DBImage::findOrFail($request->id);
+            $categoryBanner = $data->delete();
+            $existingImagePath =  $data->base_path . $data->name;
+            if (File::exists($existingImagePath)) {
+                File::delete($existingImagePath);
+            }
+        }
+
         $image = $request->file('image');
         if ($image) {
             $name = time() . '_' . $request->image->getClientOriginalName();
@@ -83,48 +104,33 @@ class ImageController extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
-
-        $data = DBImage::findOrFail($request->id);
-
-        $existingImagePath = 'public/' . $data->base_path . $data->name;
-
-        return $existingImagePath;
-
-        return Storage::disk('public')->exists('public/' . $existingImagePath);
-
         if ($request->id != 'undefined') {
             $data = DBImage::findOrFail($request->id);
+            $bannerImage = $data->delete();
             $existingImagePath =  $data->base_path . $data->name;
-            return Storage::disk('public')->exists($existingImagePath);
-
-
-            if (Storage::disk('public')->exists($existingImagePath)) {
-
-                return Storage::disk('public')->delete($existingImagePath);
+            if (File::exists($existingImagePath)) {
+                File::delete($existingImagePath);
             }
         }
-
-        // $image = $request->file('image');
-        // if ($image) {
-        //     $folder = 'assets/images/banner/home/';
-        //     $name = time() . '_' . $request->image->getClientOriginalName();
-
-        //     $result = Image::make($image)->save($folder . $name);
-
-        //     $Imagefile = DBImage::updateOrCreate([
-        //         'name' => $name,
-        //         'base_url' => $request->root(),
-        //         'base_path' => $folder,
-        //     ]);
-        //     if ($Imagefile->save()) {
-        //         return response()->json([
-        //             'success' => true,
-        //             'data' => $Imagefile
-        //         ]);
-        //     }
-        // }
+        $image = $request->file('image');
+        if ($image) {
+            $folder = 'assets/images/banner/home/';
+            $name = time() . '_' . $request->image->getClientOriginalName();
+            $result = Image::make($image)->save($folder . $name);
+            $Imagefile = DBImage::updateOrCreate([
+                'name' => $name,
+                'base_url' => $request->root(),
+                'base_path' => $folder,
+            ]);
+            if ($Imagefile->save()) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $Imagefile
+                ]);
+            }
+        }
     }
-    public function uploadBrand(Request $request)
+    public function brandImage(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'image' => 'required|mimes:jpeg,png,jpg'
@@ -136,9 +142,17 @@ class ImageController extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
+        if ($request->id != 'undefined') {
+            $data = DBImage::findOrFail($request->id);
+            $brandImage = $data->delete();
+            $existingImagePath =  $data->base_path . $data->name;
+            if (File::exists($existingImagePath)) {
+                File::delete($existingImagePath);
+            }
+        }
         $image = $request->file('image');
         if ($image) {
-            $folder = 'assets/images/banner/';
+            $folder = 'assets/images/brand/';
             $name = time() . '_' . $request->image->getClientOriginalName();
             $result = Image::make($image)->save($folder . $name);
             $Imagefile = DBImage::updateOrCreate([
@@ -167,6 +181,16 @@ class ImageController extends Controller
                 'message' => $validator->errors()->first()
             ], 400);
         }
+
+        if ($request->id != 'undefined') {
+            $data = DBImage::findOrFail($request->id);
+            $faqsImage = $data->delete();
+            $existingImagePath =  $data->base_path . $data->name;
+            if (File::exists($existingImagePath)) {
+                File::delete($existingImagePath);
+            }
+        }
+
         $image = $request->file('image');
         if ($image) {
             $folder = 'assets/images/faq_category/';

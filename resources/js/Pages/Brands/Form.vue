@@ -44,7 +44,7 @@ export default defineComponent({
                 description: this.brand?.data?.description || '',
                 status: this.brand?.data?.status ? 1 : 0,
                 category: this.brand?.data?.category?.id || '',
-                brand_image: this.form?.brand_image || '',
+                brand_image: this.brand?.data?.image?.id ? this.brand?.data?.image?.id : this.form?.brand_image,
             }),
             status: [
                 { value: 1, label: 'Active', },
@@ -84,8 +84,10 @@ export default defineComponent({
             }
         },
         async onbrandChange(e) {
+
+            console.log(this.form.brand_image)
             this.brand_upload.isLoading = true;
-            const data = await utils.imageUpload(route('upload.brand'), e)
+            const data = await utils.imageUpload(route('upload.brand'), e, this.form.brand_image)
             if (data.response.success) {
                 this.form.brand_image = data.response.data.id;
             } else {
@@ -163,9 +165,10 @@ export default defineComponent({
                                 <div class="row">
                                     <div class="col-6 mb-5">
                                         <jet-label for="category" value="Category" class="required" />
-                                        <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
-                                            class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                            v-model="v$.form.category.$model" track-by="label" :class="v$.form.category.$errors.length > 0
+                                        <Multiselect :canClear="false" :options="categories?.data" label="name"
+                                            valueProp="id" class="form-control form-control-lg form-control-solid"
+                                            placeholder="Select One" v-model="v$.form.category.$model" track-by="label"
+                                            :class="v$.form.category.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''
                                                 " />

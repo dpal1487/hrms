@@ -40,9 +40,7 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:categories,name',
-            'description' => 'required',
             'keyword' => 'required',
-            'meta_description' => 'required',
             'meta_tag' => 'required',
             'meta_keyword' => 'required',
         ]);
@@ -175,7 +173,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        $category = new CategoryResource($category);
+        $category = new CategorySingleResource($category);
         if ($category->delete()) {
             return response()->json(['message' =>    DeleteMessage('Category '), 'success' => true]);
         }

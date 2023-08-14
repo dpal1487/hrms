@@ -61,8 +61,9 @@
         /* ========= Image Controller ========== */
         Route::controller(ImageController::class)->group(function () {
             Route::post('category/thumbnail', 'categoryThumbnail')->name('category.thumbnail');
+            Route::post('category/banner', 'categoryBanner')->name('category.banner');
             Route::post('/upload/banner', 'bannerImage')->name('upload.banner');
-            Route::post('/upload/brand', 'uploadBrand')->name('upload.brand');
+            Route::post('/upload/brand', 'brandImage')->name('upload.brand');
             Route::post('/upload/faqs_category', 'uploadFAQsImage')->name('upload.faqs_category');
             Route::post('/upload/faq', 'uploadFaq');
         });
