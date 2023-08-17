@@ -2,7 +2,6 @@
 import { defineComponent } from 'vue';
 import InputError from "@/jetstream/InputError.vue";
 
-
 export default defineComponent({
     props: ["image", "selectedImage", "errors", "isUploading"],
     components: {

@@ -13,20 +13,21 @@ class LoginController extends Controller
 {
     public function authenticate(Request $request)
     {
-        $credentials = $request->only('mobile', 'password');
+        $credentials = $request->only('mobile', 'email', 'password');
+        $remember = $request->has('remember'); // Check if the remember checkbox is selected
         //valid credential
         $validator = Validator::make($credentials, [
-            'mobile' => 'required|numeric|digits:10',
-            'password' => 'required|string|min:8'
+            'mobile' => 'numeric|digits:10',
+            'email' => 'email',
+            'password' =>  Password::min(8),
         ]);
         //Send failed response if request is not valid
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
         }
         //Request is validated
-        //Crean token
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials , $remember)) {
             // $user = Auth::user();
             $user = Auth::guard('api')->user();
             $token = auth()->user()->tokens()->delete();

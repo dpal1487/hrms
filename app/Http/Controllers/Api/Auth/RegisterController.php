@@ -23,7 +23,7 @@ class RegisterController extends Controller
             'mobile' => 'numeric|unique:users,mobile|digits:10',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()->first()], 400);
+            return response()->json(['success' => false, 'type' => 'error', 'message' => $validator->errors()->first()], 400);
         } else {
             //  $response = Msg91::otp()
             // ->to($request->mobile) // phone number with country code
@@ -31,7 +31,12 @@ class RegisterController extends Controller
             // ->send();
             // if($response['type']=='success')
             if (true) {
-                return response()->json(['success' => true, 'message' => 'OTP is sent to your mobile number.']);
+                if ($request->mobile) {
+                    return response()->json(['success' => true, 'message' => 'Enter the 6 digit code sent to you at +91*******' . substr($request->mobile, -3)]);
+                }
+                if ($request->email) {
+                    return response()->json(['success' => true, 'message' => 'Enter the 6 digit code sent to you at ' . substr($request->email, 0, 3) . "*****@" . explode("@", $request->email)[1]]);
+                }
             } else {
                 // return response()->json(['success' => false, 'message' => $response['message']]);
             }
@@ -47,20 +52,17 @@ class RegisterController extends Controller
             'mobile' => 'numeric|min:10|unique:users,mobile|digits:10',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'type' => 'error', 'message' => $validator->errors()->first()]);
+            return response()->json(['success' => false, 'type' => 'error', 'message' => $validator->errors()->first()], 400);
         } else {
             // $response = Msg91::otp($request->otpNumber) // OTP to be verified
             // ->to($request->mobile) // phone number with country code
             // ->verify();
             // if($response['type']=='success'){
             if (true) {
-
                 $first_name = explode(' ', $request->name)[0];
-
                 if (strpos($first_name, ",") !== false) {
                     $first_name = explode(',',  $first_name)[0] . " " . explode(',',  $first_name)[1];
                 }
-
                 $user = User::create([
                     'first_name' => $first_name,
                     'last_name' => count(explode(' ', $request->name)) > 1 ? explode(' ', $request->name)[1] : "",
@@ -74,12 +76,17 @@ class RegisterController extends Controller
                     // $user = User::create($request->toArray());
                     $token = $user->createToken('auth_token')->plainTextToken;
                     if ($token) {
-                        return response()->json(['user' => $user, 'message' => 'Registerd successfully', 'success' => true])->withCookie(cookie('api_token', $token, 60 * 24)); // Set cookie for 24 hours (adjust as needed);
+                        return response()->json([
+                            'user' => $user,
+                            'message' => 'Registerd successfully',
+                            'success' => true,
+                            'access_token' => $token
+                        ])->withCookie(cookie('api_token', $token, 60 * 24)); // Set cookie for 24 hours (adjust as needed);
                     } else {
-                        return response()->json(['success' => false, 'type' => 'error', 'message' => 'Opps something went wrong !']);
+                        return response()->json(['success' => false, 'type' => 'error', 'message' => 'Opps something went wrong !'], 400);
                     }
                 } else {
-                    return response()->json(['success' => false, 'type' => 'error', 'message' => 'Opps something went wrong !']);
+                    return response()->json(['success' => false, 'type' => 'error', 'message' => 'Opps something went wrong !'], 400);
                 }
             } else {
                 // return response()->json(['success' => false, 'type' => 'error', 'message' => $response['message']]);

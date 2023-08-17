@@ -81,7 +81,9 @@ export default defineComponent({
                         </div>
 
 
-                        <!-- <div class="rating">
+                        <div class="rating">
+
+                            <!-- {{ itemreview?.data?.reviews }} -->
                             <div class="d-flex">
                                 <Rating :rating="ratingCount" />
                             </div>
@@ -91,7 +93,7 @@ export default defineComponent({
                             <span class="mx-10 mt-2 fs-5 fw-bold text-gray-800" v-else>
                                 {{ ratingCount }} Out Of 5
                             </span>
-                        </div> -->
+                        </div>
 
                         <div class="d-flex align-items-center mt-5 gap-4">
                             <span class="w-fit">5 Stars</span>

@@ -145,7 +145,7 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="fv-row col-10 mb-5">
+                        <div class="fv-row mb-5">
                             <jet-label for="title" value="Banner Name" />
                             <jet-input id="title" type="text" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0
                                 ? 'is-invalid'
@@ -155,7 +155,7 @@ export default defineComponent({
                                 <input-error :message="error.$message" />
                             </div>
                         </div>
-                        <div class="fv-row col-10 mb-5">
+                        <div class="fv-row mb-5">
                             <jet-label for="url" value="Banner URL" />
                             <jet-input id="url" type="text" v-model="v$.form.url.$model" :class="v$.form.url.$errors.length > 0
                                 ? 'is-invalid'

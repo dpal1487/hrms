@@ -19,7 +19,7 @@ class ItemReviewsResource extends JsonResource
             'item' => $this->name,
             'category' => $this->category,
             'review' => $this->review,
-            'user' => new ImageResource($this->user),
+            'image' => new ImageResource($this->image),
             'reviews' => ItemUserResource::collection($this->reviews),
             'rating_reviews' => count($this->reviews) > 0 ? [
                 'count' => count($this->reviews)
@@ -27,6 +27,7 @@ class ItemReviewsResource extends JsonResource
                 'rating' => 0,
                 'count' => 0
             ],
+
         ];
     }
 }
