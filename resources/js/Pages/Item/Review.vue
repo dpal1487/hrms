@@ -11,7 +11,7 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 import RatingBar from '../../Components/RatingBar.vue';
 import Rating from "../CustomerReviews/Rating.vue";
 export default defineComponent({
-    props: ['itemreview', 'reviews_count'],
+    props: ['itemreview', 'reviews_count','average_rating'],
 
     data() {
         return {
@@ -83,16 +83,13 @@ export default defineComponent({
 
                         <div class="rating">
 
-                            <!-- {{ itemreview?.data?.reviews }} -->
                             <div class="d-flex">
-                                <Rating :rating="ratingCount" />
+                                <Rating :rating="average_rating" />
                             </div>
-                            <span class="mx-10 mt-2 fs-5 fw-bold" v-if="itemreview?.data?.review == null">
-                                0 Out Of 5
+                            <span class="mx-5 mt-2 fs-5 fw-bold" >
+                                  {{ average_rating }} Out Of 5 
                             </span>
-                            <span class="mx-10 mt-2 fs-5 fw-bold text-gray-800" v-else>
-                                {{ ratingCount }} Out Of 5
-                            </span>
+                            
                         </div>
 
                         <div class="d-flex align-items-center mt-5 gap-4">

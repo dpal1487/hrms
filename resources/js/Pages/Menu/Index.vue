@@ -143,7 +143,7 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="row" v-if="menu_lists.meta">
+                <div class="row mb-5" v-if="menu_lists.meta">
                     <div class="col-sm-12 d-flex align-items-center justify-content-center justify-content-md-end">
                         <div class="dataTables_paginate paging_simple_numbers">
                             <Pagination :links="menu_lists.meta.links" />

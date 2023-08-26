@@ -22,6 +22,8 @@ class AddressController extends Controller
   }
   public function store(Request $request)
   {
+
+
     $validator = Validator::make($request->all(), [
       'address_line_1' => 'required',
       'address_line_2' => 'required',

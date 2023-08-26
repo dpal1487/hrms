@@ -18,6 +18,8 @@ export default {
 
     data() {
         return {
+            isMobile: false,
+            isSidebarActive: false,
             showingNavigationDropdown: false,
             hideSidebarOn: []
         };
@@ -39,8 +41,38 @@ export default {
         logout() {
             this.$inertia.post(route("logout"));
         },
-    },
 
+        setSidebar(value) {
+            this.isSidebarActive = value;
+        },
+        handleOuterClick(event) {
+            const sidebarElement = document.getElementById("sidebar");
+            const hamburgerElement = document.getElementById("kt_app_sidebar_mobile_toggle");
+            if (!sidebarElement.contains(event.target) && !hamburgerElement.contains(event.target)) {
+                this.isSidebarActive = false;
+            }
+        },
+        handleWindowResize(windowWidth) {
+            this.isMobile = windowWidth <= 992;
+        }
+    },
+    created() {
+        const windowWidth = window.innerWidth;
+        this.isMobile = windowWidth <= 992;
+        if (windowWidth <= 992) {
+            this.isSidebarActive = false;
+        } else {
+            this.isSidebarActive = true;
+        }
+        window.addEventListener("resize", this.handleWindowResize(windowWidth))
+    },
+    mounted() {
+        window.addEventListener("click", this.handleOuterClick);
+    },
+    beforeDestroy() {
+        window.removeEventListener("click", this.handleOuterClick);
+        window.removeEventListener("resize", this.handleWindowResize);
+    },
     computed: {
         path() {
             return window.location.pathname;
@@ -54,10 +86,10 @@ export default {
     <div>
 
         <Head :title="title" />
-        <AppHeader />
-        <AppSidebar v-if="true" />
+        <AppHeader @setSidebar="setSidebar" :isMobile="isMobile" />
 
-        <!-- Page Content -->
+        <AppSidebar :isSidebarActive="isSidebarActive" @setSidebar="setSidebar" :isMobile="isMobile" v-if="true" />
+
         <main class="app-wrapper flex-column flex-row-fluid">
             <div class="app-main flex-column flex-row-fluid">
                 <div class="d-flex flex-column flex-column-fluid">

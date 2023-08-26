@@ -20,7 +20,7 @@ class AddressResource extends JsonResource
             "address_line_2" => $this->address_line_2,
             "city" => $this->city,
             "state" => $this->state,
-            "country" => $this->country->name,
+            "country" => $this->country?->name,
             "pincode" => $this->pincode,
             "latitude" => $this->latitude,
             "longitude" => $this->longitude,

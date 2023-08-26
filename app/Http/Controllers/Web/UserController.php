@@ -65,6 +65,7 @@ class UserController extends Controller
 
         $items = Item::where(['user_id' => $id])->paginate(2);
 
+
         return Inertia::render('User/Items', [
             'user' => new UserResource($data),
             'itemStatus' => $itemStatus,

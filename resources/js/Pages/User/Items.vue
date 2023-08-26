@@ -57,8 +57,8 @@ export default defineComponent({
                 </div>
             </div>
         </div>
-        <div v-for="item in items.data" class="mb-5">
-            <ItemCard :item="item" :pagename="`/user/${user?.data?.id}/items`" />
+        <div  class="mb-5">
+            <ItemCard :items="items.data" :pagename="`/user/${user?.data?.id}/items`" />
         </div>
         <div class="d-flex align-items-center justify-content-center" v-if="items?.meta">
             <Pagination :links="items?.meta.links" />

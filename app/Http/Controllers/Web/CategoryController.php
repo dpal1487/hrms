@@ -132,7 +132,7 @@ class CategoryController extends Controller
             if ($meta) {
                 $category = Category::where(['id' => $id])->update([
                     'name' => $request->name,
-                    'slug' => $request->slug,
+                    'slug' => Str::slug($request->name),
                     'description' => $request->description,
                     'keywords' => $request->keyword,
                     'parent_id' => $request->parent,

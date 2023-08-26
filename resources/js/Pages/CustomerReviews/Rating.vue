@@ -1,18 +1,25 @@
 <script>
 import { defineComponent } from 'vue';
+
+import StarRating from 'vue-star-rating';
 export default defineComponent({
     props: ["rating"],
     data() {
         return {
             ratingArray: Array(5).fill(""),
         }
+    },
+    components: {
+        StarRating
     }
 });
 </script>
 
 <template>
-    <div class="rating">
-        <div v-for="(r, index) in ratingArray" :key="index" :class="`rating-label ${index + 1 <= this.rating && 'checked'}`">
+    <star-rating :rating="rating" :read-only="true" :star-size="20" :increment="0.01" :show-rating="false"></star-rating>
+    <!-- <div class="rating">
+        <div v-for="(r, index) in ratingArray" :key="index"
+            :class="`rating-label ${index + 1 <= this.rating && 'checked'}`">
             <span class="svg-icon svg-icon-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -22,5 +29,5 @@ export default defineComponent({
                 </svg>
             </span>
         </div>
-    </div>
+    </div> -->
 </template>

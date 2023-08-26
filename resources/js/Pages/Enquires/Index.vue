@@ -102,7 +102,7 @@ export default defineComponent({
                             <tr v-for="(enquiry, index) in enquiries.data" :key="index">
 
                                 <td>
-                                    <span class="text-gray-800 text-hover-primary fs-5 fw-bold">
+                                    <span class="text-gray-800 fs-5 fw-bold">
 
                                         {{ enquiry?.name }}
                                     </span>

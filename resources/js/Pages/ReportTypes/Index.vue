@@ -105,7 +105,7 @@ export default defineComponent({
                                 <td>
                                     <div class="d-flex">
                                         <div class="ms-5">
-                                            <span class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1">{{
+                                            <span class="text-gray-800 fs-5 fw-bold mb-1">{{
                                                 reporttype?.title
                                             }}</span>
                                         </div>

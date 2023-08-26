@@ -4,15 +4,15 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
-    props: ["projects", "status"],
-
+    props: ["projects", "status", "isMobile", "isSidebarActive"],
+    emits: ["setSidebar"],
     components: {
         Link,
     },
     data() {
         return {
+            isExpanded: true,
             q: "",
-
         };
     },
     methods: {
@@ -20,29 +20,30 @@ export default defineComponent({
             console.log(this.q);
         },
         updateSelected(id, e) {
-            console.log(id);
-            console.log(e);
+
         },
         logout() {
             Inertia.post(route('logout'));
-        }
+        },
     },
-    created() { },
+    created() {
+    },
 });
+
 </script>
 <template>
-    <div class="app-sidebar flex-column">
+    <div id="sidebar"
+        :class="`app-sidebar flex-column ${isMobile ? 'drawer drawer-start' : ''} ${isSidebarActive ? 'drawer-on' : ''}`"
+        data-kt-drawer="true" data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}"
+        data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start"
+        data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
         <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
-            <!-- <a href="/dashboard">
-                <img alt="Logo" src="https://suppliers.alrestion.com/assets/media/logos/logo.png"
-                    class="h-25px app-sidebar-logo-default" />
-                <img alt="Logo" src="https://suppliers.alrestion.com/assets/media/logos/logo.png"
-                    class="h-20px app-sidebar-logo-minimize" />
-            </a> -->
+            <Link href="/dashboard">
+            <img alt="Logo" src="assets/media/logos/logo.png" class="h-25px app-sidebar-logo-default" />
+            <img alt="Logo" src="assets/media/logos/logo.png" class="h-20px app-sidebar-logo-minimize" />
+            </Link>
             <div id="kt_app_sidebar_toggle"
-                class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary body-bg h-30px w-30px position-absolute top-50 start-100 translate-middle rotate"
-                data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
-                data-kt-toggle-name="app-sidebar-minimize">
+                class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary body-bg h-30px w-30px position-absolute top-50 start-100 translate-middle rotate">
                 <span class="svg-icon svg-icon-2 rotate-180">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path opacity="0.5"
@@ -56,12 +57,8 @@ export default defineComponent({
             </div>
         </div>
         <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
-            <div class="app-sidebar-wrapper hover-scroll-overlay-y my-5" data-kt-scroll="true"
-                data-kt-scroll-activate="true" data-kt-scroll-height="auto"
-                data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
-                data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true"
-                style="height: 755px">
-                <div class="menu menu-column menu-rounded menu-sub-indention px-3" id="#kt_app_sidebar_menu"
+            <div class="app-sidebar-wrapper hover-scroll-overlay-y h-650px">
+                <div class="menu menu-column menu-rounded menu-sub-indention px-5" id="#kt_app_sidebar_menu"
                     data-kt-menu="true" data-kt-menu-expand="false">
                     <div class="menu-item">
                         <span class="menu-link fs-2">

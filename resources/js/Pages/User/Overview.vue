@@ -51,14 +51,14 @@ export default defineComponent({
                 </div>
             </div>
             <div class="card-body p-9">
-                <div class="row mb-7">
+                <div class="row mb-5">
                     <label class="col-6 fw-bold fs-5 text-gray-800">Full Name</label>
                     <div class="col-6">
                         <span class="fw-bold fs-6 text-gray-800">{{ user?.data?.first_name + " " + user?.data?.last_name
                         }}</span>
                     </div>
                 </div>
-                <div class="row mb-7">
+                <div class="row mb-5">
                     <label class="col-6 fw-bold fs-5 text-gray-800">Contact Phone
                         <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                             title="Phone number must be active"></i></label>
@@ -67,7 +67,7 @@ export default defineComponent({
                         <span class="badge badge-success">Verified</span>
                     </div>
                 </div>
-                <div class="row mb-7">
+                <div class="row mb-5">
                     <label class="col-6 fw-bold fs-5 text-gray-800">Email ID
                         <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""></i></label>
                     <div class="col-6 d-flex align-items-center">
@@ -89,15 +89,15 @@ export default defineComponent({
 
                     </div>
                 </div>
-                <div class="row mb-7">
+                <div class="row mb-5">
                     <label class="col-6 fw-bold fs-5 text-gray-800">Country
                         <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                             title="Country of origination"></i></label>
                     <div class="col-6">
-                        <span class="fw-bold fs-6 text-gray-800">{{ user?.data?.country?.name }}</span>
+                        <span class="fw-bold fs-6 text-gray-800">{{ user?.data?.country }}</span>
                     </div>
                 </div>
-                <div class="row mb-7">
+                <div class="row mb-5">
                     <label class="col-6 fw-bold fs-5 text-gray-800">Communication</label>
                     <div class="col-6">
                         <span class="fw-bold fs-6 text-gray-800">Email, Phone</span>

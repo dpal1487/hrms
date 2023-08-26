@@ -79,4 +79,16 @@ class Item extends Model
     }
     return $this->hasOne(Favourite::class, 'item_id', 'id')->where('user_id', 0);
   }
+
+  public function total_ratings()
+  {
+    $ratings = 0;
+    $reviews = $this->reviews;
+    if (!empty($reviews)) {
+      $ratings = array_sum(array_column($reviews->toArray(), 'rating')) / count($reviews);
+    }
+    return $ratings;
+  }
+
+  
 }

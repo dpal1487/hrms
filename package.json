@@ -64,6 +64,7 @@
         "vue-social-login": "^1.0.7",
         "vue-socket.io": "^3.0.10",
         "vue-spinner": "^1.0.4",
+        "vue-star-rating": "^2.1.0",
         "vue-status-indicator": "^1.2.1",
         "vue3-autocounter": "^1.0.6",
         "vue3-carousel": "^0.3.1",

@@ -14,4 +14,10 @@ class Review extends Model
     {
         return $this->belongsTo(UserReview::class, 'review_id', 'id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(ItemReview::class, 'review_id', 'id');
+    }
+  
 }

@@ -4,17 +4,13 @@ import { Link } from '@inertiajs/inertia-vue3';
 import StatusDropdown from './StatusDropdown.vue';
 export default defineComponent({
     props: ["items", "pagename"],
-
     data() {
         return {
-
         }
     },
     components: { Link, StatusDropdown },
 });
-
 </script>
-
 <template>
     <div class="card mt-5" v-for="(item, index) in items" :key="index">
         <div class="card-body">
@@ -57,13 +53,11 @@ export default defineComponent({
                                             fill="currentColor" />
                                     </svg>
                                 </span>
-
                                 <span v-if="item?.location">
                                     {{ item?.location?.city + " " + item?.location?.state + " " +
                                         item?.location?.country?.name }}
                                 </span>
                                 <span v-else> N / A</span>
-
                             </p>
                             <p class="d-flex align-items-center fw-semibold text-gray-700  me-2 ">
                                 <span class="svg-icon svg-icon-4 me-1">
@@ -104,7 +98,6 @@ export default defineComponent({
                             <span class="text-capitalize text-gray-600 me-3">
                                 &nbsp;Security
                             </span>
-
                         </div>
                         <div class="d-flex flex-column mb-2">
                             <div class="d-flex align-items-center">

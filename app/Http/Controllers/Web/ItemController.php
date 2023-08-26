@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web;
 use App\Http\Resources\Web\Item\ItemCustomerResource;
 use App\Http\Resources\Web\Item\ItemListResource;
 use App\Http\Resources\Web\Item\ItemOverViweResource;
-use App\Http\Resources\Web\Item\ItemRatingsResource;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\ItemStatus;
@@ -14,10 +13,7 @@ use App\Http\Resources\Web\Item\ItemReviewsResource;
 use App\Http\Resources\Web\Item\ItemStatusesResource;
 use App\Http\Resources\Web\UserResource;
 use App\Models\File;
-use App\Models\ItemReview;
 use Inertia\Inertia;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
@@ -64,10 +60,15 @@ class ItemController extends Controller
 
     public function reviews($id)
     {
-      
-
+        $item = Item::find($id);
+        if (!empty($item)) {
+            $averageRating = $item->reviews->average(function ($itemReview) {
+                return $itemReview->review->rating;
+            });
+        }
         return Inertia::render('Item/Review', [
             'itemreview' => new ItemReviewsResource(Item::find($id)),
+            'average_rating' => $averageRating ?  number_format("$averageRating", 1) : null
         ]);
     }
     public function customers($id)

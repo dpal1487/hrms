@@ -12,34 +12,31 @@ use App\Http\Resources\Api\AttributesResource;
 use App\Http\Resources\Api\ImageResource;
 use App\Http\Resources\Api\ItemResource;
 use App\Http\Resources\Api\Account\UserResource;
+use App\Http\Resources\Api\ItemLocationResource;
 use App\Http\Resources\Api\ReportsResource;
 use App\Http\Resources\Web\ReviewResource;
+use App\Models\ItemLocation;
 
 class ItemController extends Controller
 {
   public function index(Request $request)
   {
     $item = Item::where('id', $request->pid)->first();
+    $location = ItemLocation::where('item_id', $request->pid)->first();
 
     return [
-      'id' => $item->id,
-      'title' => $item->name,
-      'base_url' => $item->base_url,
-      'category' => $item->category,
-      'slug' => $item->slug,
-      'time' => $item->time->title,
+      'items' => new ItemResource($item),   
       'images' => ImageResource::collection($item->images),
-      'rent_price' => $item->rent_price,
-      'security_price' => $item->security_price,
       'currency' => '₹',
       'location' => [
-        'address' => $item->location->address,
-        'pincode' => $item->location->pincode,
-        'city' => $item->location->city,
-        'state' => $item->location->state,
-        'locality' => $item->location->locality,
-        'latitude' => $item->location->latitude,
-        'longitude' => $item->location->longitude
+        'address_line_1' => $location->address->address_line_1,
+        'address_line_2' => $location->address->address_line_2,
+        'pincode' => $location->address->pincode,
+        'city' => $location->address->city,
+        'state' => $location->address->state,
+        'locality' => $location->address->locality,
+        'latitude' => $location->address->latitude,
+        'longitude' => $location->address->longitude
       ],
       'favourite' => [
         'isFavourite' => $item->isFavourite ? true : false,
@@ -52,7 +49,6 @@ class ItemController extends Controller
         'data' => count($item->customers),
       ],
       'attributes' => AttributesResource::collection($item->attributes),
-      'description' => $item->description,
       'reviews' => [
         'data' => ReviewResource::collection($item->reviews->skip(0)->take(3)),
         'place_rating' => $this->placeRating($item->reviews)
@@ -97,7 +93,6 @@ class ItemController extends Controller
   public function getReportsItems($id)
   {
     $report = Report::where(['source_id' => $id, 'type_id' => 5])->get();
-
     return ReportsResource::collection($report);
   }
 

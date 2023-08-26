@@ -18,18 +18,14 @@ class ItemReview extends Model
   }
   public function item()
   {
-    return $this->hasOne(Item::class, 'id', 'item_id');
-  }
-  public function review()
-  {
-    return $this->hasOne(Review::class, 'id', 'review_id');
+    return $this->belongsTo(Item::class, 'id', 'item_id');
   }
   public function reviews()
   {
     return $this->hasMany(Review::class, 'id', 'review_id');
   }
-  public function overallRating()
+  public function review()
   {
-    return $this->reviews()->avg('rating');
+    return $this->belongsTo(Review::class);
   }
 }
