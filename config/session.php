@@ -20,6 +20,8 @@ return [
 
     'driver' => env('SESSION_DRIVER', 'database'),
 
+    'provider' => env('SESSION_PROVIDER', 'users'), // Make sure 'users' is your correct user provider
+
     /*
     |--------------------------------------------------------------------------
     | Session Lifetime

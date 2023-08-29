@@ -22,7 +22,7 @@
                 </div>
             </div>
             <!--end::Input group--->
-            <div class="fv-row mb-3 fv-plugins-icon-container">
+            <div class="fv-row mb-8 fv-plugins-icon-container">
                 <!--begin::Password-->
                 <jet-label for="password" value="Password" />
                 <jet-input id="password" type="password" v-model="v$.form.password.$model" :class="v$.form.password.$errors.length > 0 ? 'is-invalid' : ''
@@ -33,9 +33,6 @@
             </div>
             <!--end::Input group--->
 
-            <!--begin::Wrapper-->
-
-            <!--end::Wrapper-->
             <!--begin::Submit button-->
             <div class="d-grid mb-10">
                 <primary-button :disabled="form.processing" :class="{ 'text-white-50': form.processing }">

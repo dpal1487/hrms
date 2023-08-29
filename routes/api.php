@@ -1,57 +1,58 @@
 <?php
 
 // LoginController
-    use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\LoginController;
 /* Forget Controller*/
-    use App\Http\Controllers\Api\Auth\ForgetController;
+use App\Http\Controllers\Api\Auth\ForgetController;
 /*Register Controller*/
-    use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Auth\RegisterController;
 /*Account Controller*/
-    use App\Http\Controllers\Api\Account\EmailController;
-    use App\Http\Controllers\Api\Account\FavouriteController;
-    use App\Http\Controllers\Api\Account\MyAdsController;
-    use App\Http\Controllers\Api\Account\NotificationController;
-    use App\Http\Controllers\Api\Account\ReviewController;
-    use App\Http\Controllers\Api\Account\AccountController;
-    use App\Http\Controllers\Api\Account\AddressController;
-    use App\Http\Controllers\Api\Account\AdReviewController;
-    use App\Http\Controllers\Api\Account\CouponsController;
-    use App\Http\Controllers\Api\Account\CustomerController;
+use App\Http\Controllers\Api\Account\EmailController;
+use App\Http\Controllers\Api\Account\FavouriteController;
+use App\Http\Controllers\Api\Account\MyAdsController;
+use App\Http\Controllers\Api\Account\NotificationController;
+use App\Http\Controllers\Api\Account\ReviewController;
+use App\Http\Controllers\Api\Account\AccountController;
+use App\Http\Controllers\Api\Account\AddressController;
+use App\Http\Controllers\Api\Account\AdReviewController;
+use App\Http\Controllers\Api\Account\CouponsController;
+use App\Http\Controllers\Api\Account\CustomerController;
 /*Category Controller*/
-    use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CategoryController;
 /*Conversation Controller*/
-    use App\Http\Controllers\Api\ConversationController;
+use App\Http\Controllers\Api\ConversationController;
 /*Image Controller*/
-    use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\ImageController;
 /*Item Controller*/
-    use App\Http\Controllers\Api\ItemController;
+use App\Http\Controllers\Api\ItemController;
 /*Location Controller*/
-    use App\Http\Controllers\Api\LocationController;
+use App\Http\Controllers\Api\LocationController;
 /*Message Controller*/
-    use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\MessageController;
 /*Plan Controller*/
-    use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\PlanController;
 /*Post Controller*/
-    use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\PostController;
 /*Profile Controller*/
-    use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ProfileController;
 /*Search Controller*/
-    use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\SearchController;
 /*Setting Controller*/
-    use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\SettingController;
 /*Subscription Controller*/
-    use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\SubscriptionController;
 /*User Controller*/
-    use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserController;
 /*Welcome Controller*/
-    use App\Http\Controllers\Api\WelcomeController;
+use App\Http\Controllers\Api\WelcomeController;
 
-    use App\Http\Controllers\Api\AppController;
-    use Illuminate\Support\Facades\Broadcast;
-    use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AppController;
+use App\Http\Controllers\Api\Auth\SocialController;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
-    
+
     Route::group(['prefix' => 'auth'], function () {
         /*Login Controllers*/
         Route::post('login', [LoginController::class, 'authenticate']);
@@ -63,6 +64,10 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::post('forget', [ForgetController::class, 'forget']);
         Route::post('forget/verify', [ForgetController::class, 'verify']);
         Route::post('forget/resend', [ForgetController::class, 'resend']);
+
+        Route::get('', [SocialController::class, 'index']);
+        Route::get('sociallogin/{provider}', [SocialController::class, 'SocialSignup']);
+        Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial']);
     });
 
     Route::group(['prefix' => 'welcome'], function () {

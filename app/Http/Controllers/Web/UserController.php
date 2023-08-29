@@ -64,8 +64,6 @@ class UserController extends Controller
         $address = UserAddress::where('user_id', $id)->first();
 
         $items = Item::where(['user_id' => $id])->paginate(2);
-
-
         return Inertia::render('User/Items', [
             'user' => new UserResource($data),
             'itemStatus' => $itemStatus,
@@ -92,8 +90,6 @@ class UserController extends Controller
             'address' => $address ? new AddressResource($address) : '',
         ]);
     }
-
-
 
     public function packages($id)
     {

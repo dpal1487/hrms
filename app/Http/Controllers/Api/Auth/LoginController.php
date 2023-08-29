@@ -41,7 +41,9 @@ class LoginController extends Controller
             ])->withCookie(cookie('api_token', $token, 60 * 24));;
         }
 
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        return response()->json([
+            'success' =>false,
+            'message' => 'Invalid credentials'], 401);
     }
     public function logout(Request $request)
     {

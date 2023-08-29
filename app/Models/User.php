@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable
 {
-  use HasFactory, Notifiable, HasApiTokens;
+  use HasFactory, Notifiable, HasApiTokens, TwoFactorAuthenticatable;
 
   /**
    * The attributes that are mass assignable.
@@ -27,6 +28,8 @@ class User extends Authenticatable
     'image_id',
     'facebook_id',
     'country_code',
+    'provider',
+    'provider_id'
   ];
 
   /**
@@ -48,6 +51,7 @@ class User extends Authenticatable
    */
   protected $casts = [
     'email_verified_at' => 'datetime',
+    'mobile_verified_at' => 'datetime',
   ];
 
   public function findForPassport($mobile)
@@ -55,8 +59,6 @@ class User extends Authenticatable
     $mobile = 'mobile';
     return $this->where($mobile, $mobile)->first();
   }
-
-
   public function image()
   {
     return $this->hasOne(Image::class, 'id', 'image_id');
@@ -65,7 +67,6 @@ class User extends Authenticatable
   {
     return $this->hasOne(Address::class, 'user_id', 'id');
   }
-
   public function country()
   {
     return $this->hasOne(Country::class, 'id', 'country_id');
