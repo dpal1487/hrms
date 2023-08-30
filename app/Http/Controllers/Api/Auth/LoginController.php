@@ -38,7 +38,7 @@ class LoginController extends Controller
                 'success' => true,
                 'access_token' => $token,
                 'message' => 'Successfully login',
-            ])->withCookie(cookie('api_token', $token, 60 * 24));;
+            ])->withCookie(cookie('api_token', $token, 60 * 24));
         }
 
         return response()->json([

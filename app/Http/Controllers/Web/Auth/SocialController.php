@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Web\Auth;
 
-use App\Http\Controllers\Api\Controller;
+use App\Http\Controllers\Web\Controller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -15,6 +15,8 @@ class SocialController extends Controller
 
     public function SocialSignup(Request $request, $provider)
     {
+        // dd($provider);
+
         return Socialite::driver($provider)->redirect();
     }
 
@@ -22,10 +24,13 @@ class SocialController extends Controller
     {
         try {
             $user = Socialite::driver($provider)->user();
-            $isUser = User::where('email', $user->email)->orWhere('provider_id', $user->id)->first();
+
+            // dd($user);
+            $isUser = User::where('email', $user->email)->first();
+            // dd($isUser);
             if ($isUser) {
                 Auth::login($isUser);
-                return response()->json(['data' => $user]);
+                return redirect('/dashboard')->with('flash', ['message' => 'Successfully login']);
             } else {
                 $first_name = explode(' ', $user->name)[0];
                 if (strpos($first_name, ",") !== false) {
@@ -40,7 +45,7 @@ class SocialController extends Controller
                     'password' => encrypt('admin@123')
                 ]);
                 Auth::login($createUser);
-                return response()->json(['data' => $user]);
+                return redirect('/dashboard')->with('flash', ['message' => 'Successfully login']);
             }
         } catch (Exception $exception) {
             dd($exception->getMessage());

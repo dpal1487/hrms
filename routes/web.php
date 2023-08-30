@@ -1,7 +1,7 @@
     <?php
 
-use App\Http\Controllers\Api\Auth\SocialController;
-use Inertia\Inertia;
+    use App\Http\Controllers\Web\Auth\SocialController;
+    use Inertia\Inertia;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Foundation\Application;
     use App\Http\Controllers\Web\AttributeController;
@@ -55,9 +55,8 @@ use Inertia\Inertia;
     });
 
     Route::post('login', [LoginController::class, 'login'])->name('user.login');
-    // Route::get('', [SocialController::class, 'index']);
-    // Route::get('sociallogin/{provider}', [SocialController::class, 'SocialSignup'])->name('social.oauth');
-    // Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial'])->name('social.callback');
+    Route::get('socialauth/{provider}', [SocialController::class, 'SocialSignup']);
+    Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial']);
 
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
