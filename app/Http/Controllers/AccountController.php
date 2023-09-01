@@ -125,9 +125,6 @@ class AccountController extends Controller
             }
             return response()->json(['success' => true, 'message' => 'Account Updates successfully']);
         }
-
-
-
         if ($type == 'client') {
             $account = ClientAccount::where(['account_id' => $id, 'company_id' => $this->companyId()])->first();
             if ($account) {

@@ -18,9 +18,9 @@ class SocialLoginController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function redirectToGoogle()
+    public function redirectToGoogle($provider)
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
     /**
@@ -31,20 +31,25 @@ class SocialLoginController extends Controller
     public function handleCallback($provider)
     {
         try {
-
             $user = Socialite::driver($provider)->user();
-            $finduser = User::where('social_id', $user->id)->first();
+            // dd($user);
+            $finduser = User::where('email', $user->email)->first();
             if ($finduser) {
                 Auth::login($finduser);
                 return redirect('/dashboard');
             } else {
+                $first_name = explode(' ', $user->name)[0];
+                if (strpos($first_name, ",") !== false) {
+                    $first_name = explode(',',  $first_name)[0] . " " . explode(',',  $first_name)[1];
+                }
                 $newUser = User::create([
-                    'first_name' => $user->user['given_name'],
-                    'last_name' => $user->user['family_name'],
+                    'first_name' => $first_name,
+                    'last_name' => count(explode(' ', $user->name)) > 1 ? explode(' ', $user->name)[1] : "",
                     'email' => $user->email,
+                    'avatar' =>$user->avatar,
                     'social_id' => $user->id,
-                    'email_verified_at' => $user->user['email_verified'] == true ? Carbon::now() : NULL,
-                    'social_type' => 'google',
+                    // 'email_verified_at' => $user->user['email_verified'] == true ? Carbon::now() : NULL,
+                    'social_type' => $provider,
                     'password' => Hash::make('my-google')
                 ]);
                 Auth::login($newUser);

@@ -7,7 +7,7 @@ import Header from './Components/Header.vue';
 import { toast } from 'vue3-toastify';
 export default defineComponent({
     props: ['employees', 'faqs'],
-    emits: ["submitted"],
+    emits: ["submitted"],   
 
     data() {
         return {

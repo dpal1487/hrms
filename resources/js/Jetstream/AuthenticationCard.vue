@@ -24,7 +24,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="d-flex flex-column flex-root justify-content-center flex h-100">
+    <div class="d-flex flex-column flex-root justify-content-center flex h-md-100">
         <div class="d-flex flex-column flex-lg-row flex-column-fluid">
             <div class="d-flex flex-lg-row-fluid">
                 <div
@@ -32,7 +32,7 @@ export default defineComponent({
                 >
                     <!--begin::Image-->
                     <img
-                        class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20"
+                        class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20 mb-md-20"
                         src="/assets/media/auth/agency.png"
                         alt=""
                     />

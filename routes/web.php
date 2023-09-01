@@ -60,8 +60,8 @@ Route::get('/', function () {
 });
 
 Route::post('login', [LoginController::class, 'login'])->name('user.login');
-Route::post('login/{provider}', [SocialLoginController::class, 'redirectToGoogle']);
-Route::get('login/{provider}/callback', [SocialLoginController::class, 'handleCallback']);
+Route::get('sociallogin/{provider}', [SocialLoginController::class, 'redirectToGoogle']);
+Route::get('sociallogin/{provider}/callback', [SocialLoginController::class, 'handleCallback']);
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
