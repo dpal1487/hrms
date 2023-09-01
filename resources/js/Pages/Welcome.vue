@@ -23,7 +23,6 @@ export default defineComponent({
 
 <template>
   <Head title="Welcome" />
-
   <div v-if="canLogin" class="h-100">
     <app-layout title="Dashboard" v-if="$page.props.user" :href="route('dashboard')">
       <template #header>

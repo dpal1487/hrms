@@ -15,16 +15,15 @@ class SocialController extends Controller
 
     public function SocialSignup(Request $request, $provider)
     {
-        // dd($provider);
 
         return Socialite::driver($provider)->redirect();
     }
 
     public function loginWithSocial($provider)
     {
+        // return $provider;
         try {
             $user = Socialite::driver($provider)->user();
-
             // dd($user);
             $isUser = User::where('email', $user->email)->first();
             // dd($isUser);

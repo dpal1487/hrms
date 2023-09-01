@@ -15,13 +15,20 @@ class SocialController extends Controller
 
     public function SocialSignup(Request $request, $provider)
     {
-        return Socialite::driver($provider)->redirect();
+        // return $provider;
+        // $user = Socialite::driver($provider)->stateless()->redirect();
+        // dd($user);
+        return Socialite::driver($provider)->stateless()->redirect();
+        // return Socialite::driver($provider)->stateless()->redirectUrl(config('services.' . $provider . '.api_redirect'))->redirect();
     }
 
-    public function loginWithSocial($provider)
+    public function handleSocialCallbackApi($provider)
     {
+        
+
         try {
-            $user = Socialite::driver($provider)->user();
+            // dd($provider);
+            $user = Socialite::driver($provider)->stateless()->user();
             $isUser = User::where('email', $user->email)->orWhere('provider_id', $user->id)->first();
             if ($isUser) {
                 Auth::login($isUser);
@@ -43,7 +50,11 @@ class SocialController extends Controller
                 return response()->json(['data' => $user]);
             }
         } catch (Exception $exception) {
-            dd($exception->getMessage());
+            return response()->json([
+                'error' => 'Authentication failed.',
+                'message' => $exception->getMessage()
+            ], 401);
+            // dd($exception->getMessage());
         }
     }
 }

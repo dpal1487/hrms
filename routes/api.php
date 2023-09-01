@@ -67,7 +67,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
 
         Route::get('', [SocialController::class, 'index']);
         Route::get('sociallogin/{provider}', [SocialController::class, 'SocialSignup']);
-        Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial']);
+        Route::get('sociallogin/{provider}/callback', [SocialController::class, 'handleSocialCallbackApi']);
     });
 
     Route::group(['prefix' => 'welcome'], function () {

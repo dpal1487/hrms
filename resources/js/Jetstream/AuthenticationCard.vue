@@ -24,14 +24,14 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="d-flex flex-column flex-root justify-content-center flex h-md-100">
+    <div class="d-flex flex-column flex-root justify-content-center flex h-md-100 h-sm-100">
         <div class="d-flex flex-column flex-lg-row flex-column-fluid">
             <div class="d-flex flex-lg-row-fluid">
                 <div class="d-flex flex-column flex-center pb-0 pb-lg-10 p-10 w-100">
                     <!--begin::Image-->
-                    <img class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20"
+                    <img class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20 mt-md-20 mt-sm-20"
                         src="/assets/media/auth/agency.png" alt="" />
-                    <img class="theme-dark-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20"
+                    <img class="theme-dark-show mx-auto mw-100 w-150px w-lg-300px mb-10 mb-lg-20 mt-md-20 mt-sm-20"
                         src="/assets/media/auth/agency-dark.png" alt="" />
                     <!--end::Image-->
 

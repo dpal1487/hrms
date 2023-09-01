@@ -31,15 +31,18 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'facebook' => [
+
         'client_id' => env('FACEBOOK_APP_ID'),
         'client_secret' => env('FACEBOOK_APP_SECRET'),
-        'redirect' => env('FACEBOOK_REDIRECT_URL_API', 'FACEBOOK_REDIRECT_URL_WEB'),
+        // 'redirect' => env('FACEBOOK_REDIRECT_URL'), // Use the web redirect URL by default
+        'redirect' => env('FACEBOOK_REDIRECT_URL_API'), // Optional: Define a separate redirect for the API
+        
     ],
-
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => env('GOOGLE_REDIRECT_URL_API', 'GOOGLE_REDIRECT_URL_WEB')
+        // 'redirect' => env('GOOGLE_REDIRECT_URL'),
+        'redirect' =>  env('GOOGLE_REDIRECT_URL_API'),
     ],
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
