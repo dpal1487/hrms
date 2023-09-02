@@ -118,11 +118,9 @@ export default {
                             </div>
                             <!--end::Page title-->
                             <slot name="toolbar" />
-
                         </div>
                         <!--end::Toolbar container-->
                     </div>
-
                     <div class="app-content flex-column-fluid">
                         <!--begin::Content container-->
                         <div class="app-container container-fluid">

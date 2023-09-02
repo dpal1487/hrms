@@ -76,9 +76,9 @@ export default defineComponent({
                                     </svg>
                                 </span>
                             </span>
-                            <a class="menu-link" href="/dashboard">
+                            <Link class="menu-link" href="/dashboard">
                                 <span class="menu-title">Dashboard</span>
-                            </a>
+                            </Link>
                             <span class="menu-arrow"></span>
                         </span>
                     </div>

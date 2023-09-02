@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\PostAdsEvent;
 use App\Http\Controllers\Api\Controller;
 
 use Illuminate\Http\Request;
@@ -70,20 +71,18 @@ class PostController extends Controller
             ItemAttribute::create(['item_id' => $item->id, 'attribute_id' => $attribute['attribute'], 'attribute_value' => $attribute['value']]);
           }
         }
-        $address = Address::create([
-          'country' => 'IN',
-          'address' => $request->address['address'],
-          'locality' => $request->address['locality'],
-          'state' => $request->address['state'],
-          'city' => $request->address['city'],
-          'pincode' => $request->address['pincode'],
-          'latitude' => $request->address['latitude'],
-          'longitude' => $request->address['longitude'],
-        ]);
-        if (ItemLocation::create([
-          'address_id' => $address->id,
-          'item_id' => $item->id
-        ])) {
+        // $address = Address::create([
+        //   'country' => 'IN',
+        //   'address' => $request->address['address'],
+        //   'locality' => $request->address['locality'],
+        //   'state' => $request->address['state'],
+        //   'city' => $request->address['city'],
+        //   'pincode' => $request->address['pincode'],
+        //   'latitude' => $request->address['latitude'],
+        //   'longitude' => $request->address['longitude'],
+        // ]);
+        if (true) {
+          event(new PostAdsEvent(['data' => $item]));
           return response()->json(['message' => 'Item has been added successfully', 'data' => $item, 'success' => true]);
         }
         return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false]);

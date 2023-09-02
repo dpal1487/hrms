@@ -22,7 +22,7 @@
         "laravel/socialite": "^5.8",
         "laravel/tinker": "^2.7",
         "munafio/chatify": "^1.6",
-        "predis/predis": "^2.1",
+        "predis/predis": "^2.2",
         "pusher/pusher-php-server": "^7.2",
         "razorpay/razorpay": "^2.8",
         "rinvex/laravel-subscriptions": "^6.1",

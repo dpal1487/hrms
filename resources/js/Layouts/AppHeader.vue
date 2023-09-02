@@ -1,8 +1,11 @@
+
+
 <script>
 import { defineComponent } from 'vue';
 import { Link } from "@inertiajs/inertia-vue3";
 import axios from "axios";
 import { Inertia } from '@inertiajs/inertia';
+import { toast } from 'vue3-toastify';
 
 export default defineComponent({
     props: ["isMobile", "isSidebarActive"],
@@ -14,6 +17,8 @@ export default defineComponent({
         return {
             notifications: [],
             isNotifLoading: false,
+            notificationDrop: false,
+            themeModeDrop: false,
         };
     },
     created() {
@@ -33,11 +38,28 @@ export default defineComponent({
                 .then((response) => {
                     this.notifications = response.data.data;
                 })
-                .finally(() => (this.isNotifLoading = false));
+                .finally(() => { this.isNotifLoading = false });
         },
         logout() {
             Inertia.post(route('logout'));
+        },
+        toggleNotificationDrop(value) {
+            this.notificationDrop = value;
+        },
+        toggleThemeModeDrop(value) {
+            console.log(value);
+            this.themeModeDrop = value;
         }
+    },
+    mounted() {
+        window.echo
+            .channel("laravel_database_post-ads")
+            .listen(".PostAdsEvent", (e) => {
+                console.log(e.data);
+                // toast.success(e.data.name, {
+                //     position: toast.POSITION.BOTTOM_RIGHT,
+                // });
+            });
     },
 });
 </script>
@@ -60,7 +82,8 @@ export default defineComponent({
                 </button>
             </div>
             <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                <Link href="/" class="d-lg-none">
+                <Link href="/dashboard" class="d-lg-none">
+                <img alt="Logo" src="/assets/media/logos/logo.png" class="h-30px">
                 </Link>
             </div>
             <!--end::Mobile logo-->
@@ -72,34 +95,94 @@ export default defineComponent({
                 <!--begin::Navbar-->
                 <div class="app-navbar flex-shrink-0">
                     <!--begin::Activities-->
-                    <div class="app-navbar-item ms-1 ms-md-3">
-                        <!--begin::Drawer toggle-->
-                        <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px"
-                            id="kt_activities_toggle">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
-                            <span class="svg-icon svg-icon-2 svg-icon-md-1"><svg width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="8" y="9" width="3" height="10" rx="1.5" fill="currentColor"></rect>
-                                    <rect opacity="0.5" x="13" y="5" width="3" height="14" rx="1.5" fill="currentColor">
-                                    </rect>
-                                    <rect x="18" y="11" width="3" height="8" rx="1.5" fill="currentColor"></rect>
-                                    <rect x="3" y="13" width="3" height="6" rx="1.5" fill="currentColor"></rect>
-                                </svg>
+                    <div @mouseleave="toggleNotificationDrop(false)" @mouseenter="toggleNotificationDrop(true)"
+                        class="position-relative app-navbar-item ms-1 ms-md-3">
+                        <button @click="toggleNotificationDrop(notificationDrop ? false : true)"
+                            class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
+                                height="2.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="18" cy="6" r="3"></circle>
+                                <path
+                                    d="M18 19H5V6h8c0-.712.153-1.387.422-2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h13c1.103 0 2-.897 2-2v-8.422A4.962 4.962 0 0 1 18 11v8z">
+                                </path>
+                            </svg>
+                            <span
+                                class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
                             </span>
-                            <!--end::Svg Icon-->
+                        </button>
+                        <div v-if="notificationDrop" class="menu-sub-dropdown menu flex-column">
+                            <div class="d-flex flex-column bgi-no-repeat rounded-top"
+                                style="background-image:url('/metronic8/demo1/assets/media/misc/menu-header-bg.jpg')">
+                                <h3 class="fw-semibold px-9 mt-10 mb-6">
+                                    Notifications <span class="fs-8 opacity-75 ps-3">24 reports</span>
+                                </h3>
+                            </div>
+                            <div class="">
+                                <div class="tab-pane fade" id="kt_topbar_notifications_1" role="tabpanel">
+                                    <div class="scroll-y mh-325px my-5 px-8">
+                                        <div class="d-flex flex-stack py-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="symbol symbol-35px me-4">
+                                                    <span class="symbol-label bg-light-primary">
+                                                        <i class="ki-duotone ki-abstract-28 fs-2 text-primary"><span
+                                                                class="path1"></span><span class="path2"></span></i>
+                                                    </span>
+                                                </div>
+                                                <div class="mb-0 me-2">
+                                                    <a href="#"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bold">Project
+                                                        Alice</a>
+                                                    <div class="text-gray-400 fs-7">Phase 1 development</div>
+                                                </div>
+                                            </div>
+                                            <span class="badge badge-light fs-8">1 hr</span>
+                                        </div>
+                                        <div class="d-flex flex-stack py-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="symbol symbol-35px me-4">
+                                                    <span class="symbol-label bg-light-danger">
+                                                        <i class="ki-duotone ki-information fs-2 text-danger"><span
+                                                                class="path1"></span><span class="path2"></span><span
+                                                                class="path3"></span></i>
+                                                    </span>
+                                                </div>
+                                                <div class="mb-0 me-2">
+                                                    <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">HR
+                                                        Confidential</a>
+                                                    <div class="text-gray-400 fs-7">Confidential staff documents</div>
+                                                </div>
+                                            </div>
+                                            <span class="badge badge-light fs-8">2 hrs</span>
+                                        </div>
+                                        <div class="d-flex flex-stack py-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="symbol symbol-35px me-4">
+                                                    <span class="symbol-label bg-light-warning">
+                                                        <i class="ki-duotone ki-briefcase fs-2 text-warning"><span
+                                                                class="path1"></span><span class="path2"></span></i>
+                                                    </span>
+                                                </div>
+                                                <div class="mb-0 me-2">
+                                                    <a href="#"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bold">Company HR</a>
+                                                    <div class="text-gray-400 fs-7">Corporeate staff profiles</div>
+                                                </div>
+                                            </div>
+                                            <span class="badge badge-light fs-8">5 hrs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <!--end::Drawer toggle-->
                     </div>
-                    <!--end::Activities-->
                     <!--begin::Chat-->
-                    <div class="app-navbar-item ms-1 ms-md-3">
+                    <div class="position-relative app-navbar-item ms-1 ms-md-3">
                         <!--begin::Menu wrapper-->
                         <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative"
                             id="kt_drawer_chat_toggle">
                             <!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
                             <span class="svg-icon svg-icon-2 svg-icon-md-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                    <!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                                     <path
                                         d="M284.046,224.8a34.114,34.114,0,1,0,34.317,34.113A34.217,34.217,0,0,0,284.046,224.8Zm-110.45,0a34.114,34.114,0,1,0,34.317,34.113A34.217,34.217,0,0,0,173.6,224.8Zm220.923,0a34.114,34.114,0,1,0,34.317,34.113A34.215,34.215,0,0,0,394.519,224.8Zm153.807-55.319c-15.535-24.172-37.31-45.57-64.681-63.618-52.886-34.817-122.374-54-195.666-54a405.975,405.975,0,0,0-72.032,6.357,238.524,238.524,0,0,0-49.51-36.588C99.684-11.7,40.859.711,11.135,11.421A14.291,14.291,0,0,0,5.58,34.782C26.542,56.458,61.222,99.3,52.7,138.252c-33.142,33.9-51.112,74.776-51.112,117.337,0,43.372,17.97,84.248,51.112,118.148,8.526,38.956-26.154,81.816-47.116,103.491a14.284,14.284,0,0,0,5.555,23.34c29.724,10.709,88.549,23.147,155.324-10.2a238.679,238.679,0,0,0,49.51-36.589A405.972,405.972,0,0,0,288,460.14c73.313,0,142.8-19.159,195.667-53.975,27.371-18.049,49.145-39.426,64.679-63.619,17.309-26.923,26.07-55.916,26.07-86.125C574.394,225.4,565.634,196.43,548.326,169.485ZM284.987,409.9a345.65,345.65,0,0,1-89.446-11.5l-20.129,19.393a184.366,184.366,0,0,1-37.138,27.585,145.767,145.767,0,0,1-52.522,14.87c.983-1.771,1.881-3.563,2.842-5.356q30.258-55.68,16.325-100.078c-32.992-25.962-52.778-59.2-52.778-95.4,0-83.1,104.254-150.469,232.846-150.469s232.867,67.373,232.867,150.469C517.854,342.525,413.6,409.9,284.987,409.9Z" />
                                 </svg>
@@ -113,12 +196,11 @@ export default defineComponent({
                     </div>
                     <!--end::Chat-->
                     <!--begin::Theme mode-->
-                    <div class="app-navbar-item ms-1 ms-md-3">
+                    <div @mouseleave="toggleThemeModeDrop(false)" @mouseenter="toggleThemeModeDrop(true)"
+                        class="position-relative app-navbar-item ms-1 ms-md-3">
                         <!--begin::Menu toggle-->
-                        <a href="#"
-                            class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px"
-                            data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"
-                            data-kt-menu-placement="bottom-end">
+                        <button @click="toggleThemeModeDrop(themeModeDrop ? false : true)"
+                            class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen060.svg-->
                             <span class="svg-icon theme-light-show svg-icon-2"><svg width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -169,12 +251,11 @@ export default defineComponent({
                                         fill="currentColor"></path>
                                 </svg>
                             </span>
-                            <!--end::Svg Icon--></a>
+                            <!--end::Svg Icon--></button>
                         <!--begin::Menu toggle-->
-
                         <!--begin::Menu-->
-                        <div class="menu menu-sub menu-column menu-rounded menu-title-gray-700 menu-icon-muted menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px"
-                            data-kt-menu="true" data-kt-element="theme-mode-menu">
+                        <div v-if="themeModeDrop"
+                            class="menu menu-sub-dropdown flex-column menu-rounded menu-title-gray-700 menu-icon-muted menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px">
                             <!--begin::Menu item-->
                             <div class="menu-item px-3 my-0">
                                 <a href="#" class="menu-link px-3 py-2 active" data-kt-element="mode" data-kt-value="light">

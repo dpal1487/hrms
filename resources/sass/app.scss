@@ -6551,6 +6551,12 @@ fieldset:disabled .btn {
     .modal-fullscreen-sm-down .modal-body {
         overflow-y: auto;
     }
+        .menu-sub-dropdown{
+            right: unset !important;
+            left:0 ;
+            transform:translateX(-60%);
+            width: 300px !important;
+        }
 }
 
 @media (max-width: 767.98px) {
@@ -34101,11 +34107,15 @@ html:not([data-theme=dark]) .theme-light-bg-body {
 }
 
 .menu-sub-dropdown {
-    display: none;
+    // display: none;
+    position: absolute;
     border-radius: 0.475rem;
     background-color: var(--kt-menu-dropdown-bg-color);
     box-shadow: var(--kt-menu-dropdown-box-shadow);
     z-index: 107;
+    top: 100%;
+    right: 0;
+    width: 350px;;
 }
 
 .show.menu-dropdown>.menu-sub-dropdown,

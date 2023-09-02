@@ -1,13 +1,8 @@
 {
-	"authHost": "localhost:8000",
+	"authHost": "http://localhost",
 	"authEndpoint": "/broadcasting/auth",
-	"clients": [
-		{
-			"appId": "4919c4230280bab8",
-			"key": "b9104ff6bd07b1fe81c323f70660ad39"
-		}
-	],
-	"database": "sqlite",
+	"clients": [],
+	"database": "redis",
 	"databaseConfig": {
 		"redis": {},
 		"sqlite": {
@@ -16,7 +11,7 @@
 	},
 	"devMode": true,
 	"host": null,
-	"port": "8000",
+	"port": "6001",
 	"protocol": "http",
 	"socketio": {},
 	"secureOptions": 67108864,
@@ -29,9 +24,9 @@
 		"redis": true
 	},
 	"apiOriginAllow": {
-		"allowCors": true,
-		"allowOrigin": "http://localhos:8000/api/v1",
-		"allowMethods": "GET, POST",
-		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+		"allowCors": false,
+		"allowOrigin": "",
+		"allowMethods": "",
+		"allowHeaders": ""
 	}
 }
