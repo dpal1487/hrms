@@ -4,10 +4,11 @@ import AppHeader from "./AppHeader.vue";
 import AppSidebar from "./AppSidebar.vue";
 
 export default {
-    props: {
-        title: String,
-        breadcrumb: Object,
-    },
+    props: [
+        "title",
+        "breadcrumb",
+        "headers",
+        "notifications",],
 
     components: {
         Head,
@@ -80,13 +81,11 @@ export default {
     },
 };
 </script>
-
-
 <template>
     <div>
 
         <Head :title="title" />
-        <AppHeader @setSidebar="setSidebar" :isMobile="isMobile" />
+        <AppHeader @setSidebar="setSidebar" :isMobile="isMobile" :notifications="notifications" :headers="headers" />
 
         <AppSidebar :isSidebarActive="isSidebarActive" @setSidebar="setSidebar" :isMobile="isMobile" v-if="true" />
 
@@ -102,7 +101,6 @@ export default {
                                 <h1
                                     class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
                                     {{ title }}
-                                    <!-- {{ $page.props.user.first_name }} -->
                                 </h1>
                                 <!--end::Title-->
                                 <!--begin::Breadcrumb-->

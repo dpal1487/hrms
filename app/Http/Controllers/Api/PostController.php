@@ -17,8 +17,10 @@ use App\Models\Item;
 use App\Models\ItemAttribute;
 use App\Models\UserAddress;
 use App\Models\ItemLocation;
+use App\Notifications\NewPostNotification;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -36,6 +38,7 @@ class PostController extends Controller
   }
   public function store(Request $request)
   {
+    $user = Auth::user();
     $validator = Validator::make($request->all(), [
       'name' => 'required',
       'description' => 'required',
@@ -82,7 +85,11 @@ class PostController extends Controller
         //   'longitude' => $request->address['longitude'],
         // ]);
         if (true) {
-          event(new PostAdsEvent(['data' => $item]));
+          $notification = new NewPostNotification($item);
+
+          $user->notify($notification);
+
+          // event(new PostAdsEvent(['data' => $item]));
           return response()->json(['message' => 'Item has been added successfully', 'data' => $item, 'success' => true]);
         }
         return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false]);

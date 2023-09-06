@@ -8,14 +8,14 @@ import { Inertia } from '@inertiajs/inertia';
 import { toast } from 'vue3-toastify';
 
 export default defineComponent({
-    props: ["isMobile", "isSidebarActive"],
+    props: ["isMobile", "isSidebarActive", "notifications", "headers"],
     emits: ["setSidebar"],
     components: {
         Link,
     },
     data() {
         return {
-            notifications: [],
+            // notifications: [],
             isNotifLoading: false,
             notificationDrop: false,
             themeModeDrop: false,
@@ -95,6 +95,7 @@ export default defineComponent({
                 <!--begin::Navbar-->
                 <div class="app-navbar flex-shrink-0">
                     <!--begin::Activities-->
+
                     <div @mouseleave="toggleNotificationDrop(false)" @mouseenter="toggleNotificationDrop(true)"
                         class="position-relative app-navbar-item ms-1 ms-md-3">
                         <button @click="toggleNotificationDrop(notificationDrop ? false : true)"
@@ -106,8 +107,12 @@ export default defineComponent({
                                     d="M18 19H5V6h8c0-.712.153-1.387.422-2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h13c1.103 0 2-.897 2-2v-8.422A4.962 4.962 0 0 1 18 11v8z">
                                 </path>
                             </svg>
+                            <!-- {{ notifications }} -->
+                            <span class="badge">{{ headers }}</span>
+
                             <span
-                                class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
+                                class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">{{
+                                    headers }}
                             </span>
                         </button>
                         <div v-if="notificationDrop" class="menu-sub-dropdown menu flex-column">
