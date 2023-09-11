@@ -55,7 +55,11 @@
         ]);
     });
 
-    Route::post('login', [LoginController::class, 'login'])->name('user.login');
+    Route::post( 'login', [LoginController::class, 'login'])->name('user.login');
+    
+
+
+    
     Route::get('socialauth/{provider}', [SocialController::class, 'SocialSignup']);
     Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial']);
 

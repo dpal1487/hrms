@@ -27,7 +27,7 @@ class LoginController extends Controller
         }
         //Request is validated
 
-        if (Auth::attempt($credentials , $remember)) {
+        if (Auth::attempt($credentials, $remember)) {
             // $user = Auth::user();
             $user = Auth::guard('api')->user();
             $token = auth()->user()->tokens()->delete();
@@ -42,9 +42,27 @@ class LoginController extends Controller
         }
 
         return response()->json([
-            'success' =>false,
-            'message' => 'Invalid credentials'], 401);
+            'success' => false,
+            'message' => 'Invalid credentials'
+        ], 401);
     }
+
+    public function refreshToken(Request $request)
+    {
+        $user =  $request->user();
+        $request->user()->tokens()->delete(); // Revoke all existing tokens
+
+        $token = $request->user()->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'user' => new UserResource($user),
+            'success' => true,
+            'access_token' => $token,
+            'message' => 'Successfully login',
+        ])->withCookie(cookie('api_token', $token, 60 * 24));
+    }
+
+
     public function logout(Request $request)
     {
         Auth::user()->tokens()->delete();
