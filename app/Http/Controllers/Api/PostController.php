@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\PostAdsEvent;
 use App\Http\Controllers\Api\Controller;
-
 use Illuminate\Http\Request;
-use App\Http\Resources\Api\AddressResource;
-use App\Http\Resources\Api\AttributesResource;
+use App\Http\Resources\Api\Account\AddressResource;
+use App\Http\Resources\Api\AttributeListResource;
+use App\Http\Resources\Api\CategoryResource;
 use App\Http\Resources\Api\TimeResource;
 use App\Models\Category;
 use App\Models\Attribute;
@@ -29,8 +29,8 @@ class PostController extends Controller
     $category = Category::find($request->category_id);
     $address = UserAddress::where(['user_id' => $this->uid()])->first();
     return [
-      'category' => $category,
-      'attributes' => AttributesResource::collection(Attribute::where(['category_id' => $request->category_id])->get()),
+      'category' => new CategoryResource($category),
+      'attributes' => AttributeListResource::collection(Attribute::where(['category_id' => $request->category_id])->get()),
       'price_conditions' => TimeResource::collection(TimePeriod::where(['category_id' => $request->category_id])->get()),
       'address' => new AddressResource($address->address)
     ];
@@ -45,7 +45,7 @@ class PostController extends Controller
       'images' => 'required',
       'price_condition' => 'required',
       'security_price' => 'required',
-      'address_line_1' => 'required',
+      'address' => 'required',
     ]);
     if ($validator->fails()) {
       return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
