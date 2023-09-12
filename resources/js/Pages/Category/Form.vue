@@ -97,7 +97,7 @@ export default defineComponent({
         },
         async onThumbnailChange(e) {
             this.thumbnail.isLoading = true;
-            const data = await utils.imageUpload(route('category.thumbnail'), e , this.form.image_id)
+            const data = await utils.imageUpload(route('category.thumbnail'), e, this.form.image_id)
 
             if (data.response.success) {
                 this.form.image_id = data.response.data.id;
@@ -113,7 +113,7 @@ export default defineComponent({
         async onBannerChange(e) {
             console.log(this.form.banner_image)
             this.banner.isLoading = true;
-            const data = await utils.imageUpload(route('category.banner'), e , this.form.banner_image)
+            const data = await utils.imageUpload(route('category.banner'), e, this.form.banner_image)
             if (data.response.success) {
                 this.form.banner_image = data.response.data.id;
             } else {
@@ -144,7 +144,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/category" class="text-muted text-hover-primary">category</Link>
+                <Link href="/categories" class="text-muted text-hover-primary">Category</Link>
             </li>
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
@@ -171,7 +171,7 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="card-body text-center">
-                                
+
                                 <ImageInput :image="this.category?.data?.banner?.medium_path" :onchange="onBannerChange"
                                     :remove="removeSelectedAvatar" :selectedImage="banner.url"
                                     :errors="v$.form.banner_image.$errors" :isUploading="banner.isLoading" />
@@ -199,9 +199,10 @@ export default defineComponent({
                                     </div>
                                     <div class="col-6 mb-5">
                                         <jet-label for="department_id" value="Category Parent" />
-                                        <Multiselect :options="category_parent?.data" label="name" valueProp="id"
-                                            class="form-control form-control-lg form-control-solid" placeholder="Select One"
-                                            v-model="v$.form.parent_id.$model" track-by="name" />
+                                        <Multiselect :can-clear="false" :options="category_parent?.data" label="name"
+                                            valueProp="id" class="form-control form-control-lg form-control-solid"
+                                            placeholder="Select One" v-model="v$.form.parent_id.$model" track-by="name"
+                                            :searchable="true" />
                                         <div v-for="(error, index) of v$.form.parent_id.$errors" :key="index">
                                             <input-error :message="error.$message" />
                                         </div>
@@ -224,8 +225,6 @@ export default defineComponent({
                                             ? 'is-invalid'
                                             : ''
                                             " placeholder="Text" />
-
-
                                 </div>
 
                             </div>

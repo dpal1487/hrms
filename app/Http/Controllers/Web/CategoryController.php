@@ -43,6 +43,8 @@ class CategoryController extends Controller
             'keyword' => 'required',
             'meta_tag' => 'required',
             'meta_keyword' => 'required',
+            'image_id' => 'required',
+            'banner_image' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -102,11 +104,11 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'description' => 'required',
             'keyword' => 'required',
-            'meta_description' => 'required',
             'meta_tag' => 'required',
             'meta_keyword' => 'required',
+            'image_id' => 'required',
+            'banner_image' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors([
@@ -135,7 +137,7 @@ class CategoryController extends Controller
                     'slug' => Str::slug($request->name),
                     'description' => $request->description,
                     'keywords' => $request->keyword,
-                    'parent_id' => $request->parent,
+                    'parent_id' => $request->parent_id,
                     'image_id' => $request->image_id,
                     'meta_id' => $meta->id,
                 ]);

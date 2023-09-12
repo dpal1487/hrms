@@ -112,7 +112,7 @@ export default defineComponent({
                         </button>
                         <div v-if="notificationDrop" class="menu-sub-dropdown menu flex-column">
                             <div class="d-flex flex-column bgi-no-repeat rounded-top"
-                                style="background-image:url('/metronic8/demo1/assets/media/misc/menu-header-bg.jpg')">
+                                style="background-image:url('/assets/media/misc/menu-header-bg.jpg')">
                                 <h3 class="fw-semibold px-9 mt-10 mb-6">
                                     Notifications <span class="fs-8 opacity-75 ps-3">24 reports</span>
                                 </h3>

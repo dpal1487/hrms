@@ -8,11 +8,15 @@ import { InertiaProgress } from '@inertiajs/progress';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3Toastify from 'vue3-toastify';
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'REHNTU';
 
 import "vue3-toastify/dist/index.css";
 
 import Echo from "laravel-echo";
+
+import io from 'socket.io-client';
+
+window.io = io; // Make the Socket.io client available globally
 
 window.echo = new Echo({
     broadcaster: "socket.io",

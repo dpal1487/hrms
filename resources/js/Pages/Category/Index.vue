@@ -167,7 +167,7 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="categories.meta">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end mt-5" v-if="categories.meta">
                     <Pagination :links="categories.meta.links" />
                 </div>
             </div>

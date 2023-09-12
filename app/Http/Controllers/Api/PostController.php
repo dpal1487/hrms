@@ -15,6 +15,7 @@ use App\Models\Address;
 use App\Models\TimePeriod;
 use App\Models\Item;
 use App\Models\ItemAttribute;
+use App\Models\ItemImage;
 use App\Models\UserAddress;
 use App\Models\ItemLocation;
 use Illuminate\Support\Str;
@@ -44,7 +45,7 @@ class PostController extends Controller
       'images' => 'required',
       'price_condition' => 'required',
       'security_price' => 'required',
-      'address' => 'required',
+      'address_line_1' => 'required',
     ]);
     if ($validator->fails()) {
       return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
@@ -71,16 +72,25 @@ class PostController extends Controller
             ItemAttribute::create(['item_id' => $item->id, 'attribute_id' => $attribute['attribute'], 'attribute_value' => $attribute['value']]);
           }
         }
-        // $address = Address::create([
-        //   'country' => 'IN',
-        //   'address' => $request->address['address'],
-        //   'locality' => $request->address['locality'],
-        //   'state' => $request->address['state'],
-        //   'city' => $request->address['city'],
-        //   'pincode' => $request->address['pincode'],
-        //   'latitude' => $request->address['latitude'],
-        //   'longitude' => $request->address['longitude'],
-        // ]);
+        $address = Address::create([
+          'is_primary' => $request->is_primary,
+          'address_type' => $request->address_type,
+          'address_line_1' => $request->address_line_1,
+          'address_line_2' => $request->address_line_2,
+          'state' => $request->state,
+          'city' => $request->city,
+          'country_id' => $request->country_id,
+          'pincode' => $request->pincode,
+          'latitude' => $request->latitude,
+          'longitude' => $request->longitude,
+        ]);
+
+        if ($address) {
+          $itemAddress = ItemLocation::create([
+            'item_id' => $item->id,
+            'address_id' => $address->id,
+          ]);
+        }
         if (true) {
           event(new PostAdsEvent(['data' => $item]));
           return response()->json(['message' => 'Item has been added successfully', 'data' => $item, 'success' => true]);
@@ -140,6 +150,7 @@ class PostController extends Controller
         'to_date' => date('y-m-d h:i:s'),
       );
       $item = Item::where(['id' => $request->pid, 'user_id' => $this->uid()])->update($data);
+
       if ($item) {
         ItemAttribute::where(['item_id' => $request->pid])->delete();
         if (count($request['attributes']) > 0) {
@@ -151,23 +162,23 @@ class PostController extends Controller
           'item_id' => $request->pid
         ])->first();
         if (Address::where('id', $address->id)->update([
-          'country' => 'IN',
-          'address' => $request->address['address'],
-          'locality' => $request->address['locality'],
-          'state' => $request->address['state'],
-          'city' => $request->address['city'],
-          'pincode' => $request->address['pincode'],
-          'latitude' => $request->address['latitude'],
-          'longitude' => $request->address['longitude'],
+          'address_line_1' => $request->address_line_1,
+          'address_line_2' => $request->address_line_2,
+          'state' => $request->state,
+          'city' => $request->city,
+          'country_id' => $request->country_id,
+          'pincode' => $request->pincode,
+          'latitude' => $request->latitude,
+          'longitude' => $request->longitude,
         ])) {
-          // ItemImage::where(['item_id' => $request->pid])->delete();
+          ItemImage::where(['item_id' => $request->pid])->delete();
           // foreach ($request->images as $image) {
-          //   ItemImage::create([
-          //     'item_id' => $request->pid,
-          //     'image_id' => $image['id'],
-          //   ]);
+            ItemImage::create([
+              'item_id' => $request->pid,
+              'image_id' => $request->images,
+            ]);
           // }
-          return response()->json(['message' => 'Item has been added successfully', 'data' => $request->pid, 'success' => true]);
+          return response()->json(['message' => 'Item has been updated successfully', 'data' => $request->pid, 'success' => true]);
         }
       }
       return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false]);

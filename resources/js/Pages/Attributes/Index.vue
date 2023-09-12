@@ -150,7 +150,7 @@ export default defineComponent({
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="attributes.meta">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end mt-5" v-if="attributes.meta">
                     <Pagination :links="attributes.meta.links" />
                 </div>
             </div>

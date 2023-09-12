@@ -53,6 +53,8 @@ class ImageController extends Controller
 
   public function post(Request $request)
   {
+
+    
     $validator = Validator::make($request->all(), [
       'image' => 'required|mimes:jpeg,png,jpg'
     ]);
@@ -64,12 +66,13 @@ class ImageController extends Controller
       ], 400);
     }
     $image = $request->file('image');
+
     if ($image) {
       $name = time() . '_' . $request->image->getClientOriginalName();
       $folder = "assets/images/$request->destination/";
       $result = Image::make($image)->save($folder . $name);
       $imageFile = ItemImage::updateOrCreate([
-        'item_id' => $request->id,
+        'item_id' => $request->item_id,
         'name' => $name,
         'base_url' => $request->root(),
         'base_path' => $folder,

@@ -39,8 +39,8 @@ export default defineComponent({
         data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
         <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
             <Link href="/dashboard">
-            <img alt="Logo" src="assets/media/logos/logo.png" class="h-25px app-sidebar-logo-default" />
-            <img alt="Logo" src="assets/media/logos/logo.png" class="h-20px app-sidebar-logo-minimize" />
+            <img alt="Logo" src="/assets/media/logos/logo.png" class="h-25px app-sidebar-logo-default" />
+            <img alt="Logo" src="/assets/media/logos/logo.png" class="h-20px app-sidebar-logo-minimize" />
             </Link>
             <div id="kt_app_sidebar_toggle"
                 class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary body-bg h-30px w-30px position-absolute top-50 start-100 translate-middle rotate">
