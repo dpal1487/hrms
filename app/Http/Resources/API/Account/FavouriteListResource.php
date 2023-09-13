@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Api\Account;
 
 use App\Http\Resources\Api\ImageResource;
-use App\Http\Resources\Api\ItemResource;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FavouriteListResource extends JsonResource
@@ -21,13 +21,14 @@ class FavouriteListResource extends JsonResource
             'item_id' => $this->item->id,
             'title' => $this->item->name,
             'base_url' => $this->item->base_url,
-            'time' => $this->item->time->title,
+            'period' => $this->item->time->title,
             'image' => new ImageResource($this->item->image),
             'rent_price' => $this->item->rent_price,
             'security_price' => $this->item->security_price,
-            'currency_symbol' => $this->item->user->country->currency_symbol,
-            'location' => new AddressResource($this->item->location),
+            'currency_symbol' => "₹",
+            'location' => new AddressResource($this->item->location->address),
             'isFavourite' => $this->item->isFavourite ? true : false,
+            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d'),
         ];
     }
 }

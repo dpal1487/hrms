@@ -12,7 +12,6 @@ class ItemLocation extends Model
     'address_id',
     'item_id',
   ];
-
   public function address()
   {
     return $this->hasOne(Address::class,'id','address_id');
