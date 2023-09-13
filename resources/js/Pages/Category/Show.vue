@@ -3,39 +3,26 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import TopCard from "./Components/TopCard.vue";
-import Multiselect from "@vueform/multiselect";
-import InputError from "@/jetstream/InputError.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
-import { toast } from "vue3-toastify";
-import utils from "../utils";
-import { Inertia } from "@inertiajs/inertia";
-
 export default defineComponent({
-    props: ["attribute"],
+    props: ["category"],
     setup() {
-        return { v$: useVuelidate() };
     },
     validations() {
         return {
             form: {
-                value: {
-                    required,
-                },
-                status: {
-                    required,
+                image: {
+                    required
                 }
-            },
+            }
         };
     },
     data() {
         return {
+
             tbody: [
-                "Attribute Value",
-                "Attribute Status",
-                "Action",
+                "Name",
+                "Description",
+                "Status",
             ],
             title: "Category Overview",
         };
@@ -45,12 +32,41 @@ export default defineComponent({
         Link,
         Head,
         TopCard,
-        Multiselect,
-        JetInput,
-        JetLabel,
-        InputError,
     },
     methods: {
+
+        async onThumbnailChange(e) {
+            this.thumbnail.isLoading = true;
+            const data = await utils.imageUpload(route('category.thumbnail'), e, this.form.image_id)
+
+            if (data.response.success) {
+                this.form.image_id = data.response.data.id;
+            } else {
+                toast.error(data.response.message);
+            }
+
+            this.thumbnail.url = URL.createObjectURL(data.file);
+
+            this.thumbnail.isLoading = false;
+        },
+
+        async onBannerChange(e) {
+            console.log(this.form.banner_image)
+            this.banner.isLoading = true;
+            const data = await utils.imageUpload(route('category.banner'), e, this.form.banner_image)
+            if (data.response.success) {
+                this.form.banner_image = data.response.data.id;
+            } else {
+                toast.error(data.response.message);
+            }
+            this.banner.url = URL.createObjectURL(data.file);
+
+            this.banner.isLoading = false;
+        },
+
+        removeSelectedAvatar() {
+            this.url = null;
+        }
     },
 });
 </script>
@@ -77,76 +93,55 @@ export default defineComponent({
                 <i class="bi bi-plus-circle"></i>Add New Category</Link>
             </div>
         </template>
-        <div class="mb-5">
-            <TopCard :attribute="attribute?.data" />
-            <div class="card">
+        <div>
+            <TopCard :category="category?.data" />
+            <div class="card mt-5">
                 <div class="card-header align-items-center">
                     <div class="card-title">
                         <h2>Category Banner</h2>
                     </div>
-                    <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <div>
-                        </div>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-6 mx-10">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                            </div>
+                        <div class="col-md-12">
+                            <img v-if="category?.data?.banner" :src="category?.data?.banner?.small_path" alt="image"
+                                class="w-100 h-300px" />
+                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image" class="w-100 h-300px">
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="card mt-5">
                 <div class="card-header align-items-center">
                     <div class="card-title">
                         <h2>Category Attribute</h2>
                     </div>
-                    <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                        <div>
-                        </div>
-                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6 mx-10">
-                        </div>
-                    </div>
+                <div class="card-body p-0">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-3 text-left">
+                                <table class="table align-middle table-row-dashed fs-6 text-left mx-10">
                                     <thead>
-                                        <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
+                                        <tr class="text-gray-800 fw-bold text-uppercase">
                                             <th v-for="(th, index) in tbody" :key="index">
                                                 {{ th }}
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody class="fw-semibold text-gray-600">
-                                        <tr v-for="(attribute, index) in attribute?.data?.values" :key="index">
-                                            <attribute-value-list :attribute="attribute">
-                                                <template #action>
-                                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                                        @click="toggleModal(true, attribute)"><i
-                                                            class="bi bi-pencil me-2"></i>
-                                                    </button>
-
-                                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px"
-                                                        @click="confirmDelete(
-                                                            attribute.id, index
-                                                        )
-                                                            ">
-                                                        <i class="bi bi-trash3"></i>
-                                                    </button>
-                                                </template>
-                                            </attribute-value-list>
+                                    <tbody class="fw-semibold text-gray-700 text-capitalize">
+                                        <tr v-for="(attribute, index) in category?.data?.attributes" :key="index">
+                                            <td>
+                                                {{ attribute?.name }}
+                                            </td>
+                                            <td>
+                                                {{ attribute?.description }}
+                                            </td>
+                                            <td>
+                                                <div class="badge bg-success w-fit" v-if="attribute?.status == 1">Active
+                                                </div>
+                                                <div class="badge bg-danger w-fit" v-else>Inactive</div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -155,6 +150,9 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
+
+
+
         </div>
     </app-layout>
 </template>

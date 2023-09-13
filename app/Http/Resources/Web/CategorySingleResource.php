@@ -23,7 +23,12 @@ class CategorySingleResource extends JsonResource
             'image' => new ImageResource($this->image),
             'meta' => $this->meta,
             'parent' => $this->parent,
-            'banner'=>new ImageResource($this->banner?->banner),
+            'banner' => new ImageResource($this->banner?->banner),
+            'attributes' => $this->attributes,
+            'header' => [
+                'total_active' => count($this->attributes->where('status', 1)),
+                'total_value' => count($this->attributes)
+            ]
         ];
     }
 }

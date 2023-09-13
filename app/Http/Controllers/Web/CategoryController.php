@@ -186,6 +186,8 @@ class CategoryController extends Controller
     public function show(Request $request, $id)
     {
         $category = Category::find($id);
+
+        // return new CategorySingleResource($category);
         if ($category) {
             return Inertia::render('Category/Show', [
                 'category' => new CategorySingleResource($category),

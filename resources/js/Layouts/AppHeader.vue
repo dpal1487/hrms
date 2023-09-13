@@ -47,7 +47,7 @@ export default defineComponent({
             this.notificationDrop = value;
         },
         toggleThemeModeDrop(value) {
-            console.log(value);
+            // console.log(value);
             this.themeModeDrop = value;
         }
     },

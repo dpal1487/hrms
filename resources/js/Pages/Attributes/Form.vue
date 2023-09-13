@@ -160,9 +160,9 @@ export default defineComponent({
                         </div>
                         <div class="row mb-5">
                             <div class="col-6">
-                                <jet-label for="department_id" value="Category" class="required" />
+                                <jet-label value="Category" class="required" />
                                 <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select Category"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select Category" :searchable="true"
                                     v-model="v$.form.category.$model" track-by="name" :class="v$.form.category.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -172,7 +172,7 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="col-6">
-                                <jet-label for="department_id" value="Input Type" class="required" />
+                                <jet-label value="Input Type" class="required" />
                                 <Multiselect :canClear="false" :options="input_type" label="label" valueProp="value"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select Input Type"
                                     v-model="v$.form.input_type.$model" track-by="label" :class="v$.form.input_type.$errors.length > 0
@@ -212,9 +212,9 @@ export default defineComponent({
                         </div>
                         <div class="row mb-5">
                             <div class="col-6">
-                                <jet-label for="field" value="Field" class="required" />
+                                <jet-label value="Field" class="required" />
                                 <div class="">
-                                    <jet-input id="field" type="text" v-model="v$.form.field.$model" :class="v$.form.field.$errors.length > 0
+                                    <jet-input  type="text" v-model="v$.form.field.$model" :class="v$.form.field.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
                                         " placeholder="Attribute Field" />
@@ -224,7 +224,7 @@ export default defineComponent({
                                 </div>
                             </div>
                             <div class="col-6">
-                                <jet-label for="department_id" value="Status" class="required" />
+                                <jet-label  value="Status" class="required" />
                                 <Multiselect :canClear="false" :options="status" label="label" valueProp="value"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select Status"
                                     v-model="v$.form.status.$model" track-by="label" :class="v$.form.status.$errors.length > 0

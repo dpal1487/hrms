@@ -9,7 +9,7 @@ import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, url } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import ImageInput from '@/components/ImageInput.vue';
+import ImageInput from '@/Components/ImageInput.vue';
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
 import utils from "../utils.js";

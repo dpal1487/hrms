@@ -8,10 +8,8 @@ import JetLabel from "@/Jetstream/Label.vue";
 import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import axios from "axios";
 import { toast } from "vue3-toastify";
-import { Inertia } from "@inertiajs/inertia";
-import ImageInput from '@/components/ImageInput.vue';
+import ImageInput from '@/Components/ImageInput.vue';   
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import utils from "../utils.js";
 
@@ -23,8 +21,8 @@ export default defineComponent({
     validations() {
         return {
             form: {
-                thumbnail: {},
-                banner_image: {},
+                thumbnail: {required},
+                banner_image: {required},
                 name: { required },
                 parent_id: {},
                 description: {},
@@ -145,7 +143,7 @@ export default defineComponent({
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <Link href="/categories" class="text-muted text-hover-primary">Category</Link>
+                <Link href="/categories" class="text-muted text-hover-primary"> Categories</Link>
             </li>
         </template>
         <div class="d-flex flex-column flex-lg-row flex-column-fluid justify-content-center">
@@ -165,19 +163,7 @@ export default defineComponent({
                                     :errors="v$.form.thumbnail.$errors" :isUploading="thumbnail.isLoading" />
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-header mb-5">
-                                <div class="card-title">
-                                    <h2>Banner Image </h2>
-                                </div>
-                            </div>
-                            <div class="card-body text-center">
 
-                                <ImageInput :image="this.category?.data?.banner?.medium_path" :onchange="onBannerChange"
-                                    :remove="removeSelectedAvatar" :selectedImage="banner.url"
-                                    :errors="v$.form.banner_image.$errors" :isUploading="banner.isLoading" />
-                            </div>
-                        </div>
                     </div>
                     <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
                         <div class="card">
@@ -277,6 +263,45 @@ export default defineComponent({
 
                             </div>
                         </div>
+
+                        <div class="card card-flush py-4">
+                            <!--begin::Card header-->
+                            <div class="card-header">
+                                <div class="card-title">
+                                     <h2>Banner Image </h2>
+                                </div>
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body pt-0">
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-2">
+                                    <!--begin::Dropzone-->
+                                    <div class="dropzone" id="kt_ecommerce_add_product_media">
+                                        <!--begin::Message-->
+                                        <div class="dz-message needsclick">
+                                            <!--begin::Icon-->
+                                            <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                            <!--end::Icon-->
+                                            <!--begin::Info-->
+                                            <div class="ms-4">
+                                                <h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files here or click to
+                                                    upload.</h3>
+                                            </div>
+                                            <!--end::Info-->
+                                        </div>
+                                    </div>
+                                    <!--end::Dropzone-->
+                                </div>
+                                <!--end::Input group-->
+                                <!--begin::Description-->
+                                <div class="text-muted fs-7">Set the product media gallery.</div>
+                                <!--end::Description-->
+                            </div>
+                            <!--end::Card header-->
+                        </div>
+
+
                         <div class="d-flex justify-content-end gap-5">
                             <Link href="/categories"
                                 class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
