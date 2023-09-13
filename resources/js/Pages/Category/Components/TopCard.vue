@@ -37,7 +37,7 @@ export default defineComponent({
 
         async onThumbnailChange(e) {
             this.thumbnail.isLoading = true;
-            const data = await utils.imageUpload(route('category.thumbnail'), e, this.form.image_id)
+            const data = await utils.imageUpload(route('category.thumbnail.show'), e, this.form.image_id)
 
             if (data.response.success) {
                 this.form.image_id = data.response.data.id;
