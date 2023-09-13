@@ -100,10 +100,14 @@ class CategoryController extends Controller
         $categoryParent = Category::where('parent_id', '=', NULL)->get();
         $category = Category::find($id);
 
-        return Inertia::render('Category/Form', [
-            'category_parent' => (CategoryListResource::collection($categoryParent)),
-            'category' => new CategorySingleResource($category)
-        ]);
+        if (!empty($category)) {
+            return Inertia::render('Category/Form', [
+                'category_parent' => (CategoryListResource::collection($categoryParent)),
+                'category' => new CategorySingleResource($category)
+            ]);
+        }
+
+        return redirect()->route('categories.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
 

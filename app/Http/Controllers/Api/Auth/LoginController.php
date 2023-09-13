@@ -50,6 +50,7 @@ class LoginController extends Controller
     public function refreshToken(Request $request)
     {
         $user =  $request->user();
+
         $request->user()->tokens()->delete(); // Revoke all existing tokens
 
         $token = $request->user()->createToken('auth_token')->plainTextToken;
