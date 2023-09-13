@@ -124,8 +124,9 @@ export default defineComponent({
                                                 class="rounded">
                                         </span>
                                         <div class="ms-5">
-                                            <span class="text-gray-800 fs-5 fw-bold mb-1"
-                                                category-filter="category_name">{{ category?.name }}</span>
+                                             <Link class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1"
+                                            :href="`/category/${category.id}`">{{ category?.name }}
+                                        </Link>
                                         </div>
                                     </div>
                                 </td>

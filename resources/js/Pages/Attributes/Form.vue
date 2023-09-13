@@ -146,7 +146,7 @@ export default defineComponent({
                             <div class="col-6">
                                 <jet-label for="rules" value="Attribute Rule" />
                                 <Multiselect id="rules" :can-clear="false" :options="rules?.data" label="rule"
-                                    valueProp="id" class="form-control form-control-solid" placeholder="Select Time Periods"
+                                    valueProp="id" class="form-control form-control-solid" placeholder="Attibute Rule"
                                     mode="tags" :close-on-select="false" track-by="rule" :searchable="true"
                                     :create-option="true" :class="v$.form.rules.$errors.length > 0
                                         ? 'is-invalid'
@@ -162,7 +162,7 @@ export default defineComponent({
                             <div class="col-6">
                                 <jet-label for="department_id" value="Category" class="required" />
                                 <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select Category"
                                     v-model="v$.form.category.$model" track-by="name" :class="v$.form.category.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -174,7 +174,7 @@ export default defineComponent({
                             <div class="col-6">
                                 <jet-label for="department_id" value="Input Type" class="required" />
                                 <Multiselect :canClear="false" :options="input_type" label="label" valueProp="value"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select Input Type"
                                     v-model="v$.form.input_type.$model" track-by="label" :class="v$.form.input_type.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -188,7 +188,7 @@ export default defineComponent({
                             <div class="col-6">
                                 <jet-label value="Data Type" class="required" />
                                 <Multiselect :canClear="false" :options="data_type" label="label" valueProp="value"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select Data Type"
                                     v-model="v$.form.data_type.$model" track-by="label" :class="v$.form.data_type.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -200,7 +200,7 @@ export default defineComponent({
                             <div class="col-6">
                                 <jet-label value="Display Order" class="required" />
                                 <Multiselect :canClear="false" :options="display_order" label="label" valueProp="value"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select Display Order"
                                     v-model="v$.form.display_order.$model" track-by="label" :class="v$.form.display_order.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -226,7 +226,7 @@ export default defineComponent({
                             <div class="col-6">
                                 <jet-label for="department_id" value="Status" class="required" />
                                 <Multiselect :canClear="false" :options="status" label="label" valueProp="value"
-                                    class="form-control form-control-lg form-control-solid" placeholder="Select One"
+                                    class="form-control form-control-lg form-control-solid" placeholder="Select Status"
                                     v-model="v$.form.status.$model" track-by="label" :class="v$.form.status.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
@@ -244,6 +244,8 @@ export default defineComponent({
                                     : ''
                                     " placeholder="Text ..." />
                         </div>
+
+                        
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-5">

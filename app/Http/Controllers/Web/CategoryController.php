@@ -77,10 +77,17 @@ class CategoryController extends Controller
                     ]
                 );
             }
-            return redirect()->route('categories.index')->with('flash', [
-                'success' => true,
-                'message' => CreateMessage('Category')
-            ]);
+            if ($request->add_more == true) {
+                return redirect()->route('category.create')->with('flash', [
+                    'success' => true,
+                    'message' => CreateMessage('Category')
+                ]);
+            } else {
+                return redirect()->route('categories.index')->with('flash', [
+                    'success' => true,
+                    'message' => CreateMessage('Category')
+                ]);
+            }
         }
         return redirect()->route('categories.index')->with('flash', [
             'success' => false,
@@ -170,6 +177,17 @@ class CategoryController extends Controller
             return response()->json(['message' => StatusMessage('Category', $status), 'success' => true]);
         }
         return response()->json(['message' => 'Opps! something went wrong.', 'success' => false]);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $category = Category::find($id);
+        if ($category) {
+            return Inertia::render('Category/Show', [
+                'category' => new CategorySingleResource($category),
+            ]);
+        }
+        return redirect()->route('categories.index')->with('flash', ['success' => false, 'message' => ErrorMessage()]);
     }
 
     public function destroy($id)

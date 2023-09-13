@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\Api\Account\AddressResource;
 use App\Http\Resources\Api\AttributeListResource;
+use App\Http\Resources\Api\AttributesResource;
 use App\Http\Resources\Api\CategoryResource;
 use App\Http\Resources\Api\TimeResource;
 use App\Models\Category;

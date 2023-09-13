@@ -15,6 +15,7 @@ use App\Models\AttributeRule;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
+
 class AttributeController extends Controller
 {
 
@@ -47,7 +48,7 @@ class AttributeController extends Controller
 
     public function create()
     {
-        $categories = Category::get();
+        $categories = Category::where('parent_id' , '!=' , null)->get();
         $rules = RuleModel::get();
         return Inertia::render('Attributes/Form', [
             'categories' => CategoryResource::collection($categories),

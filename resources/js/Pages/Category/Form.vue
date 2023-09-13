@@ -60,6 +60,7 @@ export default defineComponent({
                 meta_tag: this.category?.data?.meta?.tag || '',
                 meta_description: this.category?.data?.meta?.description || '',
                 meta_keyword: this.category?.data?.meta?.keywords || '',
+                add_more: false,
             }),
         };
     },
@@ -201,7 +202,7 @@ export default defineComponent({
                                         <jet-label for="department_id" value="Category Parent" />
                                         <Multiselect :can-clear="false" :options="category_parent?.data" label="name"
                                             valueProp="id" class="form-control form-control-lg form-control-solid"
-                                            placeholder="Select One" v-model="v$.form.parent_id.$model" track-by="name"
+                                            placeholder="Select Category" v-model="v$.form.parent_id.$model" track-by="name"
                                             :searchable="true" />
                                         <div v-for="(error, index) of v$.form.parent_id.$errors" :key="index">
                                             <input-error :message="error.$message" />
@@ -265,8 +266,14 @@ export default defineComponent({
                                             ? 'is-invalid'
                                             : ''
                                             " placeholder="Text" />
-
                                 </div>
+                                <div class="form-check" v-if="route().current() == 'category.create'">
+                                    <input class="form-check-input" type="checkbox" id="new-link" v-model="form.add_more" />
+                                    <label class="form-check-label" for="new-link">
+                                        Add More Category
+                                    </label>
+                                </div>
+
 
                             </div>
                         </div>
