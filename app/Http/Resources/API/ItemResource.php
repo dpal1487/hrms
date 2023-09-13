@@ -28,7 +28,6 @@ class ItemResource extends JsonResource
             "security_price" => $this->security_price,
             "from_date" => date('y M d', strtotime($this->from_date)),
             "to_date" => date('y M d', strtotime($this->to_date)),
-            "is_deleted" => $this->is_deletes,
             "status" => $this->status,
             'created_at' => Carbon::parse($this->created_at)->format('Y-m-d'),
             "updated_at" => Carbon::parse($this->updated_at)->format('Y-m-d'),

@@ -2,13 +2,13 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Http\Resources\Api\Account\AddressResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ItemListResource extends JsonResource
 {
     public function toArray($request)
     {
-
         return [
             'id' => $this->id,
             'title' => $this->name,

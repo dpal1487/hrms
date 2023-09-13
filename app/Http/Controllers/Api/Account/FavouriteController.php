@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\Account;
 use App\Models\Favourite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
-use App\Http\Resources\Api\Account\FavouritesResource;
+use App\Http\Resources\Api\Account\FavouriteListResource;
 
 class FavouriteController extends Controller
 {
@@ -22,14 +22,12 @@ class FavouriteController extends Controller
     $favourites = Favourite::whereHas('item', function ($q) {
       $q->where('is_deleted', 0);
     })->orderBy('id', 'desc')->where('user_id', $this->uid());
-    $this->data['totalCount'] = $favourites->count();
+    //$this->data['totalCount'] = $favourites->count();
     if ($this->offset) {
       $favourites = $favourites->skip($this->offset);
     }
     $favourites = $favourites->get();
-
-    // return $favourites;
-    $this->data['data'] = FavouritesResource::collection($favourites);
+    $this->data['data'] = FavouriteListResource::collection($favourites);
     return response()->json($this->data);
   }
   public function store($id)
