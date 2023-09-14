@@ -89,9 +89,9 @@ export default {
                 toast.error(error.message)
             });
     },
-    async imageUpload(route, e, id) {
+    async imageUpload(route, e, id) { // event can also be a FilelistObject
 
-        const file = e.target.files[0];
+        const file = e?.target?.files[0] || e[0];
         const formdata = new FormData();
         formdata.append("image", file);
         formdata.append("id", id);

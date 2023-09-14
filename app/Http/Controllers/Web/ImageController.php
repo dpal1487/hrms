@@ -72,7 +72,6 @@ class ImageController extends Controller
                 File::delete($existingImagePath);
             }
         }
-
         $image = $request->file('image');
         if ($image) {
             $name = time() . '_' . $request->image->getClientOriginalName();

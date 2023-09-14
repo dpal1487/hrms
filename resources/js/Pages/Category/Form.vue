@@ -9,9 +9,10 @@ import InputError from "@/jetstream/InputError.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
-import ImageInput from '@/Components/ImageInput.vue';   
+import ImageInput from '@/Components/ImageInput.vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import utils from "../utils.js";
+import DropFile from "@/Components/DropFile.vue";
 
 export default defineComponent({
     props: ['category', 'category_parent'],
@@ -21,8 +22,8 @@ export default defineComponent({
     validations() {
         return {
             form: {
-                thumbnail: {required},
-                banner_image: {required},
+                thumbnail: {},
+                banner_image: { required },
                 name: { required },
                 parent_id: {},
                 description: {},
@@ -72,6 +73,7 @@ export default defineComponent({
         InputError,
         ImageInput,
         ClassicEditor,
+        DropFile
     },
     methods: {
         submit() {
@@ -109,11 +111,11 @@ export default defineComponent({
             this.thumbnail.isLoading = false;
         },
 
-        async onBannerChange(e) {
-            console.log(this.form.banner_image)
+        async onBannerChange(files) {
             this.banner.isLoading = true;
-            const data = await utils.imageUpload(route('category.banner'), e, this.form.banner_image)
+            const data = await utils.imageUpload(route('category.banner'), files, this.form.banner_image)
             if (data.response.success) {
+                console.log(data.response.data.id)
                 this.form.banner_image = data.response.data.id;
             } else {
                 toast.error(data.response.message);
@@ -165,14 +167,14 @@ export default defineComponent({
                         </div>
 
                     </div>
-                    <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+                    <div class="d-flex flex-column flex-row-fluid gap-5">
                         <div class="card">
-                            <div class="card-header mb-5">
+                            <div class="card-header">
                                 <div class="card-title">
                                     <h2>Category</h2>
                                 </div>
                             </div>
-                            <div class="card-body pt-2">
+                            <div class="card-body pt-5">
                                 <div class="row mb-5">
                                     <div class="col-6">
                                         <jet-label for="name" value="Name" />
@@ -264,38 +266,25 @@ export default defineComponent({
                             </div>
                         </div>
 
-                        <div class="card card-flush py-4">
+                        <div class="card">
                             <!--begin::Card header-->
                             <div class="card-header">
                                 <div class="card-title">
-                                     <h2>Banner Image </h2>
+                                    <h2>Banner Image </h2>
                                 </div>
                             </div>
                             <!--end::Card header-->
+
                             <!--begin::Card body-->
-                            <div class="card-body pt-0">
+                            <div class="card-body pt-5">
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-2">
-                                    <!--begin::Dropzone-->
-                                    <div class="dropzone" id="kt_ecommerce_add_product_media">
-                                        <!--begin::Message-->
-                                        <div class="dz-message needsclick">
-                                            <!--begin::Icon-->
-                                            <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                            <!--end::Icon-->
-                                            <!--begin::Info-->
-                                            <div class="ms-4">
-                                                <h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files here or click to
-                                                    upload.</h3>
-                                            </div>
-                                            <!--end::Info-->
-                                        </div>
-                                    </div>
-                                    <!--end::Dropzone-->
+                                    <DropFile :image="this.category?.data?.banner?.file_path"
+                                        :isUploading="banner.isLoading" @change="onBannerChange" />
                                 </div>
                                 <!--end::Input group-->
                                 <!--begin::Description-->
-                                <div class="text-muted fs-7">Set the product media gallery.</div>
+                                <div class="text-muted fs-7 mx-2">Set the category banner image.</div>
                                 <!--end::Description-->
                             </div>
                             <!--end::Card header-->
