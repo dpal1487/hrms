@@ -28,7 +28,6 @@ class LoginController extends Controller
         //Request is validated
 
         if (Auth::attempt($credentials, $remember)) {
-            // $user = Auth::user();
             $user = Auth::guard('api')->user();
             $token = auth()->user()->tokens()->delete();
             $token = $user->createToken('api')->plainTextToken;
@@ -56,7 +55,8 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::user()->tokens()->delete();
+        $user = $request->user();
+        $user->tokens()->delete();
         return response()->json(['message' => 'Logged out successfully'])->withCookie(cookie('api', null));
     }
     public function user()

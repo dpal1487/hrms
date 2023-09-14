@@ -104,9 +104,9 @@ export default defineComponent({
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <img v-if="category?.data?.banner" :src="category?.data?.banner?.small_path" alt="image"
+                            <img v-if="category?.data?.banner" :src="category?.data?.banner?.file_path" alt="image"
                                 class="w-100 h-300px" />
-                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image" class="w-100 h-300px">
+                            <img v-else src="/assets/media/misc/pattern-4.jpg" alt="image" class="w-100 h-300px">
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 import InputError from "@/jetstream/InputError.vue";
 
 export default defineComponent({
-    props: ["image", "selectedImage", "errors", "isUploading"],
+    props: ["image", "selectedImage", "errors", "isUploading" , "page"],
     components: {
         InputError,
     },
@@ -22,15 +22,15 @@ export default defineComponent({
             <div class="image-input image-input-outline mx-auto" data-kt-image-input="true"
                 style="background-image: url('/assets/media/svg/avatars/blank.svg')">
                 <!--begin::Preview existing avatar-->
-                <div class="w-250px h-auto d-flex align-items-center justify-content-center rounded-1 bg-secondary"
+                <div class="w-250px h-250px d-flex align-items-center justify-content-center rounded-1 bg-secondary"
                     v-if="isUploading">
                     <div class="spinner-border spinner-border-sm w-50px h-50px"></div>
                 </div>
                 <div v-else>
-                    <img class="image-input-wrapper w-250px h-auto" v-if="image && !selectedImage" :src="image" />
-                    <img class="image-input-wrapper w-250px h-auto" v-else-if="!selectedImage"
+                    <img class="image-input-wrapper w-250px h-250px" v-if="image && !selectedImage" :src="image" />
+                    <img class="image-input-wrapper w-250px h-250px" v-else-if="!selectedImage"
                         src="/assets/media/svg/avatars/blank.svg" />
-                    <img class="image-input-wrapper w-250px h-auto" v-else :src="selectedImage" />
+                    <img class="image-input-wrapper w-250px h-250px" v-else :src="selectedImage" />
                 </div>
                 <!--end::Preview existing avatar-->
                 <!--begin::Label-->
@@ -48,7 +48,8 @@ export default defineComponent({
                 </div>
                 <!--end::Label-->
             </div>
-            <div class="form-text mt-5">Allowed file types: png, jpg, jpeg.</div>
+            <div v-if="!page" class="form-text mt-5">Allowed file types: png, jpg, jpeg.</div>
+            
         </div>
     </div>
 </template>

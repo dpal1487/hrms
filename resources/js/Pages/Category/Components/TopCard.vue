@@ -39,7 +39,7 @@ export default defineComponent({
 
         async onThumbnailChange(e) {
             this.thumbnail.isLoading = true;
-            const data = await utils.imageUpload(route('category.thumbnail'), e, this.form.image_id , this.form.id)
+            const data = await utils.imageUpload(route('category.thumbnail'), e, this.form.image_id, this.form.id)
             if (data.response.success) {
                 this.form.image_id = data.response.data.id;
             } else {
@@ -50,21 +50,6 @@ export default defineComponent({
 
             this.thumbnail.isLoading = false;
         },
-
-        async onBannerChange(e) {
-            console.log(this.form.banner_image)
-            this.banner.isLoading = true;
-            const data = await utils.imageUpload(route('category.banner'), e, this.form.banner_image)
-            if (data.response.success) {
-                this.form.banner_image = data.response.data.id;
-            } else {
-                toast.error(data.response.message);
-            }
-            this.banner.url = URL.createObjectURL(data.file);
-
-            this.banner.isLoading = false;
-        },
-
         removeSelectedAvatar() {
             this.url = null;
         }
@@ -96,83 +81,45 @@ export default defineComponent({
             </div>
             <div class="card-body p-0">
                 <div class="row">
-                    <div class="col-6">
-                        <table class="table table-striped table-bordered text-left mx-10 align-middle text-capitalize">
-                            <tbody>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-                                        Name
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        {{ category?.name }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-                                        Keyword
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        {{ category?.keywords }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-                                        Description
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        <span v-html="category?.description"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-                                        Meta
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        {{ category?.meta?.tag }}
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-
-                                        Meta Keyword
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700 text-right">
-                                        {{ category?.meta?.keywords }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-
-                                        Meta Description
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700 whitespace-break">
-                                        <span v-html="category?.meta?.description"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-                                        Image
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        <div
-                                            class="d-block symbol symbol-150px symbol-lg-150px symbol-fixed position-relative m-5">
-                                            <ImageInput :image="this.category?.image?.small_path"
-                                                :onchange="onThumbnailChange" :remove="removeSelectedAvatar"
-                                                :selectedImage="thumbnail.url" :errors="v$.form.thumbnail.$errors"
-                                                :isUploading="thumbnail.isLoading" />
-                                            <!-- <img v-if="category?.image" :src="category?.image?.small_path" alt="image"
-                                                class="rounded" />
-                                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
-                                                class="rounded"> -->
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-12 col-md-6 col-sm-6 text-capitalize mt-5">
+                        <div class="d-flex justify-content-between align-items-center mx-10 text-gray-600">
+                            <div class="fs-6 fw-bold text-gray-800 w-100 ">Name</div>
+                            <div class="fs-6 fw-bold text-gray-700 flex justify-start w-100 ">{{ category?.name }}</div>
+                        </div>
+                        <!-- <hr class="mx-10"> -->
+                        <div class="d-flex m-4 justify-content-between align-items-center mx-10 text-gray-600">
+                            <div class="fs-6 fw-bold text-gray-800 w-100">Keyword</div>
+                            <div class="fs-6 fw-bold text-gray-700  w-100">{{ category?.keywords }}</div>
+                        </div>
+                        <!-- <hr class="mx-10"> -->
+                        <div class="d-flex m-4 justify-content-between align-items-center mx-10 text-gray-600">
+                            <div class="fs-6 fw-bold text-gray-800 w-100">Description</div>
+                            <div class="fs-6 fw-bold text-gray-700 w-100 "><span v-html="category?.description"></span></div>
+                        </div>
+                        <!-- <hr class="mx-10"> -->
+                        <div class="d-flex m-4 justify-content-between align-items-center mx-10 text-gray-600">
+                            <div class="fs-6 fw-bold text-gray-800 w-100">Meta</div>
+                            <div class="fs-6 fw-bold text-gray-700  w-100">{{ category?.meta?.tag }}</div>
+                        </div>
+                        <!-- <hr class="mx-10"> -->
+                        <div class="d-flex m-4 justify-content-between align-items-center mx-10 text-gray-600">
+                            <div class="fs-6 fw-bold text-gray-800 w-100">Meta Keyword</div>
+                            <div class="fs-6 fw-bold text-gray-700  w-100">{{ category?.meta?.keywords }}</div>
+                        </div>
+                        <!-- <hr class="mx-10"> -->
+                        <div class="d-flex m-4 justify-content-between align-items-center mx-10 text-gray-600">
+                            <div class="fs-6 fw-bold text-gray-800 w-100">Meta Description</div>
+                            <div class="fs-6 fw-bold text-gray-700  w-100"> <span v-html="category?.meta?.description"></span>
+                            </div>
+                        </div>
+                        <!-- <hr class="mx-10"> -->
+                        <div class="d-block symbol symbol-150px symbol-lg-150px symbol-fixed position-relative my-10 ">
+                            <ImageInput :image="this.category?.image?.small_path" :onchange="onThumbnailChange"
+                                :remove="removeSelectedAvatar" :selectedImage="thumbnail.url"
+                                :errors="v$.form.thumbnail.$errors" :isUploading="thumbnail.isLoading" page="topCard"/>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <!-- {{ category }} -->
+                    <div class="col-12 col-md-6 col-sm-6">
                         <div class="h-100 d-flex justify-content-center align-items-center bg-gray-100">
                             <div class="drop-shadow">
                                 <div class="text-center bg-white p-20 rhombus ">
