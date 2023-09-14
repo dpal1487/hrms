@@ -18,6 +18,6 @@ class AdReviewController extends Controller
   }
   public function report()
   {
-    return "function not working";
+    return "Function not working";
   }
 }

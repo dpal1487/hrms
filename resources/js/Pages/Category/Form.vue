@@ -115,7 +115,6 @@ export default defineComponent({
             this.banner.isLoading = true;
             const data = await utils.imageUpload(route('category.banner'), files, this.form.banner_image)
             if (data.response.success) {
-                console.log(data.response.data.id)
                 this.form.banner_image = data.response.data.id;
             } else {
                 toast.error(data.response.message);

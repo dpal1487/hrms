@@ -31,7 +31,7 @@ class LoginController extends Controller
             // $user = Auth::user();
             $user = Auth::guard('api')->user();
             $token = auth()->user()->tokens()->delete();
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('api')->plainTextToken;
 
             return response()->json([
                 'user' => new UserResource($user),
@@ -47,27 +47,17 @@ class LoginController extends Controller
         ], 401);
     }
 
-    public function refreshToken(Request $request)
+    public function refresh(Request $request)
     {
-        $user =  $request->user();
-
-        $request->user()->tokens()->delete(); // Revoke all existing tokens
-
-        $token = $request->user()->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'user' => new UserResource($user),
-            'success' => true,
-            'access_token' => $token,
-            'message' => 'Successfully login',
-        ])->withCookie(cookie('api_token', $token, 60 * 24));
+        $user = $request->user();
+        $user->tokens()->delete();
+        return response()->json(['access_token' => $user->createToken('api')->plainTextToken]);
     }
-
 
     public function logout(Request $request)
     {
         Auth::user()->tokens()->delete();
-        return response()->json(['message' => 'Logged out successfully'])->withCookie(cookie('auth_token', null));
+        return response()->json(['message' => 'Logged out successfully'])->withCookie(cookie('api', null));
     }
     public function user()
     {

@@ -3,6 +3,8 @@ import { defineComponent } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import ImageInput from '@/Components/ImageInput.vue';
+import utils from "../../utils";
+import { toast } from "vue3-toastify";
 
 export default defineComponent({
     props: ["category"],
@@ -24,7 +26,7 @@ export default defineComponent({
                 url: null,
             },
             form: this.$inertia.form({
-                id: this.category?.data?.id || '',
+                id: this.category?.id || '',
                 image_id: this.category?.image?.id ? this.category?.image?.id : this.form?.image_id,
                 banner_image: this.category?.data?.banner?.id ? this.category?.data?.banner?.id : this.form?.banner_image,
             }),
@@ -37,8 +39,7 @@ export default defineComponent({
 
         async onThumbnailChange(e) {
             this.thumbnail.isLoading = true;
-            const data = await utils.imageUpload(route('category.thumbnail.show'), e, this.form.image_id)
-
+            const data = await utils.imageUpload(route('category.thumbnail'), e, this.form.image_id , this.form.id)
             if (data.response.success) {
                 this.form.image_id = data.response.data.id;
             } else {

@@ -56,7 +56,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
     Route::group(['prefix' => 'auth'], function () {
         /*Login Controllers*/
         Route::post('login', [LoginController::class, 'authenticate']);
-        Route::post('token-refresh', [LoginController::class, 'refreshToken'])->name('user.token-refresh');
+        Route::post('token-refresh', [LoginController::class, 'refresh'])->name('user.token-refresh');
 
         /*Register Controllers*/
         Route::post('register', [RegisterController::class, 'register']);

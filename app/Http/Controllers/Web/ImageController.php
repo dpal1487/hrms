@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Image;
 use App\Models\Image as DBImage;
@@ -15,24 +16,20 @@ class ImageController extends Controller
         $validator = Validator::make($request->all(), [
             'image' => 'required|mimes:jpeg,png,jpg'
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => $validator->errors()->first()
             ], 400);
         }
-
-        if ($request->id != 'undefined') {
-            $data = DBImage::findOrFail($request->id);
+        if ($request->image_id != 'undefined') {
+            $data = DBImage::findOrFail($request->image_id);
             $categoryThumbnail = $data->delete();
             $existingImagePath =  $data->base_path . $data->name;
             if (File::exists($existingImagePath)) {
                 File::delete($existingImagePath);
             }
         }
-
-
         $image = $request->file('image');
         if ($image) {
             $name = time() . '_' . $request->image->getClientOriginalName();
@@ -43,7 +40,14 @@ class ImageController extends Controller
                 'base_url' => $request->root(),
                 'base_path' => $folder,
             ]);
+
             if ($Imagefile->save()) {
+                
+                if ($request->id) {
+                    $category = Category::where(['id' => $request->id])->update([
+                        'image_id' => $Imagefile->id,
+                    ]);
+                }
                 return response()->json([
                     'success' => true,
                     'data' => $Imagefile
