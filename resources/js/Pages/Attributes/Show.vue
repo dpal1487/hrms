@@ -36,6 +36,7 @@ export default defineComponent({
         return {
             id: route.params,
             // id: this.attribute?.data?.id,
+            category: this.attribute?.data?.category,
             filter: {
 
             },
@@ -193,7 +194,9 @@ export default defineComponent({
                                         </tr>
                                     </thead>
                                     <tbody class="fw-semibold text-gray-600">
+                                        
                                         <tr v-for="(attribute, index) in attribute?.data?.values" :key="index">
+                                            
                                             <attribute-value-list :attribute="attribute">
                                                 <template #action>
                                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"

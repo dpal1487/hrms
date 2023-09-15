@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources\Web;
+namespace App\Http\Resources\Web\Category;
 
+use App\Http\Resources\Web\ImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategorySingleResource extends JsonResource

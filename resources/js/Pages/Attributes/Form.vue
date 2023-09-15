@@ -20,7 +20,7 @@ export default defineComponent({
             form: {
                 image: {},
                 name: { required },
-                category: { required },
+                categories: { required },
                 input_type: { required },
                 data_type: { required },
                 display_order: { required },
@@ -45,6 +45,8 @@ export default defineComponent({
                 status: this.attribute?.data?.status || '',
                 description: this.attribute?.data?.description || '',
                 rules: this.attribute?.data?.rules.map(rule => rule.id) || [],
+                categories: this.attribute?.data?.categories.map(category => category?.id) || [],
+
             }),
             input_type: [
                 { value: 'text', label: 'Text' },
@@ -134,7 +136,7 @@ export default defineComponent({
                     <div class="card-body">
                         <div class="row mb-5">
                             <div class="col-6">
-                                <jet-label for="name" value="Name" class="required" />
+                                <jet-label for="name" value="Brand Name" class="required" />
                                 <jet-input id="name" type="text" v-model="v$.form.name.$model" :class="v$.form.name.$errors.length > 0
                                     ? 'is-invalid'
                                     : ''
@@ -160,14 +162,15 @@ export default defineComponent({
                         </div>
                         <div class="row mb-5">
                             <div class="col-6">
+                                
                                 <jet-label value="Category" class="required" />
-                                <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id"
+                                <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id" mode="tags" :close-on-select="false" :create-option="true"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select Category" :searchable="true"
-                                    v-model="v$.form.category.$model" track-by="name" :class="v$.form.category.$errors.length > 0
+                                    v-model="v$.form.categories.$model" track-by="name" :class="v$.form.categories.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
                                         " />
-                                <div v-for="(error, index) of v$.form.category.$errors" :key="index">
+                                <div v-for="(error, index) of v$.form.categories.$errors" :key="index">
                                     <input-error :message="error.$message" />
                                 </div>
                             </div>
@@ -212,12 +215,12 @@ export default defineComponent({
                         </div>
                         <div class="row mb-5">
                             <div class="col-6">
-                                <jet-label value="Field" class="required" />
+                                <jet-label value="Brand Field" class="required" />
                                 <div class="">
                                     <jet-input  type="text" v-model="v$.form.field.$model" :class="v$.form.field.$errors.length > 0
                                         ? 'is-invalid'
                                         : ''
-                                        " placeholder="Attribute Field" />
+                                        " placeholder="Brand Field" />
                                     <div v-for="(error, index) of v$.form.field.$errors" :key="index">
                                         <input-error :message="error.$message" />
                                     </div>

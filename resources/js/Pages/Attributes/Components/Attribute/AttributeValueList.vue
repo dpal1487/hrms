@@ -6,7 +6,7 @@ import utils from '../../../utils.js';
 import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
-    props: ['attribute'],
+    props: ['attribute','category'],
     data: () => {
         return {
         }
@@ -30,11 +30,12 @@ export default defineComponent({
 </script>
 
 <template>
-    <td class="fs-6 fw-bold text-gray-700">
+    
+    <td class="fs-6 fw-bold text-gray-700 text-capitalize">
         {{ attribute?.attribute_value }}
     </td>
     <td>
-        <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
+        <div class="form-switch form-check-solid d-block form-check-custom form-check-success mx-10">
             <input class="form-check-input h-20px w-30px" type="checkbox"
                 @input="changeStatus($event.target.checked, attribute?.id)"
                 :checked="attribute?.status == 1 ? true : false" />

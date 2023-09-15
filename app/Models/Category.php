@@ -45,8 +45,9 @@ class Category extends Model
     }
     public function attributes()
     {
-        return $this->hasMany(Attribute::class, 'category_id', 'id');
+        return $this->hasMany(Attribute::class, 'category_id', 'id' ,'attribute_category', 'attribute_id', 'category_ids');
     }
+
     public function priceCondition()
     {
         return $this->hasMany(TimePeriod::class, 'category_id', 'id');

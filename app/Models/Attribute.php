@@ -39,6 +39,11 @@ class Attribute extends Model
     return $this->hasOne(Category::class, 'id', 'category_id');
   }
 
+  public function categories()
+  {
+    return $this->hasMany(AttributeCategory::class, 'attribute_id', 'id');
+  }
+
   public static function boot() {
     parent::boot();
 
