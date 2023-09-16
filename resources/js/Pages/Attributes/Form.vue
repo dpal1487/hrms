@@ -164,7 +164,6 @@ export default defineComponent({
                         </div>
                         <div class="row mb-5">
                             <div class="col-6">
-
                                 <jet-label value="Category" class="required" />
                                 <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id" mode="tags" :close-on-select="false" :create-option="true"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select Category" :searchable="true"

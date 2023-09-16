@@ -7,14 +7,13 @@ use App\Http\Resources\Web\Attribute\AttributeListResurce;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
 use App\Http\Resources\Web\Attribute\AttributeSingleResource;
-use App\Http\Resources\Web\Attribute\AttributeValueResource;
 use App\Http\Resources\Web\Category\CategoryResource;
 use App\Http\Resources\Web\RuleResource;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\Rule as RuleModel;
 use App\Models\AttributeRule;
-use App\Models\CategoryAttributes;
+use App\Models\CategoryAttribute;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Illuminate\Validation\Rule;
@@ -86,7 +85,7 @@ class AttributeController extends Controller
         if ($attribute) {
 
             foreach ($request->categories as $categoryAttribute) {
-                $categoryAttribute = CategoryAttributes::create([
+                $categoryAttribute = CategoryAttribute::create([
                     'attribute_id' => $attribute->id,
                     'category_id' => $categoryAttribute,
                 ]);
@@ -160,10 +159,10 @@ class AttributeController extends Controller
                 'status' => $request->status,
             ]);
             $attributeRule = AttributeRule::where('attribute_id', '=', $id)->delete();
-            $attributeRule = CategoryAttributes::where('attribute_id', '=', $id)->delete();
+            $attributeRule = CategoryAttribute::where('attribute_id', '=', $id)->delete();
             if ($attribute) {
                 foreach ($request->categories as $categoryAttribute) {
-                    $categoryAttribute = CategoryAttributes::create([
+                    $categoryAttribute = CategoryAttribute::create([
                         'attribute_id' => $id,
                         'category_id' => $categoryAttribute,
                     ]);
