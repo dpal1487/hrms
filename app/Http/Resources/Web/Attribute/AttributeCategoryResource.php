@@ -15,9 +15,9 @@ class AttributeCategoryResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->attributeCategory->id,
-            'name' => $this->attributeCategory->name,
-            'slug' => $this->attributeCategory->slug,
+            'category_name' => $this->category?->name,
+            // 'name' => $this->attributeCategory->name,
+            // 'slug' => $this->attributeCategory->slug,
         ];
     }
 }

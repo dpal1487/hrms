@@ -19,7 +19,6 @@ export default defineComponent({
             tbody: [
                 "Name",
                 "Data Type",
-                "CATEGORY",
                 "FIELD",
                 "Status",
                 "Action",
@@ -117,9 +116,6 @@ export default defineComponent({
                                 </td>
                                 <td>
                                     {{ attribute?.data_type }}
-                                </td>
-                                <td>
-                                    {{ attribute?.category?.name }}
                                 </td>
                                 <td>
                                     {{ attribute?.field }}

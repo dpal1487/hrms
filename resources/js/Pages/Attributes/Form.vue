@@ -38,7 +38,7 @@ export default defineComponent({
                 id: this.attribute?.data?.id || '',
                 name: this.attribute?.data?.name || '',
                 category: this.attribute?.data?.category?.id || '',
-                input_type: this.attribute?.data?.type || '',
+                input_type: this.attribute?.data?.input_type || '',
                 data_type: this.attribute?.data?.data_type || '',
                 display_order: this.attribute?.data?.display_order || '',
                 field: this.attribute?.data?.field || '',
@@ -110,6 +110,7 @@ export default defineComponent({
 </script>
 <template>
     <Head :title="isEdit ? 'Edit Attribute' : `Add New Attribute`" />
+
     <AppLayout :title="isEdit ? 'Edit Attribute' : `Add New Attribute`">
         <template #breadcrumb>
             <li class="breadcrumb-item">
@@ -125,12 +126,13 @@ export default defineComponent({
                 <span class="text-muted">Attribute Form</span>
             </li>
         </template>
+
         <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row gap-5">
             <div class="d-flex col-12 col-lg-8 flex-column flex-row-fluid gap-7 gap-lg-10">
                 <div class="card">
                     <div class="card-header align-items-center">
                         <div class="card-title">
-                            <h2>Attribute</h2>
+                            <h2>Attribute Form</h2>
                         </div>
                     </div>
                     <div class="card-body">
@@ -162,7 +164,7 @@ export default defineComponent({
                         </div>
                         <div class="row mb-5">
                             <div class="col-6">
-                                
+
                                 <jet-label value="Category" class="required" />
                                 <Multiselect :canClear="false" :options="categories?.data" label="name" valueProp="id" mode="tags" :close-on-select="false" :create-option="true"
                                     class="form-control form-control-lg form-control-solid" placeholder="Select Category" :searchable="true"
@@ -248,7 +250,7 @@ export default defineComponent({
                                     " placeholder="Text ..." />
                         </div>
 
-                        
+
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-5">

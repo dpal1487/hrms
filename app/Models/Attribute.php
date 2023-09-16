@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
   use HasFactory;
-  protected $fillable = ['name', 'category_id', 'field', 'key', 'type', 'render_as', 'display_order','data_type' ,'parent_id','status' ,'description'];
+  protected $fillable = ['name', 'category_id', 'field', 'key', 'input_type', 'render_as', 'display_order','data_type' ,'parent_id','status' ,'description'];
   protected $hidden = ['created_at', 'updated_at', 'category_id'];
 
 
@@ -41,7 +41,7 @@ class Attribute extends Model
 
   public function categories()
   {
-    return $this->hasMany(AttributeCategory::class, 'attribute_id', 'id');
+    return $this->hasMany(CategoryAttributes::class, 'attribute_id', 'id');
   }
 
   public static function boot() {

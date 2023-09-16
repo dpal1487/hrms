@@ -16,7 +16,6 @@
     use App\Http\Controllers\Web\ItemController;
     use App\Http\Controllers\Web\UserController;
     use App\Http\Controllers\Web\ProfileController;
-    use App\Http\Controllers\Web\ReviewController;
     use App\Http\Controllers\Web\PlanController;
     use App\Http\Controllers\Web\BrandController;
     use App\Http\Controllers\Web\BrandModelController;
@@ -56,10 +55,10 @@
     });
 
     Route::post( 'login', [LoginController::class, 'login'])->name('user.login');
-    
 
 
-    
+
+
     Route::get('socialauth/{provider}', [SocialController::class, 'SocialSignup']);
     Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial']);
 
@@ -152,10 +151,8 @@
             Route::group(['prefix' => 'attribute-value'], function () {
                 Route::get('/', 'index')->name('attribute-value.index');
                 Route::post('status', 'statusUdate')->name('attribute-value.status');
-                Route::get('/create', 'create')->name('attribute-value.create');
-                Route::post('/store', 'store')->name('attribute-value.store');
-                Route::get('{id}/edit', 'edit')->name('attribute-value.edit');
-                Route::post('{id}/update', 'update')->name('attribute-value.update');
+                Route::post('store', 'store')->name('attribute-value.store');
+                Route::post('update', 'update')->name('attribute-value.update');
                 Route::delete('{id}/destroy', 'destroy')->name('attribute-value.destroy');
             });
         });

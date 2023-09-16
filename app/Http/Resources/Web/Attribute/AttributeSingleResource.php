@@ -5,7 +5,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class AttributeSingleResource extends JsonResource
 {
-   
+
     public function toArray($request)
     {
         return [
@@ -15,16 +15,15 @@ class AttributeSingleResource extends JsonResource
             'category_id' => $this->category_id,
             'field' => $this->field,
             'parent_id' => $this->parent_id,
-            'type' => $this->type,
+            'input_type' => $this->input_type,
             'display_order' => $this->display_order,
             'status' => $this->status,
             'description' => $this->description,
-            'category' => $this->category,  
+            'category' => $this->category,
             'header' => [
                 'total_active' => count($this->values->where('status', 1)),
                 'total_value' => count($this->values),
             ],
-            'values' => AttributeValueResource::collection($this->values),
             'rules' => AttributeRuleResource::collection($this->rules),
             'categories' => AttributeCategoryResource::collection($this->categories)
         ];
