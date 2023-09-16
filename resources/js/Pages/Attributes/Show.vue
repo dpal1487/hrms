@@ -9,38 +9,20 @@ import Multiselect from "@vueform/multiselect";
 import InputError from "@/jetstream/InputError.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
 import { toast } from "vue3-toastify";
 import utils from "../utils";
 import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
-    props: ["attribute"],
-    setup() {
-        return { v$: useVuelidate() };
-    },
-    validations() {
-        return {
-            form: {
-                value: {
-                    required,
-                },
-                status: {
-                    required,
-                }
-            },
-        };
-    },
+    props: ["attribute" , "categories" , "values"],
+
     data() {
         return {
             id: route.params,
-            // id: this.attribute?.data?.id,
-            category: this.attribute?.data?.category,
             filter: {
-
             },
             tbody: [
+                "Category Name",
                 "Attribute Value",
                 "Attribute Status",
                 "Action",
@@ -51,7 +33,7 @@ export default defineComponent({
                 processing: false,
             },
             isLoading: false,
-            title: "Attribute Value",
+            title: "Attribute Overview",
         };
     },
     components: {
@@ -90,7 +72,7 @@ export default defineComponent({
         },
         async confirmDelete(id, index) {
             this.isLoading = true;
-            await utils.deleteIndexDialog(route('attribute-value.destroy', id), this.attribute?.data?.values, index);
+            await utils.deleteIndexDialog(route('attribute-value.destroy', id), this.values?.data, index);
             this.isLoading = false;
         },
         search() {
@@ -119,6 +101,7 @@ export default defineComponent({
                 Attribute Overview
             </li>
         </template>
+
         <template #toolbar>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <Link href="/attribute/create" class="btn btn-sm fw-bold btn-primary">
@@ -130,7 +113,7 @@ export default defineComponent({
             <div class="card">
                 <div class="card-header align-items-center">
                     <div class="card-title">
-                        <h2>Attribute List</h2>
+                        <h2>Attribute Value</h2>
                     </div>
                     <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                         <div>
@@ -147,7 +130,7 @@ export default defineComponent({
                                     </span>
                                     <input type="text" v-model="filter.q"
                                         class="form-control form-control-solid h-35px w-200px ps-14"
-                                        placeholder="Search " />
+                                        placeholder="Search "/>
                                 </div>
                             </form>
                         </div>
@@ -159,8 +142,8 @@ export default defineComponent({
                 </div>
                 <div class="card-body">
                     <div class="row" v-if="isEdit || isAdd">
-                        <div class="col-6 mx-10">
-                            <attribute-value-form @submitted="submit" :attribute="form" :id="attribute?.data?.id">
+                        <div class="">
+                            <attribute-value-form @submitted="submit" :attribute="form" :id="attribute?.data?.id" :categories="categories?.data">
                                 <template #action>
                                     <div class="d-flex justify-content-end me-5">
                                         <button type="button" class="btn btn-outline-secondary me-5"
@@ -194,16 +177,13 @@ export default defineComponent({
                                         </tr>
                                     </thead>
                                     <tbody class="fw-semibold text-gray-600">
-                                        
-                                        <tr v-for="(attribute, index) in attribute?.data?.values" :key="index">
-                                            
+                                        <tr v-for="(attribute, index) in values?.data" :key="index">
                                             <attribute-value-list :attribute="attribute">
                                                 <template #action>
                                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
                                                         @click="toggleModal(true, attribute)"><i
                                                             class="bi bi-pencil me-2"></i>
                                                     </button>
-
                                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px"
                                                         @click="confirmDelete(
                                                             attribute.id, index

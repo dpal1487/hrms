@@ -30,7 +30,9 @@ export default defineComponent({
 </script>
 
 <template>
-    
+    <td class="fs-6 fw-bold text-gray-700 text-capitalize">
+        {{ attribute?.category?.category_name }}
+    </td>
     <td class="fs-6 fw-bold text-gray-700 text-capitalize">
         {{ attribute?.attribute_value }}
     </td>

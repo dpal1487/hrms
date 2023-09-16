@@ -31,7 +31,7 @@ export default defineComponent({
                 <div class="row">
                     <div class="col-6">
                         <table class="table table-striped table-bordered text-left mx-10 align-middle text-capitalize">
-                            <tbody>
+                            <tbody >
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
                                         Name
@@ -53,7 +53,12 @@ export default defineComponent({
                                         Category
                                     </th>
                                     <td class="fs-6 fw-bold text-gray-700">
-                                        {{ attribute?.category?.name }}
+                                        <span class="" v-for="category in attribute?.categories">
+                                            <p>
+                                                <!-- Name :  -->
+                                                {{ category?.name }}
+                                            </p>
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -70,18 +75,18 @@ export default defineComponent({
                                         Input Type
                                     </th>
                                     <td class="fs-6 fw-bold text-gray-700">
-                                        {{ attribute?.type }}
+                                        {{ attribute?.input_type }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
 
-                                        Attribute Rules
+                                        Attribute Rules Values
                                     </th>
                                     <td class="fs-6 fw-bold text-gray-700 text-right">
                                         <span class="" v-for="rule in attribute?.rules">
                                             <p>
-                                                Message:
+                                                <!-- Message: -->
                                                 {{ rule?.message }}
                                             </p>
                                         </span>
