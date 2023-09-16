@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Account\UserResource;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
@@ -38,7 +39,8 @@ class AccountController extends Controller
       return response()->json(['success' => false, 'message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
     }
     //Request is valid, create new user
-    if (User::where(['id' => $this->uid()])->update([
+    $user = User::where(['id' => $this->uid()]);
+    if ($user->update([
       'first_name' => $request->first_name,
       'last_name' => $request->last_name,
       'gender' => $request->gender,
@@ -47,6 +49,7 @@ class AccountController extends Controller
     ])) {
       return response()->json([
         'success' => true,
+        'data' => new UserResource($user->first()),
         'message' => 'Account Details Updated!',
       ], Response::HTTP_OK);
     } else {
