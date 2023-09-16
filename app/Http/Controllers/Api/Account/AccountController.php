@@ -15,27 +15,27 @@ class AccountController extends Controller
   {
     $user = User::where('id', $this->uid())->first();
     return [
-        'data'=>new UserResource($user),
-        // 'data'=>[
-        //     'posts'=>Item::where(['user_id'=>$this->uid()])->count(),
-        //     'follower'=>Follower::where('following_id',$this->uid())->count(),
-        //     'following'=>Follower::where('follower_id',$this->uid())->count(),
-        // ]
+      'data' => new UserResource($user),
+      // 'data'=>[
+      //     'posts'=>Item::where(['user_id'=>$this->uid()])->count(),
+      //     'follower'=>Follower::where('following_id',$this->uid())->count(),
+      //     'following'=>Follower::where('follower_id',$this->uid())->count(),
+      // ]
     ];
   }
   public function update(Request $request)
   {
     //Validate data
     $validator = Validator::make($request->all(), [
-      'first_name' => 'required|string',
-      'last_name' => 'required|string',
-      'gender' => 'required',
-      'date_of_birth' => 'required',
+      'first_name' => 'required|string|max:255',
+      'last_name' => 'required|string|max:255',
+      'gender' => 'required|in:male,female',
+      'date_of_birth' => 'required|date_format:d-m-Y|before:today',
       'about' => 'required|string'
     ]);
     //Send failed response if request is not valid
     if ($validator->fails()) {
-      return response()->json(['success' => false, 'message' => $validator->errors()->first()], 201);
+      return response()->json(['success' => false, 'message' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST);
     }
     //Request is valid, create new user
     if (User::where(['id' => $this->uid()])->update([
@@ -53,7 +53,7 @@ class AccountController extends Controller
       return response()->json([
         'success' => true,
         'message' => 'Failed to update Profile Details',
-      ], Response::HTTP_OK);
+      ], Response::HTTP_BAD_REQUEST);
     }
   }
 }
