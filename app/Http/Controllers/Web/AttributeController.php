@@ -6,8 +6,9 @@ use App\Http\Resources\Web\Attribute\AttributeListResurce;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
 use App\Http\Resources\Web\Attribute\AttributeSingleResource;
-use App\Http\Resources\Web\CategoryResource;
+use App\Http\Resources\Web\Category\CategoryResource;
 use App\Http\Resources\Web\RuleResource;
+use App\Models\AttributeCategory;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\Rule as RuleModel;
@@ -48,7 +49,7 @@ class AttributeController extends Controller
 
     public function create()
     {
-        $categories = Category::where('parent_id' , '!=' , null)->get();
+        $categories = Category::where('parent_id', '!=', null)->get();
         $rules = RuleModel::get();
         return Inertia::render('Attributes/Form', [
             'categories' => CategoryResource::collection($categories),
@@ -58,10 +59,9 @@ class AttributeController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'unique:' . Attribute::class],
-            'category' => 'required',
+            'categories' => 'required',
             'field' => 'required',
             'input_type' => 'required',
             'data_type' => 'required',
@@ -75,7 +75,7 @@ class AttributeController extends Controller
         $attribute = Attribute::create([
             'name' => $request->name,
             'field' => $request->field,
-            'category_id' => $request->category,
+            'category_id' => json_encode($request->categories),
             'type' => $request->input_type,
             'data_type' => $request->data_type,
             'description' => $request->description,
@@ -83,6 +83,13 @@ class AttributeController extends Controller
             'status' => $request->status,
         ]);
         if ($attribute) {
+
+            foreach ($request->categories as $attributeCategory) {
+                $attributeCategory = AttributeCategory::create([
+                    'attribute_id' => $attribute->id,
+                    'category_id' => $attributeCategory,
+                ]);
+            }
             foreach ($request->rules as $key => $value) {
                 $attributeRule =  AttributeRule::create([
                     'attribute_id' => $attribute->id,
@@ -91,14 +98,18 @@ class AttributeController extends Controller
             }
             return redirect()->route('attributes.index')->with('flash', ['message' =>  CreateMessage('Attribute')]);
         }
-        return redirect()->route('attribute.index')->with('message', ErrorMessage());
+        return redirect()->route('attributes.index')->with('message', ErrorMessage());
     }
 
     public function show(Request $request, $id)
     {
         $attribute = Attribute::find($id);
+
+        // return AttributeCategory::where('attribute_id', $attribute->id)->get();
+
+        return new AttributeSingleResource($attribute);
         if ($attribute) {
-            $values = AttributeValue::where('attribute_id', $attribute->id)->get();
+            $values = AttributeValue::where('attribute_category_id', $attribute->id)->get();
             if (!empty($request->q)) {
                 $values =  $values->where('attribute_value', 'like', "%$request->q%");
             }
@@ -110,6 +121,7 @@ class AttributeController extends Controller
                 'values' => $values,
             ]);
         }
+        return redirect()->route('attributes.index')->with('message', ErrorMessage());
     }
 
     public function edit($id)
@@ -130,7 +142,7 @@ class AttributeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', Rule::unique('attributes')->ignore($id),],
-            'category' => 'required',
+            'categories' => 'required',
             'field' => 'required',
             'input_type' => 'required',
             'data_type' => 'required',
@@ -154,7 +166,14 @@ class AttributeController extends Controller
                 'status' => $request->status,
             ]);
             $attributeRule = AttributeRule::where('attribute_id', '=', $id)->delete();
+            $attributeRule = AttributeCategory::where('attribute_id', '=', $id)->delete();
             if ($attribute) {
+                foreach ($request->categories as $attributeCategory) {
+                    $attributeCategory = AttributeCategory::create([
+                        'attribute_id' => $id,
+                        'category_id' => $attributeCategory,
+                    ]);
+                }
                 foreach ($request->rules as $key => $value) {
                     AttributeRule::create([
                         'attribute_id' => $id,

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Web\BrandResource;
-use App\Http\Resources\Web\CategoryListResource;
+use App\Http\Resources\Web\Category\CategoryListResource;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 

@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Resources\Web;
+namespace App\Http\Resources\Web\Category;
 
+use App\Http\Resources\Web\ImageResource;
+use App\Http\Resources\Web\TimePeriodResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryListResource extends JsonResource

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 
-use App\Http\Resources\Web\CategoryListResource;
+use App\Http\Resources\Web\Category\CategoryListResource;
 use App\Models\TimePeriod;
 use App\Models\Category;
 use App\Models\Time;

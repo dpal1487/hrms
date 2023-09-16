@@ -7,8 +7,8 @@ use App\Http\Resources\ReviewResource;
 use App\Models\Item;
 use App\Models\Review;
 use Illuminate\Http\Request;
-use App\Http\Resources\Web\ItemResource;
-use App\Http\Resources\Web\ItemReviewsResource;
+use App\Http\Resources\Web\Item\ItemResource;
+use App\Http\Resources\Web\Item\ItemReviewsResource;
 use Inertia\Inertia;
 
 class ReviewController extends Controller
