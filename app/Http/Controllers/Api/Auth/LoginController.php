@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Account\UserResource;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
@@ -15,18 +16,14 @@ class LoginController extends Controller
     {
         $credentials = $request->only('mobile', 'email', 'password');
         $remember = $request->has('remember'); // Check if the remember checkbox is selected
-        //valid credential
         $validator = Validator::make($credentials, [
             'mobile' => 'numeric|digits:10',
             'email' => 'email',
             'password' =>  Password::min(8),
         ]);
-        //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()],Response::HTTP_BAD_REQUEST);
         }
-        //Request is validated
-
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::guard('api')->user();
             $token = auth()->user()->tokens()->delete();
@@ -37,13 +34,13 @@ class LoginController extends Controller
                 'success' => true,
                 'access_token' => $token,
                 'message' => 'Successfully login',
-            ])->withCookie(cookie('api_token', $token, 60 * 24));
+            ],Response::HTTP_OK)->withCookie(cookie('api_token', $token, 60 * 24));
         }
 
         return response()->json([
             'success' => false,
             'message' => 'Invalid credentials'
-        ], 401);
+        ], Response::HTTP_UNAUTHORIZED);
     }
 
     public function refresh(Request $request)
@@ -61,6 +58,9 @@ class LoginController extends Controller
     }
     public function user()
     {
-        return response()->json(['data' => auth()->user(), 'success' => true]);
+        if(Auth::check()){
+            return response()->json(['data' => auth()->user(), 'success' => true],Response::HTTP_OK);
+        }
+        return response()->json(['data' => auth()->user(), 'success' => true],Response::HTTP_UNAUTHORIZED);
     }
 }

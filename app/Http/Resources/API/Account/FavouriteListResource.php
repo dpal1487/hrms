@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Resources\Api\Account;
-
-use App\Http\Resources\Api\ImageResource;
-use Carbon\Carbon;
+use App\Http\Resources\Api\ItemListResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FavouriteListResource extends JsonResource
@@ -18,17 +16,7 @@ class FavouriteListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'item_id' => $this->item->id,
-            'title' => $this->item->name,
-            'base_url' => $this->item->base_url,
-            'period' => $this->item->time->title,
-            'image' => new ImageResource($this->item->image),
-            'rent_price' => $this->item->rent_price,
-            'security_price' => $this->item->security_price,
-            'currency_symbol' => "₹",
-            'location' => new AddressResource($this->item->location->address),
-            'isFavourite' => $this->item->isFavourite ? true : false,
-            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d'),
+            'item'=>new ItemListResource($this->item)
         ];
     }
 }

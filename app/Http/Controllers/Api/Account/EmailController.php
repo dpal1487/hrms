@@ -9,8 +9,8 @@ use Validator;
 use App\Mail\ChangeEmail;
 use App\Models\User;
 use Mail;
-use Str;
-use Hash;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 
 class EmailController extends Controller
 {
@@ -20,7 +20,7 @@ class EmailController extends Controller
       'email' => 'required|string',
     ]);
     if ($validation->fails()) {
-      return response()->json(['success' => false, 'message' => $validation->errors()->first()], 200);
+      return response()->json(['success' => false, 'message' => $validation->errors()->first()], Response::HTTP_BAD_REQUEST);
     } else {
       $string = rand(111111, 999999);
       $email = $request->email;
@@ -30,7 +30,7 @@ class EmailController extends Controller
       if (!User::where(['id' => $this->uid(), 'email' => $request->email])->first()) {
         if ($sendmail) {
           if (User::where('id', $this->uid())->update(['reset_otp' => $string])) {
-            return response()->json(['success' => true, 'message' => 'OTP successfully sent to ' . $email]);
+            return response()->json(['success' => true, 'message' => 'OTP successfully sent to ' . $email],Response::HTTP_OK);
           } else {
             return $this->errorMessage();
           }
@@ -38,33 +38,32 @@ class EmailController extends Controller
           return $this->errorMessage();
         }
       }
-      return response()->json(['success' => false, 'message' => 'Please use different email address'],400);
+      return response()->json(['success' => false, 'message' => 'Please use different email address'],Response::HTTP_BAD_REQUEST);
     }
   }
   public function verifyOtp(Request $request)
   {
-   
     $validation = Validator::make($request->all(), [
       'otp_number' => 'required|numeric|min:4',
       'email' => 'required|string',
       'password' => 'required'
     ]);
     if ($validation->fails()) {
-      return response()->json(['success' => false, 'message' => $validation->errors()->first()]);
+      return response()->json(['success' => false, 'message' => $validation->errors()->first()],Response::HTTP_BAD_REQUEST);
     } else {
       if (User::where(['id' =>  $this->uid(), 'reset_otp' => $request->otp_number])->first()) {
         if ($user = User::where(['id' =>  $this->uid()])->first()) {
           if (Hash::check($request->password, $user->password)) {
             if (User::where(['email' => $request->email])->update(['email' => null])) {
               if (User::where('id',  $this->uid())->update(['email' => strtolower($request->email), 'reset_otp' => 0])) {
-                return response()->json(['success' => true, 'message' => 'Your email address has been updated successfully']);
+                return response()->json(['success' => true, 'message' => 'Your email address has been updated successfully'],Response::HTTP_OK);
               }
             }
           }
-          return response()->json(['success' => false, 'message' => 'Please enter valid password']);
+          return response()->json(['success' => false, 'message' => 'Please enter valid password'],Response::HTTP_BAD_REQUEST);
         }
       } else {
-        return response()->json(['success' => false, 'message' => 'Incorrect verification code']);
+        return response()->json(['success' => false, 'message' => 'Incorrect verification code'],Response::HTTP_BAD_REQUEST);
       }
     }
     return $this->errorMessage();
