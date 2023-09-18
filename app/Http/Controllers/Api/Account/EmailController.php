@@ -51,7 +51,7 @@ class EmailController extends Controller
     if ($validation->fails()) {
       return response()->json(['success' => false, 'message' => $validation->errors()->first()],Response::HTTP_BAD_REQUEST);
     } else {
-      if (User::where(['id' =>  $this->uid(), 'reset_otp' => $request->otp_number])->first()) {
+    //   if (User::where(['id' =>  $this->uid(), 'reset_otp' => $request->otp_number])->first()) {
         if ($user = User::where(['id' =>  $this->uid()])->first()) {
           if (Hash::check($request->password, $user->password)) {
             if (User::where(['email' => $request->email])->update(['email' => null])) {
@@ -62,9 +62,9 @@ class EmailController extends Controller
           }
           return response()->json(['success' => false, 'message' => 'Please enter valid password'],Response::HTTP_BAD_REQUEST);
         }
-      } else {
-        return response()->json(['success' => false, 'message' => 'Incorrect verification code'],Response::HTTP_BAD_REQUEST);
-      }
+    //   } else {
+    //     return response()->json(['success' => false, 'message' => 'Incorrect verification code'],Response::HTTP_BAD_REQUEST);
+    //   }
     }
     return $this->errorMessage();
   }

@@ -30,7 +30,8 @@
     use App\Http\Controllers\Web\ItemStatusController;
     use App\Http\Controllers\Web\MenuController;
     use App\Http\Controllers\Web\MenuItemController;
-    use App\Http\Controllers\Web\TimeController;
+use App\Http\Controllers\Web\NotificationController;
+use App\Http\Controllers\Web\TimeController;
     use App\Http\Controllers\Web\TimePeriodController;
     use App\Http\Controllers\Web\SubscriptionsController;;
 
@@ -66,6 +67,8 @@
         Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
         /* ========= Image Controller ========== */
+
+        route::get('notifications' , [NotificationController::class, 'index'])->name('notifications');
         Route::controller(ImageController::class)->group(function () {
             Route::post('category/thumbnail', 'categoryThumbnail')->name('category.thumbnail');
             Route::post('category/banner', 'categoryBanner')->name('category.banner');

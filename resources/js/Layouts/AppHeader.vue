@@ -34,7 +34,7 @@ export default defineComponent({
         getNotifications() {
             this.isNotifLoading = true;
             axios
-                .get("/notifications/header", { params: { limit: 5 } })
+                .get("/notifications", { params: { limit: 5 } })
                 .then((response) => {
                     this.notifications = response.data.data;
                 })
@@ -45,6 +45,13 @@ export default defineComponent({
         },
         toggleNotificationDrop(value) {
             this.notificationDrop = value;
+
+            axios
+                .get("/notifications", { params: { limit: 5 } })
+                .then((response) => {
+                    this.notifications = response.data.data;
+                })
+                .finally(() => { this.isNotifLoading = false });
         },
         toggleThemeModeDrop(value) {
             // console.log(value);
@@ -56,9 +63,9 @@ export default defineComponent({
             .channel("laravel_database_post-ads")
             .listen(".PostAdsEvent", (e) => {
                 console.log(e.data);
-                // toast.success(e.data.name, {
-                //     position: toast.POSITION.BOTTOM_RIGHT,
-                // });
+                toast.success(e.data.name, {
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                });
             });
     },
 });
@@ -110,6 +117,7 @@ export default defineComponent({
                                 class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
                             </span>
                         </button>
+
                         <div v-if="notificationDrop" class="menu-sub-dropdown menu flex-column">
                             <div class="d-flex flex-column bgi-no-repeat rounded-top"
                                 style="background-image:url('/assets/media/misc/menu-header-bg.jpg')">
@@ -118,10 +126,12 @@ export default defineComponent({
                                 </h3>
                             </div>
                             <div class="">
-                                <div class="tab-pane fade" id="kt_topbar_notifications_1" role="tabpanel">
-                                    <div class="scroll-y mh-325px my-5 px-8">
-                                        <div class="d-flex flex-stack py-4">
-                                            <div class="d-flex align-items-center">
+                                <div class="tab-pane " id="kt_topbar_notifications_1" role="tabpanel">
+                                    <div class="scroll-y mh-325px my-5 px-8" v-for="notifications in notification">
+
+                                        <div class="d-flex flex-stack py-4" >
+                                            <!-- {{ notification }} -->
+                                            <div class="d-flex align-items-center" >
                                                 <div class="symbol symbol-35px me-4">
                                                     <span class="symbol-label bg-light-primary">
                                                         <i class="ki-duotone ki-abstract-28 fs-2 text-primary"><span
@@ -390,21 +400,6 @@ export default defineComponent({
                             <div class="separator my-2"></div>
                             <!--end::Menu separator-->
 
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-5">
-                                <Link href="/account" class="menu-link px-5">
-                                My Profile
-                                </Link>
-                            </div>
-                            <!--end::Menu item-->
-
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-5">
-                                <Link href="/company" class="menu-link px-5">
-                                <span class="menu-text">My Company</span>
-                                </Link>
-                            </div>
-                            <!--end::Menu item-->
                             <!--begin::Menu separator-->
                             <div class="separator my-2"></div>
                             <!--end::Menu separator-->

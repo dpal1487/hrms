@@ -19,8 +19,11 @@ use App\Models\ItemAttribute;
 use App\Models\ItemImage;
 use App\Models\UserAddress;
 use App\Models\ItemLocation;
+use App\Notifications\NewItemNotification;
+use App\Notifications\NewPostCreateNotification;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -28,12 +31,15 @@ class PostController extends Controller
   public function index(Request $request)
   {
     $category = Category::find($request->category_id);
+
+    // return $category;
     $address = UserAddress::where(['user_id' => $this->uid()])->first();
+
     return [
       'category' => new CategoryResource($category),
-      'attributes' => AttributeListResource::collection(Attribute::where(['category_id' => $request->category_id])->get()),
+      'attributes' => AttributeListResource::collection(Attribute::all()),
       'price_conditions' => TimeResource::collection(TimePeriod::where(['category_id' => $request->category_id])->get()),
-      'address' => new AddressResource($address->address)
+      'address' => $address ?  new AddressResource($address->address) : null,
     ];
   }
   public function store(Request $request)
@@ -46,12 +52,19 @@ class PostController extends Controller
       'images' => 'required',
       'price_condition' => 'required',
       'security_price' => 'required',
-      'address' => 'required',
+      'address_line_1' => 'required',
+      'address_line_2' => 'required',
+      'state' => 'required',
+      'city' => 'required',
+      'country_id' => 'required',
+      'pincode' => 'required',
+      'latitude' => 'required',
+      'longitude' => 'required',
     ]);
     if ($validator->fails()) {
       return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
     } else {
-      $data = array(
+        $item =  Item::create([
         'id' => Carbon::now()->timestamp,
         'name' => $request->name,
         'user_id' => $this->uid(),
@@ -64,9 +77,8 @@ class PostController extends Controller
         'security_price' => $request->security_price,
         'from_date' => date('y-m-d h:i:s'),
         'to_date' => date('y-m-d h:i:s'),
-      );
+      ]);
 
-      $item = Item::create($data);
       if ($item) {
         if (count($request['attributes']) > 0) {
           foreach ($request['attributes'] as $attribute) {
@@ -75,7 +87,7 @@ class PostController extends Controller
         }
         $address = Address::create([
           'is_primary' => $request->is_primary,
-          'address_type' => $request->address_type,
+        //   'address_type' => $request->address_type,
           'address_line_1' => $request->address_line_1,
           'address_line_2' => $request->address_line_2,
           'state' => $request->state,
@@ -93,6 +105,7 @@ class PostController extends Controller
           ]);
         }
         if (true) {
+            auth()->user()->notify(new NewItemNotification($item));
           event(new PostAdsEvent(['data' => $item]));
           return response()->json(['message' => 'Item has been added successfully', 'data' => $item, 'success' => true]);
         }
@@ -118,7 +131,7 @@ class PostController extends Controller
         $category = Category::find($item->category_id);
         return [
           'category' => $category,
-          'attributes' => AttributesResource::collection(Attribute::where(['category_id' => $category->id, 'parent_id' => null])->get()),
+          'attributes' => AttributesResource::collection(Attribute::where(['parent_id' => null])->get()),
           'price_conditions' => TimeResource::collection(TimePeriod::where(['category_id' => $category->id])->get()),
           'data' => $item,
         ];
