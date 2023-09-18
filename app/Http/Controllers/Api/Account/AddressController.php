@@ -10,20 +10,24 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Account\AddressResource;
+use App\Http\Resources\Api\StatesResource;
+use App\Models\State;
 
 class AddressController extends Controller
 {
   public function index()
   {
-    if ($address = UserAddress::where(['user_id' => $this->uid()])->first()) {
-      return response()->json(['data' => new AddressResource($address->address), 'success' => true]);
+    $addresses = [];
+    $states = StatesResource::collection(State::where('country_id',101)->orderBy('name', 'desc')->get());
+    if ($addresses = Address::whereHas('address',function($q){
+      $q->where(['user_id' => $this->uid()]);
+    })->get()) {
+      $addresses = AddressResource::collection($addresses);
     }
-    return response()->json(['data' => null, 'success' => true]);
+    return response()->json(['data' => $addresses,'states'=>$states, 'success' => true]);
   }
   public function store(Request $request)
   {
-
-
     $validator = Validator::make($request->all(), [
       'address_line_1' => 'required',
       'address_line_2' => 'required',

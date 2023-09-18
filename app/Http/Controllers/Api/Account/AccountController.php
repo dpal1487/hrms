@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Resources\Api\Account\UserResource;
 use Illuminate\Support\Facades\Auth;
-
+use Intervention\Image\Facades\Image;
 class AccountController extends Controller
 {
   public function index()
@@ -59,4 +59,26 @@ class AccountController extends Controller
       ], Response::HTTP_BAD_REQUEST);
     }
   }
+  public function updateImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            // Store the original image
+            $image->storeAs('images', $imageName, 'public');
+
+            // Generate a thumbnail
+            $thumbnail = Image::make($image)->fit(100, 100)->encode('jpg');
+            $thumbnailName = 'thumbnail_' . $imageName;
+            Storage::disk('public')->put('thumbnails/' . $thumbnailName, $thumbnail);
+
+            return response()->json(['message' => 'Image and thumbnail updated successfully']);
+        }
+
+        return response()->json(['error' => 'Image not provided'], 400);
+    }
 }
