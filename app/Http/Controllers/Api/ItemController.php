@@ -16,6 +16,7 @@ use App\Http\Resources\Api\ItemLocationResource;
 use App\Http\Resources\Api\ReportsResource;
 use App\Http\Resources\Web\ReviewResource;
 use App\Models\ItemLocation;
+use App\Models\Review;
 
 class ItemController extends Controller
 {
@@ -25,7 +26,7 @@ class ItemController extends Controller
     $location = ItemLocation::where('item_id', $request->pid)->first();
 
     return [
-      'items' => new ItemResource($item),   
+      'items' => new ItemResource($item),
       'images' => ImageResource::collection($item->images),
       'currency' => '₹',
       'location' => [
@@ -104,5 +105,43 @@ class ItemController extends Controller
       return response()->json(['message' => 'Thanks for reporting it. Our team will look into it at the earliest.', 'success' => true]);
     }
     return response()->json(['message' => 'Opps someting went wrong!.', 'success' => false]);
+  }
+
+  public function incrementLikes(Request $request, $id)
+  {
+    if ($item = ItemReview::where(['item_id' => $id])->first()) {
+      if ($review = Review::where(['id' => $item->review_id])->first()) {
+        if (!$review) {
+          return response()->json(['message' => 'Review not found'], 404);
+        }
+
+        
+        $review->likes_count++;
+        $review->item_id = $id;
+        $review->user_id = $this->uid();
+        $review->save();
+        return response()->json(['success' => true, 'message' => 'Likes count incremented successfully'], 200);
+      }
+    }
+    return response()->json(['success' => false, 'message' => 'Review not found.'], 400);
+  }
+
+  public function decrementLikes($id)
+  {
+    if ($item = ItemReview::where(['item_id' => $id])->first()) {
+      if ($review = Review::where(['id' => $item->review_id])->first()) {
+        if (!$review) {
+          return response()->json(['message' => 'Review not found'], 404);
+        }
+        if ($review->likes_count > 0) {
+          // Decrement the likes count
+          $review->likes_count--;
+          // Save the updated review
+          $review->save();
+        }
+        return response()->json(['success' => true, 'message' => 'Likes count decremented successfully'], 200);
+      }
+    }
+    return response()->json(['success' => false, 'message' => 'Record not found.'], 400);
   }
 }

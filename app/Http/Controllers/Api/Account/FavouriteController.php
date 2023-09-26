@@ -42,7 +42,6 @@ class FavouriteController extends Controller
   }
   public function destroy($id)
   {
-
     if (Favourite::where(['item_id' => $id, 'user_id' => $this->uid()])->delete()) {
       return response()->json(['success' => true, 'message' => 'Item removed from wishlist successfully.']);
     }
