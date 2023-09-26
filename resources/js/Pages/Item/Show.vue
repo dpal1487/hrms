@@ -2,6 +2,20 @@
 .slideimage {
     height: 400px;
 }
+.carousel__item {
+    min-height: 400px;
+    width: 100%;
+    background-color: #ca5981;
+    color: var(--vc-clr-white);
+    font-size: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
 </style>
 <script>
 import { Head, Link } from '@inertiajs/inertia-vue3';
@@ -55,15 +69,32 @@ export default defineComponent({
                 <span class="text-muted">Items Overview</span>
             </li>
         </template>
-        <carousel :autoplay="3000" :wrap-around="true">
-            <slide v-for="image in itemdetails?.data?.images" :key="slide">
-                <img :src="image?.small_path" class="d-block w-100 slideimage" alt="...">
-            </slide>
-            <template #addons>
-                <navigation />
-                <pagination />
-            </template>
-        </carousel>
+        
+        <div v-if="itemdetails?.data?.images != 0">
+            <carousel :autoplay="3000" :wrap-around="true">
+
+                <slide v-for="image in itemdetails?.data?.images" :key="slide">
+                    <img :src="image?.small_path" class="d-block w-100 slideimage" alt="...">
+                </slide>
+                <template #addons>
+                    <navigation />
+                    <pagination />
+                </template>
+            </carousel>
+        </div>
+        <div v-else>
+            
+            <carousel>
+                <slide v-for="slide in 3" :key="slide">
+                     <div class="carousel__item d-block w-100 slideimage"></div>
+                </slide>
+
+                <template #addons>
+                    <navigation />
+                    <pagination />
+                </template>
+            </carousel>
+        </div>
         <div class="row mt-5">
             <div class="col-sm-12 col-md-8">
                 <div class="card mb-5">
@@ -72,9 +103,10 @@ export default defineComponent({
                             <div class="">
                                 <div class="d-flex gap-15">
                                     <div class="d-flex align-items-center ">
-                                            <h5 class="card-title fs-2 m-3">Rent Type : </h5>
-                                            <h1 class="m-0 fs-4 text-gray-800 text-uppercase">  {{ itemdetails?.data?.time }}</h1>
-                                        </div>
+                                        <h5 class="card-title fs-2 m-3">Rent Type : </h5>
+                                        <h1 class="m-0 fs-4 text-gray-800 text-uppercase"> {{ itemdetails?.data?.time }}
+                                        </h1>
+                                    </div>
                                     <div class="d-flex align-items-center ">
                                         <h5 class="card-title fs-2 m-3">Rent Prize : </h5>
                                         <h1 class="m-0 fs-4 text-gray-800"> ₹ {{ itemdetails?.data?.rent_price }}</h1>

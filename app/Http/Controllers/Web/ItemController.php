@@ -13,6 +13,7 @@ use App\Http\Resources\Web\Item\ItemReviewsResource;
 use App\Http\Resources\Web\Item\ItemStatusesResource;
 use App\Http\Resources\Web\UserResource;
 use App\Models\File;
+use App\Models\ItemVisit;
 use Inertia\Inertia;
 
 class ItemController extends Controller
@@ -33,7 +34,7 @@ class ItemController extends Controller
             $items = $items->where('status_id', '=', $request->s);
         }
         return Inertia::render('Item/Index', [
-            'items' => ItemListResource::collection($items->paginate(2)->onEachSide(1)->appends(request()->query())),
+            'items' => ItemListResource::collection($items->paginate(3)->onEachSide(1)->appends(request()->query())),
             'itemStatus' => $this->itemstatus,
         ]);
     }
@@ -50,9 +51,15 @@ class ItemController extends Controller
 
     public function show($id)
     {
+        $itemVisits = ItemVisit::create([
+            'item_id' => $id,
+            'ip_address' => request()->ip(),
+        ]);
+
+        $user =  User::find($id);
         return Inertia::render('Item/Show', [
             'itemdetails' => new ItemOverViweResource(Item::find($id)),
-            'user' => new UserResource(User::find($id)),
+            'user' => $user ?  new UserResource(User::find($id)) : '',
             'itemStatus' => $this->itemstatus,
         ]);
     }

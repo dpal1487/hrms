@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ItemVisit extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['item_id', 'ip_address'];
 }

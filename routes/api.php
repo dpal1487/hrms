@@ -152,8 +152,11 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::get('related', [ItemController::class, 'related']);
         Route::get('report/{id}', [ItemController::class, 'getReportsItems']);
         Route::post('report/{id}', [ItemController::class, 'report']);
+        
         Route::get('reviews/{id}', [ReviewController::class, 'index']);
         Route::group(['middleware' => ['auth:api']], function () {
+            Route::post('review/{id}/like', [ItemController::class, 'incrementLikes']);
+            Route::post('review/{id}/unlike', [ItemController::class,  'decrementLikes']);
             Route::delete('delete/{id}', [ReviewController::class, 'destroy']);
             Route::get('write-review/{id}', [ReviewController::class, 'edit']);
             Route::post('write-review/{id}', [ReviewController::class, 'createOrUpdate']);

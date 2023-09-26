@@ -51,7 +51,6 @@ class ReviewController extends Controller
   {
     $review = ItemReview::with('review')->where(['item_id' => $id, 'user_id' => $this->uid()])->first();
 
-
     if ($review) {
       $this->data['data'] = [
         'title' => $review->review->title,
