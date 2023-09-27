@@ -13,9 +13,6 @@
     justify-content: center;
     align-items: center;
 }
-
-
-
 </style>
 <script>
 import { Head, Link } from '@inertiajs/inertia-vue3';
@@ -174,14 +171,14 @@ export default defineComponent({
                 <div class="card mb-5">
                     <div class="card-body p-2 m-3">
                         <h5 class="card-title fs-1 mb-4 p-0">Reviews </h5>
-                        <h1 class="fs-4 text-gray-800">Place Rating : 0 average based on {{
+                        <h1 class="fs-4 text-gray-800 mx-3"> {{ itemdetails?.data?.rating }} average based on {{
                             itemdetails?.data?.rating_reviews?.count }} reviews.</h1>
                     </div>
                 </div>
                 <div class="card mb-5">
                     <div class="card-body p-2 m-3">
                         <h5 class="card-title fs-1 mb-4 p-0">Found something unusual ?</h5>
-                        <h1 class="fs-4 text-gray-800">Ad Id : {{ itemdetails?.data?.id }}</h1>
+                        <h1 class="fs-4 text-gray-800">Ad Id : {{ itemdetails?.data }}</h1>
                     </div>
                 </div>
             </div>

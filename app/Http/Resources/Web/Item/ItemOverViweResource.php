@@ -8,6 +8,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ItemOverViweResource extends JsonResource
 {
+
+    public $totalRating;
+
+    public function __construct($resource, $totalRating)
+    {
+        parent::__construct($resource);
+        $this->totalRating = $totalRating;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -46,6 +54,7 @@ class ItemOverViweResource extends JsonResource
                 'count' => 0
             ],
             'reviews' => ReviewResource::collection($this->reviews),
+            'rating' => $this->when(isset($this->totalRating), $this->totalRating),
 
         ];
     }

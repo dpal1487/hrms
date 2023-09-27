@@ -14,6 +14,7 @@ use App\Http\Resources\Web\Item\ItemStatusesResource;
 use App\Http\Resources\Web\UserResource;
 use App\Models\File;
 use App\Models\ItemVisit;
+use App\Models\Review;
 use Inertia\Inertia;
 
 class ItemController extends Controller
@@ -56,11 +57,16 @@ class ItemController extends Controller
             'ip_address' => request()->ip(),
         ]);
 
+        $item = Item::find($id);
+        if ($item ) {
+            $totalRating = Review::where('item_id', $item->id)->sum('rating');
+        }
         $user =  User::find($id);
         return Inertia::render('Item/Show', [
-            'itemdetails' => new ItemOverViweResource(Item::find($id)),
+            'itemdetails' => new ItemOverViweResource($item, $totalRating),
             'user' => $user ?  new UserResource(User::find($id)) : '',
             'itemStatus' => $this->itemstatus,
+            
         ]);
     }
 

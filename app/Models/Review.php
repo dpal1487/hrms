@@ -19,4 +19,9 @@ class Review extends Model
     {
         return $this->hasMany(ItemReview::class, 'review_id', 'id');
     }
+
+    public function reviewLike()
+    {
+        return $this->hasOne(ItemReviewLike::class, 'review_id', 'id');
+    }
 }

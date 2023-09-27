@@ -71,10 +71,10 @@ class ReviewController extends Controller
   {
     if ($item = ItemReview::where(['item_id' => $id, 'user_id' => $this->uid()])->first()) {
       if (Review::where(['id' => $item->review_id])->update(['content' => $request->content, 'rating' => $request->rating, 'title' => $request->title])) {
-        return response()->json(['success' => true, 'message' => 'Review added successfully']);
+        return response()->json(['success' => true, 'message' => 'Review Updated successfully']);
       }
     } else {
-      if ($review = Review::create(['content' => $request->content, 'rating' => $request->rating, 'title' => $request->title])) {
+      if ($review = Review::create(['content' => $request->content, 'rating' => $request->rating, 'item_id' => $id, 'title' => $request->title])) {
         if (ItemReview::create(['item_id' => $id, 'user_id' => $this->uid(), 'review_id' => $review->id])) {
           return response()->json(['success' => true, 'message' => 'Review added successfully']);
         }
@@ -84,9 +84,7 @@ class ReviewController extends Controller
   }
   public function remove($id)
   {
-
     if ($review = ItemReview::where(['item_id' => $id, 'user_id' => $this->uid()])->first()) {
-
       if (ItemReview::where(['id' => $review->id])->delete() && Review::where(['id' => $review->review_id])->delete()) {
         return response()->json(['success' => true, 'message' => 'Review deleted successfully']);
       }
