@@ -62,11 +62,16 @@ export default defineComponent({
         window.echo
             .channel("laravel_database_post-ads")
             .listen(".PostAdsEvent", (e) => {
-                console.log(e.data);
                 toast.success(e.data.name, {
                     position: toast.POSITION.BOTTOM_RIGHT,
                 });
             });
+    },
+
+    computed: {
+        notificationCount() {
+            return this.notifications.length;
+        },
     },
 });
 </script>
@@ -113,25 +118,22 @@ export default defineComponent({
                                     d="M18 19H5V6h8c0-.712.153-1.387.422-2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h13c1.103 0 2-.897 2-2v-8.422A4.962 4.962 0 0 1 18 11v8z">
                                 </path>
                             </svg>
-                            <span
-                                class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
+                            <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
                             </span>
                         </button>
 
                         <div v-if="notificationDrop" class="menu-sub-dropdown menu flex-column">
                             <div class="d-flex flex-column bgi-no-repeat rounded-top"
                                 style="background-image:url('/assets/media/misc/menu-header-bg.jpg')">
-                                <h3 class="fw-semibold px-9 mt-10 mb-6">
-                                    Notifications <span class="fs-8 opacity-75 ps-3">24 reports</span>
+                                <h3 class="fw-semibold px-9 mt-10 mb-6 text-light">
+                                    Notifications <span class="fs-8 opacity-75 ps-3">{{ notificationCount }} reports</span>
                                 </h3>
                             </div>
-                            <div class="">
-                                <div class="tab-pane " id="kt_topbar_notifications_1" role="tabpanel">
-                                    <div class="scroll-y mh-325px my-5 px-8" v-for="notifications in notification">
-
-                                        <div class="d-flex flex-stack py-4" >
-                                            <!-- {{ notification }} -->
-                                            <div class="d-flex align-items-center" >
+                            <div class="overflow-auto h-600px">
+                                <div class="tab-pane" id="kt_topbar_notifications_1" role="tabpanel">
+                                    <div class="scroll-y mh-325px my-5 px-8" v-for="notification in notifications">
+                                        <div class="d-flex flex-stack py-4">
+                                            <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-35px me-4">
                                                     <span class="symbol-label bg-light-primary">
                                                         <i class="ki-duotone ki-abstract-28 fs-2 text-primary"><span
@@ -139,46 +141,13 @@ export default defineComponent({
                                                     </span>
                                                 </div>
                                                 <div class="mb-0 me-2">
-                                                    <a href="#"
-                                                        class="fs-6 text-gray-800 text-hover-primary fw-bold">Project
-                                                        Alice</a>
-                                                    <div class="text-gray-400 fs-7">Phase 1 development</div>
+                                                    <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">{{ JSON.parse(notification.data).name }}
+                                                    {{ JSON.parse(notification.data).first_name }} {{ JSON.parse(notification.data).last_name }}
+                                                    </a>
+                                                    <div class="text-gray-400 fs-7"></div>
                                                 </div>
                                             </div>
-                                            <span class="badge badge-light fs-8">1 hr</span>
-                                        </div>
-                                        <div class="d-flex flex-stack py-4">
-                                            <div class="d-flex align-items-center">
-                                                <div class="symbol symbol-35px me-4">
-                                                    <span class="symbol-label bg-light-danger">
-                                                        <i class="ki-duotone ki-information fs-2 text-danger"><span
-                                                                class="path1"></span><span class="path2"></span><span
-                                                                class="path3"></span></i>
-                                                    </span>
-                                                </div>
-                                                <div class="mb-0 me-2">
-                                                    <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">HR
-                                                        Confidential</a>
-                                                    <div class="text-gray-400 fs-7">Confidential staff documents</div>
-                                                </div>
-                                            </div>
-                                            <span class="badge badge-light fs-8">2 hrs</span>
-                                        </div>
-                                        <div class="d-flex flex-stack py-4">
-                                            <div class="d-flex align-items-center">
-                                                <div class="symbol symbol-35px me-4">
-                                                    <span class="symbol-label bg-light-warning">
-                                                        <i class="ki-duotone ki-briefcase fs-2 text-warning"><span
-                                                                class="path1"></span><span class="path2"></span></i>
-                                                    </span>
-                                                </div>
-                                                <div class="mb-0 me-2">
-                                                    <a href="#"
-                                                        class="fs-6 text-gray-800 text-hover-primary fw-bold">Company HR</a>
-                                                    <div class="text-gray-400 fs-7">Corporeate staff profiles</div>
-                                                </div>
-                                            </div>
-                                            <span class="badge badge-light fs-8">5 hrs</span>
+                                            <span class="badge badge-light fs-8">{{ notification.created }}</span>
                                         </div>
                                     </div>
                                 </div>

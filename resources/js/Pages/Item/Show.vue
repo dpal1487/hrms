@@ -2,6 +2,7 @@
 .slideimage {
     height: 400px;
 }
+
 .carousel__item {
     min-height: 400px;
     width: 100%;
@@ -21,7 +22,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { GoogleMap, Marker } from "vue3-google-map";
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-
+import ReportList from './Component/ReportList.vue';
 export default defineComponent({
     props: ['itemdetails'],
     data() {
@@ -29,6 +30,7 @@ export default defineComponent({
             slide: '',
             title: "Item Overview",
             center: null,
+           
         }
     },
     components: {
@@ -41,12 +43,20 @@ export default defineComponent({
         Slide,
         Pagination,
         Navigation,
+        ReportList
     },
 
     created() {
-        const center = { lat: this.itemdetails?.data?.location?.country?.longitude, lng: this.itemdetails?.data?.location?.country?.longitude };
+        // const center = { lat: this.itemdetails?.data?.location?.country?.longitude, lng: this.itemdetails?.data?.location?.country?.longitude };
+
+        const center = { lat: 28.6490624, lng: 77.0965504 };
         return { center };
-    }
+    },
+    computed: {
+        isLocationNull() {
+            return this.itemdetails?.data?.location?.address_line_1 == null;
+        },
+    },
 })
 </script>
 <template>
@@ -66,10 +76,9 @@ export default defineComponent({
                 <span class="text-muted">Items Overview</span>
             </li>
         </template>
-        
+
         <div v-if="itemdetails?.data?.images != 0">
             <carousel :autoplay="3000" :wrap-around="true">
-
                 <slide v-for="image in itemdetails?.data?.images" :key="slide">
                     <img :src="image?.small_path" class="d-block w-100 slideimage" alt="...">
                 </slide>
@@ -80,12 +89,10 @@ export default defineComponent({
             </carousel>
         </div>
         <div v-else>
-            
             <carousel>
                 <slide v-for="slide in 3" :key="slide">
-                     <div class="carousel__item d-block w-100 slideimage"></div>
+                    <div class="carousel__item d-block w-100 slideimage"></div>
                 </slide>
-
                 <template #addons>
                     <navigation />
                     <pagination />
@@ -132,17 +139,19 @@ export default defineComponent({
                                             fill="currentColor" />
                                     </svg>
                                 </span>
-                                <h1 v-if="itemdetails?.data?.location > 0" class="m-0 fs-4 text-gray-800">{{
-                                    itemdetails?.data?.location?.address_line_1
-                                    + " " + itemdetails?.data?.location?.address_line_2
-                                    + " " + itemdetails?.data?.location?.city
-                                    + " " + itemdetails?.data?.location?.state
-                                    + " " + itemdetails?.data?.location?.pincode
-                                    + " " + itemdetails?.data?.location?.country?.name }}
-                                </h1>
-                                <h1 v-else class="m-0 fs-4 text-gray-800">
-                                    Address Not Found
-                                </h1>
+                                <div v-if="isLocationNull" class="m-0 fs-4 text-gray-800">
+                                    <!-- Handle the case when location is null -->
+                                    Location is null
+                                </div>
+                                <div v-else class="m-0 fs-3 text-gray-800">
+                                    <!-- Handle the case when location is not null -->
+                                    Location : {{itemdetails?.data?.location?.address_line_1
+                                        + " " + itemdetails?.data?.location?.address_line_2
+                                        + " " + itemdetails?.data?.location?.city
+                                        + " " + itemdetails?.data?.location?.state
+                                        + " " + itemdetails?.data?.location?.pincode
+                                        + " " + itemdetails?.data?.location?.country?.name }}
+                                </div>
                             </div>
                             <div class="">
                                 <div class="d-flex">
@@ -159,7 +168,7 @@ export default defineComponent({
                 </div>
 
                 <div class="card mb-5">
-                    <h5 class="card-title fs-1 mt-4 px-3">Attribute</h5>
+                    <h5 class="card-title fs-1 mt-4 p-3">Attribute</h5>
                     <div class="card-body py-0 bg-slate-400" v-for="(attribute) in  itemdetails?.data?.attributes">
                         <div class="d-flex align-items-center gap-20 gap-y-0 mb-2">
                             <h1 class="fs-4 fw-bold w-25">Name</h1>
@@ -178,18 +187,19 @@ export default defineComponent({
                 <div class="card mb-5">
                     <div class="card-body p-2 m-3">
                         <h5 class="card-title fs-1 mb-4 p-0">Found something unusual ?</h5>
-                        <h1 class="fs-4 text-gray-800">Ad Id : {{ itemdetails?.data?.report }}</h1>
+                        <div v-if="Array.isArray(itemdetails?.data?.report) && itemdetails?.data?.report.length > 0">
+                            <ReportList :reports="itemdetails?.data?.report" />
+                        </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-sm-12 col-md-4">
                 <div class="card mb-3">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="">
                                 <Link class="user_link d-flex align-items-center gap-4"
-                                    :href="`/item/user/userProfile/${itemdetails?.data?.user?.id}`">
+                                    :href="`/user/${itemdetails?.data?.user?.id}`">
                                 <img alt="user image" src="/assets/media/avatars/300-1.jpg" width="50" height="50">
                                 <div
                                     class="user_name fs-3 fw-bold text-theme-primary flex-root d-flex align-items-center justify-content-between">
@@ -203,18 +213,17 @@ export default defineComponent({
                                 </div>
                                 </Link>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
                 <div class="card mb-5">
                     <div class="card-body p-2 m-3">
                         <h5 class="card-title fs-1 mb-4 p-0">Posted In</h5>
-                        <GoogleMap api-key="YOUR_GOOGLE_MAPS_API_KEY" style="width: 100%; height: 300px" :center="center"
+                        <GoogleMap api-key="YOUR_GOOGLE_MAPS_API_KEY" style="width: 100%; height: 400px" :center="center"
                             :zoom="15">
                             <Marker :options="{ position: center }" />
                         </GoogleMap>
+
                     </div>
                 </div>
             </div>

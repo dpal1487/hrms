@@ -28,4 +28,9 @@ class ItemReview extends Model
   {
     return $this->hasOne(Review::class, 'id', 'review_id');
   }
+
+  public function report()
+  {
+    return $this->hasOne(Report::class, 'source_id', 'review_id');
+  }
 }

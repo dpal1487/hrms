@@ -20,10 +20,8 @@ use App\Models\ItemImage;
 use App\Models\UserAddress;
 use App\Models\ItemLocation;
 use App\Notifications\NewItemNotification;
-use App\Notifications\NewPostCreateNotification;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller

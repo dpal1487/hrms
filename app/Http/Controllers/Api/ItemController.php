@@ -99,7 +99,6 @@ class ItemController extends Controller
 
   public function report(Request $request, $id)
   {
-
     $data = array('user_id' => $this->uid(), 'type_id' => 5, 'source_id' => $id);
     $reviews = Report::updateOrCreate($data, $data);
     if ($reviews) {

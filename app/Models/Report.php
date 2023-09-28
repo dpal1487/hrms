@@ -11,13 +11,13 @@ class Report extends Model
 
     protected $fillable = ['user_id', 'type_id', 'source_id'];
 
-    public function item()
+    public function review()
     {
-        return $this->hasOne(Item::class, 'id', 'source_id');
+        return $this->hasOne(Review::class, 'id', 'source_id');
     }
-    public function items()
+    public function reviews()
     {
-        return $this->hasMany(Item::class, 'id', 'source_id');
+        return $this->hasMany(Review::class, 'id', 'source_id');
     }
     public function user()
     {

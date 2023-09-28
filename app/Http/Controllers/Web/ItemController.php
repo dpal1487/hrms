@@ -13,6 +13,7 @@ use App\Http\Resources\Web\Item\ItemReviewsResource;
 use App\Http\Resources\Web\Item\ItemStatusesResource;
 use App\Http\Resources\Web\UserResource;
 use App\Models\File;
+use App\Models\ItemReview;
 use App\Models\ItemVisit;
 use App\Models\Review;
 use Inertia\Inertia;
@@ -56,7 +57,6 @@ class ItemController extends Controller
             'item_id' => $id,
             'ip_address' => request()->ip(),
         ]);
-
         $item = Item::find($id);
         if ($item ) {
             $totalRating = Review::where('item_id', $item->id)->sum('rating');

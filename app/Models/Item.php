@@ -46,6 +46,10 @@ class Item extends Model
   {
     return $this->hasOne(ItemReview::class, 'item_id', 'id');
   }
+  public function reviewReports()
+  {
+    return $this->hasMany(Review::class, 'item_id', 'id');
+  }
   public function time()
   {
     return $this->hasOne(Time::class, 'id', 'time_id');

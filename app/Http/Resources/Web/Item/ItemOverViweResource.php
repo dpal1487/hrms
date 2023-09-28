@@ -55,7 +55,7 @@ class ItemOverViweResource extends JsonResource
             ],
             'reviews' => ReviewResource::collection($this->reviews),
             'rating' => $this->when(isset($this->totalRating), $this->totalRating),
-            'report' => $this->reviews,
+            'report' => ReviewReportResource::collection($this->reviewReports),
         ];
     }
 }
