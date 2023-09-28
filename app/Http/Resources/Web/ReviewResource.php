@@ -22,7 +22,7 @@ class ReviewResource extends JsonResource
             'status' => $this->review?->status,
             'created_at' => date('y M d', strtotime($this->review?->created_at)),
             'updated_at' => $this->review?->updated_at,
-            // 'user' => new UserResource($this->user),
+            'user' => new UserResource($this->user),
             
         ];
     }

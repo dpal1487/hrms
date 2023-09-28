@@ -99,6 +99,7 @@ class ItemController extends Controller
 
   public function report(Request $request, $id)
   {
+
     $data = array('user_id' => $this->uid(), 'type_id' => 5, 'source_id' => $id);
     $reviews = Report::updateOrCreate($data, $data);
     if ($reviews) {
@@ -109,13 +110,17 @@ class ItemController extends Controller
 
   public function incrementLikes(Request $request, $id)
   {
-    if ($item = ItemReview::where(['item_id' => $id, 'review_id' => $request->review_id])->first()) {
+    if ($item = ItemReview::where(['item_id' => $id, 'review_id' => $request->review_id])->first())  // add review_id in item review table to manage proper like dislike review id value came from user
+    {
       if ($review = Review::where(['id' => $item->review_id])->first()) {
+        // add item review like value in database 
         $itemReviewLike = ItemReviewLike::create([
           'review_id' => $review->id,
           'user_id' => $this->uid(),
         ]);
+        // Decrement the likes count
         $review->likes_count++;
+        // Save the updated like count
         $review->save();
         return response()->json(['success' => true, 'message' => 'Likes count incremented successfully'], 200);
       }
@@ -126,12 +131,10 @@ class ItemController extends Controller
 
   public function decrementLikes(Request $request, $id)
   {
-    if ($item = ItemReview::where(['item_id' => $id, 'review_id' => $request->review_id])->first()) {
+    if ($item = ItemReview::where(['item_id' => $id, 'review_id' => $request->review_id])->first())  // review id value came from user
+    {
       if ($review = Review::where(['id' => $item->review_id])->first()) {
-        if (!$review) {
-          return response()->json(['message' => 'Review not found'], 404);
-        }
-        if ($itemReviewLike = ItemReviewLike::where(['review_id' => $review->id, 'user_id' => $this->uid()])->first()) {
+        if (ItemReviewLike::where(['review_id' => $review->id, 'user_id' => $this->uid()])->first()) {
           if ($review->likes_count > 0) {
             // Decrement the likes count
             $review->likes_count--;
@@ -141,7 +144,8 @@ class ItemController extends Controller
           return response()->json(['success' => true, 'message' => 'Likes count decremented successfully'], 200);
         }
       }
+      return response()->json(['message' => 'Review not found'], 404);
     }
-    return response()->json(['success' => false, 'message' => 'Record not found.'], 400);
+    return response()->json(['success' => false, 'message' => 'Item Review Record not found.'], 404);
   }
 }

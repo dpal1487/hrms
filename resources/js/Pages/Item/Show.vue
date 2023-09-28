@@ -178,7 +178,7 @@ export default defineComponent({
                 <div class="card mb-5">
                     <div class="card-body p-2 m-3">
                         <h5 class="card-title fs-1 mb-4 p-0">Found something unusual ?</h5>
-                        <h1 class="fs-4 text-gray-800">Ad Id : {{ itemdetails?.data?.id }}</h1>
+                        <h1 class="fs-4 text-gray-800">Ad Id : {{ itemdetails?.data?.report }}</h1>
                     </div>
                 </div>
             </div>

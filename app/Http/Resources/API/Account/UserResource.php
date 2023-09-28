@@ -17,7 +17,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'gender' => $this->gender,
             'date_of_birth' => $this->date_of_birth,
-            'phonecode'=>$this->country->phonecode,
+            'phonecode' => $this->country->phonecode,
             'about' => $this->about,
             'isVerified' => $this->is_verified,
             'total_ads' => count($this->items),
