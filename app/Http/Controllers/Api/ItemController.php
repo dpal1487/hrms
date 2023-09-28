@@ -12,10 +12,11 @@ use App\Http\Resources\Api\AttributesResource;
 use App\Http\Resources\Api\ImageResource;
 use App\Http\Resources\Api\ItemResource;
 use App\Http\Resources\Api\Account\UserResource;
-use App\Http\Resources\Api\ItemLocationResource;
 use App\Http\Resources\Api\ReportsResource;
-use App\Http\Resources\Web\ReviewResource;
+use App\Http\Resources\Api\ReviewsResource;
 use App\Models\ItemLocation;
+use App\Models\ItemReviewLike;
+use App\Models\Review;
 
 class ItemController extends Controller
 {
@@ -25,7 +26,7 @@ class ItemController extends Controller
     $location = ItemLocation::where('item_id', $request->pid)->first();
 
     return [
-      'items' => new ItemResource($item),   
+      'items' => new ItemResource($item),
       'images' => ImageResource::collection($item->images),
       'currency' => '₹',
       'location' => [
@@ -50,7 +51,7 @@ class ItemController extends Controller
       ],
       'attributes' => AttributesResource::collection($item->attributes),
       'reviews' => [
-        'data' => ReviewResource::collection($item->reviews->skip(0)->take(3)),
+        'data' => ReviewsResource::collection($item->reviews->skip(0)->take(3)),
         'place_rating' => $this->placeRating($item->reviews)
       ],
       'related' => $this->related($request)
@@ -59,7 +60,7 @@ class ItemController extends Controller
   public function itemReviews(Request $request)
   {
     $reviews = ItemReview::where($request->pid);
-    $data = ['data' => ReviewResource::collection($reviews->get()), 'totalReviews' => $reviews->count()];
+    $data = ['data' => ReviewsResource::collection($reviews->get()), 'totalReviews' => $reviews->count()];
   }
   public function related(Request $request)
   {
@@ -104,5 +105,43 @@ class ItemController extends Controller
       return response()->json(['message' => 'Thanks for reporting it. Our team will look into it at the earliest.', 'success' => true]);
     }
     return response()->json(['message' => 'Opps someting went wrong!.', 'success' => false]);
+  }
+
+  public function incrementLikes(Request $request, $id)
+  {
+    if ($item = ItemReview::where(['item_id' => $id, 'review_id' => $request->review_id])->first()) {
+      if ($review = Review::where(['id' => $item->review_id])->first()) {
+        $itemReviewLike = ItemReviewLike::create([
+          'review_id' => $review->id,
+          'user_id' => $this->uid(),
+        ]);
+        $review->likes_count++;
+        $review->save();
+        return response()->json(['success' => true, 'message' => 'Likes count incremented successfully'], 200);
+      }
+      return response()->json(['message' => 'Review not found'], 404);
+    }
+    return response()->json(['success' => false, 'message' => 'Item Review not found.'], 404);
+  }
+
+  public function decrementLikes(Request $request, $id)
+  {
+    if ($item = ItemReview::where(['item_id' => $id, 'review_id' => $request->review_id])->first()) {
+      if ($review = Review::where(['id' => $item->review_id])->first()) {
+        if (!$review) {
+          return response()->json(['message' => 'Review not found'], 404);
+        }
+        if ($itemReviewLike = ItemReviewLike::where(['review_id' => $review->id, 'user_id' => $this->uid()])->first()) {
+          if ($review->likes_count > 0) {
+            // Decrement the likes count
+            $review->likes_count--;
+            // Save the updated review
+            $review->save();
+          }
+          return response()->json(['success' => true, 'message' => 'Likes count decremented successfully'], 200);
+        }
+      }
+    }
+    return response()->json(['success' => false, 'message' => 'Record not found.'], 400);
   }
 }

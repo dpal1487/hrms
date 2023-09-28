@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
-    protected $fillable = ['content', 'rating', 'title'];
+    protected $fillable = ['content', 'rating', 'title', 'likes_count', 'item_id', 'user_id'];
 
     public function review()
     {
@@ -19,5 +19,9 @@ class Review extends Model
     {
         return $this->hasMany(ItemReview::class, 'review_id', 'id');
     }
-  
+
+    public function reviewLike()
+    {
+        return $this->hasOne(ItemReviewLike::class, 'review_id', 'id');
+    }
 }
