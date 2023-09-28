@@ -4,17 +4,24 @@ if (!function_exists('SuccessMessage')) {
 
     function CreateMessage($message)
     {
-        return "$message Successfully created.";
+        return "$message successfully created.";
     }
     function UpdateMessage($message)
     {
-        return "$message Successfully updated.";
+        return "$message successfully updated.";
+    }
+    function FailedUpdateMessage($message)
+    {
+        return "Failed to update $message.";
     }
     function DeleteMessage($message)
     {
-        return "$message Successfully deleted.";
+        return "$message successfully deleted.";
     }
-
+    function FailedDeleteMessage($message)
+    {
+        return "Failed to update $message.";
+    }
     function ErrorMessage()
     {
         return "Opps! something went wrong.";

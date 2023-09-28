@@ -63,10 +63,6 @@ class User extends Authenticatable
   {
     return $this->hasOne(Image::class, 'id', 'image_id');
   }
-  public function user_address()
-  {
-    return $this->hasOne(Address::class, 'user_id', 'id');
-  }
   public function country()
   {
     return $this->hasOne(Country::class, 'id', 'country_id');
@@ -76,10 +72,10 @@ class User extends Authenticatable
   {
     return $this->hasOne(State::class, 'id', 'country_id');
   }
-
-  public function address()
+  
+  public function addresses()
   {
-    return $this->hasOne(Address::class, 'user_id', 'id');
+    return $this->hasMany(UserAddress::class,'user_id','id');
   }
 
   public function reviews()

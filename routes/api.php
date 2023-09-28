@@ -102,6 +102,8 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
             /*Address*/
             Route::get('address', [AddressController::class, 'index']);
             Route::post('address', [AddressController::class, 'store']);
+            Route::post('address/{id}', [AddressController::class, 'update']);
+            Route::delete('address/{id}', [AddressController::class, 'delete']);
             /*Review*/
             Route::get('reviews', [ReviewController::class, 'myReviews']);
             Route::delete('review/{id}', [ReviewController::class, 'remove']);
