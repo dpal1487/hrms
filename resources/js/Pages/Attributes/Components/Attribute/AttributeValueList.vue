@@ -6,7 +6,7 @@ import utils from '../../../utils.js';
 import { Inertia } from '@inertiajs/inertia';
 
 export default defineComponent({
-    props: ['attribute','category'],
+    props: ['attribute'],
     data: () => {
         return {
         }
@@ -33,9 +33,9 @@ export default defineComponent({
     <td class="fs-6 fw-bold text-gray-700 text-capitalize">
         {{ attribute?.category?.name }}
     </td>
-    <td class="fs-6 fw-bold text-gray-700 text-capitalize">
-        {{ attribute?.attribute_value }}
-    </td>
+     <td class="fs-6 fw-bold text-gray-700 text-capitalize">
+            {{ attribute?.attribute_value }}
+        </td>
     <td>
         <div class="form-switch form-check-solid d-block form-check-custom form-check-success mx-10">
             <input class="form-check-input h-20px w-30px" type="checkbox"

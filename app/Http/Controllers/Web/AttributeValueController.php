@@ -32,16 +32,11 @@ class AttributeValueController extends Controller
             ]);
         }
         $attrebutevalue = AttributeValue::create([
-            'attribute_value' => $request->value,
             'attribute_id' => $request->attribute,
+            'attribute_value' => $request->value,
+            'attribute_category_id' => $request->category,
             'status' => $request->status,
         ]);
-        $categoryAttributeValue = CategoryAttributeValue::create([
-            'category_id' => $request->category,
-            'attribute_id' => $request->attribute,
-            'value_id' => $attrebutevalue->id
-        ]);
-
         if ($attrebutevalue) {
             return redirect("/attribute/$request->attribute")->with('flash', [
                 'success' => true,
@@ -72,28 +67,26 @@ class AttributeValueController extends Controller
             ], 400);
         }
 
-        $attrebutevalue = AttributeValue::where('id' , $request->id)->update([
-            'attribute_value' => $request->value,
-            'attribute_id' => $request->attribute,
-            'status' => $request->status,
-        ]);
-        $categoryAttributeValue = CategoryAttributeValue::where('value_id' , $request->id)->first();
-        if ($categoryAttributeValue)
-        {
-        $categoryAttributeValue = $categoryAttributeValue->update([
-            'category_id' => $request->category,
-            'attribute_id' => $request->attribute,
-        ]);
-    }
-    else{
-        $categoryAttributeValue = CategoryAttributeValue::create([
-            'category_id' => $request->category,
-            'attribute_id' => $request->attribute,
-            'value_id' => $request->id
-        ]);
-    }
+        $categoryAttributeValue = AttributeValue::where('id', $request->id)->first();
+        if ($categoryAttributeValue) {
+            $categoryAttributeValue = $categoryAttributeValue->update([
+                'attribute_value' => $request->value,
+                'attribute_category_id' => $request->category,
+                'status' => $request->status,
+                'attribute_id' => $request->attribute,
 
-        if ($attrebutevalue) {
+            ]);
+        } else {
+            $categoryAttributeValue = AttributeValue::create([
+                'attribute_value' => $request->value,
+                'attribute_category_id' => $request->category,
+                'status' => $request->status,
+                'attribute_id' => $request->attribute,
+
+            ]);
+        }
+
+        if ($categoryAttributeValue) {
             return redirect("/attribute/$request->attribute")->with('flash', [
                 'success' => true,
                 'message' => UpdateMessage('Attribute Value')
@@ -111,7 +104,7 @@ class AttributeValueController extends Controller
     public function destroy(string $id)
     {
         $attributeValue = AttributeValue::find($id);
-        $categoryAttributeValue = CategoryAttributeValue::where('value_id',$attributeValue->id)->first();
+        $categoryAttributeValue = CategoryAttributeValue::where('value_id', $attributeValue->id)->first();
 
         if ($attributeValue->delete()) {
             $categoryAttributeValue->delete();

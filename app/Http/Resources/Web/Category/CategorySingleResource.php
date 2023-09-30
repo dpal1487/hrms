@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Web\Category;
 
+use App\Http\Resources\Web\Attribute\AttributeCategoryResource;
 use App\Http\Resources\Web\ImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,11 +26,8 @@ class CategorySingleResource extends JsonResource
             'meta' => $this->meta,
             'parent' => $this->parent,
             'banner' => new ImageResource($this->banner?->banner),
-            'attributes' => $this->attributes,
-            'header' => [
-                'total_active' => count($this->attributes->where('status', 1)),
-                'total_value' => count($this->attributes)
-            ]
+            'attributes' => $this->attributes ? CategoryAttributeResource::collection($this->attributes) : array(),
+            
         ];
     }
 }

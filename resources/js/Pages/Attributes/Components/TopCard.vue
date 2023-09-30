@@ -31,7 +31,7 @@ export default defineComponent({
                 <div class="row">
                     <div class="col-6">
                         <table class="table table-striped table-bordered text-left mx-10 align-middle text-capitalize">
-                            <tbody >
+                            <tbody>
                                 <tr>
                                     <th class="fs-6 fw-bold text-gray-800">
                                         Name
@@ -112,8 +112,11 @@ export default defineComponent({
                                     <div>
                                         <div class="badge bg-success w-fit">Active</div>
                                         <div class="d-flex justify-content-center align-items-center text-gray-600">
-                                            <h1 class="text-gray-800">{{ attribute?.header?.total_active }}&nbsp;</h1>
+                                            <h1 class="text-gray-800" v-if="attribute?.header == null"> 0&nbsp;</h1>
+                                            <h1 class="text-gray-800" v-else> {{ attribute?.header?.total_active }}&nbsp;
+                                            </h1>
                                             <span>Out Of</span>
+                                            <h1 class="text-gray-800" v-if="attribute?.header == null" >&nbsp;0</h1>                                            
                                             <h1 class="text-gray-800">&nbsp;{{ attribute?.header?.total_value }}</h1>
                                         </div>
                                     </div>

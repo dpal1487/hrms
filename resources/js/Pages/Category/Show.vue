@@ -134,8 +134,8 @@ export default defineComponent({
                                             <td>
                                                 {{ attribute?.name }}
                                             </td>
-                                            <td>
-                                                {{ attribute?.description }}
+                                            <td v-html="attribute?.description ">
+                                                
                                             </td>
                                             <td>
                                                 <div class="badge bg-success w-fit" v-if="attribute?.status == 1">Active
@@ -150,9 +150,6 @@ export default defineComponent({
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </app-layout>
 </template>

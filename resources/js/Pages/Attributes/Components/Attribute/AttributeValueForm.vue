@@ -11,7 +11,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 export default defineComponent({
     emits: ["submitted"],
-    props: ["attribute" , "id" , "categories"],
+    props: ["attribute", "id", "categories"],
     setup() {
         return { v$: useVuelidate() };
     },
@@ -21,7 +21,7 @@ export default defineComponent({
                 value: {
                     required,
                 },
-                category:{
+                category: {
                     required,
                 },
                 status: {
@@ -37,7 +37,7 @@ export default defineComponent({
                 category: this.attribute?.category?.id || '',
                 status: this.attribute?.status,
                 attribute: this?.id,
-                id:this.attribute?.id
+                id: this.attribute?.id
             }),
             status: [
                 { id: 1, label: "Active" },
@@ -66,6 +66,7 @@ export default defineComponent({
 });
 </script>
 <template>
+
     <form @submit.prevent="submit" class="my-auto pb-5">
         <div class="row mb-5">
             <div class="col-4 mb-3">

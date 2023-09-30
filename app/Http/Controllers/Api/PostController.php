@@ -161,7 +161,9 @@ class PostController extends Controller
         'from_date' => date('y-m-d h:i:s'),
         'to_date' => date('y-m-d h:i:s'),
       );
-      $item = Item::where(['id' => $request->pid, 'user_id' => $this->uid()])->update($data);
+
+      // return Item::where(['id' => $request->pid])->get();
+      $item = Item::where(['id' => $request->pid])->update($data);
 
       if ($item) {
         ItemAttribute::where(['item_id' => $request->pid])->delete();
@@ -193,7 +195,7 @@ class PostController extends Controller
           return response()->json(['message' => 'Item has been updated successfully', 'data' => $request->pid, 'success' => true]);
         }
       }
-      return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false]);
+      return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false],500);
     }
   }
 }

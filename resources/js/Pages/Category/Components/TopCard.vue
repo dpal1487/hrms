@@ -119,14 +119,14 @@ export default defineComponent({
                                 :errors="v$.form.thumbnail.$errors" :isUploading="thumbnail.isLoading" page="topCard"/>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-sm-6">
+                    <!-- <div class="col-12 col-md-6 col-sm-6">
                         <div class="h-100 d-flex justify-content-center align-items-center bg-gray-100">
                             <div class="drop-shadow">
                                 <div class="text-center bg-white p-20 rhombus ">
                                     <div>
                                         <div class="badge bg-success w-fit">Active</div>
                                         <div class="d-flex justify-content-center align-items-center text-gray-600">
-                                            <h1 class="text-gray-800">{{ category?.header?.total_active }}&nbsp;</h1>
+                                            <h1 class="text-gray-800">{{ category?.attribute?.header?.total_active }}&nbsp;</h1>
                                             <span>Out Of</span>
                                             <h1 class="text-gray-800">&nbsp;{{ category?.header?.total_value }}</h1>
                                         </div>
@@ -134,7 +134,7 @@ export default defineComponent({
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

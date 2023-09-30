@@ -10,16 +10,16 @@ class AttributeValue extends Model
     use HasFactory;
 
     protected $fillable = [
-        'attribute_value','attribute_id','status'
+        'attribute_id', 'attribute_category_id', 'attribute_value', 'status'
     ];
 
     public function attribute()
     {
-        return $this->hasOne(Attribute::class , 'id' , 'attribute_id');
+        return $this->hasOne(Attribute::class, 'id', 'attribute_id');
     }
 
     public function attributeCategory()
     {
-        return $this->hasOne(CategoryAttributeValue::class , 'value_id' , 'id');
+        return $this->hasOne(Category::class, 'id', 'attribute_category_id');
     }
 }

@@ -30,8 +30,8 @@
     use App\Http\Controllers\Web\ItemStatusController;
     use App\Http\Controllers\Web\MenuController;
     use App\Http\Controllers\Web\MenuItemController;
-use App\Http\Controllers\Web\NotificationController;
-use App\Http\Controllers\Web\TimeController;
+    use App\Http\Controllers\Web\NotificationController;
+    use App\Http\Controllers\Web\TimeController;
     use App\Http\Controllers\Web\TimePeriodController;
     use App\Http\Controllers\Web\SubscriptionsController;;
 
@@ -55,7 +55,7 @@ use App\Http\Controllers\Web\TimeController;
         ]);
     });
 
-    Route::post( 'login', [LoginController::class, 'login'])->name('user.login');
+    Route::post('login', [LoginController::class, 'login'])->name('user.login');
 
 
 
@@ -66,9 +66,37 @@ use App\Http\Controllers\Web\TimeController;
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
+        /* ========= Attribute Controller ========== */
+
+        Route::controller(AttributeController::class)->group(function () {
+            Route::get('/attributes', 'index')->name('attributes.index');
+            Route::group(['prefix' => 'attribute'], function () {
+                Route::post('status', 'statusUdate')->name('attribute.status');
+                Route::get('/create', 'create')->name('attribute.create');
+                Route::post('/store', 'store')->name('attribute.store');
+                Route::get('{id}', 'show')->name('attribute.show');
+                Route::get('{id}/edit', 'edit')->name('attribute.edit');
+                Route::post('{id}/update', 'update')->name('attribute.update');
+                Route::delete('{id}/destroy', 'destroy')->name('attribute.destroy');
+            });
+        });
+
+        /* ========= Attribute Value Controller ========== */
+
+        Route::controller(AttributeValueController::class)->group(function () {
+            Route::group(['prefix' => 'attribute-value'], function () {
+                Route::get('/', 'index')->name('attribute-value.index');
+                Route::post('status', 'statusUdate')->name('attribute-value.status');
+                Route::post('store', 'store')->name('attribute-value.store');
+                Route::post('update', 'update')->name('attribute-value.update');
+                Route::delete('{id}/destroy', 'destroy')->name('attribute-value.destroy');
+            });
+        });
+
+
         /* ========= Image Controller ========== */
 
-        route::get('notifications' , [NotificationController::class, 'index'])->name('notifications');
+        route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
         Route::controller(ImageController::class)->group(function () {
             Route::post('category/thumbnail', 'categoryThumbnail')->name('category.thumbnail');
             Route::post('category/banner', 'categoryBanner')->name('category.banner');
@@ -131,32 +159,6 @@ use App\Http\Controllers\Web\TimeController;
                 Route::post('{id}/update', 'update')->name('banner.update');
                 Route::post('status', 'statusUdate')->name('banner.status');
                 Route::delete('{id}/destroy', 'destroy')->name('banner.destroy');
-            });
-        });
-        /* ========= Attribute Controller ========== */
-
-        Route::controller(AttributeController::class)->group(function () {
-            Route::get('/attributes', 'index')->name('attributes.index');
-            Route::group(['prefix' => 'attribute'], function () {
-                Route::post('status', 'statusUdate')->name('attribute.status');
-                Route::get('/create', 'create')->name('attribute.create');
-                Route::post('/store', 'store')->name('attribute.store');
-                Route::get('{id}', 'show')->name('attribute.show');
-                Route::get('{id}/edit', 'edit')->name('attribute.edit');
-                Route::post('{id}/update', 'update')->name('attribute.update');
-                Route::delete('{id}/destroy', 'destroy')->name('attribute.destroy');
-            });
-        });
-
-        /* ========= Attribute Value Controller ========== */
-
-        Route::controller(AttributeValueController::class)->group(function () {
-            Route::group(['prefix' => 'attribute-value'], function () {
-                Route::get('/', 'index')->name('attribute-value.index');
-                Route::post('status', 'statusUdate')->name('attribute-value.status');
-                Route::post('store', 'store')->name('attribute-value.store');
-                Route::post('update', 'update')->name('attribute-value.update');
-                Route::delete('{id}/destroy', 'destroy')->name('attribute-value.destroy');
             });
         });
 

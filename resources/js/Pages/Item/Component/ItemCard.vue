@@ -53,7 +53,7 @@ export default defineComponent({
                                             fill="currentColor" />
                                     </svg>
                                 </span>
-                                <span v-if="item?.location">
+                                <span v-if="item?.location?.city != null">
                                     {{ item?.location?.city + " " + item?.location?.state + " " +
                                         item?.location?.country?.name }}
                                 </span>

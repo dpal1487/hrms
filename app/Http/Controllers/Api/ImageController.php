@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Image as ImageModel;
 use App\Models\ItemImage;
 use App\Models\User;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use Illuminate\Support\Facades\Validator;
@@ -53,8 +54,6 @@ class ImageController extends Controller
 
   public function post(Request $request)
   {
-
-    
     $validator = Validator::make($request->all(), [
       'image' => 'required|mimes:jpeg,png,jpg'
     ]);
@@ -64,6 +63,16 @@ class ImageController extends Controller
         'success' => false,
         'message' => $validator->errors()->first()
       ], 400);
+    }
+
+    if ($request->item_id != 'undefined') {
+      $data = ItemImage::where('item_id', $request->item_id)->first();
+
+      $itemImage = $data->delete();
+      $existingImagePath =  $data->base_path . $data->name;
+      if (File::exists($existingImagePath)) {
+        File::delete($existingImagePath);
+      }
     }
     $image = $request->file('image');
 

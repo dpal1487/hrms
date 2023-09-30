@@ -37,7 +37,6 @@ export default defineComponent({
             form: this.$inertia.form({
                 id: this.attribute?.data?.id || '',
                 name: this.attribute?.data?.name || '',
-                category: this.attribute?.data?.category?.id || '',
                 input_type: this.attribute?.data?.input_type || '',
                 data_type: this.attribute?.data?.data_type || '',
                 display_order: this.attribute?.data?.display_order || '',

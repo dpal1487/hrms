@@ -16,11 +16,11 @@ class AttributeCategoryValueResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'category' =>new AttributeCategoryResource($this->attributeCategory),
+            'category' =>new AttributeValueResource($this->attributeCategory),
             'id' =>$this->id,
             'attribute_value' =>$this->attribute_value,
-            'attribute' =>$this->attribute->name,
-            'attribute_id' =>$this->attribute->id,
+            'attribute' =>$this->attribute?->name,
+            'attribute_id' =>$this->attribute?->id,
             'status' =>$this->status,
         ];
     }

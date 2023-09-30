@@ -1,6 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import Pagination from "../../../Jetstream/Pagination.vue";
+import Rating from "../../CustomerReviews/Rating.vue";
 import { Link } from "@inertiajs/inertia-vue3";
 export default defineComponent({
     props: ["reports"],
@@ -10,14 +11,16 @@ export default defineComponent({
             tbody: [
                 "Title",
                 "Content",
+                "Rating",
                 "User",
-                "Action",
+                // "Action",
             ],
         };
     },
     components: {
         Pagination,
-        Link
+        Link,
+        Rating
     },
     methods: {
     },
@@ -44,17 +47,20 @@ export default defineComponent({
                             <td>
                                 {{ report?.review_content }}
                             </td>
+                             <td>
+                                <Rating :rating="report?.review?.rating" />
+                                </td>
                             <td>
                                 {{ report?.user?.first_name }} {{ report?.user?.last_name }}
                             </td>
-                            <td>
+                            <!-- <td>
                                 <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
                                     report?.id, index
                                 )
                                     ">
                                     <i class="bi bi-trash3"></i>
                                 </button>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>

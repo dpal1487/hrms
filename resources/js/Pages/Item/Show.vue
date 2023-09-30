@@ -52,11 +52,6 @@ export default defineComponent({
         const center = { lat: 28.6490624, lng: 77.0965504 };
         return { center };
     },
-    computed: {
-        isLocationNull() {
-            return this.itemdetails?.data?.location?.address_line_1 == null;
-        },
-    },
 })
 </script>
 <template>
@@ -139,13 +134,13 @@ export default defineComponent({
                                             fill="currentColor" />
                                     </svg>
                                 </span>
-                                <div v-if="isLocationNull" class="m-0 fs-4 text-gray-800">
+                                <div v-if="itemdetails?.data?.location?.address_line_1 == null" class="m-0 fs-4 text-gray-800">
                                     <!-- Handle the case when location is null -->
-                                    Location is null
+                                    Location is not available 
                                 </div>
-                                <div v-else class="m-0 fs-3 text-gray-800">
+                                <div v-else class="mb-4 fs-3 text-gray-800">
                                     <!-- Handle the case when location is not null -->
-                                    Location : {{itemdetails?.data?.location?.address_line_1
+                                     {{itemdetails?.data?.location?.address_line_1
                                         + " " + itemdetails?.data?.location?.address_line_2
                                         + " " + itemdetails?.data?.location?.city
                                         + " " + itemdetails?.data?.location?.state
@@ -155,12 +150,12 @@ export default defineComponent({
                             </div>
                             <div class="">
                                 <div class="d-flex">
-                                    <h5 class="card-title fs-2 mx-3">From Date : </h5>
-                                    <h1 class="fs-4 text-gray-800"> {{ itemdetails?.data?.from_date }}</h1>
+                                    <h5 class="card-title fs-3 mx-3">From : </h5>
+                                    <h1 class="fs-5 text-gray-800"> {{ itemdetails?.data?.from_date }}</h1>
                                 </div>
                                 <div class="d-flex">
-                                    <h5 class="card-title fs-2 mx-3">To Date : </h5>
-                                    <h1 class="fs-4 text-gray-800">{{ itemdetails?.data?.to_date }}</h1>
+                                    <h5 class="card-title fs-3 mx-3">To : </h5>
+                                    <h1 class="fs-5 text-gray-800">{{ itemdetails?.data?.to_date }}</h1>
                                 </div>
                             </div>
                         </div>
