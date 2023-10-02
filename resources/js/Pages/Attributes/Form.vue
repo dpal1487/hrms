@@ -57,6 +57,7 @@ export default defineComponent({
             data_type: [
                 { value: 'text', label: 'Text' },
                 { value: 'number', label: 'Number' },
+                { value: 'select', label: 'Select' },
             ],
             display_order: [
                 { value: 1, label: 'Yes' },

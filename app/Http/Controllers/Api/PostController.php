@@ -13,6 +13,7 @@ use App\Http\Resources\Api\TimeResource;
 use App\Models\Category;
 use App\Models\Attribute;
 use App\Models\Address;
+use App\Models\AttributeCategory;
 use App\Models\TimePeriod;
 use App\Models\Item;
 use App\Models\ItemAttribute;
@@ -30,12 +31,14 @@ class PostController extends Controller
   {
     $category = Category::find($request->category_id);
 
-    // return $category;
+    $attribute = AttributeCategory::where('category_id', $request->category_id)->get();
+
     $address = UserAddress::where(['user_id' => $this->uid()])->first();
 
+
     return [
-      'category' => new CategoryResource($category),
-      'attributes' => AttributeListResource::collection(Attribute::all()),
+      'category' => $category ? new CategoryResource($category) : null,
+      'attributes' => $attribute ? AttributeListResource::collection($attribute) : null,
       'price_conditions' => TimeResource::collection(TimePeriod::where(['category_id' => $request->category_id])->get()),
       'address' => $address ?  new AddressResource($address->address) : null,
     ];
@@ -62,7 +65,7 @@ class PostController extends Controller
     if ($validator->fails()) {
       return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
     } else {
-        $item =  Item::create([
+      $item =  Item::create([
         'id' => Carbon::now()->timestamp,
         'name' => $request->name,
         'user_id' => $this->uid(),
@@ -85,7 +88,7 @@ class PostController extends Controller
         }
         $address = Address::create([
           'is_primary' => $request->is_primary,
-        //   'address_type' => $request->address_type,
+          //   'address_type' => $request->address_type,
           'address_line_1' => $request->address_line_1,
           'address_line_2' => $request->address_line_2,
           'state' => $request->state,
@@ -103,7 +106,7 @@ class PostController extends Controller
           ]);
         }
         if (true) {
-            auth()->user()->notify(new NewItemNotification($item));
+          auth()->user()->notify(new NewItemNotification($item));
           event(new PostAdsEvent(['data' => $item]));
           return response()->json(['message' => 'Item has been added successfully', 'data' => $item, 'success' => true]);
         }
@@ -187,15 +190,15 @@ class PostController extends Controller
         ])) {
           ItemImage::where(['item_id' => $request->pid])->delete();
           // foreach ($request->images as $image) {
-            ItemImage::create([
-              'item_id' => $request->pid,
-              'image_id' => $request->images,
-            ]);
+          ItemImage::create([
+            'item_id' => $request->pid,
+            'image_id' => $request->images,
+          ]);
           // }
           return response()->json(['message' => 'Item has been updated successfully', 'data' => $request->pid, 'success' => true]);
         }
       }
-      return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false],500);
+      return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false], 500);
     }
   }
 }

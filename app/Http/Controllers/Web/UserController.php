@@ -38,23 +38,31 @@ class UserController extends Controller
     public function show($id)
     {
         $data = User::find($id);
-        $address = UserAddress::where('user_id', $id)->first();
 
-        return Inertia::render('User/Overview', [
-            'user' => new UserResource($data),
-            'address' => $address ? new AddressResource($address) : '',
-        ]);
+        if ($data) {
+            $address = UserAddress::where('user_id', $id)->first();
+
+            return Inertia::render('User/Overview', [
+                'user' => new UserResource($data),
+                'address' => $address ? new AddressResource($address) : '',
+            ]);
+        }
+        return redirect()->back();
     }
 
     public function address($id)
     {
         $data = User::find($id);
-        $address = UserAddress::where('user_id', $id)->first();
-        return Inertia::render('User/Address', [
-            'user' => new UserResource($data),
-            'address' => $address ? new AddressResource($address) : '',
-            'countries' => CountryResource::collection(Country::get()),
-        ]);
+        if ($data) {
+            $address = UserAddress::where('user_id', $id)->first();
+            return Inertia::render('User/Address', [
+                'user' => new UserResource($data),
+                'address' => $address ? new AddressResource($address) : '',
+                'countries' => CountryResource::collection(Country::get()),
+            ]);
+        }
+        return redirect()->back();
+
     }
 
     public function items($id)

@@ -38,54 +38,28 @@ export default defineComponent({
             </li>
         </template>
         <Header :user="user?.data" :address="address?.data" />
-        <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-            <div class="card-header cursor-pointer">
-                <div class="card-title m-0">
-                    <h3 class="fw-bold m-0">Address</h3>
-                </div>
-            </div>
-            <div class="card-body p-9">
-                <div class="row mb-7">
-                    <label class="col-6 fw-bold fs-5 text-gray-800">Address Line 1</label>
-                    <div class="col-6">
-                        <span class="fw-bold fs-6 text-gray-800">
-                            {{ address?.data?.address_line_1 }}</span>
-                    </div>
-                </div>
-                <div class="row mb-7">
-                    <label class="col-6 fw-bold fs-5 text-gray-800">Address Line 2</label>
-                    <div class="col-6">
-                        <span class="fw-bold fs-6 text-gray-800">
-                            {{ address?.data?.address_line_2 }}</span>
-                    </div>
-                </div>
-                <div class="row mb-7">
-                    <label class="col-6 fw-bold fs-5 text-gray-800">City</label>
-                    <div class="col-6 fv-row">
-                        <span class="fw-bold text-gray-800 fs-6">{{ address?.data?.city }}</span>
-                    </div>
-                </div>
-                <div class="row mb-7">
-                    <label class="col-6 fw-bold fs-5 text-gray-800">State</label>
-                    <div class="col-6 fv-row">
-                        <span class="fw-bold fs-6 text-gray-800 me-2">{{ address?.data?.state }}</span>
-                    </div>
-                </div>
-                <div class="row mb-7">
-                    <label class="col-6 fw-bold fs-5 text-gray-800">Country
-                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
-                            title="Country of origination"></i></label>
-                    <div class="col-6">
-                        <span class="fw-bold fs-6 text-gray-800">{{ address?.data?.country?.name }}</span>
-                    </div>
-                </div>
-                <div class="row mb-7">
-                    <label class="col-6 fw-bold fs-5 text-gray-800">Pincode</label>
-                    <div class="col-6">
-                        <span class="fw-bold fs-6 text-gray-800">{{ address?.data?.pincode }}</span>
+
+        <div class="col-md-6 col-xxl-4">
+            <!--begin::Card-->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row g-2">
+                        <label class="col-12 fs-4 text-capitalize text-gray-800"> <i class="fa-solid fa-user-tie"></i>
+                            <span class="text-gray-600 fs-6 mx-5">{{ address?.data?.name }}</span>
+                        </label>
+                        <label><i class="fas fa-fw fa-phone"></i> <span class="text-gray-600 fs-6 mx-2">
+                                {{ address?.data?.phone }}</span>
+                        </label>
+                        <label class="fs-6 text-gray-600 text-capitalize"><i class="fa-regular fa-address-card"></i>
+                            <span class="mx-5">{{ address?.data?.address }}</span>
+                            <span>{{ address?.data?.city }}</span>
+                            <span class="mx-2">{{ address?.data?.state }}</span>
+                        </label>
+                        <label class="col-6"> <span class="fs-6 text-gray-600">{{ address?.data?.pincode }}</span></label>
                     </div>
                 </div>
             </div>
+            <!--end::Card-->
         </div>
     </AppLayout>
 </template>

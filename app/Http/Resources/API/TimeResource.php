@@ -14,6 +14,10 @@ class TimeResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'category_name' => $this->category?->name,
+            'time_id' => $this->time?->id,
+            'time_title' => $this->time?->title,
+        ];
     }
 }

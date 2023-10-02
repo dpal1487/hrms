@@ -15,15 +15,15 @@ class AttributeListResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'data_type' => $this->data_type,
-            'field' => $this->field,
-            'type' => $this->type,
-            'display_order' => $this->display_order,
-            'status' => $this->status,
-            'description' => $this->description,
-            'values'=>AttributeValueListResource::collection($this->values),
+            'id' => $this->attribute?->id,
+            'name' => $this->attribute?->name,
+            'data_type' => $this->attribute?->data_type,
+            'field' => $this->attribute?->field,
+            'type' => $this->attribute?->input_type,
+            'display_order' => $this->attribute?->display_order,
+            'status' => $this->attribute?->status,
+            'description' => $this->attribute?->description,
+            'values'=>AttributeValueListResource::collection($this->attribute->values),
         ];
     }
 }

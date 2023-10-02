@@ -73,7 +73,7 @@ export default defineComponent({
                                     </span>
                                     <span v-if="address">{{ address?.city + " " +
                                         address?.state + " " +
-                                        address?.country?.name }}</span> </span>
+                                        address?.pincode }}</span> </span>
                                 <span class="d-flex align-items-center text-gray-400  me-5 mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
