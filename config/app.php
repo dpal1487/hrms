@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'timezone' => 'Asia/Kolkata',
+    'timezone' => 'Asia/Kolkata',   
 
     /*
     |--------------------------------------------------------------------------
@@ -182,6 +182,8 @@ return [
         /*
          * Package Service Providers...
          */
+
+        Laravel\Sanctum\SanctumServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         \Chatify\ChatifyServiceProvider::class,
@@ -222,7 +224,6 @@ return [
             'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
             'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
             'Redis' => Illuminate\Support\Facades\Redis::class,
-
         ])
         ->toArray(),
 ];
