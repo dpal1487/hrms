@@ -18,6 +18,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+        // return Auth::guard('admin')->attempt($credentials);
+
         if ($user = Auth::guard('web')->attempt($credentials)) {
             return redirect('/dashboard')->with('flash', ['message' => 'Successfully login']);
         }

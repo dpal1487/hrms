@@ -1,7 +1,8 @@
     <?php
 
     use App\Events\PostAdsEvent;
-    use App\Http\Controllers\Web\Auth\SocialController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Web\Auth\SocialController;
     use Inertia\Inertia;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Foundation\Application;
@@ -56,9 +57,6 @@
     });
 
     Route::post('login', [LoginController::class, 'login'])->name('user.login');
-
-
-
 
     Route::get('socialauth/{provider}', [SocialController::class, 'SocialSignup']);
     Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial']);
@@ -411,6 +409,10 @@
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+        Route::get('chat', [ChatController::class, 'index'])->name('chat');
+        Route::post('chat/store', [ChatController::class, 'userChat'])->name('chat.store');
     });
 
     Route::get('test-event', function () {

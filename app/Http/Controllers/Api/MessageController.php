@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\Api\Controller;
 
 use App\Http\Resources\Api\ItemListResource;
-use App\Http\Resources\Api\UserResource;
+use App\Http\Resources\Api\Account\UserResource;
 
 class MessageController extends Controller
 {

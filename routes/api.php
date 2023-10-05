@@ -48,6 +48,7 @@ use App\Http\Controllers\Api\WelcomeController;
 
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\Auth\SocialController;
+use App\Http\Controllers\Api\Chat\ChatController;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -191,4 +192,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::get('{id}', [UserController::class, 'index']);
         Route::get('items/{id}', [UserController::class, 'items']);
     });
+
+    Route::get('chat', [ChatController::class, 'index'])->name('chat');
+    Route::post('chat/store', [ChatController::class, 'userChat'])->name('chat.store');
 });
