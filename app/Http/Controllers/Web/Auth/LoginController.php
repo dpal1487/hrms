@@ -20,7 +20,7 @@ class LoginController extends Controller
 
         // return Auth::guard('admin')->attempt($credentials);
 
-        if ($user = Auth::guard('web')->attempt($credentials)) {
+        if ($user = Auth::guard('admin')->attempt($credentials)) {
             return redirect('/dashboard')->with('flash', ['message' => 'Successfully login']);
         }
         return back()->withErrors(['message' => 'Invalid credentials.']);

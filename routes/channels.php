@@ -15,4 +15,8 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::channel('create-project', function ($project) {
     return true;
-}); 
+});
+
+Broadcast::channel('item-added-to-favorite', function ($item) {
+    return true;
+});

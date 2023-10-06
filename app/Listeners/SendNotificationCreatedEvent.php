@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\NotificationCreated;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendNotificationCreatedEvent
 {

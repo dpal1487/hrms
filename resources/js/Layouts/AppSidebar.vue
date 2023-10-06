@@ -2,6 +2,7 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
+import { toast } from 'vue3-toastify';
 
 export default defineComponent({
     props: ["projects", "status", "isMobile", "isSidebarActive"],
@@ -27,6 +28,18 @@ export default defineComponent({
         },
     },
     created() {
+    },
+
+    mounted() {
+        window.echo
+            .channel("item-added-to-favorite")
+            .listen(".ItemAddedToFavorite", (e) => {
+                console.log("this is a echo chanel sms" , e)
+                toast.success(e.data.name, {
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                });
+            });
+
     },
 });
 
@@ -77,7 +90,7 @@ export default defineComponent({
                                 </span>
                             </span>
                             <Link class="menu-link" href="/dashboard">
-                                <span class="menu-title">Dashboard</span>
+                            <span class="menu-title">Dashboard</span>
                             </Link>
                             <span class="menu-arrow"></span>
                         </span>

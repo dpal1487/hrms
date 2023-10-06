@@ -19,6 +19,12 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
             SendNotificationCreatedEvent::class
         ],
+        ItemAddedToFavorite::class => [
+            AddItemToFavoritesListener::class,
+        ],
+        ItemReviewed::class => [
+            ItemReviewedListener::class,
+        ],
     ];
 
     /**

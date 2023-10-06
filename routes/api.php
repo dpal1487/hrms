@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\Account\CustomerController;
 /*Category Controller*/
 use App\Http\Controllers\Api\CategoryController;
 /*Conversation Controller*/
-use App\Http\Controllers\Api\ConversationController;
+use App\Http\Controllers\Api\Chat\ConversationController;
 /*Image Controller*/
 use App\Http\Controllers\Api\ImageController;
 /*Item Controller*/
@@ -28,7 +28,7 @@ use App\Http\Controllers\Api\ItemController;
 /*Location Controller*/
 use App\Http\Controllers\Api\LocationController;
 /*Message Controller*/
-use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\Chat\MessageController;
 /*Plan Controller*/
 use App\Http\Controllers\Api\PlanController;
 /*Post Controller*/
@@ -193,6 +193,6 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
         Route::get('items/{id}', [UserController::class, 'items']);
     });
 
-    Route::get('chat', [ChatController::class, 'index'])->name('chat');
-    Route::post('chat/store', [ChatController::class, 'userChat'])->name('chat.store');
+    Route::get('user/chat', [ChatController::class, 'index'])->name('user.chat');
+    Route::post('user/chat/store', [ChatController::class, 'userChat'])->name('user.chat.store');
 });

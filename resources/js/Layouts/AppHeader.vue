@@ -30,6 +30,8 @@ export default defineComponent({
             //     .listen('CreateProject', (e) => {
             //         console.log(e)
             //     });
+
+            
         },
         getNotifications() {
             this.isNotifLoading = true;
@@ -94,7 +96,7 @@ export default defineComponent({
                 </button>
             </div>
             <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                <Link href="/dashboard" class="d-lg-none">
+                <Link href="/" class="d-lg-none">
                 <img alt="Logo" src="/assets/media/logos/logo.png" class="h-30px">
                 </Link>
             </div>
@@ -118,7 +120,8 @@ export default defineComponent({
                                     d="M18 19H5V6h8c0-.712.153-1.387.422-2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h13c1.103 0 2-.897 2-2v-8.422A4.962 4.962 0 0 1 18 11v8z">
                                 </path>
                             </svg>
-                            <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
+                            <span
+                                class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
                             </span>
                         </button>
 
@@ -141,8 +144,10 @@ export default defineComponent({
                                                     </span>
                                                 </div>
                                                 <div class="mb-0 me-2">
-                                                    <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">{{ JSON.parse(notification.data).name }}
-                                                    {{ JSON.parse(notification.data).first_name }} {{ JSON.parse(notification.data).last_name }}
+                                                    <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold">{{
+                                                        JSON.parse(notification.data).name }}
+                                                        {{ JSON.parse(notification.data).first_name }} {{
+                                                            JSON.parse(notification.data).last_name }}
                                                     </a>
                                                     <div class="text-gray-400 fs-7"></div>
                                                 </div>
@@ -351,23 +356,19 @@ export default defineComponent({
 
                                     <!--begin::Username-->
                                     <div class="d-flex flex-column">
-                                        <div class="fw-bold d-flex align-items-center fs-5">
-                                            Max Smith
+                                        <div class="fw-bold d-flex align-items-center fs-5 text-capitalize">
+                                            {{ $page?.props?.user?.first_name }} {{ $page?.props?.user?.last_name }}
                                             <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span>
                                         </div>
 
-                                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
-                                            max@kt.com
-                                        </a>
+                                        <Link href="#" class="fw-semibold text-muted text-hover-primary fs-7">
+                                        {{ $page?.props?.user?.email }}
+                                        </Link>
                                     </div>
                                     <!--end::Username-->
                                 </div>
                             </div>
                             <!--end::Menu item-->
-
-                            <!--begin::Menu separator-->
-                            <div class="separator my-2"></div>
-                            <!--end::Menu separator-->
 
                             <!--begin::Menu separator-->
                             <div class="separator my-2"></div>

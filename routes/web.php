@@ -61,7 +61,7 @@ use App\Http\Controllers\Web\Auth\SocialController;
     Route::get('socialauth/{provider}', [SocialController::class, 'SocialSignup']);
     Route::get('sociallogin/{provider}/callback', [SocialController::class, 'loginWithSocial']);
 
-    Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+    Route::middleware(['auth:admin', config('jetstream.auth_session'), 'verified'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
         /* ========= Attribute Controller ========== */
@@ -411,8 +411,8 @@ use App\Http\Controllers\Web\Auth\SocialController;
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
-        Route::get('chat', [ChatController::class, 'index'])->name('chat');
-        Route::post('chat/store', [ChatController::class, 'userChat'])->name('chat.store');
+        Route::get('admin/chat', [ChatController::class, 'index'])->name('admin.chat');
+        Route::post('admin/chat/store', [ChatController::class, 'userChat'])->name('admin.chat.store');
     });
 
     Route::get('test-event', function () {

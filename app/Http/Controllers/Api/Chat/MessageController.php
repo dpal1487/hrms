@@ -1,30 +1,26 @@
 <?php
 
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Chat;
 
-use App\Http\Resources\Api\MessageResource;
+use App\Http\Resources\Api\Chat\MessageResource;
 use Illuminate\Http\Request;
 use App\Models\Participant;
-use App\Models\Conversation;
 use App\Models\User;
 use App\Models\Message;
-use App\Http\Resources\Api\Chat\Messages;
-use App\Http\Resources\Api\Items;
 use App\Models\Item;
-use App\Http\Resources\Api\Users;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\Api\Controller;
-
 use App\Http\Resources\Api\ItemListResource;
 use App\Http\Resources\Api\Account\UserResource;
+use App\Events\ChatMessageSent;
 
 class MessageController extends Controller
 {
     public function index(Request $request)
     {
-        $participant = Participant::where('conversation_id', '=', $request->uid)->where('users_id', '!=', $this->uid())->first();
+        $participant = Participant::where('conversation_id', '=', $request->uid)->where('user_id', '!=', $this->uid())->first();
         if($participant){
             Message::where(['conversation_id'=>$request->uid])->where('sender_id', '!=', $this->uid())->update(['is_read'=>1]);
             $messages = Message::where(['conversation_id'=>$request->uid])->get();
@@ -70,11 +66,17 @@ class MessageController extends Controller
         if ($validator->fails()) {
           return response()->json(['success' => false, 'message' => $validator->errors()->first()], 400);
         }
-        if(count(Participant::where(['conversation_id'=>$request->thread_id,'users_id'=>$this->uid()])->get())>0){
-            if(Message::create(['message'=>Crypt::encryptString($request->message),'sender_id'=>$this->uid(),'conversation_id'=>$request->thread_id]))
+        if(count(Participant::where(['conversation_id'=>$request->thread_id,'user_id'=>$this->uid()])->get())>0){
+            if($message = Message::create(['body'=>Crypt::encryptString($request->message),'user_id'=>$this->uid(),'conversation_id'=>$request->thread_id]))
             {
+                event(new ChatMessageSent($message));
                 return response()->json(['success'=>true],200);
             }
+
+            // if ($message = Message::create(['message' => Crypt::encryptString($request->message), 'sender_id' => $this->uid(), 'conversation_id' => $request->thread_id])) {
+            //     event(new ChatMessageSent($message));
+            //     return response()->json(['success' => true], 200);
+            // }
         }
         return response()->json(['message'=>'Opps someting wrong.','success'=>false],400);
 
