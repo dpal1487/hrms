@@ -101,4 +101,11 @@ class User extends Authenticatable
   {
     return $this->hasMany(Follower::class, 'follower_id', 'id');
   }
+
+
+  public function totaladds()
+  {
+    return $this->hasMany(Item::class, 'user_id', 'id');
+
+  }
 }

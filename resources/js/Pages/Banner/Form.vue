@@ -13,6 +13,7 @@ import ImageInput from '@/Components/ImageInput.vue';
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
 import utils from "../utils.js";
+import DropFile from "@/Components/DropFile.vue";
 
 export default defineComponent({
     props: ['banner'],
@@ -55,7 +56,8 @@ export default defineComponent({
         JetLabel,
         InputError,
         ImageInput,
-        Loading
+        Loading,
+        DropFile
     },
     methods: {
         submit() {
@@ -122,73 +124,86 @@ export default defineComponent({
             </li>
         </template>
 
-        <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row gap-5">
-            <div class="d-flex flex-column flex-row-fluid">
-                <div class="card">
-                    <div class="card-header mb-5">
-                        <div class="card-title">
-                            <h2>Banner Image </h2>
+        <form @submit.prevent="submit()" class="form">
+
+            <div class="card g-5 mb-5">
+                <!--begin::Card header-->
+                <div class="card-header">
+                    <div class="card-title">
+                        <h2>Banner Image </h2>
+                    </div>
+                </div>
+                <!--end::Card header-->
+                <!--begin::Card body-->
+                <div class="card-body pt-5">
+                    <!--begin::Input group-->
+                    <div class="fv-row mb-2">
+                        <DropFile :image="banner?.data?.image?.file_path" :isUploading="banner?.isLoading"
+                            @change="onBannerChange" />
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Description-->
+                    <div class="text-muted fs-7 mx-2">Set the category banner image.</div>
+                    <!--end::Description-->
+                </div>
+                <!--end::Card header-->
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h2>General</h2>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row col-md-12">
+                        <div class="col-md-6">
+                            <div class="fv-row mb-5">
+                                <jet-label for="title" value="Banner Name" />
+                                <jet-input id="title" type="text" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0
+                                    ? 'is-invalid'
+                                    : ''
+                                    " placeholder="Banner Name" />
+                                <div v-for="(error, index) of v$.form.title.$errors" :key="index">
+                                    <input-error :message="error.$message" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="fv-row mb-5">
+                                <jet-label for="url" value="Banner URL" />
+                                <jet-input id="url" type="text" v-model="v$.form.url.$model" :class="v$.form.url.$errors.length > 0
+                                    ? 'is-invalid'
+                                    : ''
+                                    " placeholder="Banner URL" />
+                                <div v-for="(error, index) of v$.form.url.$errors" :key="index">
+                                    <input-error :message="error.$message" />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body text-center">
-                        <ImageInput :image="banner?.data?.image?.small_path" :onchange="onBannerChange"
-                            :remove="removeSelectedAvatar" :selectedImage="banner_upload?.url"
-                            :errors="v$.form.image.$errors" :isUploading="banner_upload?.isLoading" />
+                    <div class="fv-row mb-5">
+                        <jet-label for="description" value="Description" />
+                        <textarea id="description" v-model="v$.form.description.$model"
+                            class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
+                                ? 'is-invalid'
+                                : ''
+                                " placeholder="Text ..." />
+
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-column flex-row-fluid gap-5">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h2>General</h2>
-                        </div>
+            <div class="d-flex justify-content-end m-5 gap-5" >
+                <Link href="/banners" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                Discard
+                </Link>
+                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
+                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
-                    <div class="card-body">
-                        <div class="fv-row mb-5">
-                            <jet-label for="title" value="Banner Name" />
-                            <jet-input id="title" type="text" v-model="v$.form.title.$model" :class="v$.form.title.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
-                                " placeholder="Banner Name" />
-                            <div v-for="(error, index) of v$.form.title.$errors" :key="index">
-                                <input-error :message="error.$message" />
-                            </div>
-                        </div>
-                        <div class="fv-row mb-5">
-                            <jet-label for="url" value="Banner URL" />
-                            <jet-input id="url" type="text" v-model="v$.form.url.$model" :class="v$.form.url.$errors.length > 0
-                                ? 'is-invalid'
-                                : ''
-                                " placeholder="Banner URL" />
-                            <div v-for="(error, index) of v$.form.url.$errors" :key="index">
-                                <input-error :message="error.$message" />
-                            </div>
-                        </div>
-                        <div class="fv-row mb-5">
-                            <jet-label for="description" value="Description" />
-                            <textarea id="description" v-model="v$.form.description.$model"
-                                class="form-control form-control-solid" :class="v$.form.description.$errors.length > 0
-                                    ? 'is-invalid'
-                                    : ''
-                                    " placeholder="Text ..." />
-
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end gap-5">
-                    <Link href="/banners"
-                        class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
-                    Discard
-                    </Link>
-                    <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
-                        <div v-show="form.processing" class="spinner-border spinner-border-sm">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <span v-if="route().current() == 'banner.edit'">Update</span>
-                        <span v-if="route().current() == 'banner.create'">Save</span>
-                    </button>
-                </div>
+                    <span v-if="route().current() == 'banner.edit'">Update</span>
+                    <span v-if="route().current() == 'banner.create'">Save</span>
+                </button>
             </div>
         </form>
     </AppLayout>

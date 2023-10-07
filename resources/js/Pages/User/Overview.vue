@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Header from "./Components/Header.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import ImageInput from '@/components/ImageInput.vue';
 
 export default defineComponent({
     props: ['user', 'address'],
@@ -12,6 +13,7 @@ export default defineComponent({
         Header,
         Link,
         Head,
+        ImageInput,
     },
     data() {
         return {
@@ -51,6 +53,18 @@ export default defineComponent({
                 </div>
             </div>
             <div class="card-body p-9">
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-md-4 col-form-label fw-bold fs-6"></label>
+
+                    <!--end::Label-->
+                    <div class="col-md-8">
+                        <img v-if="user?.data?.image" :src="user?.data?.image?.small_path" alt="image"
+                            class="image-input-wrapper w-500px h-300px" />
+                        <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
+                            class="image-input-wrapper w-100 h-300px">
+                    </div>
+                </div>
                 <div class="row mb-5">
                     <label class="col-6 fw-bold fs-5 text-gray-800">Full Name</label>
                     <div class="col-6">
@@ -77,13 +91,11 @@ export default defineComponent({
                         <span class="fw-bold fs-6 text-gray-800 me-2" v-else>
                             N / A
                         </span>
-                        <div class="fw-bold fs-2" v-if="user?.data?.email_verified_at == null">
+                        <div class="fw-bold fs-2" v-if="user?.data?.email_verified_at !== true">
                             <Link href="#" class="badge badge-danger">Not Verified
                             </Link>
-
                         </div>
                         <div class="fw-bold fs-2" v-else>
-
                             <span class="badge badge-success">Verified</span>
                         </div>
 
@@ -132,3 +144,4 @@ export default defineComponent({
         </div>
     </AppLayout>
 </template>
+?.email_verified_at

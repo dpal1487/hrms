@@ -167,7 +167,7 @@ export default defineComponent({
                                         <jet-label for="category" value="Category" class="required" />
                                         <Multiselect :canClear="false" :options="categories?.data" label="name"
                                             valueProp="id" class="form-control form-control-lg form-control-solid"
-                                            placeholder="Select One" v-model="v$.form.category.$model" track-by="label"
+                                            placeholder="Select One" :searchable="true" :track-by="name" v-model="v$.form.category.$model"
                                             :class="v$.form.category.$errors.length > 0
                                                 ? 'is-invalid'
                                                 : ''

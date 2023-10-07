@@ -273,7 +273,6 @@ export default defineComponent({
                                 </div>
                             </div>
                             <!--end::Card header-->
-
                             <!--begin::Card body-->
                             <div class="card-body pt-5">
                                 <!--begin::Input group-->
@@ -288,7 +287,6 @@ export default defineComponent({
                             </div>
                             <!--end::Card header-->
                         </div>
-
 
                         <div class="d-flex justify-content-end gap-5">
                             <Link href="/categories"

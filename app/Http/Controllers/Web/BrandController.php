@@ -26,6 +26,8 @@ class BrandController extends Controller
         if (!empty($request->s) || ($request->s != '')) {
             $brands = $brands->where('status', $request->s);
         }
+
+        $brands = $brands->orderBy('created_at', 'desc');
         // return $brands;
         return Inertia::render('Brands/Index', [
             'brands' => BrandListResource::collection($brands->paginate(10)->onEachSide(1)->appends(request()->query()))

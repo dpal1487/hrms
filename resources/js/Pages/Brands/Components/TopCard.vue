@@ -20,70 +20,37 @@ export default defineComponent({
 </script>
 <template>
     <div class="mb-5">
-        <div class="card">
-            <div class="card-header align-items-center">
-                <div class="card-title">
-                    <h2>Brand</h2>
-                </div>
-            </div>
+        <div class="card bg-transparent">
             <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-6">
-                        <table class="table table-striped table-bordered text-left mx-10 align-middle">
-
-                            <tbody>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-                                        Name
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        {{ brand?.name }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-
-                                        Slug
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        {{ brand?.slug }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-
-                                        Category
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        {{ brand?.category?.name }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-
-                                        Description
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700 whitespace-break">
-                                        <span v-html="brand?.description"></span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th class="fs-6 fw-bold text-gray-800">
-                                        Image
-                                    </th>
-                                    <td class="fs-6 fw-bold text-gray-700">
-                                        <div
-                                            class="d-block symbol symbol-150px symbol-lg-150px symbol-fixed position-relative">
-                                            <img v-if="brand?.image" :src="brand?.image?.small_path" alt="image"
-                                                class="rounded" />
-                                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
-                                                class="rounded">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="row g-0">
+                    <div class="col-6 rounded  overflow-hidden">
+                        <div class="">
+                            <img v-if="brand?.image" :src="brand?.image?.small_path" alt="image"
+                                class="image-input-wrapper w-100 h-300px" />
+                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
+                                class="image-input-wrapper w-100 h-300px">
+                        </div>
+                        <div class="d-flex flex-column gap-5 p-10 bg-white">
+                            <div class="d-flex ">
+                                <div class="fs-6  w-50 fw-bold text-gray-800">Name</div>
+                                <div class="fs-6  w-50 fw-bold text-gray-700"> {{ brand?.name }}</div>
+                            </div>
+                            <div class="d-flex ">
+                                <div class="fs-6  w-50 fw-bold text-gray-800"> Slug</div>
+                                <div class="fs-6  w-50 fw-bold text-gray-700"> {{ brand?.slug }}</div>
+                            </div>
+                            <div class="d-flex ">
+                                <div class="fs-6  w-50 fw-bold text-gray-800">Category</div>
+                                <div class="fs-6  w-50 fw-bold text-gray-700">
+                                    <span class="badge badge-secondary">
+                                    {{ brand?.category?.name }}</span></div>
+                            </div>
+                            <div class="d-flex ">
+                                <div class="fs-6  w-50 fw-bold text-gray-800">Description</div>
+                                <div class="fs-6  w-50 fw-bold text-gray-700"> <span v-html="brand?.description"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-6">
                         <div class="h-100 d-flex justify-content-center align-items-center bg-gray-100">

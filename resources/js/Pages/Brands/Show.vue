@@ -11,7 +11,7 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import { toast } from "vue3-toastify";
+
 import utils from "../utils";
 
 export default defineComponent({
@@ -38,12 +38,10 @@ export default defineComponent({
                 "Status",
                 "Action",
             ],
-            isEdit: false,
-            isAdd: false,
-            form: {
-                processing: false,
-            },
+            isModalOpen: false,
             isLoading: false,
+            showBrandForm: false,
+            selectedBrand:null,
             title: "Brand Overview",
         };
     },
@@ -60,26 +58,16 @@ export default defineComponent({
         InputError,
     },
     methods: {
-        submit(form) {
-            this.form = form;
-            this.form
-                .transform((data) => ({
-                    ...data,
-                }))
-                .post(this.isAdd ? this.route("brand-model.store") : this.route('brand-model.update', this.brand?.data?.id), {
-                    onSuccess: (data) => {
-                        toast.success(this.$page.props.jetstream.flash.message);
-                        this.isEdit = false;
-                        this.isAdd = false;
-                    },
-                    onError: (data) => {
-                        toast.error(data.message);
-                    },
-                });
+        addBrandValueModal() {
+            this.showBrandForm = true;
+            this.selectedBrand = null
         },
-        toggleModal(isEdit, brand) {
-            this.isEdit = isEdit;
-            this.form = brand;
+        editBrandValueModal(brand) {
+            this.showBrandForm = true;
+            this.selectedBrand = brand
+        },
+        hideBrandValueModal() {
+            this.showBrandForm = false;
         },
         async confirmDelete(id, index) {
             this.isLoading = true;
@@ -114,49 +102,26 @@ export default defineComponent({
         </template>
         <div class="mb-5">
             <TopCard :brand="brand?.data" />
+            
+            <BrandModelForm :show="showBrandForm" :data="selectedBrand" :id="brand?.data?.id" @hidemodal="hideBrandValueModal" />
             <div class="card">
                 <div class="card-header align-items-center">
                     <div class="card-title">
                         <h2>Brand Model</h2>
                     </div>
-                    <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-
-                        <button class="btn btn-primary m-1 btn-sm" v-if="!isEdit"
-                            @click="this.isAdd = this.isAdd ? false : true, this.form = {}"><i
-                                class="bi bi-plus-circle"></i>Add New
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row" v-if="isEdit || isAdd">
-                        <div class="col-6 mx-10">
-                            <brand-model-form @submitted="submit" :brand="form" :id="brand?.data?.id">
-                                <template #action>
-                                    <div class="d-flex justify-content-end me-5">
-                                        <button type="button" class="btn btn-outline-secondary me-5"
-                                            @click="this.isEdit = false, this.isAdd = false">Discard</button>
-                                        <button type="submit" class="btn btn-primary"
-                                            :class="{ 'text-white-50': form.processing }">
-                                            <div v-show="form.processing" class="spinner-border spinner-border-sm">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                            <span v-if="isAdd">
-                                                Save
-                                            </span>
-                                            <span v-if="isEdit">
-                                                Update
-                                            </span>
-                                        </button>
-                                    </div>
-                                </template>
-                            </brand-model-form>
+                    <div class="card-toolbar flex-row-fluid justify-content-end">
+                        <div class="flex-1 fw-bold">
+                            <button type="button" class="btn btn-primary m-1 btn-sm" @click="() => addBrandValueModal()"><i
+                                    class="bi bi-plus-circle"></i>Add New
+                            </button>
                         </div>
                     </div>
-                    <div class="row" v-else>
-                        <div class="col-12">
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12 mx-10">
                             <div class="table-responsive">
                                 <table class="table align-middle table-row-dashed fs-6 gy-3 text-left">
-
                                     <thead>
                                         <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
                                             <th v-for="(th, index) in tbody" :key="index">
@@ -169,7 +134,8 @@ export default defineComponent({
                                             <brand-model-list :brand="brand">
                                                 <template #action>
                                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                                        @click="toggleModal(true, brand)"><i class="bi bi-pencil me-2"></i>
+                                                        @click="editBrandValueModal(brand)"><i
+                                                            class="bi bi-pencil me-2"></i>
                                                     </button>
                                                     <button class="btn btn-icon btn-active-light-primary w-30px h-30px"
                                                         @click="confirmDelete(
@@ -185,7 +151,7 @@ export default defineComponent({
                                 </table>
                             </div>
                             <div class="d-flex align-items-center justify-content-center justify-content-md-end"
-                                v-if="brand.meta">sd
+                                v-if="brand.meta">
                                 <!-- <Pagination :links="brand.meta.links" /> -->
                             </div>
                         </div>

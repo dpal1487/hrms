@@ -60863,12 +60863,12 @@ html:not([data-theme=dark]) {
 
 .multiselect-tag {
     align-items: center;
-    background: var(--ms-tag-bg, #10b981);
+    // background: var(--ms-tag-bg, #10b981);
     border-radius: var(--ms-tag-radius, 4px);
-    color: var(--ms-tag-color, #fff);
+    color: var(--ms-tag-color, #5e6278);
     display: flex;
-    font-size: var(--ms-tag-font-size, 0.875rem);
-    font-weight: var(--ms-tag-font-weight, 600);
+    font-size: var(--ms-tag-font-size, 1.15rem);
+    font-weight: var(--ms-tag-font-weight, 500);
     line-height: var(--ms-tag-line-height, 1.25rem);
     margin-bottom: var(--ms-tag-my, 0.25rem);
     margin-right: var(--ms-tag-mx, 0.25rem);
@@ -60944,6 +60944,7 @@ html:not([data-theme=dark]) {
     right: 0;
     top: 0;
     width: 100%;
+    background: transparent;
 }
 
 .multiselect-tags-search::-webkit-search-cancel-button,

@@ -27,10 +27,10 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="flex-grow-1">
-                    <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap mb-2 ">
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center mb-2">
-                                <span class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{
+                                <span class="text-gray-900 text-hover-primary fs-2 fw-bold me-1 text-capitalize">{{
                                     user?.first_name }}
                                     {{ user?.last_name }}</span>
                                 <span class="svg-icon svg-icon-1 svg-icon-primary">
@@ -45,7 +45,7 @@ export default defineComponent({
                                 </span>
                             </div>
                             <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-                                <span class="d-flex align-items-center text-gray-400  me-5 mb-2">
+                                <span class="d-flex align-items-center text-gray-400  me-5 mb-2 text-capitalize">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +58,7 @@ export default defineComponent({
                                             <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <span> {{ user?.first_name +" "+ user?.last_name }}</span></span>
+                                    <span> {{ user?.first_name + " " + user?.last_name }}</span></span>
                                 <span class="d-flex align-items-center text-gray-400  me-5 mb-2 text-capitalize">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -71,9 +71,12 @@ export default defineComponent({
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <span v-if="address">{{ address?.city + " " +
+                                    <span v-if="address?.id">{{ address?.city + " " +
                                         address?.state + " " +
-                                        address?.pincode }}</span> </span>
+                                        address?.pincode }}</span>
+                                    <span v-else>N/A</span>
+
+                                </span>
                                 <span class="d-flex align-items-center text-gray-400  me-5 mb-2">
                                     <span class="svg-icon svg-icon-4 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -105,26 +108,10 @@ export default defineComponent({
                                                     fill="currentColor" />
                                             </svg>
                                         </span>
-                                        <div class="fs-2 fw-bold">0</div>
+                                        <div class="fs-2 fw-bold">{{ user?.header?.total_ads }}</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Earnings</div>
-                                </div>
-                                <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <span class="svg-icon svg-icon-3 svg-icon-danger me-2">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <rect opacity="0.5" x="11" y="18" width="13" height="2" rx="1"
-                                                    transform="rotate(-90 11 18)" fill="currentColor" />
-                                                <path
-                                                    d="M11.4343 15.4343L7.25 11.25C6.83579 10.8358 6.16421 10.8358 5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75L11.2929 18.2929C11.6834 18.6834 12.3166 18.6834 12.7071 18.2929L18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25C17.8358 10.8358 17.1642 10.8358 16.75 11.25L12.5657 15.4343C12.2533 15.7467 11.7467 15.7467 11.4343 15.4343Z"
-                                                    fill="currentColor" />
-                                            </svg>
-                                        </span>
-                                        <div class="fs-2 fw-bold">
-                                            0</div>
+                                    <div class="fw-semibold fs-6 text-gray-400">Total Ads
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Projects</div>
                                 </div>
                                 <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                     <div class="d-flex align-items-center">
@@ -138,9 +125,28 @@ export default defineComponent({
                                                     fill="currentColor" />
                                             </svg>
                                         </span>
-                                        <div class="fs-2 fw-bold">0</div>
+                                        <div class="fs-2 fw-bold">
+                                            {{ user?.header?.followers }}</div>
                                     </div>
-                                    <div class="fw-semibold fs-6 text-gray-400">Success Rate</div>
+                                    <div class="fw-semibold fs-6 text-gray-400">Followers
+                                    </div>
+                                </div>
+                                <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <span class="svg-icon svg-icon-3 svg-icon-success me-2">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1"
+                                                    transform="rotate(90 13 6)" fill="currentColor" />
+                                                <path
+                                                    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        </span>
+                                        <div class="fs-2 fw-bold">{{ user?.header?.following }}</div>
+                                    </div>
+                                    <div class="fw-semibold fs-6 text-gray-400">Following
+                                    </div>
                                 </div>
                             </div>
                         </div>

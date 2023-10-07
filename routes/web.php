@@ -395,9 +395,8 @@ use App\Http\Controllers\Web\Auth\SocialController;
         /* ========= Rule Controller ========== */
 
         Route::controller(RuleController::class)->group(function () {
+            Route::get('rules', 'index')->name('rules.index');
             Route::group(['prefix' => 'rule'], function () {
-                Route::get('/', 'index')->name('rule.index');
-                Route::post('status', 'statusUdate')->name('rule.status');
                 Route::get('/create', 'create')->name('rule.create');
                 Route::post('/store', 'store')->name('rule.store');
                 Route::get('{id}/edit', 'edit')->name('rule.edit');

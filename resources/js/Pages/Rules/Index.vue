@@ -1,24 +1,26 @@
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Multiselect from "@vueform/multiselect";
 import Pagination from "../../Jetstream/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
+import Loading from "vue-loading-overlay";
+import 'vue-loading-overlay/dist/css/index.css';
+import utils from "../utils.js";
+import Multiselect from "@vueform/multiselect";
 
 export default defineComponent({
-    props: ["users"],
+    props: ["rules"],
     data() {
         return {
-            title: "Users",
             form: {},
+            title: "Rules",
+            isLoading: false,
             tbody: [
-                "Name",
-                "Email",
-                "Mobile",
-                "gender",
-                "country",
-                "email verified"
+                "Rule",
+                "Value",
+                "Message",
+                "Action",
             ],
         };
     },
@@ -27,29 +29,41 @@ export default defineComponent({
         Link,
         Head,
         Pagination,
+        Loading,
         Multiselect,
     },
     methods: {
+        async confirmDelete(id, index) {
+            this.isLoading = true;
+            await utils.deleteIndexDialog(route('rule.destroy', id), this.rules.data, index);
+            this.isLoading = false;
+        },
 
         search() {
             Inertia.get(
-                "/users",
-                this.form
+                "/rules",
+                this.form,
             );
         },
-    }
-
+    },
 });
 </script>
 <template>
+    <loading v-model:active="isLoading" :can-cancel="false" :is-full-page="true" />
     <app-layout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
             </li>
             <li class="breadcrumb-item">
-                <span class="text-muted">Users</span>
+                <span class="text-muted">{{ title }}</span>
             </li>
+        </template>
+        <template #toolbar>
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <Link href="/rule/create" class="btn btn-sm fw-bold btn-primary">
+                <i class="bi bi-plus-circle"></i>Add New Rule</Link>
+            </div>
         </template>
 
         <Head :title="title" />
@@ -75,54 +89,51 @@ export default defineComponent({
                 </form>
 
             </div>
+
             <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-4 text-left">
+                    <table class="table align-center table-row-dashed fs-6  text-left">
                         <thead>
-                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
+                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase ">
                                 <th v-for="(th, index) in tbody" :key="index">
                                     {{ th }}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="fw-semibold text-gray-600">
-                            <tr v-for="(user, index) in users?.data" :key="index">
+                        <tbody class="fw-semibold text-gray-600 text-capitalize text-left">
+                            <tr v-for="(rule, index) in rules?.data" :key="index">
                                 <td>
-                                    <div class="d-flex">
-                                        <Link :href="`/user/${user.id}`"
-                                            class="d-block symbol symbol-50px symbol-lg-50px symbol-fixed position-relative">
-                                        <img v-if="user?.image" :src="user?.image?.small_path" alt="image"
-                                            class="rounded" />
-                                        <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image" class="rounded">
-                                        </Link>
-                                        <div class="ms-5">
-                                            <Link :href="'/user/' + user.id"
-                                                class="text-gray-800 text-hover-primary fs-5 fw-bold mt-4">
-                                            {{ user?.first_name + " " + user?.last_name }}</Link>
-                                        </div>
-                                    </div>
+                                    <span class="text-gray-800 fs-5 fw-bold">{{
+                                        rule?.rule
+                                    }}</span>
                                 </td>
-                                <td>{{ user?.email }}</td>
-                                <td>{{ user?.email }}</td>
-                                <td>{{ user?.gender }}</td>
-                                <td>{{ user?.country }}</td>
                                 <td>
-                                    <div class="fw-bold fs-2" v-if="user?.email_verified_at !== true">
-                                        <span class="badge badge-danger">Not Verified
-                                        </span>
-                                    </div>
-                                    <div class="fw-bold fs-2" v-else>
-                                        <span class="badge badge-success">Verified</span>
-                                    </div>
+                                    <span class="text-gray-800 fs-5 fw-bold">{{
+                                        rule?.value
+                                    }}</span>
                                 </td>
-                            </tr>
+                                <td>
+                                    <span v-html="rule?.message"></span>
+                                </td>
+                                <td>
+                                    <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                        :href="`/rule/${rule.id}/edit`">
+                                    <i class="bi bi-pencil"></i>
+                                    </Link>
+                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
+                                        rule.id, index
+                                    )
+                                        ">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </td>
 
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="users?.meta">
-                    <Pagination :links="users?.meta.links" />
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="rules?.meta">
+                    <Pagination :links="rules?.meta.links" />
                 </div>
             </div>
         </div>
