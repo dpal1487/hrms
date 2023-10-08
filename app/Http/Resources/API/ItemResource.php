@@ -22,7 +22,7 @@ class ItemResource extends JsonResource
             "slug" => $this->slug,
             "base_url" => $this->base_url,
             "category" => new CategoryResource($this->category),
-            "time" => $this->time?->title,
+            "price_condition" => $this->time->title,
             "description" => $this->description,
             "rent_price" => $this->rent_price,
             "security_price" => $this->security_price,

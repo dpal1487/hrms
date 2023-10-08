@@ -22,10 +22,7 @@ class ImageResource extends JsonResource
         //$filepath = $this->base_url . '/' . $this->base_path . $this->name;
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'url' => $this->base_url,
-            'file_path' => $filepath,
-            'base_path' => $this->base_path,
+            'url' => $filepath,
         ]; 
     }
 }

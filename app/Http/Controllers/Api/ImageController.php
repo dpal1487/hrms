@@ -18,7 +18,7 @@ class ImageController extends Controller
     $name = $image->hashName();
     $image->move(Storage::disk('local')->path('images/original'),$name);
     $optimizerChain->optimize(Storage::disk('local')->path("images/original/{$name}"));
-    $sizes = [300, 600, 1200];
+    $sizes = [150, 300, 600];
     foreach($sizes as $size) {
       if(!is_dir(Storage::disk('local')->path("images/{$size}px"))) {
         mkdir(Storage::disk('local')->path("images/{$size}px"), 0755, true);
@@ -28,13 +28,14 @@ class ImageController extends Controller
         });
         $resizedImage->save(Storage::disk('local')->path("images/{$size}px/{$name}"));
         $optimizerChain->optimize(Storage::disk('local')->path("images/{$size}px/{$name}"));
-        if($image = ImageModel::create([
-            'name' => $name,
-            'base_path' => "storage/app/images/original/",
-            'base_url' => $request->url(),
-        ])){
-          return new ImageResource($image);
-        }
+      
     }
+    if($image = ImageModel::create([
+      'name' => $name,
+      'base_path' => "storage/app/images/original/",
+      'base_url' => $request->url(),
+  ])){
+    return new ImageResource($image);
+  }
   }
 }
