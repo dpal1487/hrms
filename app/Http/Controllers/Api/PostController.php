@@ -30,17 +30,13 @@ class PostController extends Controller
   public function index(Request $request)
   {
     $category = Category::find($request->category_id);
-
     $attribute = AttributeCategory::where('category_id', $request->category_id)->get();
-
     $address = UserAddress::where(['user_id' => $this->uid()])->first();
-
-
     return [
-      'category' => $category ? new CategoryResource($category) : null,
+      'category' =>new CategoryResource($category),
       'attributes' => $attribute ? AttributeListResource::collection($attribute) : null,
       'price_conditions' => TimeResource::collection(TimePeriod::where(['category_id' => $request->category_id])->get()),
-      'address' => $address ?  new AddressResource($address->address) : null,
+      'address' => $address ?  new AddressResource($address->address) : [],
     ];
   }
   public function store(Request $request)
@@ -53,14 +49,7 @@ class PostController extends Controller
       'images' => 'required',
       'price_condition' => 'required',
       'security_price' => 'required',
-      'address_line_1' => 'required',
-      'address_line_2' => 'required',
-      'state' => 'required',
-      'city' => 'required',
-      'country_id' => 'required',
-      'pincode' => 'required',
-      'latitude' => 'required',
-      'longitude' => 'required',
+      'address' => 'required',
     ]);
     if ($validator->fails()) {
       return response()->json(['message' => $validator->errors()->first(), 'success' => false], 400);
@@ -201,4 +190,5 @@ class PostController extends Controller
       return response()->json(['message' => 'Opps someting wrong! please try again', 'success' => false], 500);
     }
   }
+  
 }

@@ -139,7 +139,6 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
             Route::put('', [PostController::class, 'update']);
             Route::post('success', [PostController::class, 'success']);
             Route::get('edit', [PostController::class, 'edit']);
-            Route::post('image', [ImageController::class, 'post']);
         });
         /*Messaging*/
         Route::post('conversations', [ConversationController::class, 'index']);
@@ -195,4 +194,7 @@ Route::group(['namespace' => 'api', 'prefix' => 'v1'], function () {
 
     Route::get('user/chat', [ChatController::class, 'index'])->name('user.chat');
     Route::post('user/chat/store', [ChatController::class, 'userChat'])->name('user.chat.store');
+
+    Route::post('images', [ImageController::class, 'store']);
+
 });
