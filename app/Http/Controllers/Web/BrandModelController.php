@@ -72,7 +72,10 @@ class BrandModelController extends Controller
             'brand_id' => $request->brand_id,
         ]);
         if ($brandmodel) {
-            return redirect()->route('brand.show', $request->brand_id)->with('flash', ['success' => true, 'message' => UpdateMessage('Brand Model')]);
+
+            return response()->json(['message' => UpdateMessage('Brand Model'), 'success' => true]);
+
+            // return redirect()->route('brand.show', $request->brand_id)->with('flash', ['success' => true, 'message' => UpdateMessage('Brand Model')]);
         }
         return redirect()->route('brand.show')->with('flash', ['success' => true, 'message' => ErrorMessage()]);
     }

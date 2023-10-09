@@ -1,8 +1,8 @@
     <?php
 
     use App\Events\PostAdsEvent;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\Web\Auth\SocialController;
+    use App\Http\Controllers\ChatController;
+    use App\Http\Controllers\Web\Auth\SocialController;
     use Inertia\Inertia;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Foundation\Application;
@@ -32,6 +32,8 @@ use App\Http\Controllers\Web\Auth\SocialController;
     use App\Http\Controllers\Web\MenuController;
     use App\Http\Controllers\Web\MenuItemController;
     use App\Http\Controllers\Web\NotificationController;
+    use App\Http\Controllers\web\OptionController;
+    use App\Http\Controllers\Web\SettingController;
     use App\Http\Controllers\Web\TimeController;
     use App\Http\Controllers\Web\TimePeriodController;
     use App\Http\Controllers\Web\SubscriptionsController;;
@@ -101,6 +103,7 @@ use App\Http\Controllers\Web\Auth\SocialController;
             Route::post('/upload/banner', 'bannerImage')->name('upload.banner');
             Route::post('/upload/brand', 'brandImage')->name('upload.brand');
             Route::post('/upload/faqs_category', 'uploadFAQsImage')->name('upload.faqs_category');
+            Route::post('/upload/image', 'uploadOption')->name('upload.image');
             Route::post('/upload/faq', 'uploadFaq');
         });
         /* ========= User Controller ========== */
@@ -405,13 +408,27 @@ use App\Http\Controllers\Web\Auth\SocialController;
             });
         });
 
+        /* ========= Option Controller ========== */
+
+        Route::controller(OptionController::class)->group(function () {
+            Route::get('/options', 'index')->name('options.index');
+            Route::group(['prefix' => 'option'], function () {
+                Route::get('/create', 'create')->name('option.create');
+                Route::post('/store', 'store')->name('option.store');
+                Route::get('{id}', 'show')->name('option.show');
+                Route::get('{id}/edit', 'edit')->name('option.edit');
+                Route::post('{id}/update', 'update')->name('option.update');
+                Route::delete('{id}/destroy', 'destroy')->name('option.destroy');
+                Route::post('status', 'statusUdate')->name('option.status');
+            });
+        });
+
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
         Route::get('admin/chat', [ChatController::class, 'index'])->name('admin.chat');
         Route::post('admin/chat/store', [ChatController::class, 'userChat'])->name('admin.chat.store');
+        
     });
 
     Route::get('test-event', function () {

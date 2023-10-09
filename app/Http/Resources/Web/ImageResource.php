@@ -30,6 +30,6 @@ class ImageResource extends JsonResource
             'small_path' => $filepath . "?width=100&height=100",
             'medium_path' => $filepath . "?width=200&height=200",
             'large_path' => $filepath . "?width=1024",
-        ]; 
+        ];
     }
 }

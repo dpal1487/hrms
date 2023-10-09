@@ -11,6 +11,8 @@ import { required } from "@vuelidate/validators";
 import Modal from "../../../../Components/Modal.vue";
 import { toast } from "vue3-toastify";
 import { Inertia } from "@inertiajs/inertia";
+import axios from "axios";
+
 export default defineComponent({
     props: ["data", "show", "id"],
     setup() {
@@ -30,6 +32,7 @@ export default defineComponent({
     },
     data() {
         return {
+            requesting: false,
             form: this.$inertia.form({
                 name: this.data?.name,
                 status: this.data?.status,
@@ -53,20 +56,23 @@ export default defineComponent({
         Modal
     },
     methods: {
-        submit() {
-            console.log(this.form)
+        async submit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-                Inertia.post(!(this.data) ? this.route("brand-model.store", this.form) : this.route('brand-model.update', this.form), {
-                    onSuccess: (data) => {
-                        toast.success(this.$page.props.jetstream.flash.message);
-                        this.$emit('hidemodel')
-                    },
-                    onError: (data) => {
-                        toast.error(data.message);
-                        console.log(data);
-                    },
-                });
+                this.requesting = true;
+                const response = await axios.post(!(this.data) ? this.route("brand-model.store") : this.route('brand-model.update', this.form.id), this.form)
+                    .then((response) => {
+                        if (response.data.success == true) {
+                            toast.success(response.data.message)
+                            this.requesting = false;
+                            this.$emit('hidemodal')
+                        } else {
+                            toast.info(response.data.message)
+                        }
+                        if (response.data.success == false) {
+                            toast.error(response.data.error)
+                        }
+                    })
             }
         },
     },
@@ -122,15 +128,16 @@ export default defineComponent({
                 <Link :href="`/brand/${id}`" class="btn btn-outline-secondary me-5">
                 Discard
                 </Link>
-                <button type="submit" class="btn btn-primary" :class="{ 'text-white-50': form.processing }">
-                    <div v-show="form.processing" class="spinner-border spinner-border-sm">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                <button type="submit" class="btn btn-primary align-items-center justify-content-center"
+                    :data-kt-indicator="requesting ? 'on' : 'off'">
                     <span v-if="data">
                         Update
                     </span>
                     <span v-else>
                         Save
+                    </span>
+                    <span class="indicator-progress">
+                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                     </span>
                 </button>
             </div>
