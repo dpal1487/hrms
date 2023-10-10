@@ -32,8 +32,8 @@
     use App\Http\Controllers\Web\MenuController;
     use App\Http\Controllers\Web\MenuItemController;
     use App\Http\Controllers\Web\NotificationController;
-    use App\Http\Controllers\web\OptionController;
-    use App\Http\Controllers\Web\SettingController;
+    use App\Http\Controllers\Web\Setting\GeneralController;
+    use App\Http\Controllers\web\Setting\SettingImageController;
     use App\Http\Controllers\Web\TimeController;
     use App\Http\Controllers\Web\TimePeriodController;
     use App\Http\Controllers\Web\SubscriptionsController;;
@@ -410,16 +410,40 @@
 
         /* ========= Option Controller ========== */
 
-        Route::controller(OptionController::class)->group(function () {
-            Route::get('/options', 'index')->name('options.index');
-            Route::group(['prefix' => 'option'], function () {
-                Route::get('/create', 'create')->name('option.create');
-                Route::post('/store', 'store')->name('option.store');
-                Route::get('{id}', 'show')->name('option.show');
-                Route::get('{id}/edit', 'edit')->name('option.edit');
-                Route::post('{id}/update', 'update')->name('option.update');
-                Route::delete('{id}/destroy', 'destroy')->name('option.destroy');
-                Route::post('status', 'statusUdate')->name('option.status');
+        Route::controller(SettingImageController::class)->group(function () {
+            // Route::get('/options', 'index')->name('options.index');
+            // Route::group(['prefix' => 'option'], function () {
+            //     Route::get('/create', 'create')->name('option.create');
+            //     Route::post('/store', 'store')->name('option.store');
+            //     Route::get('{id}', 'show')->name('option.show');
+            //     Route::get('{id}/edit', 'edit')->name('option.edit');
+            //     Route::post('{id}/update', 'update')->name('option.update');
+            //     Route::delete('{id}/destroy', 'destroy')->name('option.destroy');
+            //     Route::post('status', 'statusUdate')->name('option.status');
+            // });
+
+            Route::get('/option-images', 'index')->name('option-images.index');
+            Route::group(['prefix' => 'option-image'], function () {
+                Route::get('/create', 'create')->name('option-image.create');
+                Route::post('/store', 'store')->name('option-image.store');
+                Route::get('{id}', 'show')->name('option-image.show');
+                Route::get('{id}/edit', 'edit')->name('option-image.edit');
+                Route::post('{id}/update', 'update')->name('option-image.update');
+                Route::delete('{id}/destroy', 'destroy')->name('option-image.destroy');
+                Route::post('status', 'statusUdate')->name('option-image.status');
+            });
+        });
+
+        /* ========= General Setting Controller ========== */
+
+        Route::controller(GeneralController::class)->group(function () {
+            Route::get('/generals', 'index')->name('generals.index');
+            Route::group(['prefix' => 'general'], function () {
+                Route::get('/create', 'create')->name('general.create');
+                Route::post('/store', 'store')->name('general.store');
+                Route::get('{id}/edit', 'edit')->name('general.edit');
+                Route::post('{id}/update', 'update')->name('general.update');
+                Route::delete('{id}/destroy', 'destroy')->name('general.destroy');
             });
         });
 
@@ -428,7 +452,6 @@
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         Route::get('admin/chat', [ChatController::class, 'index'])->name('admin.chat');
         Route::post('admin/chat/store', [ChatController::class, 'userChat'])->name('admin.chat.store');
-        
     });
 
     Route::get('test-event', function () {

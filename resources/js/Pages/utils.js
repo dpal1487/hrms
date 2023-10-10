@@ -3,6 +3,14 @@ import {
     toast
 } from "vue3-toastify";
 import { Inertia } from "@inertiajs/inertia";
+export const parse_json = (value) => {
+    try {
+        const parsedJSON = JSON.parse(value);
+        return parsedJSON;
+    } catch (error) {
+        return value;
+    }
+};
 export default {
     async deleteIndexDialog(route,
         data, index) {
@@ -89,7 +97,7 @@ export default {
                 toast.error(error.message)
             });
     },
-    async imageUpload(route, e, image_id , id) { // event can also be a FilelistObject
+    async imageUpload(route, e, image_id, id) { // event can also be a FilelistObject
 
         const file = e?.target?.files[0] || e[0];
         const formdata = new FormData();
@@ -115,4 +123,5 @@ export default {
     errorToast(message) {
         toast.error(message);
     }
+
 }

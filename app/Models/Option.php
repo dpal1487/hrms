@@ -12,7 +12,6 @@ class Option extends Model
     protected $fillable = [
         'option_name',
         'option_value',
-        'image_name',
         'auto_load',
     ];
 }

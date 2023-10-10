@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\Web;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ImageResource extends JsonResource
 {
@@ -19,17 +19,16 @@ class ImageResource extends JsonResource
         $hostname = $request->getHost();
         $port = $request->getPort(); // remove in production
 
-        $filepath =  $protocol . "://" . $hostname . ":" . $port . "/" . $this->base_path . $this->name;
-
+        $filepath =  $protocol . "://" . $hostname . ":" . $port . "/" . $this->base_path . 'original/'. $this->name;
         return [
             'id' => $this->id,
             'name' => $this->name,
             'url' => $this->base_url,
             'file_path' => $filepath,
-            'base_path' => $this->base_path,
-            'small_path' => $filepath . "?width=100&height=100",
-            'medium_path' => $filepath . "?width=200&height=200",
-            'large_path' => $filepath . "?width=1024",
+            'base_path' => $this->base_path.'original/',
+            'small_path' => $this->base_url . '/' . $this->base_path . '150px/' . $this->name . '?width=100&height=100',
+            'medium_path' => $this->base_url . '/' . $this->base_path . '300px/' . $this->name . '?width=200&height=200',
+            'large_path' => $this->base_url . '/' . $this->base_path . '600px/' . $this->name . '?width=1024',
         ];
     }
 }

@@ -221,31 +221,77 @@ class ImageController extends Controller
 
     public function uploadOption(Request $request)
     {
-        $image = $request->file('image');
-        $optimizerChain = OptimizerChainFactory::create();
-        $name = $image->hashName();
-        $image->move(Storage::disk('local')->path('public/images/original'), $name);
-        $optimizerChain->optimize(Storage::disk('local')->path("public/images/original/{$name}"));
-        $sizes = [150, 300, 600];
-        foreach ($sizes as $size) {
-            if (!is_dir(Storage::disk('local')->path("public/images/{$size}px"))) {
-                mkdir(Storage::disk('local')->path("public/images/{$size}px"), 0755, true);
-            }
-            $resizedImage = Image::make(Storage::disk('local')->path("public/images/original/{$name}"))->resize($size, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $resizedImage->save(Storage::disk('local')->path("public/images/{$size}px/{$name}"));
-            $optimizerChain->optimize(Storage::disk('local')->path("public/images/{$size}px/{$name}"));
-        }
-        if ($image = ImageModel::create([
-            'name' => $name,
-            'base_path' => "app/public/images/original/",
-            'base_url' => $request->url(),
-        ])) {
+
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|mimes:jpeg,png,jpg'
+        ]);
+        if ($validator->fails()) {
             return response()->json([
-                'success' => true,
-                'data' => new ImageResource($image)
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 400);
+        }
+        $image = $request->file('image');
+        if ($image) {
+            $optimizerChain = OptimizerChainFactory::create();
+            $name = $image->hashName();
+
+            $folder = 'assets/images/settings/';
+            $image = Image::make($image)->save($folder. 'original/' . $name);
+            $optimizerChain->optimize($folder. 'original/'. "{$name}");
+
+            $sizes = [150, 300, 600];
+
+            foreach ($sizes as $size) {
+                if (!is_dir("assets/images/settings/{$size}px")) {
+                    mkdir(("assets/images/settings/{$size}px"), 0755, true);
+                }
+                $resizedImage = Image::make($image)->save($folder . 'original/' . $name)->resize($size, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $resizedImage->save(($folder . "{$size}px/{$name}"));
+                $optimizerChain->optimize($folder . "{$size}px/{$name}");
+            }
+            $Imagefile = ImageModel::updateOrCreate([
+                'name' => $name,
+                'base_url' => $request->root(),
+                'base_path' => $folder,
             ]);
+            if ($Imagefile->save()) {
+                return response()->json([
+                    'success' => true,
+                    'data' => new ImageResource($Imagefile)
+                ]);
+            }
         }
     }
+    // public function uploadOption(Request $request)
+    // {
+    //     $image = $request->file('image');
+    //     $optimizerChain = OptimizerChainFactory::create();
+    //     $name = $image->hashName();
+        // $image->move(Storage::disk('local')->path('public/images'), $name);
+    //     $optimizerChain->optimize(Storage::disk('local')->path("public/images/{$name}"));
+    //     $sizes = ['small', 'medium', 'large'];
+    //     foreach ($sizes as $size) {
+    //         if (!is_dir(Storage::disk('local')->path("public/images/{$size}"))) {
+    //             mkdir(Storage::disk('local')->path("public/images/{$size}"), 0755, true);
+    //         }
+    //         $resizedImage = Image::make(Storage::disk('local')->path("public/images/{$name}"))->resize($size, null, function ($constraint) {
+    //             $constraint->aspectRatio();
+    //         });
+    //         $resizedImage->save(Storage::disk('local')->path("public/images/{$size}/{$name}"));
+    //         $optimizerChain->optimize(Storage::disk('local')->path("public/images/{$size}/{$name}"));
+    //     }
+    //     if ($image = ImageModel::create([
+    //         'name' => $name,
+    //         'base_path' => "app/public/images/",
+    //         'base_url' =>  storage_path(),
+    //     ])) {
+    //         return response()->json([
+    //             'success' => true,
+    //             'data' => new ImageResource($image)
+    //         ]);
+    //     }
+    // }
 }

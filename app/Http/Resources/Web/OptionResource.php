@@ -16,7 +16,8 @@ class OptionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => storage_path($this->option_value),
+            // 'image' => storage_path($this->option_value),
+            'image' => $this->option_value,
             'option_name' => $this->option_name,
             'auto_load' => $this->auto_load
         ];
