@@ -262,9 +262,10 @@ class ImageController extends Controller
                     'success' => true,
                     'data' => new ImageResource($Imagefile)
                 ]);
-            }
+            }            
         }
     }
+    
     // public function uploadOption(Request $request)
     // {
     //     $image = $request->file('image');

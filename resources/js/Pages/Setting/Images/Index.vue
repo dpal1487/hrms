@@ -2,64 +2,88 @@
 import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Pagination from "../../Jetstream/Pagination.vue";
-import { Inertia } from "@inertiajs/inertia";
+import JetInput from "@/Jetstream/Input.vue";
+import JetLabel from "@/Jetstream/Label.vue";
+import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
-import utils, { parse_json } from "../utils.js";
+import DropFile from "@/Components/DropFile.vue";
+import utils, { parse_json } from "../../utils";
+import axios from "axios";
+import SettingImage from "./Components/SettingImage.vue"
 
 export default defineComponent({
-    props: ["options"],
-
+    props: ['options', 'option'],
     setup() {
-        return { parse_json }
+        return { parse_json };
     },
-
+    validations() {
+        return {
+            form: {
+                chat_icon: {},
+            },
+        };
+    },
     data() {
         return {
-            form: {},
-            title: "Options",
-            isLoading: false,
-            tbody: [
-                "Image",
-                "Option Name",
-                "Auto Load",
-                "Action",
-            ],
+            title: 'Options',
+            form: this.$inertia.form({
+                option: [{
+                    chat_icon: '',
+                    auto_load: '',
+                    image: this.option_value
+                }]
+            }),
+            image_url: {
+                isLoading: false,
+            },
         };
     },
     components: {
         AppLayout,
         Link,
         Head,
-        Pagination,
+        JetInput,
+        JetLabel,
+        DropFile,
         Loading,
+        SettingImage
     },
     methods: {
-        async confirmDelete(id, index) {
-            this.isLoading = true;
-            await utils.deleteIndexDialog(route('option-image.destroy', id), this.options.data, index);
-            this.isLoading = false;
+        submit(form) {
+            this.form = form;
+            // console.log(this.form?.option);
+            // axios.post(route('option-image.store', this.form))
+            //     .then(() => {
+            //         console.log(this.form?.option[0].auto_load)
+            //     })
         },
+        //     {
+        //     onSuccess: (data) => {
+        //         toast.success(this.$page.props.jetstream.flash.message);
+        //         this.isEdit = false;
+        //     },
+        //     onError: (data) => {
+        //         toast.error(data.message);
+        //     },
+        // });
 
-        async changeStatus(status, id) {
-            console.log(id)
-            this.isLoading = true;
-            await utils.changeStatus(route('option-image.status'), { id: id, status: status });
-            this.isLoading = false;
+        async onSettingImage(e) {
+            this.image_url.isLoading = true;
+            const data = await utils.imageUpload(route('upload.image'), e, this.form.image_url)
+            if (data.response.success) {
+                this.option_value = data.response.data;
+                this.image_name = data.response.data?.name;
+            } else {
+                toast.error(data.response.message);
+            }
+            this.image_url.url = URL.createObjectURL(data.file);
+            this.image_url.isLoading = false;
         },
-
-        search() {
-            Inertia.get(
-                "/option-images",
-                this.form,
-            );
-        },
-    },
+    }
 });
 </script>
 <template>
-    <loading v-model:active="isLoading" :can-cancel="false" :is-full-page="true" />
     <app-layout :title="title">
         <template #breadcrumb>
             <li class="breadcrumb-item">
@@ -78,81 +102,38 @@ export default defineComponent({
 
         <Head :title="title" />
         <div class="card card-flush">
-            <div>
-                <form class="card-header justify-content-start py-5 gap-4" @submit.prevent="search()">
-                    <div class="d-flex align-items-center position-relative">
-                        <span class="svg-icon svg-icon-1 position-absolute ms-4"><svg width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                    transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
-                                <path
-                                    d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                    fill="currentColor"></path>
-                            </svg>
-                        </span>
-                        <input type="text" v-model="form.q" class="form-control form-control-solid w-250px ps-14"
-                            placeholder="Search " />
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        Search
-                    </button>
-                </form>
-            </div>
             <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table class="table table-row-dashed fs-6 gy-4">
-                        <thead>
-                            <tr class="text-gray-800 fw-bold fs-6 text-uppercase">
-                                <th v-for="(th, index) in tbody" :key="index">
-                                    {{ th }}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="fw-semibold text-gray-600 g-0">
-                            <tr v-for="(option, index) in options.data" :key="index">
-                                <td>
-                                    <div class="d-flex">
-                                        <span
-                                            class="d-block symbol symbol-50px symbol-lg-50px symbol-fixed position-relative">
-                                            <img v-if="parse_json(option?.image)"
-                                                :src="parse_json(option?.image)?.file_path" alt="image" class="rounded" />
-                                            <img v-else src="/assets/media/svg/avatars/blank.svg" alt="image"
-                                                class="rounded">
-                                        </span>
+                <!-- <form @submit.prevent="submit()" class="form d-flex flex-column flex-lg-row"> -->
+                <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+                    <div class="card">
+                        <div class="card-header align-items-center">
+                            <div class="card-title">
+                                <h2>General</h2>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <SettingImage @submitted="submit" :options="options?.data">
+                                <template #action>
+                                    <div class="d-flex justify-content-end m-5 gap-5">
+                                        <Link href="/option-images"
+                                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                                        Discard
+                                        </Link>
+                                        <button type="submit" class="btn btn-primary"
+                                            :class="{ 'text-white-50': form.processing }">
+                                            <div v-show="form.processing" class="spinner-border spinner-border-sm">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <span v-if="route().current() == 'option-images.index'">Save</span>
+                                        </button>
                                     </div>
-                                </td>
-                                <td>
-                                    <div class="fs-5 text-gray-700 fw-bold">
-                                        {{ option?.option_name }}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-switch form-check-solid d-block form-check-custom form-check-success">
-                                        <input class="form-check-input h-20px w-30px" type="checkbox"
-                                            @input="changeStatus($event.target.checked, option.id)"
-                                            :checked="option.auto_load == 1 ? true : false" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <Link class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                        :href="`/option-image/${option.id}/edit`">
-                                    <i class="bi bi-pencil"></i>
-                                    </Link>
+                                </template>
+                            </SettingImage>
+                        </div>
+                    </div>
 
-                                    <button class="btn btn-icon btn-active-light-primary w-30px h-30px" @click="confirmDelete(
-                                        option.id, index
-                                    )
-                                        ">
-                                        <i class="bi bi-trash3"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end" v-if="options.meta">
-                    <Pagination :links="options.meta.links" />
-                </div>
+                <!-- </form> -->
             </div>
         </div>
     </app-layout>

@@ -8,8 +8,60 @@
     display: grid !important;
 }
 </style>
+
+<script>
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+    props: ["image", "multiple", "isUploading", "className"],
+    emits: ["change"],
+    data() {
+        return {
+            isDragging: false,
+            isDefaultImage: false,
+            files: [],
+        };
+    },
+    methods: {
+        onChange() {
+            this.files.push(...this.$refs.file.files);
+            this.$emit("change", this.$refs.file.files)
+        },
+        dragover(e) {
+            e.preventDefault();
+            this.isDragging = true;
+        },
+        dragleave() {
+            this.isDragging = false;
+        },
+        drop(e) {
+            e.preventDefault();
+            this.$refs.file.files = e.dataTransfer.files;
+            this.onChange();
+            this.isDragging = false;
+        },
+        generateURL(file) {
+            let fileSrc = URL.createObjectURL(file);
+            setTimeout(() => {
+                URL.revokeObjectURL(fileSrc);
+            }, 1000);
+            return fileSrc;
+        },
+        removeImage(file) {
+            this.files = this.files.filter(f => f !== file);
+        },
+        removeDefaultImage() {
+            this.isDefaultImage = false;
+        }
+    },
+    created() {
+        if (this.image) this.isDefaultImage = true;
+    }
+});
+</script>
 <template>
-    <div :class="`dropzone ${files.length > 0 || isDefaultImage ? 'h-300px' : 'h-150px'} position-relative`">
+    <div
+        :class="`dropzone ${(files.length > 0 || isDefaultImage) && !className ? 'h-300px' : 'h-150px'} ${className || ''} position-relative`">
         <div class="w-100" @dragover="dragover" @dragleave="dragleave" @drop="drop">
             <input type="file" :multiple="multiple" name="file" id="fileInput" class="d-none" @change="onChange" ref="file"
                 accept=".pdf,.jpg,.jpeg,.png" />
@@ -79,53 +131,3 @@
     </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    props: ["image", "multiple", "isUploading"],
-    emits: ["change"],
-    data() {
-        return {
-            isDragging: false,
-            isDefaultImage: false,
-            files: [],
-        };
-    },
-    methods: {
-        onChange() {
-            this.files.push(...this.$refs.file.files);
-            this.$emit("change", this.$refs.file.files)
-        },
-        dragover(e) {
-            e.preventDefault();
-            this.isDragging = true;
-        },
-        dragleave() {
-            this.isDragging = false;
-        },
-        drop(e) {
-            e.preventDefault();
-            this.$refs.file.files = e.dataTransfer.files;
-            this.onChange();
-            this.isDragging = false;
-        },
-        generateURL(file) {
-            let fileSrc = URL.createObjectURL(file);
-            setTimeout(() => {
-                URL.revokeObjectURL(fileSrc);
-            }, 1000);
-            return fileSrc;
-        },
-        removeImage(file) {
-            this.files = this.files.filter(f => f !== file);
-        },
-        removeDefaultImage() {
-            this.isDefaultImage = false;
-        }
-    },
-    created() {
-        if (this.image) this.isDefaultImage = true;
-    }
-});
-</script>

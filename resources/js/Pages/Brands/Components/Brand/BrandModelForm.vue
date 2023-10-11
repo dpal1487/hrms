@@ -80,12 +80,18 @@ export default defineComponent({
     watch: {
         data: {
             async handler() {
+                console.log("see this", this.data)
                 this.form = {
                     name: this.data?.name,
                     status: this.data?.status,
                     brand_id: this?.id,
                     id: this.data?.id
                 };
+            }
+        },
+        id: {
+            async handler() {
+                console.log("see this", this.id);
             }
         }
     }

@@ -33,6 +33,7 @@
     use App\Http\Controllers\Web\MenuItemController;
     use App\Http\Controllers\Web\NotificationController;
     use App\Http\Controllers\Web\Setting\GeneralController;
+    use App\Http\Controllers\Web\Setting\SettingIconController;
     use App\Http\Controllers\web\Setting\SettingImageController;
     use App\Http\Controllers\Web\TimeController;
     use App\Http\Controllers\Web\TimePeriodController;
@@ -444,6 +445,19 @@
                 Route::get('{id}/edit', 'edit')->name('general.edit');
                 Route::post('{id}/update', 'update')->name('general.update');
                 Route::delete('{id}/destroy', 'destroy')->name('general.destroy');
+            });
+        });
+
+        /* ========= General Setting Icon Controller ========== */
+
+        Route::controller(SettingIconController::class)->group(function () {
+            Route::get('/setting-icons', 'index')->name('setting-icons.index');
+            Route::group(['prefix' => 'setting-icon'], function () {
+                Route::get('/create', 'create')->name('setting-icon.create');
+                Route::post('/store', 'store')->name('setting-icon.store');
+                Route::get('{id}/edit', 'edit')->name('setting-icon.edit');
+                Route::post('{id}/update', 'update')->name('setting-icon.update');
+                Route::delete('{id}/destroy', 'destroy')->name('setting-icon.destroy');
             });
         });
 

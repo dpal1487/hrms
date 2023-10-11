@@ -10,7 +10,7 @@ import useVuelidate from "@vuelidate/core";
 import { toast } from "vue3-toastify";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/css/index.css';
-import utils, { parse_json } from "../utils.js";
+import utils, { parse_json } from "../../utils.js";
 import DropFile from "@/Components/DropFile.vue";
 
 export default defineComponent({
