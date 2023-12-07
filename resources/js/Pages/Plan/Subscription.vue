@@ -87,10 +87,6 @@ export default defineComponent({
 
             this.elements = this.stripe.elements();
             this.card = this.elements.create('card');
-
-            console.log("card details", this.card)
-
-
             this.card.mount('#card-element');
         },
 

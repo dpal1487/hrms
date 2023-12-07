@@ -182,7 +182,7 @@ export default defineComponent({
         form: {
             deep: true,
             // We have to move our method to a handler field
-            handler() {
+            h andler() {
                 let total = 0;
                 for (var i = 0; i < this.form.items.length; i++) {
                     total += parseInt(this.form.items[i].cpi) * parseInt(this.form.items[i].quantity);
